@@ -1,0 +1,42 @@
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+interface SampleFnProps {
+  children?: React.ReactElement | React.ReactElement[];
+}
+
+const SampleFn = (props: SampleFnProps) => {
+  const { children } = props;
+
+  const someFn = () => {};
+
+  const asyncFn = async () => {};
+
+  /* how to use store value in component..
+  const someVal = useSelector((state) => state.sample.someVal);
+  const dispatch = useDispatch(); */
+
+  /* what is the effect..
+  useEffect(() => {
+    return () => {};
+  }, [someVal]); */
+
+  /* what is the memo..
+  const memo = useMemo(() => {
+    return (
+      <></>
+    );
+  }, [someVal]); */
+
+  /* what is the callback..
+  const callback = useCallback(() => {}, []); */
+
+  return (
+    <div>
+      { children }
+    </div>
+  );
+};
+
+export default SampleFn;
+// export default connect(mapStateToProps, mapDispatchToProps)(SampleFn);

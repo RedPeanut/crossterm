@@ -1,0 +1,169 @@
+html { height: 100%; }
+
+body {
+  position: relative;
+  color: white;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  overflow-y: hidden;
+}
+
+button {
+  background-color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  appearance: none;
+  font-size: 1.3rem;
+  box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12),
+    0px 18px 88px -4px rgba(24, 39, 75, 0.14);
+  transition: all ease-in 0.1s;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+button:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  height: fit-content;
+  width: fit-content;
+  margin: 10px;
+}
+
+a:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+/* App */
+.app {
+  background-color: #252526;
+}
+
+/* SideBar */
+.part.sidebar {
+  height: 100%;
+  width: 43px;
+  /* min-height:  */
+  background: rgb(24, 24, 24);
+  border-color: rgv(43, 43, 43);
+  position: absolute;
+}
+
+.sidebar .content {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+/* SideIcon */
+.control-icon-wrap {
+  padding: 14px 0;
+  text-align: center;
+}
+
+.control-icon-wrap .control-icon:hover {
+  cursor: pointer;
+}
+
+.control-icon-wrap .badge {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+}
+
+.control-icon-wrap .badge .badge-content {
+  color: white;
+  background-color: rgb(0, 120, 212);
+  position: absolute;
+  top: 24px;
+  right: 8px;
+  font-size: 9px;
+  font-weight: 600;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.control-icon-wrap .active-item-indicator {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+}
+
+.control-icon-wrap .active-item-indicator:before {
+  top: 0; height: 100%;
+  border-left-color: #0078d4;
+  border-left: 2px solid;
+}
+
+/* SidePanel */
+#side-panel {
+  position: absolute;
+  height: 100%;
+  left: 43px;
+  width: 220px;
+  border-right: 1px solid rgb(43, 43, 43);
+}
+
+.side-panel {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  background: #141314;
+  display: none;
+}
+
+.side-panel.active { display: block; }
+
+/* Sash */
+.sash-container { position: absolute; }
+
+.sash.vertical {
+  cursor: col-resize;
+  top: 0;
+  height: 100%;
+}
+
+.sash.hover:before { background: #0078d4; }
+
+/* Body */
+.parts.body {
+  position: absolute;
+  left: 264px;
+  background-color: rgb(31, 31, 31);
+  width: 100%;
+  height: 100%;
+}
+
+.tabs .tablist {
+  display: flex;
+  height: 35px;
+}
+
+.tabs .tab {
+  left: auto;
+  border-right: 1px solid rgb(43, 43, 43);
+  background-color: rgb(24, 24, 24);
+  width: 120px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.drop-overlay {
+  position: absolute;
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+  left: 0;
+}
