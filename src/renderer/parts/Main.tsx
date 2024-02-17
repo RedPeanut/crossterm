@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { setScreen } from '../reducers/app';
+import Split from './Split';
 import SideBar from './sidebar/SideBar';
 import SidePanel from './sidebar/SidePanel';
 import BookmarkPanel from './panel/BookmarkPanel';
@@ -36,21 +37,29 @@ class Main extends React.Component {
   render() {
     return (
       <div className="app">
-        <SideBar />
-        <SidePanel>
-          <BookmarkPanel />
-          <Sample1Panel />
-          <Sample2Panel />
-        </SidePanel>
-        <div className="parts body split-view-container">
-          <div className="split-view-view">
-            <div className="">
-              <Tabs />
-            </div>
-            <Sessions />
-            {/* make DropOverlay in here dynamically */}
+        <Split className=""
+          lineBar={true}
+          visible={[1]}
+          style={{}}
+        >
+          <div className="parts side">
+            <SideBar />
+            <SidePanel>
+              <BookmarkPanel />
+              <Sample1Panel />
+              <Sample2Panel />
+            </SidePanel>
           </div>
-        </div>
+          <Split className="parts body"
+            lineBar={true}
+            visible={false}
+            style={{
+            }}
+          >
+            <Tabs />
+            <Sessions />
+          </Split>
+        </Split>
       </div>
     );
   }
