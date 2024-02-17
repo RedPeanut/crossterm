@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setScreen } from './reducers/app';
 import _ from 'lodash';
 
-import SideBar from './parts/sidebar/SideBar';
-import SidePanel from './parts/sidebar/SidePanel';
-import BookmarkPanel from './parts/panel/BookmarkPanel';
-import Sample1Panel from './parts/panel/Sample1Panel';
-import Sample2Panel from './parts/panel/Sample2Panel';
-import Tabs from './parts/tabs/Tabs';
-import Session from './parts/session/Session';
+import { setScreen } from '../reducers/app';
+import SideBar from './sidebar/SideBar';
+import SidePanel from './sidebar/SidePanel';
+import BookmarkPanel from './panel/BookmarkPanel';
+import Sample1Panel from './panel/Sample1Panel';
+import Sample2Panel from './panel/Sample2Panel';
+import Tabs from './tabs/Tabs';
+import Session from './session/Session';
 
 class Main extends React.Component {
   componentDidMount() {

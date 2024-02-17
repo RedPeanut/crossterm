@@ -1,9 +1,9 @@
 import React from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import configureStore from './store/configureStore';
 import './App.css';
-import Main from './Main';
+import configureStore from './store/configureStore';
+import Main from './parts/Main';
 
 const store = configureStore();
 
