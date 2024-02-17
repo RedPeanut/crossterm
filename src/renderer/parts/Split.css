@@ -1,0 +1,192 @@
+.split {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* display: flex;
+  flex-direction: row; */
+  --split-bar-shadow: #d5d5d5;
+  --split-bar-shadow-disable: #d5d5d5;
+}
+.split-bar {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  /* right: 0; */
+  height:100%;
+  /* justify-content: center;
+  display: flex; */
+  background: var(--split-bar-background, #f8f8f9);
+  -webkit-user-select: none;
+          user-select: none;
+}
+.split-bar::before,
+.split-bar::after {
+  content: '';
+  display: block;
+}
+.split-bar.disable {
+  pointer-events: none;
+  cursor: not-allowed !important;
+}
+.split-bar:hover:not(.disable) {
+  transition: background-color 0.3s;
+  background: var(--split-bar-hover-background, #ecf7ff);
+}
+.split.dragging .split-pane {
+  position: relative;
+}
+.split.dragging .split-pane::before {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+}
+.split > .split-pane {
+  transform: none;
+}
+.split:not(.dragging) > .split-pane {
+  transition: all 0.3s;
+}
+.split-horizontal > .split-bar {
+  cursor: col-resize;
+  width: 5px;
+  /* flex-direction: column; */
+  box-shadow: inset 1px 0 0 0 var(--split-bar-shadow), 1px 0 0 0 var(--split-bar-shadow);
+}
+.split-horizontal > .split-bar::before,
+.split-horizontal > .split-bar::after {
+  height: 3px;
+  width: 100%;
+  box-shadow: inset 0 1px 0 0 var(--split-bar-shadow), 0 1px 0 0 var(--split-bar-shadow);
+}
+.split-horizontal > .split-bar::before {
+  margin-top: -1px;
+}
+.split-horizontal > .split-bar::after {
+  margin-top: 3px;
+}
+.split-horizontal > .split-bar.disable {
+  box-shadow: inset 1px 0 0 0 var(--split-bar-shadow-disable), 1px 0 0 0 var(--split-bar-shadow-disable) !important;
+}
+.split-vertical {
+  flex-direction: column;
+}
+.split-vertical > .split-bar {
+  cursor: row-resize;
+  width: 100%;
+  height: 5px;
+  align-items: center;
+  flex-direction: row;
+  box-shadow: inset 0 1px 0 0 var(--split-bar-shadow), 0 1px 0 0 var(--split-bar-shadow);
+}
+.split-vertical > .split-bar.disable {
+  box-shadow: inset 0 1px 0 0 var(--split-bar-shadow-disable), 0 1px 0 0 var(--split-bar-shadow-disable) !important;
+}
+.split-vertical > .split-bar::before,
+.split-vertical > .split-bar::after {
+  height: 100%;
+  width: 3px;
+  box-shadow: inset 1px 0 0 0 var(--split-bar-shadow), 1px 0 0 0 var(--split-bar-shadow);
+}
+.split-vertical > .split-bar::before {
+  margin-left: -1px;
+}
+.split-vertical > .split-bar::after {
+  margin-left: 3px;
+}
+.split-large-bar div {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+.split-vertical > .split-line-bar:hover::before,
+.split-horizontal > .split-line-bar:hover::before {
+  background: var(--split-line-bar-hover-border-color, #008ef0);
+}
+.split-vertical > .split-line-bar {
+  height: 1px;
+}
+.split-vertical > .split-line-bar div {
+  cursor: row-resize;
+  width: 100%;
+  height: 8px;
+  margin-top: -2px;
+  margin-bottom: -2px;
+}
+.split-vertical > .split-line-bar div:hover,
+.split-vertical > .split-line-bar div:active,
+.split-vertical > .split-line-bar div:focus {
+  margin-top: -6px;
+  margin-bottom: -6px;
+  height: 6px;
+}
+.split-vertical > .split-line-bar div:hover::after,
+.split-vertical > .split-line-bar div:active::after,
+.split-vertical > .split-line-bar div:focus::after {
+  background: var(--split-line-bar-active-background, #008ef0);
+}
+.split-vertical > .split-line-bar div::after {
+  height: 1px;
+  width: 100%;
+}
+.split-horizontal > .split-line-bar {
+  width: 1px;
+}
+.split-horizontal > .split-line-bar div {
+  cursor: col-resize;
+  height: 100%;
+  width: 8px;
+  margin-left: -2px;
+  margin-right: -2px;
+}
+.split-horizontal > .split-line-bar div:hover,
+.split-horizontal > .split-line-bar div:active,
+.split-horizontal > .split-line-bar div:focus {
+  margin-left: -6px;
+  margin-right: -6px;
+  width: 6px;
+}
+.split-horizontal > .split-line-bar div:hover::after,
+.split-horizontal > .split-line-bar div:active::after,
+.split-horizontal > .split-line-bar div:focus::after {
+  background: var(--split-line-bar-active-background, #008ef0);
+}
+.split-horizontal > .split-line-bar div::after {
+  width: 1px;
+  height: 100%;
+}
+.split-vertical > .split-line-bar,
+.split-horizontal > .split-line-bar {
+  flex-direction: inherit;
+}
+.split-vertical > .split-line-bar::before,
+.split-horizontal > .split-line-bar::before {
+  display: none;
+}
+.split-vertical > .split-line-bar div,
+.split-horizontal > .split-line-bar div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.split-vertical > .split-line-bar div::after,
+.split-horizontal > .split-line-bar div::after {
+  content: '';
+  display: block;
+  background-color: var(--split-line-bar-background, #d5d5d5);
+}
+.split-line-bar {
+  box-shadow: inset 0 0 0 0 !important;
+  background: transparent;
+}
+.split-line-bar::before {
+  box-shadow: inset 0 0 0 0 !important;
+}
+.split-line-bar::after {
+  display: none;
+}
