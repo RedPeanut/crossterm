@@ -9,7 +9,7 @@ import BookmarkPanel from './panel/BookmarkPanel';
 import Sample1Panel from './panel/Sample1Panel';
 import Sample2Panel from './panel/Sample2Panel';
 import Tabs from './tabs/Tabs';
-import Session from './session/Session';
+import Sessions from './session/Sessions';
 
 class Main extends React.Component {
   componentDidMount() {
@@ -47,7 +47,7 @@ class Main extends React.Component {
             <div className="">
               <Tabs />
             </div>
-            <Session />
+            <Sessions />
             {/* make DropOverlay in here dynamically */}
           </div>
         </div>
