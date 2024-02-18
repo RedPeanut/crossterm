@@ -15,7 +15,7 @@ import Sessions from './session/Sessions';
 class Main extends React.Component {
   componentDidMount() {
     let self = this;
-    window.addEventListener('resize', _.debounce(this.onResize.bind(this), 100, { leading: true }));
+    window.addEventListener('resize', _.debounce(this.onResize.bind(this), 100/* , { leading: true } */));
     // this.onResize();
     // window.dispatchEvent(new Event('resize' /* , { bubbles: true } */));
   }
