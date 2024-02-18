@@ -1,11 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Tab from './Tab';
 import { Splittable } from '../../Types';
 
-export default class Tabs extends React.Component {
+interface TabsProps {}
+
+class Tabs extends React.Component {
   componentDidMount() {}
 
   render() {
+    const { ...rest } = this.props;
     return (
       <div className="tabs">
         <div className="tabs-and-actions-container">
@@ -23,3 +27,5 @@ export default class Tabs extends React.Component {
     );
   }
 }
+
+export default connect(null, null)(Tabs);

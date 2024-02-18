@@ -27,9 +27,7 @@ const mapStateToProps = (state: any) => {
 };
 
 /* const mapDispatchToProps = (dispatch) => {
-  return {
-    onSetSomeVal: (value) => dispatch(setSomeVal(value)),
-  };
+  return {};
 }; */
 
 export default connect(mapStateToProps, null)(BookmarkPanel);

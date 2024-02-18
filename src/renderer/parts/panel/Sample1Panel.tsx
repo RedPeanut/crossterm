@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { setSomeVal } from '../../reducers/sample';
-
 interface Sample1PanelProps {
   sidePanel: { active: string, visible: boolean };
 }
@@ -29,9 +27,7 @@ const mapStateToProps = (state: any) => {
 };
 
 /* const mapDispatchToProps = (dispatch) => {
-  return {
-    onSetSomeVal: (value) => dispatch(setSomeVal(value)),
-  };
+  return {};
 }; */
 
 export default connect(mapStateToProps, null)(Sample1Panel);
