@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import Split from './Split.tobe';
+import Split from './Split';
 import SideBar from './sidebar/SideBar';
 import SidePanel from './sidebar/SidePanel';
 import BookmarkPanel from './panel/BookmarkPanel';

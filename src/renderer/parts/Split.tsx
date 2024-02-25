@@ -1,5 +1,5 @@
 import React from 'react';
-import './Split.tobe.css';
+import './Split.css';
 
 export interface SplitProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onDragEnd'> {
   style?: React.CSSProperties;
@@ -211,7 +211,7 @@ export default class Split extends React.Component<SplitProps, SplitState> {
               className: [`${prefixCls}-pane`, element.props.className].filter(Boolean).join(' ').trim(),
               style: { ...element.props.style },
             });
-            const visibleBar = visible === true || (visible && visible.includes((idx+1) as never)) || false;
+            const visibleBar = visible === true || (visible && visible.includes((idx) as never)) || false;
             const barProps = {
               className: [
                 `${prefixCls}-bar`,
@@ -219,7 +219,7 @@ export default class Split extends React.Component<SplitProps, SplitState> {
                 !lineBar ? `${prefixCls}-large-bar` : null,
               ].filter(Boolean).join(' ').trim(),
             };
-            if(disable === true || (disable && disable.includes((idx+1) as never))) {
+            if(disable === true || (disable && disable.includes((idx) as never))) {
               barProps.className = [barProps.className, disable ? 'disable' : null].filter(Boolean).join(' ').trim();
             }
             let bar = null;
