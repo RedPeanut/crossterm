@@ -1,0 +1,36 @@
+.split {
+  display: flex;
+}
+
+.split-vertical {
+  flex-direction: column;
+}
+
+.split-horizontal {
+  flex-direction: row;
+}
+
+.split-bar {
+  z-index: 10;
+  top: 0;
+  height:100%;
+}
+
+.split-vertical .split-bar {
+  cursor: row-resize;
+  width: 100%;
+  height: 3px;
+}
+
+.split-horizontal .split-bar {
+  cursor: col-resize;
+  width: 3px;
+  height: 100%;
+}
+
+.split-line-bar div {width:100%;height:100%;}
+
+.split-vertical .split-line-bar:hover,
+.split-horizontal .split-line-bar:hover {
+  background: var(--split-line-bar-hover-border-color, #008ef0);
+}

@@ -10,7 +10,7 @@ class BookmarkPanel extends React.Component<BookmarkPanelProps, {}> {
 
   render() {
     const { sidePanel } = this.props;
-    const cls = 'side-panel bookmark-panel'
+    const cls = 'item bookmark-panel'
       + (sidePanel.active === 'Bookmarks' ? ' active' : '');
     return (
       <div className={cls}>

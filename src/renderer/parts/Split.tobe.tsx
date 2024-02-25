@@ -1,5 +1,5 @@
 import React from 'react';
-import './Split.css';
+import './Split.tobe.css';
 
 export interface SplitProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onDragEnd'> {
   style?: React.CSSProperties;
@@ -64,7 +64,7 @@ export default class Split extends React.Component<SplitProps, SplitState> {
   }
 
   public componentDidMount() {
-    console.log('this.wrapper =', this.wrapper);
+    // console.log('this.wrapper =', this.wrapper);
   }
 
   public componentWillUnmount() {
@@ -77,8 +77,13 @@ export default class Split extends React.Component<SplitProps, SplitState> {
   }
 
   onMouseDown(paneNumber: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+
+    // console.log('onMouseDown event is called...');
+
     if(!e.target || !this.wrapper)
       return;
+
+    // console.log('>>> 1');
 
     this.paneNumber = paneNumber;
     this.startX = e.clientX;
@@ -103,12 +108,20 @@ export default class Split extends React.Component<SplitProps, SplitState> {
   }
 
   onDragging(e: Event) {
+
+    // console.log('onDragging event is called...');
+
     if(!this.move)
       return;
+
+    // console.log('>>> 1');
 
     if(!this.state.dragging) {
       this.setState({ dragging: true });
     }
+
+    // console.log('>>> 2');
+
     const { mode, onDragging } = this.props;
 
     const prevTarget = this.target.previousElementSibling as HTMLDivElement;
@@ -121,7 +134,11 @@ export default class Split extends React.Component<SplitProps, SplitState> {
     this.prevSize = 0;
     this.nextSize = 0;
 
+    console.log('>>> 3');
     if(mode === 'horizontal') {
+
+      console.log('>>> 4-1');
+
       this.prevSize = this.prevWidth + x > -1 ? this.prevWidth + x : 0;
       this.nextSize = this.nextWidth - x > -1 ? this.nextWidth - x : 0;
       if(this.prevSize === 0 || this.nextSize === 0)
@@ -136,6 +153,9 @@ export default class Split extends React.Component<SplitProps, SplitState> {
     }
 
     if(mode === 'vertical' && this.prevHeight + y > -1 && this.nextHeight - y > -1) {
+
+      console.log('>>> 4-2');
+
       this.prevSize = this.prevHeight + y > -1 ? this.prevHeight + y : 0;
       this.nextSize = this.nextHeight - y > -1 ? this.nextHeight - y : 0;
       this.prevSize = (this.prevSize / this.boxHeight >= 1 ? 1 : this.prevSize / this.boxHeight) * 100;
@@ -152,12 +172,14 @@ export default class Split extends React.Component<SplitProps, SplitState> {
   }
 
   onDragEnd() {
+    // console.log('onDragEnd event is called...');
     const { onDragEnd } = this.props;
     this.move = false;
     onDragEnd && onDragEnd(this.prevSize, this.nextSize, this.paneNumber);
     this.removeEvent();
     this.setState({ dragging: false });
   }
+
   render() {
     const {
       prefixCls,
@@ -195,10 +217,7 @@ export default class Split extends React.Component<SplitProps, SplitState> {
                 `${prefixCls}-bar`,
                 lineBar ? `${prefixCls}-line-bar` : null,
                 !lineBar ? `${prefixCls}-large-bar` : null,
-              ]
-                .filter(Boolean)
-                .join(' ')
-                .trim(),
+              ].filter(Boolean).join(' ').trim(),
             };
             if(disable === true || (disable && disable.includes((idx+1) as never))) {
               barProps.className = [barProps.className, disable ? 'disable' : null].filter(Boolean).join(' ').trim();

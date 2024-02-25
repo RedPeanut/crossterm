@@ -1,9 +1,9 @@
 import React from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import './App.css';
+import './App.tobe.css';
 import configureStore from './store/configureStore';
-import Main from './parts/Main';
+import Main from './parts/Main.tobe';
 
 const store = configureStore();
 

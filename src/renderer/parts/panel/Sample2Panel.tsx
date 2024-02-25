@@ -10,7 +10,7 @@ class Sample2Panel extends React.Component<Sample2PanelProps, {}> {
 
   render() {
     const { sidePanel } = this.props;
-    const cls = 'side-panel bookmark-panel'
+    const cls = 'item sample2-panel'
       + (sidePanel.active === 'Sample2' ? ' active' : '');
     return (
       <div className={cls}>
