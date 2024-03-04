@@ -20,12 +20,12 @@
 .split-vertical > .split-bar {
   cursor: row-resize;
   width: 100%;
-  height: 3px;
+  height: 2px;
 }
 
 .split-horizontal > .split-bar {
   cursor: col-resize;
-  width: 3px;
+  width: 2px;
   height: 100%;
 }
 
