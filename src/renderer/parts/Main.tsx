@@ -45,11 +45,35 @@ class Main extends React.Component {
           </SidePanel>
           <Split className="parts body"
             lineBar={true}
-            visible={false}
+            // visible={false}
             style={{
             }}
           >
-            <div className="body-item">
+            <Split className=""
+              style={{width:'50%'}}
+              lineBar={true}
+              mode="vertical"
+            >
+              <div className="body-item"
+                style={{
+                  height:'50%'
+                }}
+              >
+                <Tabs />
+                <Sessions />
+              </div>
+              <div className="body-item"
+                style={{
+                  height:'50%'
+                }}
+              >
+                <Tabs />
+                <Sessions />
+              </div>
+            </Split>
+            <div className="body-item"
+              style={{width:'50%'}}
+            >
               <Tabs />
               <Sessions />
             </div>

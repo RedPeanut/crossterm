@@ -48,7 +48,7 @@ class SideBar extends React.Component<SideBarProps, {}> {
     // const { screen } = this.props;
     return (
       <div
-        className="parts sidebar"
+        className="parts side-bar"
         style={{
           // width: DEFAULT_SIDE_BAR_WIDTH,
           // height: screen.height,
