@@ -33,8 +33,8 @@ class SideBar extends React.Component<SideBarProps, {}> {
 
   onClick = (next: string) => {
     const { sidePanel } = this.props;
-    console.log('sidePanel.active =', sidePanel.active);
-    console.log('next =', next);
+    // console.log('sidePanel.active =', sidePanel.active);
+    // console.log('next =', next);
     if(sidePanel.active.toLowerCase() === next.toLowerCase()) {
       this.props.onSetSidePanel({ ...sidePanel, visible: !sidePanel.visible }); // toggle panel
     } else {

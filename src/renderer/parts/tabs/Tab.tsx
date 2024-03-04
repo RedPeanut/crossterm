@@ -26,9 +26,9 @@ class Tab extends React.Component<TabProps, {}> {
   };
 
   onDragEnter = (e: DragEvent): void => {
-    console.log('onDragEnter event is called...');
+    // console.log('onDragEnter event is called...');
     const target = e.target as HTMLElement;
-    console.log('target =', target);
+    // console.log('target =', target);
     /* if(!this.overlay) {
       const targetGroupView = this.findTargetGroupView(target);
       if(targetGroupView)
@@ -36,10 +36,10 @@ class Tab extends React.Component<TabProps, {}> {
     } */
   };
   onDragLeave = (): void => {
-    console.log('onDragLeave event is called...');
+    // console.log('onDragLeave event is called...');
   };
   onDragEnd = (): void => {
-    console.log('onDragEnd event is called...');
+    // console.log('onDragEnd event is called...');
   };
 
   handleContextMenu = (e) => { console.log('handleContextMenu() is called...'); };
