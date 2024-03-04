@@ -49,8 +49,10 @@ class Main extends React.Component {
             style={{
             }}
           >
-            <Tabs />
-            <Sessions />
+            <div className="body-item">
+              <Tabs />
+              <Sessions />
+            </div>
           </Split>
         </Split>
       </div>

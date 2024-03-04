@@ -1,4 +1,5 @@
 import React from 'react';
+import DropOverlay from '../DropOverlay';
 
 export default class Sessions extends React.Component {
   componentDidMount() {}
@@ -6,6 +7,7 @@ export default class Sessions extends React.Component {
   render() {
     return (
       <div className="sessions-container">
+        <DropOverlay />
       </div>
     );
   }
