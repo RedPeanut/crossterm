@@ -224,12 +224,12 @@ export default class Split extends React.Component<SplitProps, SplitState> {
             }
             let bar = null;
             if(idx !== count && visibleBar && renderBar) {
-              bar = renderBar({ ...barProps, onMouseDown: this.onMouseDown.bind(this, idx+1) });
+              bar = renderBar({ ...barProps, onMouseDown: this.onMouseDown.bind(this, idx) });
             } else if(idx !== count && visibleBar) {
               bar = React.createElement(
                 'div',
                 { ...barProps },
-                <div onMouseDown={this.onMouseDown.bind(this, idx+1)} />,
+                <div onMouseDown={this.onMouseDown.bind(this, idx)} />,
               );
             }
             return (

@@ -34,7 +34,7 @@ class Main extends React.Component {
       <div className="app">
         <Split className=""
           lineBar={true}
-          visible={[2]}
+          visible={[1]}
           style={{width:'100%'}}
         >
           <SideBar />
