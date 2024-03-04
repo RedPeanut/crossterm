@@ -14,7 +14,7 @@ class Tabs extends React.Component {
       <div className="tabs">
         <div className="tabs-and-actions-container">
           <div className="scrollable-element">
-            <div className="tablist tabs-container">
+            <div className="tablist">
               <Tab />
               <Tab />
               <Tab />
