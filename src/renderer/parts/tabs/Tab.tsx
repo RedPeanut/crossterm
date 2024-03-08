@@ -18,7 +18,7 @@ class Tab extends React.Component<TabProps, {}> {
     // e.dataTransfer?.setData('text/plain', JSON.stringify(''));
     // console.log('id =', id);
     // console.log('dom =', dom);
-    console.log('e =', e);
+    // console.log('e =', e);
   };
 
   findTargetGroupView = () => {

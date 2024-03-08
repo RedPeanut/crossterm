@@ -17,10 +17,10 @@ class Main extends React.Component {
   }
 
   onResize(e: Event) {
-    console.log('onResize() is called...');
+    // console.log('onResize() is called...');
     const _window = e.target as Window;
-    console.log('width =', _window.innerWidth);
-    console.log('height =', _window.innerHeight);
+    // console.log('width =', _window.innerWidth);
+    // console.log('height =', _window.innerHeight);
     // if(this.props) {
     //   this.props.onSetScreen({
     //     width: _window.innerWidth,
