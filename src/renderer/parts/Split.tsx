@@ -223,14 +223,16 @@ export default class Split extends React.Component<SplitProps, SplitState> {
               barProps.className = [barProps.className, disable ? 'disable' : null].filter(Boolean).join(' ').trim();
             }
             let bar = null;
-            if(idx !== count && visibleBar && renderBar) {
-              bar = renderBar({ ...barProps, onMouseDown: this.onMouseDown.bind(this, idx) });
-            } else if(idx !== count && visibleBar) {
-              bar = React.createElement(
-                'div',
-                { ...barProps },
-                <div onMouseDown={this.onMouseDown.bind(this, idx)} />,
-              );
+            if(idx !== count && visibleBar) {
+              if(renderBar) {
+                bar = renderBar({ ...barProps, onMouseDown: this.onMouseDown.bind(this, idx) });
+              } else {
+                bar = React.createElement(
+                  'div',
+                  { ...barProps },
+                  <div onMouseDown={this.onMouseDown.bind(this, idx)} />,
+                );
+              }
             }
             return (
               <React.Fragment key={idx}>
