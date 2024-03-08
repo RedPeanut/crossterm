@@ -10,6 +10,7 @@ import Sample1Panel from './panel/Sample1Panel';
 import Sample2Panel from './panel/Sample2Panel';
 import Tabs from './tabs/Tabs';
 import Sessions from './session/Sessions';
+import { Terminal, SplitItem, isTerminal, isSplitItem } from '../Types';
 
 class Main extends React.Component {
   componentDidMount() {
@@ -29,7 +30,52 @@ class Main extends React.Component {
     // }
   }
 
+  // render item recursively
+  renderBodyItem(mode: string, list: (SplitItem | Terminal[])[]): JSX.Element[] {
+    let result = []; // (<></>);
+    let size = Math.floor(100 / list.length) + '%';
+    for(let i = 0; i < list.length; i++) {
+      if(Array.isArray(list[i])) {
+        result.push(
+          <div className="body-item"
+            style={mode === 'vertical' ? { height: size } : { width: size }}
+          >
+            <Tabs />
+            <Sessions />
+          </div>
+        )
+      } else if(isSplitItem(list[i])) {
+        let item = list[i] as SplitItem;
+        result.push(
+          <Split className=""
+            style={mode === 'vertical' ? { height: size } : { width: size }}
+            lineBar={true}
+            mode={item.mode}
+          >
+            { this.renderBodyItem(item.mode, item.list) }
+          </Split>
+        )
+      }
+    }
+    return result;
+  }
+
   render() {
+
+    let root: SplitItem = {
+      mode: 'horizontal',
+      list: [
+        {
+          mode: 'vertical',
+          list: [
+            [{id:'a'}],
+            [{id:'b'}]
+          ]
+        },
+        [{id:'c'}]
+      ]
+    };
+
     return (
       <div className="app">
         <Split className=""
@@ -49,7 +95,8 @@ class Main extends React.Component {
             style={{
             }}
           >
-            <Split className=""
+            { this.renderBodyItem(root.mode, root.list) }
+            {/* <Split className=""
               style={{width:'50%'}}
               lineBar={true}
               mode="vertical"
@@ -76,7 +123,7 @@ class Main extends React.Component {
             >
               <Tabs />
               <Sessions />
-            </div>
+            </div> */}
           </Split>
         </Split>
       </div>
