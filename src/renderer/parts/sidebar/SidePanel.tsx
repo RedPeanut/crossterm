@@ -13,7 +13,7 @@ class SidePanel extends React.Component<SidePanelProps, {}> {
     const { sidePanel } = this.props;
     return (
       <div
-        id="side-panel"
+        className="side-panel"
         style={{
           // left: DEFAULT_SIDE_BAR_WIDTH,
           // width: DEFAULT_SIDE_PANEL_WIDTH,
