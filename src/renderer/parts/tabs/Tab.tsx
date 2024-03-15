@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { Terminal, SplitItem, isTerminal, isSplitItem } from '../../Types';
+
 interface TabProps {
   children?: React.ReactElement | React.ReactElement[];
+  terminal: Terminal;
 }
 
 class Tab extends React.Component<TabProps, {}> {
@@ -45,7 +48,7 @@ class Tab extends React.Component<TabProps, {}> {
   handleContextMenu = (e) => { console.log('handleContextMenu() is called...'); };
 
   render() {
-    const { children } = this.props;
+    const { children, terminal } = this.props;
     // console.log('this.props =', this.props);
 
     return (

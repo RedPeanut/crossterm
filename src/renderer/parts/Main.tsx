@@ -40,7 +40,7 @@ class Main extends React.Component {
           <div className="body-item"
             style={mode === 'vertical' ? { height: size } : { width: size }}
           >
-            <Tabs />
+            <Tabs list={list[i] as Terminal[]}/>
             <Sessions list={list[i] as Terminal[]}/>
           </div>
         )
@@ -62,14 +62,14 @@ class Main extends React.Component {
 
   render() {
 
-    let root: SplitItem = {
+    /* let root: SplitItem = {
       mode: 'horizontal',
       list: [
         [{id:'a1'},{id:'a2'}]
       ],
-    }
+    } */
 
-    /* let root: SplitItem = {
+    let root: SplitItem = {
       mode: 'horizontal',
       list: [
         {
@@ -81,7 +81,7 @@ class Main extends React.Component {
         },
         [{id:'c1'},{id:'c2'},{id:'c3'}]
       ]
-    }; */
+    };
 
     return (
       <div className="app">

@@ -2,22 +2,34 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Tab from './Tab';
 import { Splittable } from '../../Types';
+import { Terminal, SplitItem, isTerminal, isSplitItem } from '../../Types';
+import { v1 as uuid } from 'uuid';
+interface TabsProps {
+  list: Terminal[];
+}
 
-interface TabsProps {}
+interface TabsState {
+}
 
-class Tabs extends React.Component {
+class Tabs extends React.Component<TabsProps, TabsState> {
   componentDidMount() {}
 
   render() {
-    const { ...rest } = this.props;
+    const { list } = this.props;
     return (
       <div className="tabs">
         <div className="tabs-and-actions-container">
           <div className="scrollable-element">
             <div className="tablist">
-              <Tab />
-              <Tab />
-              <Tab />
+              {
+                list.map((e) => {
+                  return (
+                    <Tab terminal={e}
+                      key={uuid()}
+                    />
+                  );
+                })
+              }
             </div>
           </div>
           <div className="actions"></div>
