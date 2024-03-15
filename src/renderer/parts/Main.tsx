@@ -13,6 +13,9 @@ import Sessions from './session/Sessions';
 import { Terminal, SplitItem, isTerminal, isSplitItem } from '../Types';
 import { v1 as uuid } from 'uuid';
 
+import '../../../node_modules/xterm/css/xterm.css';
+import Term from './terminal';
+
 class Main extends React.Component {
   componentDidMount() {
     window.addEventListener('resize', _.debounce(this.onResize.bind(this), 100/* , { leading: true } */));
@@ -105,6 +108,9 @@ class Main extends React.Component {
             style={{
             }}
           >
+
+            {/* <Term /> */}
+
             { this.renderBodyItem(root.mode, root.list) }
 
             {/* <Split className=""
