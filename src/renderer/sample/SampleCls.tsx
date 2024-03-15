@@ -9,7 +9,7 @@ class SampleCls extends React.Component<SampleClsProps, SampleClsState> {
 
   public static defaultProps = {};
 
-  constructor(props: any) {
+  constructor(props: SampleClsProps) {
     super(props);
   }
 
