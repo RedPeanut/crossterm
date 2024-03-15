@@ -11,6 +11,7 @@ import Sample2Panel from './panel/Sample2Panel';
 import Tabs from './tabs/Tabs';
 import Sessions from './session/Sessions';
 import { Terminal, SplitItem, isTerminal, isSplitItem } from '../Types';
+import { v1 as uuid } from 'uuid';
 
 class Main extends React.Component {
   componentDidMount() {
@@ -39,6 +40,7 @@ class Main extends React.Component {
         result.push(
           <div className="body-item"
             style={mode === 'vertical' ? { height: size } : { width: size }}
+            key={uuid()}
           >
             <Tabs list={list[i] as Terminal[]}/>
             <Sessions list={list[i] as Terminal[]}/>
@@ -51,6 +53,7 @@ class Main extends React.Component {
             style={mode === 'vertical' ? { height: size } : { width: size }}
             lineBar={true}
             mode={item.mode}
+            key={uuid()}
           >
             { this.renderBodyItem(item.mode, item.list) }
           </Split>
