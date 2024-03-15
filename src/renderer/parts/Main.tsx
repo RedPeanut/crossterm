@@ -41,7 +41,7 @@ class Main extends React.Component {
             style={mode === 'vertical' ? { height: size } : { width: size }}
           >
             <Tabs />
-            <Sessions />
+            <Sessions list={list[i] as Terminal[]}/>
           </div>
         )
       } else if(isSplitItem(list[i])) {
@@ -65,16 +65,23 @@ class Main extends React.Component {
     let root: SplitItem = {
       mode: 'horizontal',
       list: [
+        [{id:'a1'},{id:'a2'}]
+      ],
+    }
+
+    /* let root: SplitItem = {
+      mode: 'horizontal',
+      list: [
         {
           mode: 'vertical',
           list: [
-            [{id:'a'}],
+            [{id:'a1'},{id:'a2'}],
             [{id:'b'}]
           ]
         },
-        [{id:'c'}]
+        [{id:'c1'},{id:'c2'},{id:'c3'}]
       ]
-    };
+    }; */
 
     return (
       <div className="app">
@@ -96,6 +103,7 @@ class Main extends React.Component {
             }}
           >
             { this.renderBodyItem(root.mode, root.list) }
+
             {/* <Split className=""
               style={{width:'50%'}}
               lineBar={true}
@@ -124,6 +132,7 @@ class Main extends React.Component {
               <Tabs />
               <Sessions />
             </div> */}
+
           </Split>
         </Split>
       </div>

@@ -8,6 +8,8 @@ export const SET_SCREEN = 'SET_SCREEN';
 export const GET_SCREEN = 'GET_SCREEN';
 export const SET_SIDE_PANEL = 'SET_SIDE_PANEL';
 export const GET_SIDE_PANEL = 'GET_SIDE_PANEL';
+export const SET_DROP_OVERLAY = 'SET_DROP_OVERLAY';
+export const GET_DROP_OVERLAY = 'GET_DROP_OVERLAY';
 
 /* action creator */
 export function setScreen(_v: {}) {
@@ -16,6 +18,10 @@ export function setScreen(_v: {}) {
 
 export function setSidePanel(_v: {}) {
   return { type: SET_SIDE_PANEL, v: _v };
+}
+
+export function setDropOverlay(_v: {}) {
+  return { type: SET_DROP_OVERLAY, v: _v };
 }
 
 /* initial state */
@@ -38,6 +44,10 @@ export const initialState/*: {
     visible: true,
     active: DEFAULT_ACTIVE_SIDE_BAR_ICON,
   },
+  dropOverlay: {
+    id: '',
+    style: {},
+  },
 };
 
 /* reducers */
@@ -57,6 +67,13 @@ export default (state = initialState, action: { type: string; v: any }) => {
       };
     case GET_SIDE_PANEL:
       return state.sidePanel;
+    case SET_DROP_OVERLAY:
+      return {
+        ...state,
+        dropOverlay: action.v,
+      };
+    case GET_DROP_OVERLAY:
+      return state.dropOverlay;
     default:
       return state;
   }
