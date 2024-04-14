@@ -17,6 +17,7 @@ import { setSidePanel } from '../../reducers/app';
 import SideIcon from './SideIcon';
 import SidePanel from './SidePanel';
 import BookmarkPanel from '../panel/BookmarkPanel';
+import '../../../../release/app/node_modules/@vscode/codicons/dist/codicon.css';
 
 import {
   DEFAULT_SIDE_BAR_WIDTH,
@@ -56,23 +57,37 @@ class SideBar extends React.Component<SideBarProps, {}> {
       >
         <div className="content">
           <div className="composite-bar">
-            <SideIcon title="Bookmarks">
-              <BookOutlined
+            <SideIcon title="Bookmarks"
+              // onClick={() => this.onClick('Bookmarks')}
+            >
+              {/* <BookOutlined rev={null}
                 className="font20 iblock control-icon"
+                onClick={() => this.onClick('Bookmarks')} /> */}
+              <i className="codicon codicon-bookmark"
                 onClick={() => this.onClick('Bookmarks')}
-              />
+              ></i>
             </SideIcon>
-            <SideIcon title="Sample1">
-              <InfoCircleOutlined
+            <SideIcon title="Sample1"
+              // onClick={() => this.onClick('Sample1')}
+            >
+              {/* <InfoCircleOutlined rev={null}
                 className="iblock font16 control-icon open-about-icon"
                 onClick={() => this.onClick('Sample1')}
-              />
+              /> */}
+              <i className="codicon codicon-info"
+                onClick={() => this.onClick('Sample1')}
+              ></i>
             </SideIcon>
-            <SideIcon title="Sample2">
-              <InfoCircleOutlined
+            <SideIcon title="Sample2"
+              // onClick={() => this.onClick('Sample2')}
+            >
+              {/* <InfoCircleOutlined rev={null}
                 className="iblock font16 control-icon open-about-icon"
                 onClick={() => this.onClick('Sample2')}
-              />
+              /> */}
+              <i className="codicon codicon-info"
+                onClick={() => this.onClick('Sample2')}
+              ></i>
             </SideIcon>
           </div>
         </div>
