@@ -17,8 +17,20 @@ import '../../../node_modules/xterm/css/xterm.css';
 import Term from './terminal';
 
 class Main extends React.Component {
+
+  _onResize: (this: Window, ev: UIEvent) => any;
+
+  constructor(props: any) {
+    super(props);
+    this._onResize = _.debounce(this.onResize.bind(this), 100/* , { leading: true } */);
+  }
+
   componentDidMount() {
-    window.addEventListener('resize', _.debounce(this.onResize.bind(this), 100/* , { leading: true } */));
+    window.addEventListener('resize', this._onResize);
+  }
+
+  componentWillUnmount(): void {
+    window.removeEventListener('resize', this._onResize);
   }
 
   onResize(e: Event) {

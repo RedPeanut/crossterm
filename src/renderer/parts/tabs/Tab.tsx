@@ -17,7 +17,7 @@ class Tab extends React.Component<TabProps, {}> {
   componentDidMount() {
   }
 
-  onDragStart = (e: DragEvent): void => {
+  onDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
     // e.dataTransfer?.setData('text/plain', JSON.stringify(''));
     // console.log('id =', id);
     // console.log('dom =', dom);
@@ -28,7 +28,7 @@ class Tab extends React.Component<TabProps, {}> {
     //
   };
 
-  onDragEnter = (e: DragEvent): void => {
+  onDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
     // console.log('onDragEnter event is called...');
     const target = e.target as HTMLElement;
     // console.log('target =', target);
@@ -45,7 +45,7 @@ class Tab extends React.Component<TabProps, {}> {
     // console.log('onDragEnd event is called...');
   };
 
-  handleContextMenu = (e) => { console.log('handleContextMenu() is called...'); };
+  handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
 
   render() {
     const { children, terminal } = this.props;
