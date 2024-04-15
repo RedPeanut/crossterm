@@ -25,7 +25,7 @@ class Runtime {
   public static defaultLang = 'en_us';
   public static tempDir = os.tmpdir();
   public static homeDir = os.homedir();
-  public static packInfo = require(this.isDev ? '../../package.json' : '../package.json')
+  public static packInfo = require(this.isDev ? '../../package.json' : '../../package.json')
 }
 
 export default Runtime;
