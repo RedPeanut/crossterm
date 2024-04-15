@@ -121,9 +121,9 @@ class Main extends React.Component {
             }}
           >
 
-            {/* <Term /> */}
+            <Term />
 
-            { this.renderBodyItem(root.mode, root.list) }
+            {/* { this.renderBodyItem(root.mode, root.list) } */}
 
             {/* <Split className=""
               style={{width:'50%'}}

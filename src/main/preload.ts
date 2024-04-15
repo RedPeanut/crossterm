@@ -1,29 +1,23 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { contextBridge, ipcRenderer, IpcRendererEvent, IpcRenderer } from 'electron';
 
 export type Channels = 'ipc-example';
 
 const electronHandler = {
-  api: {
+  'api': {
+    send(event: string, ...args: any[]) {
+      ipcRenderer.send(event, args);
+    },
+    invoke(event: string, ...args: any[]) {
+      return ipcRenderer.invoke(event, args);
+    },
     on: (event: string, cb: (...args: unknown[]) => void) => {
       ipcRenderer.on(event, cb)
     },
     off: (event: string, cb: (...args: unknown[]) => void) => {
       ipcRenderer.removeListener(event, cb)
     },
-    aync: (name: string, ...args: unknown[]) => {
-      return ipcRenderer.invoke('async', {
-        name,
-        args
-      })
-    },
-    sync: (name: string, ...args: unknown[]) => {
-      return ipcRenderer.sendSync('sync-func', {
-        name,
-        args
-      })
-    }
   },
-  ipcRenderer: {
+  'ipcRenderer': {
     sendMessage(channel: Channels, args: unknown[]) {
       ipcRenderer.send(channel, args);
     },
