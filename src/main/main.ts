@@ -113,7 +113,6 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-
 const getLastStateWindowSize = async () => {
   const lastStateWindowPos = await LastStateManager.get('windowPos');
   const lastStateWindowSize = await LastStateManager.get('windowSize');
