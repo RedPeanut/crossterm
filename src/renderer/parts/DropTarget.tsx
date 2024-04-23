@@ -1,6 +1,6 @@
 import React, { DragEvent, useRef } from 'react';
 import { connect } from 'react-redux';
-import { Terminal, SplitItem, isTerminal, isSplitItem } from '../Types';
+import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../Types';
 const debug = require('debug')('DropTarget');
 
 interface DropTargetProps {
@@ -9,7 +9,7 @@ interface DropTargetProps {
   // ref?: string;
   id?: string;
   key?: string;
-  uuid?: string;
+  uid?: string;
 
   //
   dropOverlay: {};
@@ -42,7 +42,7 @@ class DropTarget extends React.Component<DropTargetProps, DropTargetState> {
     // console.log('shouldComponentUpdate() is called...');
     // console.log(`nextProps = ${JSON.stringify(nextProps)}, nextState = ${JSON.stringify(nextState)}`);
     if(nextProps.dropOverlay && nextProps.dropOverlay.style) {
-      if(nextProps.dropOverlay.id !== this.props.uuid)
+      if(nextProps.dropOverlay.id !== this.props.uid)
         return false;
       else
         return JSON.stringify(nextProps.dropOverlay) !== JSON.stringify(this.props.dropOverlay)

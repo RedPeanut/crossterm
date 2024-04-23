@@ -1,6 +1,6 @@
 import React, { DragEvent, useRef } from 'react';
 import { connect } from 'react-redux';
-import { Terminal, SplitItem, isTerminal, isSplitItem } from '../Types';
+import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../Types';
 import _ from 'lodash';
 import { setDropOverlay, setShowDropTarget } from '../reducers/app';
 const debug = require('debug')('DropOverlay');
@@ -10,8 +10,8 @@ export const enum GroupDirection {
 }
 
 interface DropOverlayProps {
-  list: Terminal[];
-  uuid?: string;
+  list: Terminal_[];
+  uid?: string;
 }
 
 interface DropOverlayState {}
@@ -184,7 +184,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     let _e = e.nativeEvent;
     // console.log('_e =', _e);
     this.showDropTarget = false;
-    const { list, dropOverlay, uuid } = this.props;
+    const { list, dropOverlay, uid: uuid } = this.props;
     // console.log('dropOverlay =', dropOverlay);
     // console.log('uuid =', uuid);
     if(list != null && list.length > 0
@@ -215,7 +215,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
       }
     }); */
     this.showDropTarget = false;
-    const { list, dropOverlay, uuid } = this.props;
+    const { list, dropOverlay, uid: uuid } = this.props;
     // if(dropOverlay.id === uuid) {
       // console.log('>>> 1');
       this.props.onSetDropOverlay({

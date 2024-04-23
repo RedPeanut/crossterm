@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { Terminal, SplitItem, isTerminal, isSplitItem } from '../../Types';
+import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../../Types';
 import DropOverlay from '../DropOverlay';
 import DropTarget from '../DropTarget';
 import _ from 'lodash';
-import { v1 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 interface SessionsProps {
-  list: Terminal[];
+  list: Terminal_[];
 }
 
 interface SessionsState {
@@ -15,11 +15,11 @@ interface SessionsState {
 
 export default class Sessions extends React.Component<SessionsProps, SessionsState> {
 
-  uuid: string;
+  uid: string;
 
   constructor(props: SessionsProps) {
     super(props)
-    this.uuid = uuid();
+    this.uid = uuidv4();
     this.state = {
     }
   }
@@ -28,11 +28,11 @@ export default class Sessions extends React.Component<SessionsProps, SessionsSta
 
   render() {
     return (
-      <div id={this.uuid}
+      <div id={this.uid}
         className='sessions-container'
       >
-        <DropTarget uuid={this.uuid} />
-        <DropOverlay uuid={this.uuid} list={this.props.list} />
+        <DropTarget uid={this.uid} />
+        <DropOverlay uid={this.uid} list={this.props.list} />
       </div>
     );
   }

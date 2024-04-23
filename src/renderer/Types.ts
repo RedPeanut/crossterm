@@ -1,6 +1,6 @@
 export interface Splittable {}
 
-export interface Terminal {
+export interface Terminal_ {
   id: string;
   // properties that are describe to terminal
   // text, position, etc ...
@@ -8,7 +8,7 @@ export interface Terminal {
 
 export interface SplitItem {
   mode: 'horizontal' | 'vertical'; // string;
-  list: (SplitItem | Terminal[])[];
+  list: (SplitItem | Terminal_[])[];
 }
 
 export function isTerminal(o: any) {

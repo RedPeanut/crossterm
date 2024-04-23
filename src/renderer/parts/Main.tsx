@@ -10,8 +10,8 @@ import Sample1Panel from './panel/Sample1Panel';
 import Sample2Panel from './panel/Sample2Panel';
 import Tabs from './tabs/Tabs';
 import Sessions from './session/Sessions';
-import { Terminal, SplitItem, isTerminal, isSplitItem } from '../Types';
-import { v1 as uuid } from 'uuid';
+import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../Types';
+import { v4 as uuidv4 } from 'uuid';
 
 import '../../../node_modules/xterm/css/xterm.css';
 import Term from './terminal';
@@ -47,7 +47,7 @@ class Main extends React.Component {
   }
 
   // render item recursively
-  renderBodyItem(mode: string, list: (SplitItem | Terminal[])[]): JSX.Element[] {
+  renderBodyItem(mode: string, list: (SplitItem | Terminal_[])[]): JSX.Element[] {
     let result = []; // (<></>);
     let size = Math.floor(100 / list.length) + '%';
     for(let i = 0; i < list.length; i++) {
@@ -55,10 +55,10 @@ class Main extends React.Component {
         result.push(
           <div className="body-item"
             style={mode === 'vertical' ? { height: size } : { width: size }}
-            key={uuid()}
+            key={uuidv4()}
           >
-            <Tabs list={list[i] as Terminal[]}/>
-            <Sessions list={list[i] as Terminal[]}/>
+            <Tabs list={list[i] as Terminal_[]}/>
+            <Sessions list={list[i] as Terminal_[]}/>
           </div>
         )
       } else if(isSplitItem(list[i])) {
@@ -68,7 +68,7 @@ class Main extends React.Component {
             style={mode === 'vertical' ? { height: size } : { width: size }}
             lineBar={true}
             mode={item.mode}
-            key={uuid()}
+            key={uuidv4()}
           >
             { this.renderBodyItem(item.mode, item.list) }
           </Split>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Terminal, SplitItem, isTerminal, isSplitItem } from '../../Types';
+import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../../Types';
 
 interface TabProps {
   children?: React.ReactElement | React.ReactElement[];
-  terminal: Terminal;
+  terminal: Terminal_;
 }
 
 class Tab extends React.Component<TabProps, {}> {
