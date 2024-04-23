@@ -78,5 +78,5 @@ const mapDispatchToProps = (dispatch: any) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(Tab);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Tab);
 

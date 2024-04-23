@@ -75,7 +75,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     overlay.style.height = options.height;
   } */
 
-  private positionOverlay(e: DragEvent): void { // mousePosX: number, mousePosY: number): void {
+  private positionOverlay(e: any): void { // mousePosX: number, mousePosY: number): void {
 
     let style = {};
 
@@ -169,7 +169,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     });
   }
 
-  onDragStart(e) {
+  onDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDragStart() is called...');
     // console.log('e =', e);
     // this._startX = dom.offsetLeft;
@@ -178,7 +178,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     // this._offsetY = e.clientY;
   }
 
-  onDragEnter(e) {
+  onDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDragEnter() is called...');
     // console.log('e =', e);
     let _e = e.nativeEvent;
@@ -205,7 +205,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     // this.setState({startDropOverlay: startDropOverlay});
   }
 
-  onDragLeave(e) {
+  onDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDragLeave() is called...');
     /* this.setState({startDropOverlay: false});
     this.setState({
@@ -233,11 +233,11 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     }); */
   }
 
-  onDragEnd(e) {
+  onDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDragEnd() is called...');
   }
 
-  onDragOver(e) {
+  onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDragOver() is called...');
     // console.log('e =', e as DragEvent);
     // console.log('e.offsetX =', e.offsetX);
@@ -248,7 +248,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
       this.positionOverlay(_e);
   }
 
-  onDrop(e) {
+  onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDrop() is called...');
   }
 
@@ -288,4 +288,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(DropOverlay);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(DropOverlay);

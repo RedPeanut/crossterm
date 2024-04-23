@@ -85,4 +85,4 @@ const mapDispatchToProps = (dispatch: any) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(DropTarget);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(DropTarget);
