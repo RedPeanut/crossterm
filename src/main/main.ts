@@ -27,8 +27,6 @@ class AppUpdater {
   }
 }
 
-let win: BrowserWindow | null = null;
-
 ipcMain.on('api:createTerminal', async (event, arg) => {
   // console.log('[main.ts] event =', event);
   // console.log('[main.ts] arg =', arg);
@@ -156,6 +154,8 @@ const getWindowSize = async () => {
   }
 }
 
+let win: BrowserWindow | null = null;
+
 const createWindow = async () => {
 
   if(Runtime.isDev) {
@@ -196,7 +196,7 @@ const createWindow = async () => {
   });
 
   win.on('move', _.debounce(() => {
-    const { x, y } = win?.getBounds();
+    const { x, y } = win!.getBounds();
     // setWindowPos({ x, y });
     LastStateManager.set('windowPos', { x, y });
   }, 100));
