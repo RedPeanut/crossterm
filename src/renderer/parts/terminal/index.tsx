@@ -15,8 +15,8 @@ class Term extends React.Component<TermProps, TermState> {
   }
 
   componentDidMount() {
-    let returnValue = window.electron.api.send('api:createTerminal', { type: 'local', size: { col: 80, row: 24 } });
-    console.log('[app] returnValue =', returnValue);
+    /* let returnValue =  */window.ipc.send('new', { type: 'local', size: { col: 80, row: 24 } });
+    // console.log('[app] returnValue =', returnValue);
 
     const terminal = new Terminal();
     // Load WebLinksAddon on terminal, this is all that's needed to get web links

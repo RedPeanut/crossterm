@@ -27,6 +27,15 @@ class Main extends React.Component {
 
   componentDidMount() {
     window.addEventListener('resize', this._onResize);
+
+    window.ipc.on('terminal data', (...args: any[]) => {
+      console.log('terminal data event is called..');
+      console.log('args =', args);
+      const raw: string = args[1];
+      const uid = raw.slice(0, 36);
+      const data = raw.slice(36);
+    });
+
   }
 
   componentWillUnmount(): void {

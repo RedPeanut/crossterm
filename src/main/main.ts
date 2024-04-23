@@ -27,68 +27,6 @@ class AppUpdater {
   }
 }
 
-ipcMain.on('api:createTerminal', async (event, arg) => {
-  // console.log('[main.ts] event =', event);
-  // console.log('[main.ts] arg =', arg);
-  // event.reply('api:createTerminal', {name: 'reply argument', arg1: 'arg1', arg2: ['args2-1','arg2-2']});
-  // event.returnValue = {name: 'return argument', arg1: 'arg1', arg2: ['args2-1', 'arg2-2']};
-  event.reply('api:createTerminal', api['createTerminal'](arg));
-});
-
-let someFn = (args: any): any => {
-  console.log('[main.ts/someFn] args =', args);
-}
-
-import * as os from 'node:os';
-import * as pty from 'node-pty';
-
-let createTerminal = (args: any): any => {
-  console.log('[main.ts/createTerminal] args =', args);
-  // return { resultData: 'someVal' };
-  const shell = os.platform() === 'win32' ? 'powershell.exe' : 'bash';
-  const ptyProcess = pty.spawn(shell, [], {
-    name: 'xterm-color',
-    cols: 80,
-    rows: 24,
-    cwd: process.cwd(),
-    env: process.env
-  });
-  // return ptyProcess;
-}
-
-let api: { [key: string]: (args: any) => any } = {
-  someFn,
-  createTerminal,
-};
-
-/**
- * send - on :
- */
-ipcMain.on('api', (event, args) => {
-  console.log('on() is called...');
-  console.log('event =', event);
-  console.log('args =', args);
-  // console.log('{ name, args } =', { name, args });
-  // event.returnValue = api[name](args);
-});
-
-/**
- * invoke - handle :
- */
-ipcMain.handle('api', (event, args) => {
-  console.log('handle() is called...');
-  console.log('event =', event);
-  console.log('args =', args);
-  // console.log('{ name, args } =', { name, args });
-  // return api[name](args); // cannot return object
-});
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
-
 if(Runtime.isProd) {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
@@ -180,6 +118,19 @@ const createWindow = async () => {
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
+  });
+
+  ipcMain.on('new', (event, args: any[]) => {
+    console.log('[main.ts/new] args =', args);
+    const arg = args[0];
+    if(arg.type === 'local') {
+    } else if(arg.type === 'ssh') {
+    }
+  });
+
+  ipcMain.on('data', (event, args: any[]) => {
+    console.log('[main.ts/data] args =', args);
+    const arg = args[0];
   });
 
   win.loadURL(resolveHtmlPath('index.html'));

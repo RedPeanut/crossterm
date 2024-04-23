@@ -1,40 +1,39 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent, IpcRenderer } from 'electron';
 
-export type Channels = 'ipc-example';
+export type MainEvents =
+  'new'
+  | 'data'
+  | 'maximize'
+  | 'minimize'
+  | 'resize'
+  | 'open context menu'
+  | 'close'
+  | 'command'
+;
+
+export type RenderEvents =
+  'terminal add'
+  | 'terminal data'
+  | 'terminal exit'
+;
+
+export type Channels = MainEvents | RenderEvents;
 
 const electronHandler = {
-  'api': {
-    send(event: string, ...args: any[]) {
-      ipcRenderer.send(event, args);
-    },
-    invoke(event: string, ...args: any[]) {
-      return ipcRenderer.invoke(event, args);
-    },
-    on: (event: string, cb: (...args: unknown[]) => void) => {
-      ipcRenderer.on(event, cb)
-    },
-    off: (event: string, cb: (...args: unknown[]) => void) => {
-      ipcRenderer.removeListener(event, cb)
-    },
+  send(channel: Channels, ...args: any[]) {
+    ipcRenderer.send(channel, args);
   },
-  'ipcRenderer': {
-    sendMessage(channel: Channels, args: unknown[]) {
-      ipcRenderer.send(channel, args);
-    },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) => func(...args);
-      ipcRenderer.on(channel, subscription);
-
-      return () => {
-        ipcRenderer.removeListener(channel, subscription);
-      };
-    },
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
-    },
+  invoke(channel: Channels, ...args: any[]) {
+    return ipcRenderer.invoke(channel, args);
+  },
+  on: (channel: Channels, cb: (...args: unknown[]) => void) => {
+    ipcRenderer.on(channel, cb)
+  },
+  off: (channel: Channels, cb: (...args: unknown[]) => void) => {
+    ipcRenderer.removeListener(channel, cb)
   },
 };
 
-contextBridge.exposeInMainWorld('electron', electronHandler);
+contextBridge.exposeInMainWorld('ipc', electronHandler);
 
 export type ElectronHandler = typeof electronHandler;
