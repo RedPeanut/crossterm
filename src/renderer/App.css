@@ -103,6 +103,10 @@ body { height: 100%; }
   flex-grow: 1;
 }
 
+.terms-container {
+  flex-grow: 1;
+}
+
 .tabs .tablist {
   display: flex;
   height: 35px;
@@ -122,6 +126,12 @@ body { height: 100%; }
 }
 
 .sessions-container {
+  position: relative;
+  width: 100%;
+  /* height: 100%; */
+}
+
+.terms-container {
   position: relative;
   width: 100%;
   /* height: 100%; */

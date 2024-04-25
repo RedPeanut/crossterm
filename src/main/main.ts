@@ -18,6 +18,8 @@ import { resolveHtmlPath } from './util';
 import Runtime from './Runtime';
 import LastStateManager from './nedb/LastStateManager';
 import _ from 'lodash';
+import {v4 as uuidv4} from 'uuid';
+import TerminalLocal from './terminal/TerminalLocal';
 
 class AppUpdater {
   constructor() {
@@ -120,10 +122,18 @@ const createWindow = async () => {
     },
   });
 
+  const terminals = new Map<string, TerminalLocal>();
+
   ipcMain.on('new', (event, args: any[]) => {
     console.log('[main.ts/new] args =', args);
     const arg = args[0];
     if(arg.type === 'local') {
+      const terminal = new TerminalLocal({uid: arg.uid});
+      terminal.on('data', (data: string) => {
+        console.log('data event is called..., data =', data);
+        win?.webContents.send('terminal data', data);
+      });
+      terminals.set(arg.uid, terminal);
     } else if(arg.type === 'ssh') {
     }
   });
@@ -131,6 +141,10 @@ const createWindow = async () => {
   ipcMain.on('data', (event, args: any[]) => {
     console.log('[main.ts/data] args =', args);
     const arg = args[0];
+    const terminal = arg && arg.uid && terminals.get(arg.uid);
+    if(terminal) {
+      terminal.write(arg.data);
+    }
   });
 
   win.loadURL(resolveHtmlPath('index.html'));

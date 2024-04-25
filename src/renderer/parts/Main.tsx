@@ -14,7 +14,9 @@ import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../Types';
 import { v4 as uuidv4 } from 'uuid';
 
 import '../../../node_modules/xterm/css/xterm.css';
-import Term from './terminal';
+import Term from './terminal/Term';
+import terminals from './terminal/terminals';
+import Terms from './terminal/Terms';
 
 class Main extends React.Component {
 
@@ -34,6 +36,10 @@ class Main extends React.Component {
       const raw: string = args[1];
       const uid = raw.slice(0, 36);
       const data = raw.slice(36);
+      const term = terminals[uid];
+      if(term) {
+        term.terminal.write(data);
+      }
     });
 
   }
@@ -67,7 +73,7 @@ class Main extends React.Component {
             key={uuidv4()}
           >
             <Tabs list={list[i] as Terminal_[]}/>
-            <Sessions list={list[i] as Terminal_[]}/>
+            <Terms list={list[i] as Terminal_[]}/>
           </div>
         )
       } else if(isSplitItem(list[i])) {
@@ -89,14 +95,14 @@ class Main extends React.Component {
 
   render() {
 
-    /* let root: SplitItem = {
+    let root: SplitItem = {
       mode: 'horizontal',
       list: [
         [{id:'a1'},{id:'a2'}]
       ],
-    } */
+    }
 
-    let root: SplitItem = {
+    /* let root: SplitItem = {
       mode: 'horizontal',
       list: [
         {
@@ -108,7 +114,7 @@ class Main extends React.Component {
         },
         [{id:'c1'},{id:'c2'},{id:'c3'}]
       ]
-    };
+    }; */
 
     return (
       <div className="app">
@@ -130,9 +136,9 @@ class Main extends React.Component {
             }}
           >
 
-            <Term />
+            {/* <Term /> */}
 
-            {/* { this.renderBodyItem(root.mode, root.list) } */}
+            { this.renderBodyItem(root.mode, root.list) }
 
             {/* <Split className=""
               style={{width:'50%'}}
