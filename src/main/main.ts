@@ -125,12 +125,12 @@ const createWindow = async () => {
   const terminals = new Map<string, TerminalLocal>();
 
   ipcMain.on('new', (event, args: any[]) => {
-    console.log('[main.ts/new] args =', args);
+    // console.log('[main.ts/new] args =', args);
     const arg = args[0];
     if(arg.type === 'local') {
       const terminal = new TerminalLocal({uid: arg.uid});
       terminal.on('data', (data: string) => {
-        console.log('data event is called..., data =', data);
+        // console.log('data event is called..., data =', data);
         win?.webContents.send('terminal data', data);
       });
       terminals.set(arg.uid, terminal);
@@ -139,7 +139,7 @@ const createWindow = async () => {
   });
 
   ipcMain.on('data', (event, args: any[]) => {
-    console.log('[main.ts/data] args =', args);
+    // console.log('[main.ts/data] args =', args);
     const arg = args[0];
     const terminal = arg && arg.uid && terminals.get(arg.uid);
     if(terminal) {

@@ -29,7 +29,7 @@ class Term extends React.Component<TermProps, TermState> {
   }
 
   onData(data: string) {
-    console.log('onData() is called..., e =', data);
+    // console.log('onData() is called..., e =', data);
     window.ipc.send('data', {
       uid: this.uid,
       data: data
