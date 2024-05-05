@@ -56,8 +56,8 @@ class Tab extends React.Component<TabProps, {}> {
         draggable
         onDragEnter={this.onDragEnter}
         onDragLeave={this.onDragLeave}
-        onDragEnd={this.onDragEnd}
         onDragStart={this.onDragStart}
+        onDragEnd={this.onDragEnd}
         // onDrag={this.onDrag}
         // onDragOver={this.onDragOver}
         // onDragExit={this.onDragExit}

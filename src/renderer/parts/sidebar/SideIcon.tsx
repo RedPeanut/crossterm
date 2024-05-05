@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 // const { prefix } = window;
 // console.log('prefix =', prefix);
@@ -13,7 +13,7 @@ interface SideIconProps {
 function SideIcon(props: SideIconProps) {
   const { className, title, children } = props;
 
-  const cls = classNames(className, 'control-icon-wrap', {});
+  const cls = classnames(className, 'control-icon-wrap', {});
 
   return (
     <div className={cls} title={title}>
