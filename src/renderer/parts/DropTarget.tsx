@@ -11,8 +11,8 @@ interface DropTargetProps {
   key?: string;
   uid?: string;
 
-  //
-  dropOverlay: {};
+  // mapped value
+  dropOverlay: any;
 }
 
 interface DropTargetState {
