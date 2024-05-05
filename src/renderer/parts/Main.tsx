@@ -98,7 +98,8 @@ class Main extends React.Component {
     let root: SplitItem = {
       mode: 'horizontal',
       list: [
-        [{id:'a1'},{id:'a2'}]
+        [{id:'a1'}],
+        [{id:'a2'}]
       ],
     }
 
