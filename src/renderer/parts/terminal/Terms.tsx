@@ -31,7 +31,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
       <div
         className='terms-container'
       >
-        <Term uid={this.uid} />
+        <Term /* uid={this.uid} */ />
         {/* <DropTarget uid={this.uid} />
         <DropOverlay uid={this.uid} list={this.props.list} /> */}
       </div>
