@@ -45,6 +45,7 @@ export const initialState/*: {
     active: DEFAULT_ACTIVE_SIDE_BAR_ICON,
   },
   dropOverlay: {
+    visible: false,
     id: '',
     style: {},
   },

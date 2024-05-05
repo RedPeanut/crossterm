@@ -1,11 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../../Types';
+import { setDropOverlay } from '../../reducers/app';
 
 interface TabProps {
   children?: React.ReactElement | React.ReactElement[];
   terminal: Terminal_;
+
+  //
+  dropOverlay: any;
+  onSetDropOverlay: any;
 }
 
 class Tab extends React.Component<TabProps, {}> {
@@ -22,6 +26,10 @@ class Tab extends React.Component<TabProps, {}> {
     // console.log('id =', id);
     // console.log('dom =', dom);
     // console.log('e =', e);
+    this.props.onSetDropOverlay({
+      ...this.props.dropOverlay,
+      visible: true
+    });
   };
 
   findTargetGroupView = () => {
@@ -43,6 +51,10 @@ class Tab extends React.Component<TabProps, {}> {
   };
   onDragEnd = (): void => {
     // console.log('onDragEnd event is called...');
+    this.props.onSetDropOverlay({
+      ...this.props.dropOverlay,
+      visible: false,
+    });
   };
 
   handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
@@ -71,11 +83,15 @@ class Tab extends React.Component<TabProps, {}> {
 };
 
 const mapStateToProps = (state: any) => {
-  return {};
+  return {
+    dropOverlay: state.app.dropOverlay,
+  };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {};
+  return {
+    onSetDropOverlay: (v: any) => dispatch(setDropOverlay(v)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Tab);
