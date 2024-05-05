@@ -1,14 +1,14 @@
-import {
-  BookOutlined,
-  ClockCircleOutlined,
-  CloudSyncOutlined,
-  InfoCircleOutlined,
-  PictureOutlined,
-  PlusCircleOutlined,
-  SettingOutlined,
-  UpCircleOutlined,
-  BarsOutlined,
-} from '@ant-design/icons';
+// import {
+//   BookOutlined,
+//   ClockCircleOutlined,
+//   CloudSyncOutlined,
+//   InfoCircleOutlined,
+//   PictureOutlined,
+//   PlusCircleOutlined,
+//   SettingOutlined,
+//   UpCircleOutlined,
+//   BarsOutlined,
+// } from '@ant-design/icons';
 
 import React from 'react';
 import { connect } from 'react-redux';
@@ -17,7 +17,10 @@ import { setSidePanel } from '../../reducers/app';
 import SideIcon from './SideIcon';
 import SidePanel from './SidePanel';
 import BookmarkPanel from '../panel/BookmarkPanel';
-import '../../../../release/app/node_modules/@vscode/codicons/dist/codicon.css';
+// import '../../../../release/app/node_modules/@vscode/codicons/dist/codicon.css';
+// import '@vscode/codicons/dist/codicon.css';
+// import { VscBookmark, VscInfo } from 'react-icons/vsc';
+import { BiBookmarks, BiInfoCircle } from 'react-icons/bi';
 
 import {
   DEFAULT_SIDE_BAR_WIDTH,
@@ -63,9 +66,10 @@ class SideBar extends React.Component<SideBarProps, {}> {
               {/* <BookOutlined rev={null}
                 className="font20 iblock control-icon"
                 onClick={() => this.onClick('Bookmarks')} /> */}
-              <i className="codicon codicon-bookmark"
+              {/* <i className="codicon codicon-bookmark"
                 onClick={() => this.onClick('Bookmarks')}
-              ></i>
+              ></i> */}
+              <BiBookmarks width={20} height={20} onClick={() => this.onClick('Bookmarks')} />
             </SideIcon>
             <SideIcon title="Sample1"
               // onClick={() => this.onClick('Sample1')}
@@ -74,9 +78,10 @@ class SideBar extends React.Component<SideBarProps, {}> {
                 className="iblock font16 control-icon open-about-icon"
                 onClick={() => this.onClick('Sample1')}
               /> */}
-              <i className="codicon codicon-info"
+              {/* <i className="codicon codicon-info"
                 onClick={() => this.onClick('Sample1')}
-              ></i>
+              ></i> */}
+              <BiInfoCircle width={20} height={20} onClick={() => this.onClick('Sample1')} />
             </SideIcon>
             <SideIcon title="Sample2"
               // onClick={() => this.onClick('Sample2')}
@@ -85,9 +90,10 @@ class SideBar extends React.Component<SideBarProps, {}> {
                 className="iblock font16 control-icon open-about-icon"
                 onClick={() => this.onClick('Sample2')}
               /> */}
-              <i className="codicon codicon-info"
+              {/* <i className="codicon codicon-info"
                 onClick={() => this.onClick('Sample2')}
-              ></i>
+              ></i> */}
+              <BiInfoCircle width={20} height={20} onClick={() => this.onClick('Sample2')} />
             </SideIcon>
           </div>
         </div>

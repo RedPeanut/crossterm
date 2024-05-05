@@ -15,7 +15,6 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "@vscode/codicons": "0.0.35",
     "node-pty": "1.0.0"
   }
 }
