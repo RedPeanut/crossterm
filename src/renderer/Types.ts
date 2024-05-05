@@ -1,3 +1,45 @@
+export type ListItemType = 'local' | 'remote' | 'group' | 'folder'
+export type FolderModeType = 0 | 1 | 2 // 0: 기본값; 1: 단일 선택 2: 다중 선택
+
+export interface ListObject {
+  id: string
+  title?: string
+  on?: boolean
+  type?: ListItemType
+
+  // remote
+  url?: string
+  last_refresh?: string
+  last_refresh_ms?: number
+  refresh_interval?: number // 단위: 초
+
+  // group
+  include?: string[]
+
+  // folder
+  folder_mode?: FolderModeType
+  folder_open?: boolean
+  children?: ListObject[]
+
+  is_sys?: boolean
+
+  [key: string]: any
+}
+
+export interface TreeNodeData {
+  id: string
+  title?: string
+  can_select?: boolean // 선택 가능 여부, 기본값은 true
+  can_drag?: boolean // 드래그 가능 여부, 기본값은 true
+  can_drop_before?: boolean // 이전 드롭이 허용되는지 여부, 기본값은 true
+  can_drop_in?: boolean // 드롭인 허용 여부, 기본값은 true
+  can_drop_after?: boolean // 이후 드롭을 허용할지 여부, 기본값은 true
+  is_collapsed?: boolean
+  children?: TreeNodeData[]
+
+  [key: string]: any
+}
+
 export interface Splittable {}
 
 export interface Terminal_ {

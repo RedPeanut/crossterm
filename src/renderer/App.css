@@ -85,6 +85,21 @@ body { height: 100%; }
 
 .side-panel .item.active { display: block; }
 
+/* List */
+.side-panel .list {
+  padding: 5px 10px;
+  overflow: auto;
+}
+
+.side-panel .list .tree {}
+.side-panel .list .tree .node {}
+.side-panel .list .tree .node.selected {
+  background-color: rgb(71 85 102);
+  border-radius: 4px;
+}
+.side-panel .list .tree .node .list-item {}
+
+
 /* Body */
 .parts.body {
   background-color: rgb(31, 31, 31);

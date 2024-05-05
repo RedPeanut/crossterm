@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import List from '../list/List';
 
-import '../../../../node_modules/rc-tree/assets/index.css'
-import Tree, { TreeNode } from 'rc-tree';
+// import 'rc-tree/assets/index.css'
+// import Tree, { TreeNode } from 'rc-tree';
 
 interface BookmarkPanelProps {
   sidePanel: { active: string, visible: boolean };
@@ -66,7 +67,8 @@ class BookmarkPanel extends React.Component<BookmarkPanelProps, {}> {
       + (sidePanel.active === 'Bookmarks' ? ' active' : '');
     return (
       <div className={cls}>
-        <Tree
+        <List />
+        {/* <Tree
           ref = { tree => { this.tree = tree; } }
           checkable
           draggable
@@ -76,7 +78,7 @@ class BookmarkPanel extends React.Component<BookmarkPanelProps, {}> {
           onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
           treeData={this.treeData}
-        />
+        /> */}
       </div>
     );
   }
