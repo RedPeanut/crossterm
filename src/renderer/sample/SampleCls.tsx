@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { setSomeVal } from '../reducers/sample';
 
-interface SampleClsProps {}
-interface SampleClsState {}
+interface Props {
+  // mapped value
+  someVal: any, onSetSomeVal: any;
+}
+interface State {}
 
-class SampleCls extends React.Component<SampleClsProps, SampleClsState> {
+class SampleCls extends React.Component<Props, State> {
 
-  public static defaultProps = {};
-
-  constructor(props: SampleClsProps) {
+  constructor(props: Props) {
     super(props);
   }
 

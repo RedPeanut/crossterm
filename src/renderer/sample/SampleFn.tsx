@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-interface SampleFnProps {
+interface Props {
   children?: React.ReactElement | React.ReactElement[];
 }
 
-const SampleFn = (props: SampleFnProps) => {
+const SampleFn = (props: Props) => {
   const { children } = props;
 
   const someFn = () => {};
@@ -14,21 +14,21 @@ const SampleFn = (props: SampleFnProps) => {
 
   const [stateVal, setStateVal] = useState('stateVal');
 
-  /* how to use store value in component.. */
+  /* how to use store value in component..
   const someVal = useSelector((state) => state.sample.someVal);
   const dispatch = useDispatch();
 
-  /* what is the effect.. */
+  /* what is the effect..
   useEffect(() => {
     return () => {};
   }, [someVal]);
 
-  /* what is the memo.. */
+  /* what is the memo..
   const memo = useMemo(() => {
     return (
       <></>
     );
-  }, [someVal]);
+  }, [someVal]); */
 
   /* what is the callback.. */
   const callback = useCallback(() => {}, []);
