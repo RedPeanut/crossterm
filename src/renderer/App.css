@@ -29,7 +29,7 @@ body { height: 100%; }
 
 /* SideIcon */
 .control-icon-wrap {
-  padding: 14px 0;
+  padding: 8px 0;
   text-align: center;
 }
 
@@ -40,6 +40,9 @@ body { height: 100%; }
 .control-icon-wrap .codicon:hover {
   cursor: pointer;
 }
+
+.control-icon-wrap:hover { cursor: pointer; }
+.control-icon-wrap svg { display: inline-block; }
 
 .control-icon-wrap .badge {
   position: absolute; left: 0; top: 0; width: 100%; height: 100%;

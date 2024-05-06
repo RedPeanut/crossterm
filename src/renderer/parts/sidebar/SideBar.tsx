@@ -61,7 +61,7 @@ class SideBar extends React.Component<SideBarProps, {}> {
         <div className="content">
           <div className="composite-bar">
             <SideIcon title="Bookmarks"
-              // onClick={() => this.onClick('Bookmarks')}
+              onClick={() => this.onClick('Bookmarks')}
             >
               {/* <BookOutlined rev={null}
                 className="font20 iblock control-icon"
@@ -69,10 +69,16 @@ class SideBar extends React.Component<SideBarProps, {}> {
               {/* <i className="codicon codicon-bookmark"
                 onClick={() => this.onClick('Bookmarks')}
               ></i> */}
-              <BiBookmarks width={20} height={20} onClick={() => this.onClick('Bookmarks')} />
+              <BiBookmarks
+                size={24}
+                // className=''
+                // style={width:'32px',height:'32px'}
+                // width={32} height={32}
+                // onClick={() => this.onClick('Bookmarks')}
+              />
             </SideIcon>
             <SideIcon title="Sample1"
-              // onClick={() => this.onClick('Sample1')}
+              onClick={() => this.onClick('Sample1')}
             >
               {/* <InfoCircleOutlined rev={null}
                 className="iblock font16 control-icon open-about-icon"
@@ -81,10 +87,14 @@ class SideBar extends React.Component<SideBarProps, {}> {
               {/* <i className="codicon codicon-info"
                 onClick={() => this.onClick('Sample1')}
               ></i> */}
-              <BiInfoCircle width={20} height={20} onClick={() => this.onClick('Sample1')} />
+              <BiInfoCircle
+                size={24}
+                // width={32} height={32}
+                // onClick={() => this.onClick('Sample1')}
+              />
             </SideIcon>
             <SideIcon title="Sample2"
-              // onClick={() => this.onClick('Sample2')}
+              onClick={() => this.onClick('Sample2')}
             >
               {/* <InfoCircleOutlined rev={null}
                 className="iblock font16 control-icon open-about-icon"
@@ -93,7 +103,11 @@ class SideBar extends React.Component<SideBarProps, {}> {
               {/* <i className="codicon codicon-info"
                 onClick={() => this.onClick('Sample2')}
               ></i> */}
-              <BiInfoCircle width={20} height={20} onClick={() => this.onClick('Sample2')} />
+              <BiInfoCircle
+                size={24}
+                // width={32} height={32}
+                // onClick={() => this.onClick('Sample2')}
+              />
             </SideIcon>
           </div>
         </div>
