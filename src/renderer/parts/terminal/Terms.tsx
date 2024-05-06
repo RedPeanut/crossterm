@@ -21,18 +21,40 @@ class Terms extends React.Component<TermsProps, TermsState> {
   public static defaultProps = {};
 
   uid: string;
+  termsRef: HTMLElement | null;
+  resizeObserver!: ResizeObserver;
+  resizeTimeout!: NodeJS.Timeout;
 
   constructor(props: TermsProps) {
     super(props);
     this.uid = uuidv4();
+    this.termsRef = null;
   }
 
   componentDidMount() {}
+
+  onTermsRef(component: HTMLElement | null) {
+    this.termsRef = component;
+
+    if(component) {
+      this.resizeObserver = new ResizeObserver(() => {
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+          // this.fitResize();
+          console.log('resize timeout is called...');
+        }, 500);
+      });
+      this.resizeObserver.observe(component);
+    } else {
+      this.resizeObserver.disconnect();
+    }
+  };
 
   render() {
     const { dropOverlay, list } = this.props;
     return (
       <div
+        ref={this.onTermsRef.bind(this)}
         className='terms'
       >
         {
