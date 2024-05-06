@@ -64,12 +64,16 @@ class Main extends React.Component {
   // render item recursively
   renderBodyItem(mode: string, list: (SplitItem | Terminal_[])[]): JSX.Element[] {
     let result = []; // (<></>);
+    const sizeProperty = mode === 'vertical' ? 'height' : 'width';
     let size = Math.floor(100 / list.length) + '%';
+    const style = {
+      [sizeProperty]: size,
+    };
     for(let i = 0; i < list.length; i++) {
       if(Array.isArray(list[i])) {
         result.push(
           <div className="body-item"
-            style={mode === 'vertical' ? { height: size } : { width: size }}
+            style={style}
             key={uuidv4()}
           >
             <Tabs list={list[i] as Terminal_[]}/>
@@ -80,7 +84,7 @@ class Main extends React.Component {
         let item = list[i] as SplitItem;
         result.push(
           <Split className=""
-            style={mode === 'vertical' ? { height: size } : { width: size }}
+            style={style}
             lineBar={true}
             mode={item.mode}
             key={uuidv4()}
