@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Tab from './Tab';
 import { Splittable } from '../../Types';
-import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../../Types';
+import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
 import { v1 as uuid } from 'uuid';
 
 interface TabsProps {

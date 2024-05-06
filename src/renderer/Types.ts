@@ -53,7 +53,7 @@ export interface SplitItem {
   list: (SplitItem | Terminal_[])[];
 }
 
-export function isTerminal(o: any) {
+export function isTerminal_(o: any) {
   return typeof o === 'object' && 'id' in o;
 }
 

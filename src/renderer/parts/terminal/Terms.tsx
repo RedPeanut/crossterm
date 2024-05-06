@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { setSomeVal } from '../../reducers/sample';
 import { v4 as uuidv4 } from 'uuid';
-import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../../Types';
+import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
 import DropOverlay from '../DropOverlay';
 import DropTarget from '../DropTarget';
 import Term from './Term';

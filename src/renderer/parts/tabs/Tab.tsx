@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../../Types';
+import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
 import { setDropOverlay } from '../../reducers/app';
 
 interface TabProps {

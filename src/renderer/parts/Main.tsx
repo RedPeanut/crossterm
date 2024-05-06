@@ -10,7 +10,7 @@ import Sample1Panel from './panel/Sample1Panel';
 import Sample2Panel from './panel/Sample2Panel';
 import Tabs from './tabs/Tabs';
 import Sessions from './session/Sessions';
-import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../Types';
+import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../Types';
 import { v4 as uuidv4 } from 'uuid';
 
 import '../../../node_modules/xterm/css/xterm.css';

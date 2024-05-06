@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Terminal_, SplitItem, isTerminal, isSplitItem } from '../../Types';
+import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
 import DropOverlay from '../DropOverlay';
 import DropTarget from '../DropTarget';
 import _ from 'lodash';
