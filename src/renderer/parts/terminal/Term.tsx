@@ -5,9 +5,12 @@ import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import terminals from './terminals';
 import { v4 as uuidv4 } from 'uuid';
+import { Terminal_ } from '../../Types';
 
 interface TermProps {
   // uid: string;
+  terminal: Terminal_;
+  style: {};
 }
 
 interface TermState {}
@@ -69,9 +72,13 @@ class Term extends React.Component<TermProps, TermState> {
   }
 
   render() {
+    const style = {
+      ...this.props.style,
+    }
     return (
       <div id={this.uid}
         className='term term_fit term_wrapper'
+        style={style}
       />
     );
   }

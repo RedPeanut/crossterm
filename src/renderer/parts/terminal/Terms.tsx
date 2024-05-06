@@ -30,16 +30,26 @@ class Terms extends React.Component<TermsProps, TermsState> {
   componentDidMount() {}
 
   render() {
-    const { dropOverlay } = this.props;
+    const { dropOverlay, list } = this.props;
     return (
       <div
         className='terms'
       >
-        <Term /* uid={this.uid} */ />
+        {
+          list.map((item, index) => {
+            return (
+              <Term terminal={item} key={uuidv4()}
+                style={
+                  list.length != 1 && index != list.length-1 ? {display:'none'} : {}
+                }
+              />
+            );
+          })
+        }
         { dropOverlay.visible ?
           <div>
             <DropTarget uid={this.uid} />
-            <DropOverlay uid={this.uid} list={this.props.list} />
+            <DropOverlay uid={this.uid} list={list} />
           </div>
         : null }
       </div>
