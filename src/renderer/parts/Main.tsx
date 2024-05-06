@@ -13,8 +13,8 @@ import Sessions from './session/Sessions';
 import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../Types';
 import { v4 as uuidv4 } from 'uuid';
 
-import '../../../node_modules/xterm/css/xterm.css';
-import Term from './terminal/Term';
+// import 'xterm/css/xterm.css';
+// import Term from './terminal/Term';
 import terminals from './terminal/terminals';
 import Terms from './terminal/Terms';
 
