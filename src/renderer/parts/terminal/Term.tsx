@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import 'xterm/css/xterm.css';
 import { Terminal as xterm } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
-import terminals from './terminals';
 import { v4 as uuidv4 } from 'uuid';
+import terminals from './terminals';
 import { Terminal_ } from '../../Types';
 
 interface TermProps {
@@ -31,7 +32,6 @@ class Term extends React.Component<TermProps, TermState> {
 
   onKey(e: { key: string; domEvent: KeyboardEvent }) {
     const printable: boolean = !e.domEvent.altKey && !e.domEvent.ctrlKey && !e.domEvent.metaKey;
-
   }
 
   onData(data: string) {

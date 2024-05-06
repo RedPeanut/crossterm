@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Tab from './Tab';
 import { Splittable } from '../../Types';
 import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
-import { v1 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 interface TabsProps {
   list: Terminal_[];
@@ -23,10 +23,10 @@ class Tabs extends React.Component<TabsProps, TabsState> {
           <div className="scrollable-element">
             <div className="tablist">
               {
-                list.map((e) => {
+                list.map((item) => {
                   return (
-                    <Tab terminal={e}
-                      key={uuid()}
+                    <Tab terminal={item}
+                      key={uuidv4()}
                     />
                   );
                 })

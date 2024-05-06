@@ -29,7 +29,7 @@ export default class NedbWrapper {
 
   public static action(dbName: string, op: string, ...args: any[]): Promise<any> {
     return new Promise((resolve, reject) => {
-      NedbWrapper.db[dbName][op](...args, (err, result: string) => {
+      NedbWrapper.db[dbName][op](...args, (err: any, result: string) => {
         if(err) {
           return reject(err);
         }
