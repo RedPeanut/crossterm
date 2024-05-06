@@ -33,7 +33,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
     const { dropOverlay } = this.props;
     return (
       <div
-        className='terms-container'
+        className='terms'
       >
         <Term /* uid={this.uid} */ />
         { dropOverlay.visible ?

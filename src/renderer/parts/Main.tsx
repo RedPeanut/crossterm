@@ -96,10 +96,10 @@ class Main extends React.Component {
   render() {
 
     let root: SplitItem = {
-      mode: 'horizontal',
+      mode: 'vertical',
       list: [
-        [{id:'a1'}],
-        [{id:'a2'}]
+        [{id:'a1'},{id:'a2'}],
+        [{id:'b1'}]
       ],
     }
 
@@ -133,8 +133,8 @@ class Main extends React.Component {
           <Split className="parts body"
             lineBar={true}
             // visible={false}
-            style={{
-            }}
+            style={{}}
+            mode={root.mode}
           >
 
             {/* <Term /> */}

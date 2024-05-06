@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Terminal as xterm } from 'xterm'
+import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import terminals from './terminals';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,10 +18,12 @@ class Term extends React.Component<TermProps, TermState> {
 
   terminal: xterm | null = null;
   uid: string;
+  fitAddon: FitAddon;
 
   constructor(props: any) {
     super(props);
     this.uid = uuidv4();
+    this.fitAddon = new FitAddon();
   }
 
   onKey(e: { key: string; domEvent: KeyboardEvent }) {
@@ -51,9 +54,11 @@ class Term extends React.Component<TermProps, TermState> {
     // Load WebLinksAddon on terminal, this is all that's needed to get web links
     // working in the terminal.
     terminal.loadAddon(new WebLinksAddon());
+    terminal.loadAddon(this.fitAddon);
     terminal.open(document.getElementById(this.uid) as HTMLElement);
     terminal.onKey((e) => this.onKey(e));
     terminal.onData((e) => this.onData(e));
+    this.fitAddon.fit();
     this.terminal = terminal;
 
     terminals[this.uid] = this;
@@ -65,8 +70,9 @@ class Term extends React.Component<TermProps, TermState> {
 
   render() {
     return (
-      <div id={this.uid}>
-      </div>
+      <div id={this.uid}
+        className='term term_fit term_wrapper'
+      />
     );
   }
 }
