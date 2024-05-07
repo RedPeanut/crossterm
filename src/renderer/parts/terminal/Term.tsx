@@ -76,10 +76,15 @@ class Term extends React.Component<TermProps, TermState> {
 
     const { terminal } = this.props;
 
+    let style = {};
+    if(!terminal.selected) {
+      style = {display: 'none'}
+    }
+
     return (
       <div id={this.uid}
         className={classnames('term', terminal.selected ? 'selected' : null, terminal.active ? 'active' : null)}
-        style={this.props.style}
+        style={style}
       />
     );
   }

@@ -59,16 +59,8 @@ class Terms extends React.Component<TermsProps, TermsState> {
       >
         {
           list.map((item, index) => {
-
-            let _style;
-            if(list.length > 1 && !item.selected) {
-              _style = { display: 'none' };
-            }
-
             return (
-              <Term terminal={item} key={uuidv4()}
-                style={_style}
-              />
+              <Term terminal={item} key={uuidv4()}/>
             );
           })
         }
