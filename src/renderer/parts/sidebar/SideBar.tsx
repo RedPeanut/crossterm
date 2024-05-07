@@ -28,8 +28,8 @@ import {
 } from '../../Constants';
 
 interface SideBarProps {
-  sidePanel: { active: string, visible: boolean };
-  onSetSidePanel: Function;
+  // mapped value
+  sidePanel: any, onSetSidePanel: any;
 }
 
 class SideBar extends React.Component<SideBarProps, {}> {
@@ -49,7 +49,8 @@ class SideBar extends React.Component<SideBarProps, {}> {
   onClickBookmark = () => {};
 
   render() {
-    // const { screen } = this.props;
+    // const { sidePanel } = this.props;
+
     return (
       <div
         className="parts side-bar"

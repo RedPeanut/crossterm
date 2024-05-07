@@ -41,7 +41,8 @@ class Terms extends React.Component<TermsProps, TermsState> {
         clearTimeout(this.resizeTimeout);
         this.resizeTimeout = setTimeout(() => {
           // this.fitResize();
-          console.log('resize timeout is called...');
+          // console.log('resize timeout is called...');
+          // console.trace();
         }, 500);
       });
       this.resizeObserver.observe(component);
