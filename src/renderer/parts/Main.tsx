@@ -66,6 +66,9 @@ class Main extends React.Component {
     let result = []; // (<></>);
     const sizeProperty = mode === 'vertical' ? 'height' : 'width';
     let size = Math.floor(100 / list.length) + '%';
+    // maybe split-bar's flex-shrink: 0
+    // let n_divider = list.length - 1;
+    // let size = `calc((100% - ${n_divider} * 3px) / ${list.length})`;
     const style = {
       [sizeProperty]: size,
     };
