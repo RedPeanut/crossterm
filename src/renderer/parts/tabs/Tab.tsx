@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
 import { setDropOverlay } from '../../reducers/app';
+import classnames from 'classnames';
 
 interface TabProps {
   children?: React.ReactElement | React.ReactElement[];
@@ -59,12 +60,28 @@ class Tab extends React.Component<TabProps, {}> {
 
   handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
 
+  onClick(e: any) {
+
+  }
+
   render() {
     const { children, terminal } = this.props;
     // console.log('this.props =', this.props);
 
+    let style: {} = {
+      '--tab-border-bottom-color': 'rgb(31, 31, 31)',
+      '--tab-border-top-color': 'rgb(0, 120, 212)',
+    };
+
+    let border_top_container_style;
+    if(!terminal.active)
+      border_top_container_style = { display: 'none'}
+
     return (
-      <div className="tab"
+      <div className={classnames("tab", terminal.selected ? 'selected' : null, terminal.active ? 'active' : null)}
+        style={style}
+        // selected='false'
+        onClick={this.onClick}
         draggable
         onDragEnter={this.onDragEnter}
         onDragLeave={this.onDragLeave}
@@ -76,7 +93,10 @@ class Tab extends React.Component<TabProps, {}> {
         // onDrop={this.onDrop}
         onContextMenu={this.handleContextMenu}
       >
-        탭입니다
+        <div className='tab-border-top-container' style={border_top_container_style}></div>
+        <div className='label'>탭입니다</div>
+        <div className='tab-actions'></div>
+        <div className='tab-border-bottom-container'></div>
       </div>
     );
   }
