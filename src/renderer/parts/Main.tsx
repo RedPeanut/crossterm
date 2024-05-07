@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
+import TopBar from './topbar/TopBar';
 import Split from './Split';
 import SideBar from './sidebar/SideBar';
 import SidePanel from './sidebar/SidePanel';
@@ -126,8 +127,8 @@ class Main extends React.Component {
     let root: SplitItem = {
       mode: 'vertical',
       list: [
-        [{id:'a1',selected:true},{id:'a2'}],
-        [{id:'b1',active:true}]
+        [{id:'a1',selected:true,active:true},{id:'a2'}],
+        [{id:'b1'}]
       ],
     }
 
@@ -150,59 +151,67 @@ class Main extends React.Component {
 
     return (
       <div className="app">
-        <Split className=""
-          lineBar={true}
-          visible={[1]}
-          style={{width:'100%'}}
-        >
-          <SideBar />
-          <SidePanel>
-            <BookmarkPanel />
-            <Sample1Panel />
-            <Sample2Panel />
-          </SidePanel>
-          <Split className="parts body"
+        <TopBar />
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          // flexGrow: '1'
+          height: 'calc(100% - 42px)'
+        }}>
+          <Split className=""
             lineBar={true}
-            // visible={false}
-            style={{}}
-            mode={root.mode}
+            visible={[1]}
+            style={{width:'100%'}}
           >
-
-            {/* <Term /> */}
-
-            { this.renderBodyItem(root.mode, root.list) }
-
-            {/* <Split className=""
-              style={{width:'50%'}}
+            <SideBar />
+            <SidePanel>
+              <BookmarkPanel />
+              <Sample1Panel />
+              <Sample2Panel />
+            </SidePanel>
+            <Split className="parts body"
               lineBar={true}
-              mode="vertical"
+              // visible={false}
+              style={{}}
+              mode={root.mode}
             >
-              <div className="body-item"
-                style={{
-                  height:'50%'
-                }}
-              >
-                <Tabs />
-                <Sessions />
-              </div>
-              <div className="body-item"
-                style={{
-                  height:'50%'
-                }}
-              >
-                <Tabs />
-                <Sessions />
-              </div>
-            </Split>
-            <div className="body-item"
-              style={{width:'50%'}}
-            >
-              <Tabs />
-              <Sessions />
-            </div> */}
 
+              {/* <Term /> */}
+
+              { this.renderBodyItem(root.mode, root.list) }
+
+              {/* <Split className=""
+                style={{width:'50%'}}
+                lineBar={true}
+                mode="vertical"
+              >
+                <div className="body-item"
+                  style={{
+                    height:'50%'
+                  }}
+                >
+                  <Tabs />
+                  <Sessions />
+                </div>
+                <div className="body-item"
+                  style={{
+                    height:'50%'
+                  }}
+                >
+                  <Tabs />
+                  <Sessions />
+                </div>
+              </Split>
+              <div className="body-item"
+                style={{width:'50%'}}
+              >
+                <Tabs />
+                <Sessions />
+              </div> */}
+
+            </Split>
           </Split>
-        </Split>
+        </div>
       </div>
     );
   }

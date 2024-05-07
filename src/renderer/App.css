@@ -10,9 +10,27 @@ body { height: 100%; }
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background-color: #252526;
 }
+
+/* TopBar */
+.parts.topbar {
+  padding-left: 80px;
+  border-bottom: 1px solid rgb(43, 43, 43);
+  height: 42px;
+  width: 100%;
+  display: flex;
+}
+
+.topbar .topbar-left {}
+.topbar .topbar-center {
+  width: 100%; height: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.topbar .topbar-right {}
 
 /* Side */
 .parts.side {
