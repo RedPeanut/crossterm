@@ -38,7 +38,7 @@ class Main extends React.Component {
       const data = raw.slice(36);
       const term = terminals[uid];
       if(term) {
-        term.terminal.write(data);
+        term.xterm.write(data);
       }
     });
 

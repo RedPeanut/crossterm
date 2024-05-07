@@ -20,7 +20,7 @@ class Term extends React.Component<TermProps, TermState> {
 
   public static defaultProps = {};
 
-  terminal: xterm | null = null;
+  xterm: xterm | null = null;
   uid: string;
   fitAddon: FitAddon;
 
@@ -53,16 +53,16 @@ class Term extends React.Component<TermProps, TermState> {
     });
     // console.log('[app] returnValue =', returnValue);
 
-    const terminal = new xterm({});
+    const _xterm = new xterm({});
     // Load WebLinksAddon on terminal, this is all that's needed to get web links
     // working in the terminal.
-    terminal.loadAddon(new WebLinksAddon());
-    terminal.loadAddon(this.fitAddon);
-    terminal.open(document.getElementById(this.uid) as HTMLElement);
-    terminal.onKey((e) => this.onKey(e));
-    terminal.onData((e) => this.onData(e));
+    _xterm.loadAddon(new WebLinksAddon());
+    _xterm.loadAddon(this.fitAddon);
+    _xterm.open(document.getElementById(this.uid) as HTMLElement);
+    _xterm.onKey((e) => this.onKey(e));
+    _xterm.onData((e) => this.onData(e));
     this.fitAddon.fit();
-    this.terminal = terminal;
+    this.xterm = _xterm;
 
     terminals[this.uid] = this;
   }
