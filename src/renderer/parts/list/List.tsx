@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setSomeVal } from '../../reducers/sample';
+// import { setSomeVal } from '../../reducers/sample';
 // import styles from './List.module.scss'
 import classnames from 'classnames';
 import ItemIcon from '../ItemIcon';
@@ -11,8 +11,7 @@ import { BiChevronRight } from 'react-icons/bi';
 
 interface ListProps {
   // mapped value
-  someVal: any;
-  onSetSomeVal: any;
+  // someVal: any, onSetSomeVal: any;
 }
 
 interface ListState {
@@ -143,15 +142,11 @@ class List extends React.Component<ListProps, ListState> {
 }
 
 const mapStateToProps = (state: any) => {
-  return {
-    someVal: state.sample.someVal,
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onSetSomeVal: (v: any) => dispatch(setSomeVal(v)),
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);

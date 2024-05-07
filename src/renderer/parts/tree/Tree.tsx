@@ -26,8 +26,8 @@ interface TreeProps {
   selected_ids: string[];
 
   // mapped value
-  someVal: any;
-  onSetSomeVal: any;
+  // someVal: any;
+  // onSetSomeVal: any;
 }
 interface TreeState {
   // tree: TreeNodeData[];
@@ -101,15 +101,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
 }
 
 const mapStateToProps = (state: any) => {
-  return {
-    someVal: state.sample.someVal,
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onSetSomeVal: (v: any) => dispatch(setSomeVal(v)),
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tree);
