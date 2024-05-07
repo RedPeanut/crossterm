@@ -29,6 +29,7 @@ body { height: 100%; }
 
 /* SideIcon */
 .control-icon-wrap {
+  position: relative;
   padding: 8px 0;
   text-align: center;
 }
@@ -64,10 +65,12 @@ body { height: 100%; }
   position: absolute; left: 0; top: 0; width: 100%; height: 100%;
 }
 
-.control-icon-wrap .active-item-indicator:before {
-  top: 0; height: 100%;
-  border-left-color: #0078d4;
+.control-icon-wrap.checked .active-item-indicator:before {
+  left: 0; top: 0; height: 100%;
   border-left: 2px solid;
+  border-left-color: rgb(0 120 212);
+  content: "";
+  position: absolute;
 }
 
 /* SidePanel */
