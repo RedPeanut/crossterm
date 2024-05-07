@@ -100,15 +100,39 @@ class Main extends React.Component {
     return result;
   }
 
+  selectLastItemIfNone(list: (SplitItem | Terminal_[])[]) {
+    for(let i = 0; i < list.length; i++) {
+      if(Array.isArray(list[i])) {
+        let selected: boolean | undefined = false,
+          active: boolean | undefined = false;
+        let _list = list[i] as Terminal_[];
+        for(let j = 0; j < _list.length; j++) {
+          selected ||= _list[j].selected;
+          active ||= _list[j].active;
+        }
+        if(!selected/*  && !active */) {
+          _list[_list.length-1].selected = true;
+          // _list[_list.length-1].active = true;
+        }
+      } else if(isSplitItem(list[i])) {
+        let item = list[i] as SplitItem;
+        this.selectLastItemIfNone(item.list);
+      }
+    }
+  }
+
   render() {
 
     let root: SplitItem = {
       mode: 'vertical',
       list: [
-        [{id:'a1'},{id:'a2'}],
+        [{id:'a1',selected:true,active:true},{id:'a2'}],
         [{id:'b1'}]
       ],
     }
+
+    this.selectLastItemIfNone(root.list);
+    // console.log('root.list =', root.list);
 
     /* let root: SplitItem = {
       mode: 'horizontal',

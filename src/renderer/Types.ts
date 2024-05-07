@@ -44,6 +44,9 @@ export interface Splittable {}
 
 export interface Terminal_ {
   id: string;
+  selected?: boolean; // default: false
+  active?: boolean; // default: false
+
   // properties that are describe to terminal
   // text, position, etc ...
 }

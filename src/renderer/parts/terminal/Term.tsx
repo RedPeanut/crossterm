@@ -7,11 +7,12 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 import { v4 as uuidv4 } from 'uuid';
 import terminals from './terminals';
 import { Terminal_ } from '../../Types';
+import classnames from 'classnames';
 
 interface TermProps {
   // uid: string;
   terminal: Terminal_;
-  style: {};
+  style?: {};
 }
 
 interface TermState {}
@@ -72,13 +73,13 @@ class Term extends React.Component<TermProps, TermState> {
   }
 
   render() {
-    const style = {
-      ...this.props.style,
-    }
+
+    const { terminal } = this.props;
+
     return (
       <div id={this.uid}
-        className='term term_fit term_wrapper'
-        style={style}
+        className={classnames('term', terminal.selected ? 'selected' : null, terminal.active ? 'active' : null)}
+        style={this.props.style}
       />
     );
   }
