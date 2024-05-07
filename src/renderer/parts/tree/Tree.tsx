@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { setSomeVal } from '../../reducers/sample';
 import Node, { NodeUpdate } from './Node';
 import classnames from 'classnames';
-import styles from './style.module.scss'
+// import styles from './style.module.scss'
 import { TreeNodeData } from '../../Types';
 
 export type DropWhereType = 'before' | 'in' | 'after';
@@ -89,7 +89,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
                 // onDragStart={onDragStart}
                 // onDragEnd={onDragEnd}
                 selected_ids={selected_ids}
-                onSelect={this.onSelectOne}
+                onSelect={this.onSelectOne.bind(this)}
+                level={0}
               />
             )
           })

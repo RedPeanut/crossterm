@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setSomeVal } from '../../reducers/sample';
-import styles from './List.module.scss'
+// import styles from './List.module.scss'
 import classnames from 'classnames';
 import ItemIcon from '../ItemIcon';
 import ListItem from './ListItem';
@@ -113,8 +113,8 @@ class List extends React.Component<ListProps, ListState> {
           }}
           draggingNodeRender={(data) => {
             return (
-              <div className={classnames(styles.for_drag)}>
-                <span className={classnames(styles.icon, data.type === 'folder' && styles.folder)}>
+              <div className={classnames(/* styles.for_drag */)}>
+                <span className={classnames(/* styles.icon, data.type === 'folder' && styles.folder */)}>
                   <ItemIcon
                     type={data.type}
                     is_collapsed={data.is_collapsed}
@@ -131,10 +131,10 @@ class List extends React.Component<ListProps, ListState> {
               </div>
             )
           }}
-          nodeClassName={styles.node}
-          nodeDropInClassName={styles.node_drop_in}
-          nodeSelectedClassName={styles.node_selected}
-          nodeCollapseArrowClassName={styles.arrow}
+          // nodeClassName={styles.node}
+          // nodeDropInClassName={styles.node_drop_in}
+          // nodeSelectedClassName={styles.node_selected}
+          // nodeCollapseArrowClassName={styles.arrow}
           allowed_multiple_selection={true}
         />
       </div>

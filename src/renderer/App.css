@@ -88,19 +88,38 @@ body { height: 100%; }
 
 .side-panel .item.active { display: block; }
 
-/* List */
+/* List, Tree, Node, ListItem */
 .side-panel .list {
   padding: 5px 10px;
   overflow: auto;
 }
 
 .side-panel .list .tree {}
-.side-panel .list .tree .node {}
+.side-panel .list .tree .node {
+  line-height: 28px;
+  font-size: 16px;
+  padding-left: 4px;
+}
 .side-panel .list .tree .node.selected {
   background-color: rgb(71 85 102);
   border-radius: 4px;
 }
-.side-panel .list .tree .node .list-item {}
+
+.side-panel .list .tree .node .content {
+  margin: 2px 0;
+  display: flex;
+  align-items: center;
+}
+
+.side-panel .list .tree .node .content .ln_header {
+  width: 20px;
+}
+
+.side-panel .list .tree .node .list-item span {
+  margin-right: 7px;
+  display: inline-block;
+  vertical-align: middle;
+}
 
 
 /* Body */
