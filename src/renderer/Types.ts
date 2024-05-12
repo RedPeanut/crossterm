@@ -51,6 +51,16 @@ export interface Terminal_ {
   // text, position, etc ...
 }
 
+export interface Settings_ {
+  id: string;
+  selected?: boolean; // default: false
+  active?: boolean; // default: false
+}
+
+type ListItemType_ =
+  SplitItem
+  | (Terminal_ | Settings_)[];
+
 export interface SplitItem {
   mode: 'horizontal' | 'vertical'; // string;
   list: (SplitItem | Terminal_[])[];
