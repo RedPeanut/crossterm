@@ -181,6 +181,10 @@ body { height: 100%; }
   padding-left: 10px;
 }
 
+.tabs .tab.selected {
+  background-color: rgb(31, 31, 31);
+}
+
 .tabs .tab .tab-border-top-container {
   background-color: var(--tab-border-top-color);
   position: absolute;
