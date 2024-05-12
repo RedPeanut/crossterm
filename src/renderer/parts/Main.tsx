@@ -104,12 +104,12 @@ class Main extends React.Component {
   selectLastItemIfNone(list: (SplitItem | Terminal_[])[]) {
     for(let i = 0; i < list.length; i++) {
       if(Array.isArray(list[i])) {
-        let selected: boolean | undefined = false,
-          active: boolean | undefined = false;
+        let selected: boolean | undefined = false; //,
+          // active: boolean | undefined = false;
         let _list = list[i] as Terminal_[];
         for(let j = 0; j < _list.length; j++) {
           selected ||= _list[j].selected;
-          active ||= _list[j].active;
+          // active ||= _list[j].active;
         }
         if(!selected/*  && !active */) {
           _list[_list.length-1].selected = true;
@@ -122,32 +122,63 @@ class Main extends React.Component {
     }
   }
 
+  findActiveItem(list: (SplitItem | Terminal_[])[]): Terminal_ | undefined {
+    for(let i = 0; i < list.length; i++) {
+      if(Array.isArray(list[i])) {
+        let _list = list[i] as Terminal_[];
+        for(let j = 0; j < _list.length; j++) {
+          if(_list[j].active)
+            return _list[j];
+        }
+      } else if(isSplitItem(list[i])) {
+        let item = list[i] as SplitItem;
+        return this.findActiveItem(item.list);
+      }
+    }
+  }
+
+  findLastItem(list: (SplitItem | Terminal_[])[]): Terminal_ | undefined {
+    for(let i = list.length-1; i > 0; i--) {
+      if(Array.isArray(list[i])) {
+        let _list = list[i] as Terminal_[];
+        return _list[_list.length-1];
+      } else if(isSplitItem(list[i])) {
+        let item = list[i] as SplitItem;
+        return this.findLastItem(item.list);
+      }
+    }
+  }
+
   render() {
 
-    let root: SplitItem = {
+    const root: SplitItem = {
       mode: 'vertical',
       list: [
-        [{id:'a1',selected:true,active:true},{id:'a2'}],
+        [{id:'a1',selected:true/* ,active:true */},{id:'a2'}],
         [{id:'b1'}]
       ],
     }
 
-    this.selectLastItemIfNone(root.list);
-    // console.log('root.list =', root.list);
+    // const root: SplitItem = {
+    //   mode: 'horizontal',
+    //   list: [
+    //     {
+    //       mode: 'vertical',
+    //       list: [
+    //         [{id:'a1'},{id:'a2'}],
+    //         [{id:'b'}]
+    //       ]
+    //     },
+    //     [{id:'c1'},{id:'c2'},{id:'c3'}]
+    //   ]
+    // };
 
-    /* let root: SplitItem = {
-      mode: 'horizontal',
-      list: [
-        {
-          mode: 'vertical',
-          list: [
-            [{id:'a1'},{id:'a2'}],
-            [{id:'b'}]
-          ]
-        },
-        [{id:'c1'},{id:'c2'},{id:'c3'}]
-      ]
-    }; */
+    this.selectLastItemIfNone(root.list);
+    if(!this.findActiveItem(root.list)) {
+      let lastItem = this.findLastItem(root.list);
+      if(lastItem) lastItem.active = true;
+    }
+    // console.log('root.list =', root.list);
 
     return (
       <div className="app">
