@@ -14,7 +14,8 @@ interface TreeProps {
   nodeRender?: (node: TreeNodeData, update: NodeUpdate) => React.ReactElement | null;
   nodeAttr?: (node: TreeNodeData) => Partial<TreeNodeData>;
   onChange?: (tree: TreeNodeData[]) => void;
-  onSelect?: (ids: string[]) => void
+  onSelect?: (ids: string[]) => void;
+  onDoubleClick?: (id: string) => void;
   collapseArrow?: string | React.ReactElement;
   draggingNodeRender?: (node: TreeNodeData, source_ids: string[]) => React.ReactElement;
   nodeClassName?: string;
@@ -46,7 +47,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   componentDidMount() {}
 
-  onSelectOne(id: string, multiple_type: MultipleSelectType = 0): void {
+  onSelect_(id: string, multiple_type: MultipleSelectType = 0): void {
     const { onSelect } = this.props;
     let new_selected_ids: string[] = [];
 
@@ -71,6 +72,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
     onSelect && onSelect(new_selected_ids);
   }
 
+  onDoubleClick_(id: string): void {
+    console.log('onDoubleClick_() is called...');
+    const { onDoubleClick } = this.props;
+    onDoubleClick && onDoubleClick(id);
+  }
+
   render() {
     const tree: TreeNodeData[] = this.props.data;
     const { /* data as tree,  */className, selected_ids } = this.props;
@@ -89,7 +96,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
                 // onDragStart={onDragStart}
                 // onDragEnd={onDragEnd}
                 selected_ids={selected_ids}
-                onSelect={this.onSelectOne.bind(this)}
+                onSelect={this.onSelect_.bind(this)}
+                onDoubleClick={this.onDoubleClick_.bind(this)}
                 level={0}
               />
             )

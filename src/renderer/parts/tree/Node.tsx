@@ -14,6 +14,7 @@ interface NodeProps {
   render?: (data: TreeNodeData, update: NodeUpdate) => React.ReactElement | null;
   selected_ids: string[];
   onSelect: (id: string, multiple_type?: MultipleSelectType) => void;
+  onDoubleClick: (id: string) => void;
   collapseArrow?: string | React.ReactElement
   level: number;
   indent_px?: number;
@@ -35,7 +36,7 @@ class Node extends React.Component<NodeProps, NodeState> {
   }
 
   render() {
-    const { data, render, onSelect, selected_ids, collapseArrow, level, indent_px } = this.props;
+    const { data, render, onSelect, onDoubleClick, selected_ids, collapseArrow, level, indent_px } = this.props;
     const is_selected = selected_ids.includes(data.id);
     const has_children = Array.isArray(data.children) && data.children.length > 0;
 
@@ -45,6 +46,7 @@ class Node extends React.Component<NodeProps, NodeState> {
           onClick={(e) => {
             onSelect(data.id);
           }}
+          onDoubleClick={(e) => {onDoubleClick(data.id);}}
           style={{
             paddingLeft: level * (indent_px || 20) + 4,
           }}

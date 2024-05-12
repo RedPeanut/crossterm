@@ -90,6 +90,12 @@ class List extends React.Component<ListProps, ListState> {
               selected_ids: ids || ['0']
             });
           }}
+          onDoubleClick={
+            (id: string) => {
+              // find active tabs -> add tab after selected one in here..
+
+            }
+          }
           nodeRender={(data) => (
             <ListItem key={data.id} data={data} /* selected_ids={selected_ids} */ />
           )}
