@@ -18,8 +18,6 @@ interface TermsState {}
 
 class Terms extends React.Component<TermsProps, TermsState> {
 
-  public static defaultProps = {};
-
   uid: string;
   termsRef: HTMLElement | null;
   resizeObserver!: ResizeObserver;

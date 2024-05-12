@@ -19,8 +19,6 @@ interface TermState {}
 
 class Term extends React.Component<TermProps, TermState> {
 
-  public static defaultProps = {};
-
   xterm: xterm | null = null;
   uid: string;
   fitAddon: FitAddon;

@@ -11,7 +11,6 @@ import { BiChevronRight } from 'react-icons/bi';
 
 interface ListProps {
   // mapped value
-  // someVal: any, onSetSomeVal: any;
 }
 
 interface ListState {
@@ -19,8 +18,6 @@ interface ListState {
 }
 
 class List extends React.Component<ListProps, ListState> {
-
-  public static defaultProps = {};
 
   constructor(props: ListProps) {
     super(props);
@@ -79,7 +76,6 @@ class List extends React.Component<ListProps, ListState> {
 
     return (
       <div className='list'>
-        {/*<SystemHostsItem/>*/}
         <Tree
           data={data}
           selected_ids={this.state.selected_ids}

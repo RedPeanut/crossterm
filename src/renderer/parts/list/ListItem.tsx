@@ -10,13 +10,10 @@ interface ListItemProps {
   data: ListObject;
 
   // mapped value
-  someVal: any, onSetSomeVal: any;
 }
 interface ListItemState {}
 
 class ListItem extends React.Component<ListItemProps, ListItemState> {
-
-  public static defaultProps = {};
 
   constructor(props: ListItemProps) {
     super(props);
@@ -46,15 +43,11 @@ class ListItem extends React.Component<ListItemProps, ListItemState> {
 }
 
 const mapStateToProps = (state: any) => {
-  return {
-    someVal: state.sample.someVal,
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onSetSomeVal: (v: any) => dispatch(setSomeVal(v)),
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListItem);
