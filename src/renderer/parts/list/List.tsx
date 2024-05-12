@@ -84,7 +84,7 @@ class List extends React.Component<ListProps, ListState> {
             // setList(list).catch((e) => console.error(e))
           }}
           onSelect={(ids: string[]) => {
-            console.log(ids);
+            // console.log(ids);
             // setSelectedIds(ids);
             this.setState({
               selected_ids: ids || ['0']
