@@ -106,10 +106,10 @@ class List extends React.Component<ListProps, ListState> {
           // }
           nodeAttr={(item) => {
             return {
-              can_drag: !item.is_sys /* && !is_tray */,
-              can_drop_before: !item.is_sys,
+              can_drag: true,
+              can_drop_before: true,
               can_drop_in: item.type === 'folder',
-              can_drop_after: !item.is_sys,
+              can_drop_after: true,
             }
           }}
           draggingNodeRender={(data) => {
