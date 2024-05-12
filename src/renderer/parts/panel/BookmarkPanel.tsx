@@ -11,7 +11,7 @@ interface BookmarkPanelProps {
 
 class BookmarkPanel extends React.Component<BookmarkPanelProps, {}> {
 
-  // ref;
+  /* // ref;
   tree: any;
   treeData = [
     {
@@ -36,7 +36,7 @@ class BookmarkPanel extends React.Component<BookmarkPanelProps, {}> {
         },
       ],
     },
-  ];
+  ]; */
 
   constructor(props: BookmarkPanelProps) {
     super(props);
@@ -45,7 +45,7 @@ class BookmarkPanel extends React.Component<BookmarkPanelProps, {}> {
 
   componentDidMount() {}
 
-  onExpand = (expandedKeys: any) => {
+  /* onExpand = (expandedKeys: any) => {
     console.log('onExpand', expandedKeys);
   };
 
@@ -59,7 +59,7 @@ class BookmarkPanel extends React.Component<BookmarkPanelProps, {}> {
 
   onDrop = (info: any) => {
     console.log('onDrop', info);
-  }
+  } */
 
   render() {
     const { sidePanel } = this.props;

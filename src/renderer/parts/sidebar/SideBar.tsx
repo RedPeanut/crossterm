@@ -72,6 +72,8 @@ class SideBar extends React.Component<SideBarProps, {}> {
               ></i> */}
               <BiBookmarks
                 size={24}
+                // strokeWidth={0}
+                // stroke='1px'
                 // className=''
                 // style={width:'32px',height:'32px'}
                 // width={32} height={32}

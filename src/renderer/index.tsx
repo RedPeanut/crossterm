@@ -13,7 +13,7 @@ const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
   <ChakraProvider>
-    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+    {/* <ColorModeScript initialColorMode={theme.config.initialColorMode} /> */}
     <App />
   </ChakraProvider>
 );
