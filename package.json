@@ -2,7 +2,7 @@
   "name": "crossterm",
   "description": "Crossplatform terminal program based on electron react boilerplate.",
   "version": "0.0.1",
-  "keywords": [],
+  "keywords": ["crossplatform","terminal app","electron"],
   "homepage": "",
   "license": "MIT",
   "author": {
