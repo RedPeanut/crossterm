@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // import 'xterm/css/xterm.css';
 // import Term from './terminal/Term';
-import terminals from './terminal/terminals';
+import terminals from '../globals';
 import Terms from './terminal/Terms';
 
 class Main extends React.Component {

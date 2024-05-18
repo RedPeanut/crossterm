@@ -5,7 +5,7 @@ import { Terminal as xterm } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import { v4 as uuidv4 } from 'uuid';
-import terminals from './terminals';
+import terminals from '../../globals';
 import { Terminal_ } from '../../Types';
 import classnames from 'classnames';
 
