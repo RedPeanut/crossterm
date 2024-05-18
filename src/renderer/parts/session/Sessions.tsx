@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
-import DropOverlay from '../DropOverlay';
-import DropTarget from '../DropTarget';
+import DropOverlay from '../drop/DropOverlay';
+import DropTarget from '../drop/DropTarget';
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
