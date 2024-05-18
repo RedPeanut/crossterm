@@ -8,9 +8,11 @@ import ListItem from './ListItem';
 import Tree from '../tree/Tree';
 import { Center } from '@chakra-ui/react';
 import { BiChevronRight } from 'react-icons/bi';
+import { setList } from 'renderer/reducers/app';
 
 interface ListProps {
   // mapped value
+  list: any, onSetList: any;
 }
 
 interface ListState {
@@ -27,6 +29,17 @@ class List extends React.Component<ListProps, ListState> {
   }
 
   componentDidMount() {}
+
+  onDoubleClick(id: string) {
+    // find active tabs -> add tab after selected one in here..
+    const { list } = this.props;
+    // console.log('...this.props.root =', ...this.props.root);
+    const _list = [
+      ...list,
+    ]
+    console.log('_list =', _list);
+    this.props.onSetList(_list);
+  }
 
   render() {
 
@@ -90,12 +103,7 @@ class List extends React.Component<ListProps, ListState> {
               selected_ids: ids || ['0']
             });
           }}
-          onDoubleClick={
-            (id: string) => {
-              // find active tabs -> add tab after selected one in here..
-
-            }
-          }
+          onDoubleClick={this.onDoubleClick.bind(this)}
           nodeRender={(data) => (
             <ListItem key={data.id} data={data} /* selected_ids={selected_ids} */ />
           )}
@@ -144,11 +152,15 @@ class List extends React.Component<ListProps, ListState> {
 }
 
 const mapStateToProps = (state: any) => {
-  return {};
+  return {
+    list: state.app.list,
+  };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {};
+  return {
+    onSetList: (v: any) => dispatch(setList(v)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);

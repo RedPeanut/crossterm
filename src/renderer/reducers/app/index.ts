@@ -1,3 +1,4 @@
+import { FlatItem } from 'renderer/Types';
 import {
   DEFAULT_ACTIVE_SIDE_BAR_ICON,
   DEFAULT_SIDE_PANEL_WIDTH,
@@ -10,6 +11,8 @@ export const SET_SIDE_PANEL = 'SET_SIDE_PANEL';
 export const GET_SIDE_PANEL = 'GET_SIDE_PANEL';
 export const SET_DROP_OVERLAY = 'SET_DROP_OVERLAY';
 export const GET_DROP_OVERLAY = 'GET_DROP_OVERLAY';
+export const SET_LIST = 'SET_LIST';
+export const GET_LIST = 'GET_LIST';
 
 /* action creator */
 export function setScreen(_v: {}) {
@@ -24,17 +27,26 @@ export function setDropOverlay(_v: {}) {
   return { type: SET_DROP_OVERLAY, v: _v };
 }
 
+export function setList(_v: {}) {
+  return { type: SET_LIST, v: _v };
+}
+
 /* initial state */
 export const initialState/*: {
   screen: {
     width: number;
     height: number;
-  }
-  sidebar: {
-    width: number;
+  },
+  sidePanel: {
     visible: boolean;
     active: string;
-  };
+  },
+  dropOverlay: {
+    visible: boolean;
+    id: string;
+    style: {}
+  },
+  list: FlatItem[],
 } */ = {
   screen: {
     width: -1, // to be set
@@ -49,6 +61,7 @@ export const initialState/*: {
     id: '',
     style: {},
   },
+  list: [{id:0,children:[]}],
 };
 
 /* reducers */
@@ -75,6 +88,13 @@ export default (state = initialState, action: { type: string; v: any }) => {
       };
     case GET_DROP_OVERLAY:
       return state.dropOverlay;
+    case SET_LIST:
+      return {
+        ...state,
+        list: action.v,
+      };
+    case GET_LIST:
+      return state.list;
     default:
       return state;
   }

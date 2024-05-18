@@ -2,13 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { setSomeVal } from '../../reducers/sample';
 import { v4 as uuidv4 } from 'uuid';
-import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
+import { Terminal_, SplitItem, isTerminal_, isSplitItem, FlatItem } from '../../Types';
 import DropOverlay from '../DropOverlay';
 import DropTarget from '../DropTarget';
 import Term from './Term';
 
 interface TermsProps {
-  list: Terminal_[];
+  // list: Terminal_[];
+  children: FlatItem[];
 
   // mapped value
   dropOverlay: any;
@@ -50,25 +51,25 @@ class Terms extends React.Component<TermsProps, TermsState> {
   };
 
   render() {
-    const { dropOverlay, list } = this.props;
+    const { dropOverlay, children } = this.props;
     return (
       <div
         ref={this.onTermsRef.bind(this)}
         className='terms'
       >
         {
-          list.map((item, index) => {
+          children.map((item, index) => {
             return (
-              <Term terminal={item} key={uuidv4()}/>
+              <Term item={item} key={uuidv4()}/>
             );
           })
         }
-        { dropOverlay.visible ?
+        {/* { dropOverlay.visible ?
           <div>
             <DropTarget uid={this.uid} />
             <DropOverlay uid={this.uid} list={list} />
           </div>
-        : null }
+        : null } */}
       </div>
     );
   }

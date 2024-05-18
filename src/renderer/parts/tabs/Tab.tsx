@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
+import { Terminal_, SplitItem, isTerminal_, isSplitItem, FlatItem } from '../../Types';
 import { setDropOverlay } from '../../reducers/app';
 import classnames from 'classnames';
 
 interface TabProps {
-  children?: React.ReactElement | React.ReactElement[];
-  terminal: Terminal_;
+  // terminal: Terminal_;
+  item: FlatItem;
 
   //
   dropOverlay: any;
@@ -65,7 +65,7 @@ class Tab extends React.Component<TabProps, {}> {
   }
 
   render() {
-    const { children, terminal } = this.props;
+    const { item } = this.props;
     // console.log('this.props =', this.props);
 
     let style: {} = {
@@ -74,11 +74,11 @@ class Tab extends React.Component<TabProps, {}> {
     };
 
     let border_top_container_style;
-    if(!terminal.active)
+    if(!item.active)
       border_top_container_style = { display: 'none'}
 
     return (
-      <div className={classnames("tab", terminal.selected ? 'selected' : null, terminal.active ? 'active' : null)}
+      <div className={classnames("tab", item.selected ? 'selected' : null, item.active ? 'active' : null)}
         style={style}
         // selected='false'
         onClick={this.onClick}

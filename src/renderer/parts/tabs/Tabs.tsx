@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Tab from './Tab';
-import { Splittable } from '../../Types';
+import { FlatItem, Splittable } from '../../Types';
 import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
 import { v4 as uuidv4 } from 'uuid';
 
 interface TabsProps {
-  list: Terminal_[];
+  // list: Terminal_[];
+  children: FlatItem[];
 }
 
 interface TabsState {
@@ -16,16 +17,16 @@ class Tabs extends React.Component<TabsProps, TabsState> {
   componentDidMount() {}
 
   render() {
-    const { list } = this.props;
+    const { children } = this.props;
     return (
       <div className="tabs">
         <div className="tabs-and-actions-container">
           <div className="scrollable-element">
             <div className="tablist">
               {
-                list.map((item) => {
+                children.map((item) => {
                   return (
-                    <Tab terminal={item}
+                    <Tab item={item}
                       key={uuidv4()}
                     />
                   );

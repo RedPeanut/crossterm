@@ -5,13 +5,14 @@ import { Terminal as xterm } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import { v4 as uuidv4 } from 'uuid';
-import terminals from '../../globals';
-import { Terminal_ } from '../../Types';
+import { terminals } from '../../globals';
+import { FlatItem, Terminal_ } from '../../Types';
 import classnames from 'classnames';
 
 interface TermProps {
   // uid: string;
-  terminal: Terminal_;
+  // terminal: Terminal_;
+  item: FlatItem;
   style?: {};
 }
 
@@ -72,16 +73,16 @@ class Term extends React.Component<TermProps, TermState> {
 
   render() {
 
-    const { terminal } = this.props;
+    const { item } = this.props;
 
     let style = {};
-    if(!terminal.selected) {
+    if(!item.selected) {
       style = {display: 'none'}
     }
 
     return (
       <div id={this.uid}
-        className={classnames('term', terminal.selected ? 'selected' : null, terminal.active ? 'active' : null)}
+        className={classnames('term', item.selected ? 'selected' : null, item.active ? 'active' : null)}
         style={style}
       />
     );

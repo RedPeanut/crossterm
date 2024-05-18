@@ -73,3 +73,16 @@ export function isTerminal_(o: any) {
 export function isSplitItem(o: any) {
   return typeof o === 'object' && 'mode' in o && 'list' in o;
 }
+
+export interface FlatItem {
+  id: string;
+  pid?: string;
+  mode?: 'vertical' | 'horizontal';
+  selected?: boolean; // default: false
+  active?: boolean; // default: false
+  children?: FlatItem[];
+}
+
+export function isSplitItem_(o: any) {
+  return typeof o === 'object' && 'mode' in o && 'children' in o;
+}

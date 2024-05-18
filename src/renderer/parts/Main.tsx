@@ -11,15 +11,21 @@ import Sample1Panel from './panel/Sample1Panel';
 import Sample2Panel from './panel/Sample2Panel';
 import Tabs from './tabs/Tabs';
 import Sessions from './session/Sessions';
-import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../Types';
+import { Terminal_, SplitItem, isTerminal_, isSplitItem, FlatItem, isSplitItem_ } from '../Types';
 import { v4 as uuidv4 } from 'uuid';
 
 // import 'xterm/css/xterm.css';
 // import Term from './terminal/Term';
-import terminals from '../globals';
+import { terminals } from '../globals';
 import Terms from './terminal/Terms';
 
-class Main extends React.Component {
+interface Props {
+  // mapped value
+  list: any;
+}
+interface State {}
+
+class Main extends React.Component<Props, State> {
 
   _onResize: (this: Window, ev: UIEvent) => any;
 
@@ -62,102 +68,129 @@ class Main extends React.Component {
     // }
   }
 
-  // render item recursively
-  renderBodyItem(mode: string, list: (SplitItem | Terminal_[])[]): JSX.Element[] {
-    let result = []; // (<></>);
-    const sizeProperty = mode === 'vertical' ? 'height' : 'width';
-    let size = Math.floor(100 / list.length) + '%';
-    // maybe split-bar's flex-shrink: 0
-    // let n_divider = list.length - 1;
-    // let size = `calc((100% - ${n_divider} * 3px) / ${list.length})`;
-    const style = {
-      [sizeProperty]: size,
-    };
+  // // render item recursively
+  // renderBodyItem(mode: string, list: (SplitItem | Terminal_[])[]): JSX.Element[] {
+  //   let result = []; // (<></>);
+  //   const sizeProperty = mode === 'vertical' ? 'height' : 'width';
+  //   let size = Math.floor(100 / list.length) + '%';
+  //   // maybe split-bar's flex-shrink: 0
+  //   // let n_divider = list.length - 1;
+  //   // let size = `calc((100% - ${n_divider} * 3px) / ${list.length})`;
+  //   const style = {
+  //     [sizeProperty]: size,
+  //   };
+  //   for(let i = 0; i < list.length; i++) {
+  //     if(Array.isArray(list[i])) {
+  //       result.push(
+  //         <div className="body-item"
+  //           style={style}
+  //           key={uuidv4()}
+  //         >
+  //           <Tabs list={list[i] as Terminal_[]}/>
+  //           <Terms list={list[i] as Terminal_[]}/>
+  //         </div>
+  //       )
+  //     } else if(isSplitItem(list[i])) {
+  //       let item = list[i] as SplitItem;
+  //       result.push(
+  //         <Split className=""
+  //           style={style}
+  //           lineBar={true}
+  //           mode={item.mode}
+  //           key={uuidv4()}
+  //         >
+  //           { this.renderBodyItem(item.mode, item.list) }
+  //         </Split>
+  //       )
+  //     }
+  //   }
+  //   return result;
+  // }
+
+  // selectLastItemIfNone(list: (SplitItem | Terminal_[])[]) {
+  //   for(let i = 0; i < list.length; i++) {
+  //     if(Array.isArray(list[i])) {
+  //       let selected: boolean | undefined = false; //,
+  //         // active: boolean | undefined = false;
+  //       let _list = list[i] as Terminal_[];
+  //       for(let j = 0; j < _list.length; j++) {
+  //         selected ||= _list[j].selected;
+  //         // active ||= _list[j].active;
+  //       }
+  //       if(!selected/*  && !active */) {
+  //         _list[_list.length-1].selected = true;
+  //         // _list[_list.length-1].active = true;
+  //       }
+  //     } else if(isSplitItem(list[i])) {
+  //       let item = list[i] as SplitItem;
+  //       this.selectLastItemIfNone(item.list);
+  //     }
+  //   }
+  // }
+
+  // findActiveItem(list: (SplitItem | Terminal_[])[]): Terminal_ | undefined {
+  //   for(let i = 0; i < list.length; i++) {
+  //     if(Array.isArray(list[i])) {
+  //       let _list = list[i] as Terminal_[];
+  //       for(let j = 0; j < _list.length; j++) {
+  //         if(_list[j].active)
+  //           return _list[j];
+  //       }
+  //     } else if(isSplitItem(list[i])) {
+  //       let item = list[i] as SplitItem;
+  //       return this.findActiveItem(item.list);
+  //     }
+  //   }
+  // }
+
+  // findLastItem(list: (SplitItem | Terminal_[])[]): Terminal_ | undefined {
+  //   for(let i = list.length-1; i > 0; i--) {
+  //     if(Array.isArray(list[i])) {
+  //       let _list = list[i] as Terminal_[];
+  //       return _list[_list.length-1];
+  //     } else if(isSplitItem(list[i])) {
+  //       let item = list[i] as SplitItem;
+  //       return this.findLastItem(item.list);
+  //     }
+  //   }
+  // }
+
+  renderBodyListItem(list: FlatItem[]): JSX.Element[] {
+    let result = [];
     for(let i = 0; i < list.length; i++) {
-      if(Array.isArray(list[i])) {
-        result.push(
-          <div className="body-item"
-            style={style}
-            key={uuidv4()}
-          >
-            <Tabs list={list[i] as Terminal_[]}/>
-            <Terms list={list[i] as Terminal_[]}/>
-          </div>
-        )
-      } else if(isSplitItem(list[i])) {
-        let item = list[i] as SplitItem;
+      let item = list[i];
+      if(isSplitItem_(list[i])) {
         result.push(
           <Split className=""
-            style={style}
+            // style={style}
             lineBar={true}
             mode={item.mode}
             key={uuidv4()}
           >
-            { this.renderBodyItem(item.mode, item.list) }
+            { item.children && this.renderBodyListItem(item.children) }
           </Split>
         )
+      } else {
+        item.children && result.push(
+          <div className='body-item' key={uuidv4()}>
+            <Tabs children={item.children} />
+            <Terms children={item.children} />
+          </div>
+        );
       }
     }
     return result;
   }
 
-  selectLastItemIfNone(list: (SplitItem | Terminal_[])[]) {
-    for(let i = 0; i < list.length; i++) {
-      if(Array.isArray(list[i])) {
-        let selected: boolean | undefined = false; //,
-          // active: boolean | undefined = false;
-        let _list = list[i] as Terminal_[];
-        for(let j = 0; j < _list.length; j++) {
-          selected ||= _list[j].selected;
-          // active ||= _list[j].active;
-        }
-        if(!selected/*  && !active */) {
-          _list[_list.length-1].selected = true;
-          // _list[_list.length-1].active = true;
-        }
-      } else if(isSplitItem(list[i])) {
-        let item = list[i] as SplitItem;
-        this.selectLastItemIfNone(item.list);
-      }
-    }
-  }
-
-  findActiveItem(list: (SplitItem | Terminal_[])[]): Terminal_ | undefined {
-    for(let i = 0; i < list.length; i++) {
-      if(Array.isArray(list[i])) {
-        let _list = list[i] as Terminal_[];
-        for(let j = 0; j < _list.length; j++) {
-          if(_list[j].active)
-            return _list[j];
-        }
-      } else if(isSplitItem(list[i])) {
-        let item = list[i] as SplitItem;
-        return this.findActiveItem(item.list);
-      }
-    }
-  }
-
-  findLastItem(list: (SplitItem | Terminal_[])[]): Terminal_ | undefined {
-    for(let i = list.length-1; i > 0; i--) {
-      if(Array.isArray(list[i])) {
-        let _list = list[i] as Terminal_[];
-        return _list[_list.length-1];
-      } else if(isSplitItem(list[i])) {
-        let item = list[i] as SplitItem;
-        return this.findLastItem(item.list);
-      }
-    }
-  }
-
   render() {
 
-    const root: SplitItem = {
-      mode: 'vertical',
-      list: [
-        [{id:'a1',selected:true/* ,active:true */},{id:'a2'}],
-        [{id:'b1'}]
-      ],
-    }
+    // const root: SplitItem = {
+    //   mode: 'vertical',
+    //   list: [
+    //     [{id:'a1',selected:true/* ,active:true */},{id:'a2'}],
+    //     [{id:'b1'}]
+    //   ],
+    // }
 
     // const root: SplitItem = {
     //   mode: 'horizontal',
@@ -166,19 +199,49 @@ class Main extends React.Component {
     //       mode: 'vertical',
     //       list: [
     //         [{id:'a1'},{id:'a2'}],
-    //         [{id:'b'}]
+    //         [{id:'b1'}]
     //       ]
     //     },
     //     [{id:'c1'},{id:'c2'},{id:'c3'}]
     //   ]
     // };
 
-    this.selectLastItemIfNone(root.list);
-    if(!this.findActiveItem(root.list)) {
-      let lastItem = this.findLastItem(root.list);
-      if(lastItem) lastItem.active = true;
-    }
+    // this.selectLastItemIfNone(root.list);
+    // if(!this.findActiveItem(root.list)) {
+    //   let lastItem = this.findLastItem(root.list);
+    //   if(lastItem) lastItem.active = true;
+    // }
     // console.log('root.list =', root.list);
+
+    /* FlatItem Example (이렇게 꾸며야 REACT가 상태변화를 감지할 것 같음)
+    [
+      {id:'p1',mode:'horizontal',children:[{id:'q1'},{id:'q2'}]},
+      {id:'q1',pid:'p1',mode:'vertical',children:[{id:'r1'},{id:'r2'}]},
+      {id:'r1',pid:'q1',children:[{id:'s1'},{id:'s2'}]},
+      // {id:'s1',pid:'r1', details in here?},
+      // {id:'s2',pid:'r1'},
+      {id:'r2',pid:'q1',children:[{id:'t1'}]},
+      // {id:'t1',pid:'r2'},
+      {id:'q2',pid:'p1',children:[{id:'u1'},{id:'u2'},{id:'u3'}]},
+      // {id:'u1',pid:'q2'},
+      // {id:'u2',pid:'q2'},
+      // {id:'u3',pid:'q2'},
+    ]
+
+    [
+      {id:'0',children:[{id:'q1'},{id:'q2'},{id:'q3'}]},
+      // {id:'q1',pid:'0'},
+      // {id:'q2',pid:'0'},
+      // {id:'q3',pid:'0'},
+    ]
+    */
+
+    console.log('render() is called..');
+
+    const { list } = this.props;
+    // console.log('root =', root);
+    // console.log('flat =', flat);
+    const mode = 'horizontal';
 
     return (
       <div className="app">
@@ -204,12 +267,14 @@ class Main extends React.Component {
               lineBar={true}
               // visible={false}
               style={{}}
-              mode={root.mode}
+              mode={mode}
             >
+
+              { this.renderBodyListItem(list) }
 
               {/* <Term /> */}
 
-              { this.renderBodyItem(root.mode, root.list) }
+              {/* { this.renderBodyItem(root.mode, root.list) } */}
 
               {/* <Split className=""
                 style={{width:'50%'}}
@@ -250,6 +315,7 @@ class Main extends React.Component {
 
 const mapStateToProps = (state: any) => {
   return {
+    list: state.app.list,
   };
 };
 
