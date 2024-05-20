@@ -9,6 +9,8 @@ import Tree from '../tree/Tree';
 import { Center } from '@chakra-ui/react';
 import { BiChevronRight } from 'react-icons/bi';
 import { setList } from 'renderer/reducers/app';
+import { v4 as uuidv4 } from 'uuid';
+import { FlatItem } from 'renderer/Types';
 
 interface ListProps {
   // mapped value
@@ -33,12 +35,21 @@ class List extends React.Component<ListProps, ListState> {
   onDoubleClick(id: string) {
     // find active tabs -> add tab after selected one in here..
     const { list } = this.props;
-    // console.log('...this.props.root =', ...this.props.root);
-    const _list = [
-      ...list,
-    ]
-    console.log('_list =', _list);
-    this.props.onSetList(_list);
+
+    if(list && list.length > 0) {
+      const _new = [];
+      const root: FlatItem = {id:'0',children:[]};
+      const _children = [...list[0].children];
+      for(let i = 0; i < list[0].children.length; i++) {
+        list[0].children[i].selected = false;
+        list[0].children[i].active = false;
+      }
+      root.children = _children;
+      const newOne = {id:uuidv4(),selected:true,active:true};
+      _children.push(newOne);
+      _new.push(root);
+      this.props.onSetList(_new);
+    }
   }
 
   render() {
