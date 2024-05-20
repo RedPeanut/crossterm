@@ -1,6 +1,6 @@
 import React, {  } from 'react';
 import { connect } from 'react-redux';
-import { Terminal_ } from '../../Types';
+import { FlatItem } from '../../Types';
 import _ from 'lodash';
 import { setDropOverlay } from '../../reducers/app';
 const debug = require('debug')('DropOverlay');
@@ -10,7 +10,8 @@ export const enum GroupDirection {
 }
 
 interface DropOverlayProps {
-  list: Terminal_[];
+  // list: Terminal_[];
+  children: FlatItem[];
   uid?: string;
 
   // mapped values
@@ -188,10 +189,10 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     let _e = e.nativeEvent;
     // console.log('_e =', _e);
     this.showDropTarget = false;
-    const { list, dropOverlay, uid } = this.props;
+    const { children, dropOverlay, uid } = this.props;
     // console.log('dropOverlay =', dropOverlay);
     // console.log('uuid =', uuid);
-    if(list != null && list.length > 0
+    if(children && children.length > 0
       // && dropOverlay.id === uuid
     ) {
       // console.log('>>> 1');
@@ -219,7 +220,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
       }
     }); */
     this.showDropTarget = false;
-    const { list, dropOverlay, uid } = this.props;
+    const { dropOverlay, uid } = this.props;
     // if(dropOverlay.id === uuid) {
       // console.log('>>> 1');
       this.props.onSetDropOverlay({

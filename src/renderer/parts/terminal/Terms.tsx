@@ -65,7 +65,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
         {/* { dropOverlay.visible ?
           <div>
             <DropTarget uid={this.uid} />
-            <DropOverlay uid={this.uid} list={list} />
+            <DropOverlay uid={this.uid} children={children} />
           </div>
         : null } */}
       </div>
