@@ -2,9 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { setSomeVal } from '../../reducers/sample';
 import { v4 as uuidv4 } from 'uuid';
-import { Terminal_, SplitItem, isTerminal_, isSplitItem, FlatItem } from '../../Types';
-import DropOverlay from '../drop/DropOverlay';
-import DropTarget from '../drop/DropTarget';
+import { FlatItem } from '../../Types';
 import Term from './Term';
 
 interface TermsProps {

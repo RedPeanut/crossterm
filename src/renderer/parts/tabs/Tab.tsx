@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Terminal_, SplitItem, isTerminal_, isSplitItem, FlatItem } from '../../Types';
+import { FlatItem } from '../../Types';
 import { setDropOverlay } from '../../reducers/app';
 import classnames from 'classnames';
 

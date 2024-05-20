@@ -1,6 +1,5 @@
 import React, { DragEvent, useRef } from 'react';
 import { connect } from 'react-redux';
-import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
 const debug = require('debug')('DropTarget');
 
 interface DropTargetProps {

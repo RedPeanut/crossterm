@@ -6,7 +6,7 @@ import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import { v4 as uuidv4 } from 'uuid';
 import { terminals } from '../../globals';
-import { FlatItem, Terminal_ } from '../../Types';
+import { FlatItem } from '../../Types';
 import classnames from 'classnames';
 
 interface TermProps {

@@ -40,7 +40,7 @@ export interface TreeNodeData {
   [key: string]: any
 }
 
-export interface Splittable {}
+/* export interface Splittable {}
 
 export interface Terminal_ {
   id: string;
@@ -72,7 +72,7 @@ export function isTerminal_(o: any) {
 
 export function isSplitItem(o: any) {
   return typeof o === 'object' && 'mode' in o && 'list' in o;
-}
+} */
 
 export interface FlatItem {
   id: string;

@@ -1,6 +1,6 @@
-import React, { DragEvent, useRef } from 'react';
+import React, {  } from 'react';
 import { connect } from 'react-redux';
-import { Terminal_, SplitItem, isTerminal_, isSplitItem } from '../../Types';
+import { Terminal_ } from '../../Types';
 import _ from 'lodash';
 import { setDropOverlay } from '../../reducers/app';
 const debug = require('debug')('DropOverlay');
