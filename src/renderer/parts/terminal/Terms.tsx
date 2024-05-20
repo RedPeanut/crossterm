@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { FlatItem } from '../../Types';
 import Term from './Term';
+import Wrapper from '../drop/Wrapper';
 
 interface TermsProps {
   // list: Terminal_[];
   children: FlatItem[];
 
   // mapped value
-  dropOverlay: any;
+  // dropOverlay: any;
 }
 
 interface TermsState {}
@@ -49,7 +50,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
   };
 
   render() {
-    const { dropOverlay, children } = this.props;
+    const { children } = this.props;
     return (
       <div
         ref={this.onTermsRef.bind(this)}
@@ -62,6 +63,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
             );
           })
         }
+        <Wrapper uid={this.uid} children={children} />
         {/* { dropOverlay.visible ?
           <div>
             <DropTarget uid={this.uid} />
@@ -75,7 +77,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    dropOverlay: state.app.dropOverlay,
+    // dropOverlay: state.app.dropOverlay,
   };
 };
 
