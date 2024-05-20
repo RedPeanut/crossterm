@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 const debug = require('debug')('DropTarget');
 
 interface DropTargetProps {
-  children?: React.ReactElement | React.ReactElement[];
+  // children?: React.ReactElement | React.ReactElement[];
   // list: Terminal[];
   // ref?: string;
   id?: string;
@@ -67,7 +67,7 @@ class DropTarget extends React.Component<DropTargetProps, DropTargetState> {
         className="drop-target"
         style={dropOverlay.style}
       >
-        { this.props.children }
+        {/* { this.props.children } */}
       </div>
     );
   }

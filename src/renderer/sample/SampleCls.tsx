@@ -4,7 +4,7 @@ import { setSomeVal } from '../reducers/sample';
 
 interface Props {
   // mapped value
-  someVal: any, onSetSomeVal: any;
+  someVal: any; onSetSomeVal: any;
 }
 interface State {}
 
