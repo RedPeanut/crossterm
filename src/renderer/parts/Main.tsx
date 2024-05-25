@@ -212,7 +212,7 @@ class Main extends React.Component<Props, State> {
     // }
     // console.log('root.list =', root.list);
 
-    /* FlatItem Example (이렇게 꾸며야 REACT가 상태변화를 감지할 것 같음)
+    /* FlatItem Example: 이렇게 꾸며야 REACT가 상태변화를 감지할 것 같음
     [
       {id:'p1',mode:'horizontal',children:[{id:'q1'},{id:'q2'}]},
       {id:'q1',pid:'p1',mode:'vertical',children:[{id:'r1'},{id:'r2'}]},
