@@ -12,7 +12,7 @@ export const enum GroupDirection {
 interface DropOverlayProps {
   // list: Terminal_[];
   children: FlatItem[];
-  uid?: string;
+  uid: string;
 
   // mapped values
   dropOverlay: any;
@@ -138,33 +138,21 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     switch(splitDirection) {
       case GroupDirection.UP:
         style = { top: '0', left: '0', width: '100%', height: '50%' };
-        // this.doPositionOverlay({ top: '0', left: '0', width: '100%', height: '50%' });
-        // this.toggleDropIntoPrompt(false);
         break;
       case GroupDirection.DOWN:
         style = { top: '50%', left: '0', width: '100%', height: '50%' };
-        // this.doPositionOverlay({ top: '50%', left: '0', width: '100%', height: '50%' });
-        // this.toggleDropIntoPrompt(false);
         break;
       case GroupDirection.LEFT:
         style = { top: '0', left: '0', width: '50%', height: '100%' };
-        // this.doPositionOverlay({ top: '0', left: '0', width: '50%', height: '100%' });
-        // this.toggleDropIntoPrompt(false);
         break;
       case GroupDirection.RIGHT:
         style = { top: '0', left: '50%', width: '50%', height: '100%' };
-        // this.doPositionOverlay({ top: '0', left: '50%', width: '50%', height: '100%' });
-        // this.toggleDropIntoPrompt(false);
         break;
       default:
         style = { top: '0', left: '0', width: '100%', height: '100%' };
-        // this.doPositionOverlay({ top: '0', left: '0', width: '100%', height: '100%' });
-        // this.toggleDropIntoPrompt(true);
     }
 
     // Make sure the overlay is visible now
-    // const overlay = assertIsDefined(this.overlay);
-    // overlay.style.opacity = '1';
     this.props.onSetDropOverlay({
       ...this.props.dropOverlay,
       style: {
@@ -254,7 +242,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
-    console.log('onDrop() is called...');
+    console.log('onDrop event is called...');
   }
 
   render() {
@@ -264,7 +252,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     return (
       <div ref={ref => this.ref = ref}
         className="drop-overlay"
-        onDragStart={this.onDragStart}
+        onDragStart={this.onDragStart.bind(this)}
         onDragEnter={this.onDragEnter.bind(this)}
         onDragLeave={this.onDragLeave.bind(this)}
         onDragEnd={this.onDragEnd.bind(this)}

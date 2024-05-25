@@ -47,10 +47,12 @@ class Tab extends React.Component<TabProps, {}> {
       this.overlay = this.createInstance(DropOverlay, this, targetGorupView);
     } */
   };
-  onDragLeave = (): void => {
+
+  onDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
     // console.log('onDragLeave event is called...');
   };
-  onDragEnd = (): void => {
+
+  onDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
     // console.log('onDragEnd event is called...');
     this.props.onSetDropOverlay({
       ...this.props.dropOverlay,
@@ -83,9 +85,9 @@ class Tab extends React.Component<TabProps, {}> {
         // selected='false'
         onClick={this.onClick}
         draggable
+        onDragStart={this.onDragStart}
         onDragEnter={this.onDragEnter}
         onDragLeave={this.onDragLeave}
-        onDragStart={this.onDragStart}
         onDragEnd={this.onDragEnd}
         // onDrag={this.onDrag}
         // onDragOver={this.onDragOver}
