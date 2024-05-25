@@ -80,7 +80,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     overlay.style.height = options.height;
   } */
 
-  private positionOverlay(e: any): void { // mousePosX: number, mousePosY: number): void {
+  private doPositionOverlay(e: any): void { // mousePosX: number, mousePosY: number): void {
 
     let style = {};
 
@@ -238,7 +238,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     let _e = e.nativeEvent;
     // console.log('_e =', _e);
     if(this.showDropTarget)
-      this.positionOverlay(_e);
+      this.doPositionOverlay(_e);
   }
 
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
