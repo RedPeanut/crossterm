@@ -23,7 +23,7 @@ class Tab extends React.Component<TabProps, {}> {
   }
 
   onDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
-    // e.dataTransfer?.setData('text/plain', JSON.stringify(''));
+    e.dataTransfer.setData('text/plain', JSON.stringify({item:this.props.item}));
     // console.log('id =', id);
     // console.log('dom =', dom);
     // console.log('e =', e);

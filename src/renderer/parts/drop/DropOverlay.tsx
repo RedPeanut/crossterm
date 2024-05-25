@@ -2,7 +2,7 @@ import React, {  } from 'react';
 import { connect } from 'react-redux';
 import { FlatItem } from '../../Types';
 import _, { DebouncedFunc } from 'lodash';
-import { setDropOverlay } from '../../reducers/app';
+import { setDropOverlay, setList } from '../../reducers/app';
 const debug = require('debug')('DropOverlay');
 
 export const enum GroupDirection {
@@ -15,8 +15,8 @@ interface DropOverlayProps {
   uid: string;
 
   // mapped values
-  dropOverlay: any;
-  onSetDropOverlay: any;
+  dropOverlay: any; onSetDropOverlay: any;
+  list: any; onSetList: any;
 }
 
 interface DropOverlayState {}
@@ -28,6 +28,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   clientWidth: number;
   clientHeight: number;
   showDropTarget!: boolean;
+  splitDirection: GroupDirection | undefined;
   throttle_doPositionOverlay: DebouncedFunc<(...args: any[]) => any>;
 
   constructor(props: DropOverlayProps) {
@@ -35,6 +36,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     // this.ref = useRef();
     this.clientWidth = -1;
     this.clientHeight = -1;
+    this.splitDirection = undefined;
 
     this.state = {};
     this.throttle_doPositionOverlay = _.throttle(this.doPositionOverlay.bind(this), 300, {trailing:false});
@@ -95,8 +97,8 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     // console.log('{clientWidth, clientHeight} =', {clientWidth, clientHeight});
     // console.log('{mousePosX, mousePosY} =', {mousePosX, mousePosY});
 
-    let edgeWidthThresholdFactor: number = 0.2; // 20% threshold to split if dragging editors
-    let edgeHeightThresholdFactor: number = 0.2; // 20% threshold to split if dragging editors
+    let edgeWidthThresholdFactor: number = 0.2; // 20% threshold to split
+    let edgeHeightThresholdFactor: number = 0.2; // 20% threshold to split
 
     const edgeWidthThreshold = editorControlWidth * edgeWidthThresholdFactor;
     const edgeHeightThreshold = editorControlHeight * edgeHeightThresholdFactor;
@@ -105,12 +107,12 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     const splitHeightThreshold = editorControlHeight / 3; // offer to split up/down at 33%
 
     // No split if mouse is above certain threshold in the center of the view
-    let splitDirection: GroupDirection | undefined;
+    // this.splitDirection = undefined;
     if(
       mousePosX > edgeWidthThreshold && mousePosX < editorControlWidth - edgeWidthThreshold &&
       mousePosY > edgeHeightThreshold && mousePosY < editorControlHeight - edgeHeightThreshold
     ) {
-      splitDirection = undefined;
+      this.splitDirection = undefined;
     }
 
     // Offer to split otherwise
@@ -126,18 +128,18 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
       // |         |  SPLIT DOWN  |         |
       // ------------------------------------
       if(mousePosX < splitWidthThreshold) {
-        splitDirection = GroupDirection.LEFT;
+        this.splitDirection = GroupDirection.LEFT;
       } else if(mousePosX > splitWidthThreshold * 2) {
-        splitDirection = GroupDirection.RIGHT;
+        this.splitDirection = GroupDirection.RIGHT;
       } else if(mousePosY < editorControlHeight / 2) {
-        splitDirection = GroupDirection.UP;
+        this.splitDirection = GroupDirection.UP;
       } else {
-        splitDirection = GroupDirection.DOWN;
+        this.splitDirection = GroupDirection.DOWN;
       }
     }
 
     // Draw overlay based on split direction
-    switch(splitDirection) {
+    switch(this.splitDirection) {
       case GroupDirection.UP:
         style = { top: '0', left: '0', width: '100%', height: '50%' };
         break;
@@ -233,7 +235,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
-    console.log('onDragOver event is called...');
+    // console.log('onDragOver event is called...');
     e.preventDefault();
 
     // console.log('e =', e as DragEvent);
@@ -250,6 +252,16 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDrop event is called...');
     e.preventDefault();
+
+    const { list, uid, children } = this.props;
+    console.log(e.dataTransfer.getData('text/plain'));
+    /* switch(this.splitDirection) {
+      case GroupDirection.UP: break;
+      case GroupDirection.DOWN: break;
+      case GroupDirection.LEFT: break;
+      case GroupDirection.RIGHT: break;
+      default:
+    } */
   }
 
   render() {
@@ -279,12 +291,14 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
 const mapStateToProps = (state: any) => {
   return {
     dropOverlay: state.app.dropOverlay,
+    list: state.app.list,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onSetDropOverlay: (v: any) => dispatch(setDropOverlay(v)),
+    onSetList: (v: any) => dispatch(setList(v)),
   };
 };
 
