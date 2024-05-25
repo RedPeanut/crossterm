@@ -1,7 +1,7 @@
 import React, {  } from 'react';
 import { connect } from 'react-redux';
 import { FlatItem } from '../../Types';
-import _ from 'lodash';
+import _, { DebouncedFunc } from 'lodash';
 import { setDropOverlay } from '../../reducers/app';
 const debug = require('debug')('DropOverlay');
 
@@ -28,6 +28,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   clientWidth: number;
   clientHeight: number;
   showDropTarget!: boolean;
+  throttle_doPositionOverlay: DebouncedFunc<(...args: any[]) => any>;
 
   constructor(props: DropOverlayProps) {
     super(props);
@@ -36,6 +37,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     this.clientHeight = -1;
 
     this.state = {};
+    this.throttle_doPositionOverlay = _.throttle(this.doPositionOverlay.bind(this), 300, {trailing:false});
   }
 
   shouldComponentUpdate(nextProps: any, nextState: any) {
@@ -231,18 +233,23 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
-    console.log('onDragOver() is called...');
+    console.log('onDragOver event is called...');
+    e.preventDefault();
+
     // console.log('e =', e as DragEvent);
     // console.log('e.offsetX =', e.offsetX);
     // console.log('e.offsetY =', e.offsetY);
     let _e = e.nativeEvent;
     // console.log('_e =', _e);
-    if(this.showDropTarget)
-      this.doPositionOverlay(_e);
+    if(this.showDropTarget) {
+      // this.doPositionOverlay(_e);
+      this.throttle_doPositionOverlay(_e);
+    }
   }
 
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDrop event is called...');
+    e.preventDefault();
   }
 
   render() {
@@ -257,8 +264,8 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
         onDragLeave={this.onDragLeave.bind(this)}
         onDragEnd={this.onDragEnd.bind(this)}
         // onDragOver={this.onDragOver}
-        // onDragOver={this.onDragOver.bind(this)}
-        onDragOver={_.throttle(this.onDragOver.bind(this), 300, {trailing:false})}
+        onDragOver={this.onDragOver.bind(this)}
+        // onDragOver={_.throttle(this.onDragOver.bind(this), 300, {trailing:false})}
         // onDragOver={throttle(this.onDragOver, 3000)}
         // onDragOver={throttle(() => { this.onDragOver.bind(this) }, 1000)}
         onDrop={this.onDrop.bind(this)}
