@@ -281,9 +281,8 @@ class Main extends React.Component<Props, State> {
     console.log('render() is called..');
 
     const { list } = this.props;
-    // console.log('root =', root);
-    // console.log('flat =', flat);
-    const mode = 'horizontal';
+    const item = list[0];
+    const style = {};
 
     return (
       <div className="app">
@@ -305,7 +304,13 @@ class Main extends React.Component<Props, State> {
               <Sample1Panel />
               <Sample2Panel />
             </SidePanel>
-            { this.renderBodyListItem(list, list[0], 0, 0) }
+            { list.length === 1 ?
+              <div className='parts body' style={style} key={uuidv4()}>
+                <Tabs pid={item.id} children={item.children} />
+                <Terms pid={item.id} children={item.children} />
+              </div>
+              : this.renderBodyListItem(list, list[0], 0, 0)
+            }
           </Split>
         </div>
       </div>
