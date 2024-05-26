@@ -13,6 +13,7 @@ interface DropOverlayProps {
   // list: Terminal_[];
   children: FlatItem[];
   uid: string;
+  pid: string;
 
   // mapped values
   dropOverlay: any; onSetDropOverlay: any;
@@ -253,7 +254,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     console.log('onDrop event is called...');
     e.preventDefault();
 
-    const { list, uid, children } = this.props;
+    const { list, uid, pid, children } = this.props;
     console.log(e.dataTransfer.getData('text/plain'));
     /* switch(this.splitDirection) {
       case GroupDirection.UP: break;

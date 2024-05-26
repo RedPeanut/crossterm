@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface TabsProps {
   // list: Terminal_[];
+  pid: string;
   children: FlatItem[];
 }
 

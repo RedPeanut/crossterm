@@ -5,6 +5,7 @@ import DropOverlay from './DropOverlay';
 import DropTarget from './DropTarget';
 
 interface Props {
+  pid: string;
   children: FlatItem[];
   uid: string;
 
@@ -22,7 +23,7 @@ class Wrapper extends React.Component<Props, State> {
   componentDidMount() {}
 
   render() {
-    const {  dropOverlay, uid, children } = this.props;
+    const {  dropOverlay, uid, pid, children } = this.props;
     return (
       <div>
         {
@@ -30,7 +31,7 @@ class Wrapper extends React.Component<Props, State> {
           true ?
             <div>
               <DropTarget uid={uid} />
-              <DropOverlay uid={uid} children={children} />
+              <DropOverlay uid={uid} pid={pid} children={children} />
             </div>
           : null
         }

@@ -8,6 +8,7 @@ import Wrapper from '../drop/Wrapper';
 
 interface TermsProps {
   // list: Terminal_[];
+  pid: string;
   children: FlatItem[];
 
   // mapped value
@@ -50,7 +51,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
   };
 
   render() {
-    const { children } = this.props;
+    const { pid, children } = this.props;
     return (
       <div
         ref={this.onTermsRef.bind(this)}
@@ -63,7 +64,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
             );
           })
         }
-        <Wrapper uid={this.uid} children={children} />
+        <Wrapper uid={this.uid} pid={pid} children={children} />
         {/* { dropOverlay.visible ?
           <div>
             <DropTarget uid={this.uid} />

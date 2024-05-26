@@ -154,7 +154,7 @@ class Main extends React.Component<Props, State> {
   //   }
   // }
 
-  renderBodyListItem(list: FlatItem[]): JSX.Element[] {
+  /* renderBodyListItem(list: FlatItem[]): JSX.Element[] {
     let result = [];
     for(let i = 0; i < list.length; i++) {
       let item = list[i];
@@ -176,6 +176,49 @@ class Main extends React.Component<Props, State> {
             <Terms children={item.children} />
           </div>
         );
+      }
+    }
+    return result;
+  } */
+
+  renderBodyListItem(list: FlatItem[], parent: FlatItem, depth: number, idx: number): JSX.Element[] {
+    let result = [];
+    let className = depth === 0 ? 'parts body' : '';
+    for(let i = idx; i < list.length; i++) {
+      let item = list[i];
+
+      let style;
+      if(parent.children) {
+        const sizeProperty = parent.mode === 'vertical' ? 'height' : 'width';
+        const size = Math.floor(100 / parent.children.length) + '%';
+        style = depth !== 0 ? {[sizeProperty]: size} : {};
+      }
+
+      if(isSplitItem_(item)) {
+        // find children item from all
+        if(item.children) {
+          result.push(
+            <Split className={className}
+              style={style}
+              lineBar={true}
+              mode={item.mode}
+              key={uuidv4()}
+            >
+              { this.renderBodyListItem(list, item, depth+1, i+1) }
+            </Split>
+          )
+          break;
+        } else
+          throw new Error('blar blar balr ..');
+      } else {
+        if(item.children) {
+          result.push(
+            <div className='body-item' style={style} key={uuidv4()}>
+              <Tabs pid={item.id} children={item.children} />
+              <Terms pid={item.id} children={item.children} />
+            </div>
+          );
+        }
       }
     }
     return result;
@@ -262,49 +305,7 @@ class Main extends React.Component<Props, State> {
               <Sample1Panel />
               <Sample2Panel />
             </SidePanel>
-            <Split className="parts body"
-              lineBar={true}
-              // visible={false}
-              style={{}}
-              mode={mode}
-            >
-
-              { this.renderBodyListItem(list) }
-
-              {/* <Term /> */}
-
-              {/* { this.renderBodyItem(root.mode, root.list) } */}
-
-              {/* <Split className=""
-                style={{width:'50%'}}
-                lineBar={true}
-                mode="vertical"
-              >
-                <div className="body-item"
-                  style={{
-                    height:'50%'
-                  }}
-                >
-                  <Tabs />
-                  <Sessions />
-                </div>
-                <div className="body-item"
-                  style={{
-                    height:'50%'
-                  }}
-                >
-                  <Tabs />
-                  <Sessions />
-                </div>
-              </Split>
-              <div className="body-item"
-                style={{width:'50%'}}
-              >
-                <Tabs />
-                <Sessions />
-              </div> */}
-
-            </Split>
+            { this.renderBodyListItem(list, list[0], 0, 0) }
           </Split>
         </div>
       </div>

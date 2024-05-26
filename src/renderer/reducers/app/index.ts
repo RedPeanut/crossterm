@@ -61,7 +61,20 @@ export const initialState/*: {
     id: '',
     style: {},
   },
-  list: [{id:0,children:[]}],
+  // list: [{id:'0',children:[]}],
+  // list: [{id:'0',children:[{id:'a1',selected:true,active:true},{id:'a2'},{id:'a3'}]}],
+  // list: [
+  //   {id:'0',mode:'horizontal',children:[{id:'c1'},{id:'c2'}]},
+  //   {id:'c1',pid:'0',children:[{id:'a1',selected:true}]},
+  //   {id:'c2',pid:'0',children:[{id:'b1'},{id:'b2',selected:true,active:true}]},
+  // ],
+  list: [
+    {id:'0',mode:'horizontal',children:[{id:'c1'},{id:'c2'}]},
+    {id:'c1',pid:'0',children:[{id:'a1',selected:true}]},
+    {id:'c2',pid:'0',mode:'vertical',children:[{id:'d1'},{id:'d2'}]},
+    {id:'d1',pid:'c2',children:[{id:'e1',selected:true,active:true}]},
+    {id:'d2',pid:'c2',children:[{id:'e2',selected:true}]},
+  ]
 };
 
 /* reducers */
