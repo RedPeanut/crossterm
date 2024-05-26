@@ -37,18 +37,47 @@ class List extends React.Component<ListProps, ListState> {
     const { list } = this.props;
 
     if(list && list.length > 0) {
-      const _new = [];
-      const root: FlatItem = {id:'0',children:[]};
-      const _children = [...list[0].children];
-      for(let i = 0; i < list[0].children.length; i++) {
-        list[0].children[i].selected = false;
-        list[0].children[i].active = false;
+
+      let exists = false;
+      let i = 0, j = 0;
+      outer: for(i = 0; i < list.length; i++) {
+        for(j = 0; j < list[i].children.length; j++) {
+          if(list[i].children[j].active) {
+            exists = true;
+            break outer;
+          }
+        }
       }
-      root.children = _children;
-      const newOne = {id:uuidv4(),selected:true,active:true};
-      _children.push(newOne);
-      _new.push(root);
-      this.props.onSetList(_new);
+      console.log('exists =', exists);
+
+      // i and j are selected after loop
+      i = i > list.length-1 ? list.length-1 : i;
+      j = j > list[i].children.length-1 ? list[i].children.length-1 : j;
+      console.log('i =', i, ', j =', j);
+
+      if(exists) {
+        // turn off the selected item
+        list[i].children[j].selected = false;
+        list[i].children[j].active = false;
+      } else {
+        // if there is no is only first time
+      }
+
+      const new_one: FlatItem = {id:uuidv4(),selected:true,active:true};
+      const replaced_children = [
+        ...list[i].children,
+        new_one
+      ];
+      const replaced_item = {
+        ...list[i],
+        children: replaced_children
+      };
+      const new_list = [
+        ...list.slice(0, i),
+        replaced_item,
+        ...list.slice(i+1)
+      ];
+      this.props.onSetList(new_list);
     }
   }
 

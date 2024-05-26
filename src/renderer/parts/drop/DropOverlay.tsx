@@ -205,32 +205,21 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     // this.setState({startDropOverlay: startDropOverlay});
   }
 
-  onDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
-    console.log('onDragLeave() is called...');
-    /* this.setState({startDropOverlay: false});
-    this.setState({
-      style: {
-        ...this.state.style,
-        opacity: '0',
-      }
-    }); */
+  private makeDropTargetHide(): void {
     this.showDropTarget = false;
     const { dropOverlay, uid } = this.props;
-    // if(dropOverlay.id === uuid) {
-      // console.log('>>> 1');
-      this.props.onSetDropOverlay({
-        ...dropOverlay,
-        style: {
-          ...this.props.dropOverlay.style,
-          opacity: '0',
-        },
-        // showDropTarget: false,
-      });
-    // }
-    /* this.props.onSetDropOVerlay({
-      // ...this.props.dropOverlay,
-      opacity: '0',
-    }); */
+    this.props.onSetDropOverlay({
+      ...dropOverlay,
+      style: {
+        ...this.props.dropOverlay.style,
+        opacity: '0',
+      },
+    });
+  }
+
+  onDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
+    console.log('onDragLeave() is called...');
+    this.makeDropTargetHide();
   }
 
   onDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -255,16 +244,86 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDrop event is called...');
     e.preventDefault();
-
+    this.makeDropTargetHide();
     const { list, uid, pid, children } = this.props;
     console.log(e.dataTransfer.getData('text/plain'));
-    /* switch(this.splitDirection) {
-      case GroupDirection.UP: break;
-      case GroupDirection.DOWN: break;
-      case GroupDirection.LEFT: break;
-      case GroupDirection.RIGHT: break;
-      default:
-    } */
+
+    let i = 0, j = 0; // active item index
+    outer: for(i = 0; i < list.length; i++) {
+      for(j = 0; j < list[i].children.length; j++) {
+        if(list[i].children[j].active) {
+          break outer;
+        }
+      }
+    }
+
+    // i and j are selected after loop
+    i = i > list.length-1 ? list.length-1 : i;
+    j = j > list[i].children.length-1 ? list[i].children.length-1 : j;
+    console.log(`i = ${i}, j = ${j}`);
+
+    console.log('pid =', pid);
+    console.log('list =', list);
+
+    let k = 0; // target item index
+    for(k = 0; k < list.length; k++) {
+      if(list[k].id === pid)
+        break;
+    }
+    k = k > list.length-1 ? list.length-1 : k;
+    console.log('k =', k);
+    // if(k === -1)
+    //   throw new Error('not valid target index');
+
+    switch(this.splitDirection) {
+      // insert before
+      case GroupDirection.UP:
+      case GroupDirection.LEFT: {
+        // change target item into split item and attach current item before
+        // 너무 복잡한데 이걸 이해할 수 있는 사람이 있을까?
+        const before_id = uuidv4();
+        const after_id = uuidv4();
+        const replaced_children = [{id: before_id}, {id: after_id}];
+        let mode = this.splitDirection === GroupDirection.UP ? 'vertical' : 'horizontal';
+        const replaced_item = {...list[i], mode: mode, children: replaced_children};
+        const attach_before: FlatItem = {id: before_id, children: [{id: list[i].children[j].id, selected: true, active: true}]};
+        const after_children = [...list[i].children.slice(0, j), ...list[i].children.slice(j+1)];
+        const attach_after: FlatItem = {id: after_id, children: after_children};
+
+        // select the last one because there is none
+        if(attach_after.children)
+          attach_after.children[attach_after.children.length-1].selected = true;
+
+        const attach_list: FlatItem[] = [replaced_item, attach_before, attach_after];
+        const new_list = [...list.slice(0, k), ...attach_list, ...list.slice(k+1)];
+        // console.log('new_list =', new_list);
+        this.props.onSetList(new_list);
+        break;
+      }
+      // insert after
+      case GroupDirection.DOWN:
+      case GroupDirection.RIGHT: {
+        const before_id = uuidv4();
+        const after_id = uuidv4();
+        const replaced_children = [{id: before_id}, {id: after_id}];
+        let mode = this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
+        const replaced_item = {...list[i], mode: mode, children: replaced_children};
+
+        const before_children = [...list[i].children.slice(0, j), ...list[i].children.slice(j+1)];
+        const attach_before: FlatItem = {id: before_id, children: before_children};
+        const attach_after: FlatItem = {id: after_id, children: [{id: list[i].children[j].id, selected: true, active: true}]};
+
+        // select the last one because there is none
+        if(attach_before.children)
+          attach_before.children[attach_before.children.length-1].selected = true;
+
+        const attach_list: FlatItem[] = [replaced_item, attach_before, attach_after];
+        const new_list = [...list.slice(0, k), ...attach_list, ...list.slice(k+1)];
+        // console.log('new_list =', new_list);
+        this.props.onSetList(new_list);
+        break;
+      }
+    }
   }
 
   render() {
