@@ -23,10 +23,11 @@ class Tab extends React.Component<TabProps, {}> {
   }
 
   onDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
-    e.dataTransfer.setData('text/plain', JSON.stringify({item:this.props.item}));
+    // console.log('onDragStart event is called...');
     // console.log('id =', id);
     // console.log('dom =', dom);
     // console.log('e =', e);
+    e.dataTransfer.setData('text/plain', JSON.stringify(this.props.item));
     this.props.onSetDropOverlay({
       ...this.props.dropOverlay,
       visible: true

@@ -1,8 +1,10 @@
 import React, {  } from 'react';
 import { connect } from 'react-redux';
-import { FlatItem } from '../../Types';
 import _, { DebouncedFunc } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { throws } from 'assert';
 import { setDropOverlay, setList } from '../../reducers/app';
+import { FlatItem } from '../../Types';
 const debug = require('debug')('DropOverlay');
 
 export const enum GroupDirection {
@@ -10,10 +12,10 @@ export const enum GroupDirection {
 }
 
 interface DropOverlayProps {
-  // list: Terminal_[];
-  children: FlatItem[];
   uid: string;
+  // list: Terminal_[];
   pid: string;
+  children?: FlatItem[];
 
   // mapped values
   dropOverlay: any; onSetDropOverlay: any;

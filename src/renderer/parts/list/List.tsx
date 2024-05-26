@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 // import { setSomeVal } from '../../reducers/sample';
 // import styles from './List.module.scss'
 import classnames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
+import { Center } from '@chakra-ui/react';
+import { BiChevronRight } from 'react-icons/bi';
 import ItemIcon from '../ItemIcon';
 import ListItem from './ListItem';
 import Tree from '../tree/Tree';
-import { Center } from '@chakra-ui/react';
-import { BiChevronRight } from 'react-icons/bi';
 import { setList } from 'renderer/reducers/app';
-import { v4 as uuidv4 } from 'uuid';
 import { FlatItem } from 'renderer/Types';
 
 interface ListProps {
