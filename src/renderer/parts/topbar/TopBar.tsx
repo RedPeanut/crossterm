@@ -1,10 +1,12 @@
-import { Flex, IconButton } from '@chakra-ui/react';
 import React from 'react';
-import { BiCog } from 'react-icons/bi';
 import { connect } from 'react-redux';
+import { Flex, IconButton } from '@chakra-ui/react';
+import { BiCog, BiPlus } from 'react-icons/bi';
+import { setAdd } from 'renderer/reducers/app';
 
 interface Props {
   // mapped value
+  add: any, onSetAdd: any
 }
 interface State {}
 
@@ -19,7 +21,14 @@ class TopBar extends React.Component<Props, State> {
   render() {
     return (
       <div className='parts topbar'>
-        <div className='topbar-left'></div>
+        <Flex className='topbar-left'>
+          <IconButton
+            aria-label="Add"
+            icon={<BiPlus size={16} />}
+            onClick={() => { this.props.onSetAdd(true); }}
+            variant="ghost"
+          />
+        </Flex>
         <div className='topbar-center'>
           <div className='window-title'>crossterm</div>
         </div>
@@ -38,11 +47,15 @@ class TopBar extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: any) => {
-  return {};
+  return {
+    add: state.app.add
+  };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {};
+  return {
+    onSetAdd: (v: any) => dispatch(setAdd(v)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopBar);

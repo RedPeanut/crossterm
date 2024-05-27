@@ -13,6 +13,8 @@ export const SET_DROP_OVERLAY = 'SET_DROP_OVERLAY';
 export const GET_DROP_OVERLAY = 'GET_DROP_OVERLAY';
 export const SET_LIST = 'SET_LIST';
 export const GET_LIST = 'GET_LIST';
+export const SET_ADD = 'SET_ADD';
+export const GET_ADD = 'GET_ADD';
 
 /* action creator */
 export function setScreen(_v: {}) {
@@ -29,6 +31,10 @@ export function setDropOverlay(_v: {}) {
 
 export function setList(_v: {}) {
   return { type: SET_LIST, v: _v };
+}
+
+export function setAdd(_v: {}) {
+  return { type: SET_ADD, v: _v };
 }
 
 /* initial state */
@@ -74,7 +80,8 @@ export const initialState/*: {
   //   {id:'c2',pid:'0',mode:'vertical',children:[{id:'d1'},{id:'d2'}]},
   //   {id:'d1',pid:'c2',children:[{id:'e1',selected:true,active:true}]},
   //   {id:'d2',pid:'c2',children:[{id:'e2',selected:true}]},
-  // ]
+  // ],
+  add: false,
 };
 
 /* reducers */
@@ -108,6 +115,13 @@ export default (state = initialState, action: { type: string; v: any }) => {
       };
     case GET_LIST:
       return state.list;
+    case SET_ADD:
+      return {
+        ...state,
+        add: action.v,
+      };
+    case GET_ADD:
+      return state.add;
     default:
       return state;
   }

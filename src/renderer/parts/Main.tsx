@@ -17,10 +17,11 @@ import { v4 as uuidv4 } from 'uuid';
 // import Term from './terminal/Term';
 import { terminals } from '../globals';
 import Terms from './terminal/Terms';
+import Add from './Add';
 
 interface Props {
   // mapped value
-  list: any;
+  list: any; add: any;
 }
 interface State {}
 
@@ -280,7 +281,7 @@ class Main extends React.Component<Props, State> {
 
     console.log('render() is called..');
 
-    const { list } = this.props;
+    const { list, add } = this.props;
     const item = list[0];
     const style = {};
 
@@ -313,6 +314,7 @@ class Main extends React.Component<Props, State> {
             }
           </Split>
         </div>
+        { add ? <Add/> : null }
       </div>
     );
   }
@@ -321,6 +323,7 @@ class Main extends React.Component<Props, State> {
 const mapStateToProps = (state: any) => {
   return {
     list: state.app.list,
+    add: state.app.add,
   };
 };
 
