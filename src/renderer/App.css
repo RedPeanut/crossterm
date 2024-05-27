@@ -136,6 +136,14 @@ body { height: 100%; }
   width: 20px;
 }
 
+.side-panel .list .tree .node .content .ln_header .arrow {
+  cursor: pointer;
+}
+
+.side-panel .list .tree .node .list-item .title {
+  cursor: default;
+}
+
 .side-panel .list .tree .node .list-item span {
   margin-right: 7px;
   display: inline-block;
