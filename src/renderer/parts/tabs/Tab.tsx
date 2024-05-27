@@ -1,19 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FlatItem } from '../../Types';
-import { setDropOverlay } from '../../reducers/app';
+import _ from 'lodash';
 import classnames from 'classnames';
+import { FlatItem } from 'renderer/Types';
+import { setDropOverlay, setList } from 'renderer/reducers/app';
+import { getItemIndex } from 'renderer/util';
 
 interface TabProps {
   // terminal: Terminal_;
   item: FlatItem;
 
-  //
-  dropOverlay: any;
-  onSetDropOverlay: any;
+  // mapped value
+  dropOverlay: any; onSetDropOverlay: any;
+  list: any; onSetList: any;
 }
 
-class Tab extends React.Component<TabProps, {}> {
+interface TabState {}
+
+class Tab extends React.Component<TabProps, TabState> {
 
   constructor(props: TabProps) {
     super(props);
@@ -64,7 +68,49 @@ class Tab extends React.Component<TabProps, {}> {
   handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
 
   onClick(e: any) {
+    // change active in here
+    const { list, item } = this.props;
 
+    // get active item index
+    const { i: i, j: j } = getItemIndex(list, (item: FlatItem) => {
+      if(item.active) return true;
+      else return false;
+    });
+
+    // console.log(list);
+    // console.log({i,j});
+
+    // turn off previous selected item
+    const prev_cloned_item = _.cloneDeep(list[i]);
+    console.log('prev_cloned_item =', prev_cloned_item);
+    prev_cloned_item.children[j].selected = false;
+    prev_cloned_item.children[j].active = false;
+    const prev_replaced_list = [
+      ...list.slice(0, i),
+      prev_cloned_item,
+      ...list.slice(i+1)
+    ];
+    // console.log(prev_replaced_list);
+
+    // get this item index
+    const { i: _i, j: _j } = getItemIndex(list, (_item: FlatItem) => {
+      if(_item.id === item.id) return true;
+      else return false;
+    });
+    // console.log({_i,_j});
+
+    // turn on this item
+    const this_cloned_item = _.cloneDeep(prev_replaced_list[_i]);
+    this_cloned_item.children[_j].selected = true;
+    this_cloned_item.children[_j].active = true;
+    const this_replaced_list = [
+      ...prev_replaced_list.slice(0, _i),
+      this_cloned_item,
+      ...prev_replaced_list.slice(_i+1)
+    ];
+    // console.log(this_replaced_list);
+
+    this.props.onSetList(this_replaced_list);
   }
 
   render() {
@@ -84,7 +130,7 @@ class Tab extends React.Component<TabProps, {}> {
       <div className={classnames("tab", item.selected ? 'selected' : null, item.active ? 'active' : null)}
         style={style}
         // selected='false'
-        onClick={this.onClick}
+        onClick={this.onClick.bind(this)}
         draggable
         onDragStart={this.onDragStart}
         onDragEnter={this.onDragEnter}
@@ -108,14 +154,15 @@ class Tab extends React.Component<TabProps, {}> {
 const mapStateToProps = (state: any) => {
   return {
     dropOverlay: state.app.dropOverlay,
+    list: state.app.list,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onSetDropOverlay: (v: any) => dispatch(setDropOverlay(v)),
+    onSetList: (v: any) => dispatch(setList(v)),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Tab);
-
