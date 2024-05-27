@@ -5,10 +5,15 @@ import classnames from 'classnames';
 import { FlatItem } from 'renderer/Types';
 import { setDropOverlay, setList } from 'renderer/reducers/app';
 import { getItemIndex } from 'renderer/util';
+import { DropTargetType } from 'renderer/parts/tabs/Tabs';
 
 interface TabProps {
   // terminal: Terminal_;
   item: FlatItem;
+  index: number;
+  children: FlatItem[];
+  className: string;
+  updateDropTarget: (dropTarget: DropTargetType) => void;
 
   // mapped value
   dropOverlay: any; onSetDropOverlay: any;
@@ -63,25 +68,50 @@ class Tab extends React.Component<TabProps, TabState> {
     });
   };
 
+  private getTabDragOverLocation(e: DragEvent): 'left' | 'right' {
+    const clientWidth = this.clientWidth;
+    // const clientHeight = this.clientHeight;
+    const mousePosX = e.offsetX;
+    const mousePosY = e.offsetY;
+    const widthThreshold = clientWidth / 2;
+    // let location;
+    if(mousePosX < widthThreshold) {
+      return 'left';
+    } else {
+      return 'right';
+    }
+	}
+
+  private computeDropTarget(e: DragEvent): DropTargetType {
+    const { index } = this.props;
+		const isLeftSideOfTab = this.getTabDragOverLocation(e) === 'left';
+		const isLastTab = index === this.props.children.length - 1;
+		const isFirstTab = index === 0;
+
+		// Before first tab
+		if(isLeftSideOfTab && isFirstTab) {
+			return { leftElementIndex: undefined, rightElementIndex: index };
+		}
+
+		// After last tab
+		if(!isLeftSideOfTab && isLastTab) {
+			return { leftElementIndex: index, rightElementIndex: undefined };
+		}
+
+		// Between two tabs
+		const tabBefore: number = isLeftSideOfTab ? index-1 : index;
+		const tabAfter: number = isLeftSideOfTab ? index : index+1;
+
+		return { leftElementIndex: tabBefore, rightElementIndex: tabAfter};
+	}
+
   // (property) React.BaseSyntheticEvent
   // <DragEvent, EventTarget & HTMLDivElement, EventTarget>
   // .nativeEvent: DragEvent
   private doDragOver(e: DragEvent): void {
-    const clientWidth = this.clientWidth;
-    const clientHeight = this.clientHeight;
-    const mousePosX = e.offsetX;
-    const mousePosY = e.offsetY;
-    const widthThreshold = clientWidth / 2;
-    let direction;
-    if(mousePosX < widthThreshold) {
-      direction = 'LEFT';
-    } else {
-      direction = 'RIGHT';
-    }
-    switch(direction) {
-      case 'LEFT': break;
-      case 'RIGHT': break;
-    }
+    const { index } = this.props
+    let dropTarget = this.computeDropTarget(e);
+    this.props.updateDropTarget(dropTarget);
   }
 
   onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -91,7 +121,6 @@ class Tab extends React.Component<TabProps, TabState> {
 
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
-
   }
 
   handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
@@ -143,7 +172,7 @@ class Tab extends React.Component<TabProps, TabState> {
   }
 
   render() {
-    const { item } = this.props;
+    const { item, className } = this.props;
     // console.log('this.props =', this.props);
 
     let style: {} = {
@@ -158,7 +187,11 @@ class Tab extends React.Component<TabProps, TabState> {
     return (
       <div
         ref={ref => this.ref = ref}
-        className={classnames("tab", item.selected ? 'selected' : null, item.active ? 'active' : null)}
+        className={classnames('tab',
+          item.selected ? 'selected' : null,
+          item.active ? 'active' : null,
+          className
+        )}
         style={style}
         // selected='false'
         onClick={this.onClick.bind(this)}

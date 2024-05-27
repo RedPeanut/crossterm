@@ -201,6 +201,26 @@ body { height: 100%; }
   left: 0; top: 0; z-index: 6;
 }
 
+.tabs .tab.drop-target-left::after,
+.tabs .tab.drop-target-right::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 1px;
+	background-color: white;
+	pointer-events: none;
+	z-index: 11;
+}
+
+.tabs .tab.drop-target-right::before {
+	left: 0;
+}
+
+.tabs .tab.drop-target-left::after {
+	right: -1px; /* -1 to connect with drop-target-right */
+}
+
 .terms .term {
   height: 100%;
 }
