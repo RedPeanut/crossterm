@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import _, { DebouncedFunc } from 'lodash';
 import classnames from 'classnames';
 import { FlatItem } from 'renderer/Types';
 import { setDropOverlay, setList } from 'renderer/reducers/app';
@@ -19,11 +19,19 @@ interface TabState {}
 
 class Tab extends React.Component<TabProps, TabState> {
 
+  ref: any;
+  clientWidth: number = -1;
+  clientHeight: number = -1;
+  throttle_doDragOver: DebouncedFunc<(...args: any[]) => any>;
+
   constructor(props: TabProps) {
     super(props);
+    this.throttle_doDragOver = _.throttle(this.doDragOver.bind(this), 300, {trailing:false});
   }
 
   componentDidMount() {
+    this.clientWidth = this.ref.clientWidth;
+    this.clientHeight = this.ref.clientHeight;
   }
 
   onDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -38,19 +46,9 @@ class Tab extends React.Component<TabProps, TabState> {
     });
   };
 
-  findTargetGroupView = () => {
-    //
-  };
-
   onDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
     // console.log('onDragEnter event is called...');
     const target = e.target as HTMLElement;
-    // console.log('target =', target);
-    /* if(!this.overlay) {
-      const targetGroupView = this.findTargetGroupView(target);
-      if(targetGroupView)
-      this.overlay = this.createInstance(DropOverlay, this, targetGorupView);
-    } */
   };
 
   onDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -64,6 +62,37 @@ class Tab extends React.Component<TabProps, TabState> {
       visible: false,
     });
   };
+
+  // (property) React.BaseSyntheticEvent
+  // <DragEvent, EventTarget & HTMLDivElement, EventTarget>
+  // .nativeEvent: DragEvent
+  private doDragOver(e: DragEvent): void {
+    const clientWidth = this.clientWidth;
+    const clientHeight = this.clientHeight;
+    const mousePosX = e.offsetX;
+    const mousePosY = e.offsetY;
+    const widthThreshold = clientWidth / 2;
+    let direction;
+    if(mousePosX < widthThreshold) {
+      direction = 'LEFT';
+    } else {
+      direction = 'RIGHT';
+    }
+    switch(direction) {
+      case 'LEFT': break;
+      case 'RIGHT': break;
+    }
+  }
+
+  onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.preventDefault();
+    this.throttle_doDragOver(e.nativeEvent);
+  }
+
+  onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.preventDefault();
+
+  }
 
   handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
 
@@ -127,7 +156,9 @@ class Tab extends React.Component<TabProps, TabState> {
       border_top_container_style = { display: 'none'}
 
     return (
-      <div className={classnames("tab", item.selected ? 'selected' : null, item.active ? 'active' : null)}
+      <div
+        ref={ref => this.ref = ref}
+        className={classnames("tab", item.selected ? 'selected' : null, item.active ? 'active' : null)}
         style={style}
         // selected='false'
         onClick={this.onClick.bind(this)}
@@ -137,9 +168,9 @@ class Tab extends React.Component<TabProps, TabState> {
         onDragLeave={this.onDragLeave}
         onDragEnd={this.onDragEnd}
         // onDrag={this.onDrag}
-        // onDragOver={this.onDragOver}
+        onDragOver={this.onDragOver}
         // onDragExit={this.onDragExit}
-        // onDrop={this.onDrop}
+        onDrop={this.onDrop}
         onContextMenu={this.handleContextMenu}
       >
         <div className='tab-border-top-container' style={border_top_container_style}></div>
