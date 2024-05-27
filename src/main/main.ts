@@ -112,6 +112,7 @@ const createWindow = async () => {
 
   const { x, y, width, height } = await getWindowSize();
   win = new BrowserWindow({
+    autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
     show: false,
     x, y, width, height,
