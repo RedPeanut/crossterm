@@ -91,8 +91,8 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
 
     let style = {};
 
-    const editorControlWidth = this.clientWidth;
-    const editorControlHeight = this.clientHeight;
+    const clientWidth = this.clientWidth;
+    const clientHeight = this.clientHeight;
 
     let mousePosX = e.offsetX;
     let mousePosY = e.offsetY;
@@ -103,17 +103,17 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     let edgeWidthThresholdFactor: number = 0.2; // 20% threshold to split
     let edgeHeightThresholdFactor: number = 0.2; // 20% threshold to split
 
-    const edgeWidthThreshold = editorControlWidth * edgeWidthThresholdFactor;
-    const edgeHeightThreshold = editorControlHeight * edgeHeightThresholdFactor;
+    const edgeWidthThreshold = clientWidth * edgeWidthThresholdFactor;
+    const edgeHeightThreshold = clientHeight * edgeHeightThresholdFactor;
 
-    const splitWidthThreshold = editorControlWidth / 3; // offer to split left/right at 33%
-    const splitHeightThreshold = editorControlHeight / 3; // offer to split up/down at 33%
+    const splitWidthThreshold = clientWidth / 3; // offer to split left/right at 33%
+    const splitHeightThreshold = clientHeight / 3; // offer to split up/down at 33%
 
     // No split if mouse is above certain threshold in the center of the view
     // this.splitDirection = undefined;
     if(
-      mousePosX > edgeWidthThreshold && mousePosX < editorControlWidth - edgeWidthThreshold &&
-      mousePosY > edgeHeightThreshold && mousePosY < editorControlHeight - edgeHeightThreshold
+      mousePosX > edgeWidthThreshold && mousePosX < clientWidth - edgeWidthThreshold &&
+      mousePosY > edgeHeightThreshold && mousePosY < clientHeight - edgeHeightThreshold
     ) {
       this.splitDirection = undefined;
     }
@@ -134,7 +134,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
         this.splitDirection = GroupDirection.LEFT;
       } else if(mousePosX > splitWidthThreshold * 2) {
         this.splitDirection = GroupDirection.RIGHT;
-      } else if(mousePosY < editorControlHeight / 2) {
+      } else if(mousePosY < clientHeight / 2) {
         this.splitDirection = GroupDirection.UP;
       } else {
         this.splitDirection = GroupDirection.DOWN;
