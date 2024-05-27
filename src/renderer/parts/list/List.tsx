@@ -162,8 +162,8 @@ class List extends React.Component<ListProps, ListState> {
           }}
           draggingNodeRender={(data) => {
             return (
-              <div className={classnames(/* styles.for_drag */)}>
-                <span className={classnames(/* styles.icon, data.type === 'folder' && styles.folder */)}>
+              <div className={classnames('for_drag'/* styles.for_drag */)}>
+                <span className={classnames('icon'/* styles.icon, data.type === 'folder' && styles.folder */)}>
                   <ItemIcon
                     type={data.type}
                     is_collapsed={data.is_collapsed}

@@ -55,7 +55,7 @@ class Node extends React.Component<NodeProps, NodeState> {
             <div className={'ln_header'/* styles.ln_header */} data-role="tree-node-header">
               {
                 has_children ? (
-                  <div>
+                  <div className='arrow'>
                     {collapseArrow ? collapseArrow : '>'}
                   </div>) : null
               }

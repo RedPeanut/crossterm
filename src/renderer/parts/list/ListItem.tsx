@@ -28,8 +28,8 @@ class ListItem extends React.Component<ListItemProps, ListItemState> {
         className={classnames('list-item'/* , styles.selected */)}
         onContextMenu={(e) => {}}
       >
-        <div className={classnames(/* styles.title */)} /* onClick={onSelect} */>
-          <span className={classnames(/* styles.icon, is_folder && styles.folder */)} /* onClick={this.toggleIsCollapsed} */>
+        <div className={classnames('title'/* styles.title */)} /* onClick={onSelect} */>
+          <span className={classnames('icon'/* styles.icon, is_folder && styles.folder */)} /* onClick={this.toggleIsCollapsed} */>
             <ItemIcon type={data.type} is_collapsed={data.is_collapsed} />
           </span>
           {data.title/*  || lang.untitled */}
