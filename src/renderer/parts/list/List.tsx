@@ -9,12 +9,13 @@ import { BiChevronRight } from 'react-icons/bi';
 import ItemIcon from '../ItemIcon';
 import ListItem from './ListItem';
 import Tree from '../tree/Tree';
-import { setList } from 'renderer/reducers/app';
+import { setList, setTree } from 'renderer/reducers/app';
 import { FlatItem } from 'renderer/Types';
 
 interface ListProps {
   // mapped value
   list: any, onSetList: any;
+  tree: any, onSetTree: any;
 }
 
 interface ListState {
@@ -33,6 +34,11 @@ class List extends React.Component<ListProps, ListState> {
   componentDidMount() {}
 
   onDoubleClick(id: string) {
+    const { tree } = this.props;
+
+  }
+
+  /* onDoubleClick(id: string) {
     // find active tabs -> add tab after selected one in here..
     const { list } = this.props;
 
@@ -77,9 +83,10 @@ class List extends React.Component<ListProps, ListState> {
         replaced_item,
         ...list.slice(i+1)
       ];
+      console.log('new_list =', new_list);
       this.props.onSetList(new_list);
     }
-  }
+  } */
 
   render() {
 
@@ -194,12 +201,14 @@ class List extends React.Component<ListProps, ListState> {
 const mapStateToProps = (state: any) => {
   return {
     list: state.app.list,
+    tree: state.app.tree,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onSetList: (v: any) => dispatch(setList(v)),
+    onSetTree: (v: any) => dispatch(setTree(v)),
   };
 };
 

@@ -10,7 +10,7 @@ import BookmarkPanel from './panel/BookmarkPanel';
 import Sample1Panel from './panel/Sample1Panel';
 import Sample2Panel from './panel/Sample2Panel';
 import Tabs from './tabs/Tabs';
-import { FlatItem, isSplitItem_ } from '../Types';
+import { FlatItem, SplitItem, Terminal, isSplitItem, isSplitItem_ } from '../Types';
 import { v4 as uuidv4 } from 'uuid';
 
 // import 'xterm/css/xterm.css';
@@ -21,7 +21,7 @@ import Add from './Add';
 
 interface Props {
   // mapped value
-  list: any; add: any;
+  list: any; tree:any; add: any;
 }
 interface State {}
 
@@ -182,16 +182,80 @@ class Main extends React.Component<Props, State> {
     return result;
   } */
 
-  renderBodyListItem(list: FlatItem[], parent: FlatItem, depth: number, idx: number): JSX.Element[] {
+  renderTreeList(parent: SplitItem, depth: number): JSX.Element[] {
+    let result = [];
+    for(let i = 0; i < parent.list.length; i++) {
+      let item = parent.list[i];
+
+      let className = '';
+      let style;
+      if(parent.list) {
+        const sizeProperty = parent.mode === 'vertical' ? 'height' : 'width';
+        const size = Math.floor(100 / parent.list.length) + '%';
+        style = {[sizeProperty]: size};
+      }
+
+      if(isSplitItem(item)) {
+        item = item as SplitItem;
+        result.push(
+          <Split className={className}
+            style={style}
+            lineBar={true}
+            mode={item.mode}
+            key={uuidv4()}
+          >
+            { this.renderTreeList(item as SplitItem, depth+1) }
+          </Split>
+        );
+      } else {
+        // if not split item must have one item (as Terminal[])
+        result.push(
+          <div className='body-item' style={style} key={uuidv4()}>
+            <Tabs list={item as Terminal[]} />
+            <Terms list={item as Terminal[]} />
+          </div>
+        );
+      }
+    }
+    return result;
+  }
+
+  renderTreeRoot(root: SplitItem, depth: number): JSX.Element[] {
+    let result = [];
+    // let className = 'parts body';
+    let style;
+
+    if(isSplitItem(root)) {
+      result.push(
+        <Split className={'parts body'}
+          style={style}
+          lineBar={true}
+          mode={root.mode}
+          key={uuidv4()}
+        >
+          { this.renderTreeList(root as SplitItem, depth+1) }
+        </Split>
+      )
+    } else {
+      result.push(
+        <div className='parts body' key={uuidv4()}>
+          { this.renderTreeList(root as SplitItem, depth+1) }
+        </div>
+      )
+    }
+    return result;
+  }
+
+  /* renderBodyListItem(curr: FlatItem, depth: number, list: FlatItem[], idx: number, length: number): JSX.Element[] {
     let result = [];
     let className = depth === 0 ? 'parts body' : '';
-    for(let i = idx; i < list.length; i++) {
+    for(let i = idx; i < length; i++) {
       let item = list[i];
 
       let style;
-      if(parent.children) {
-        const sizeProperty = parent.mode === 'vertical' ? 'height' : 'width';
-        const size = Math.floor(100 / parent.children.length) + '%';
+      if(curr.children) {
+        const sizeProperty = curr.mode === 'vertical' ? 'height' : 'width';
+        const size = Math.floor(100 / curr.children.length) + '%';
         style = depth !== 0 ? {[sizeProperty]: size} : {};
       }
 
@@ -205,12 +269,12 @@ class Main extends React.Component<Props, State> {
               mode={item.mode}
               key={uuidv4()}
             >
-              { this.renderBodyListItem(list, item, depth+1, i+1) }
+              { this.renderBodyListItem(item, depth+1, list, i+1, item.children.length) }
             </Split>
           )
           break;
         } else
-          throw new Error('blar blar balr ..');
+          throw new Error('blarblarbalr..');
       } else {
         if(item.children) {
           result.push(
@@ -223,7 +287,7 @@ class Main extends React.Component<Props, State> {
       }
     }
     return result;
-  }
+  } */
 
   render() {
 
@@ -281,9 +345,11 @@ class Main extends React.Component<Props, State> {
 
     console.log('render() is called..');
 
-    const { list, add } = this.props;
-    const item = list[0];
-    const style = {};
+    const { tree, list, add } = this.props;
+    /* const item = list[0];
+    const style = {}; */
+
+    const body = this.renderTreeRoot(tree, 0);
 
     return (
       <div className="app">
@@ -305,13 +371,17 @@ class Main extends React.Component<Props, State> {
               <Sample1Panel />
               <Sample2Panel />
             </SidePanel>
-            { list.length === 1 ?
+
+            {/* { list.length === 1 ?
               <div className='parts body' style={style} key={uuidv4()}>
                 <Tabs pid={item.id} children={item.children} />
                 <Terms pid={item.id} children={item.children} />
               </div>
-              : this.renderBodyListItem(list, list[0], 0, 0)
-            }
+              : this.renderBodyListItem(list[0], 0, list, 0, list.length)
+            } */}
+
+            { body }
+
           </Split>
         </div>
         { add ? <Add/> : null }
@@ -323,6 +393,7 @@ class Main extends React.Component<Props, State> {
 const mapStateToProps = (state: any) => {
   return {
     list: state.app.list,
+    tree: state.app.tree,
     add: state.app.add,
   };
 };

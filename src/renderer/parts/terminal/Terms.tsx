@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { setSomeVal } from '../../reducers/sample';
 import { v4 as uuidv4 } from 'uuid';
-import { FlatItem } from '../../Types';
+import { FlatItem, Terminal } from '../../Types';
 import Term from './Term';
 import Wrapper from '../drop/Wrapper';
 
 interface TermsProps {
   // list: Terminal_[];
-  pid: string;
-  children: FlatItem[];
+  // pid: string;
+  // children: FlatItem[];
+  list: Terminal[];
 
   // mapped value
   // dropOverlay: any;
@@ -51,20 +52,29 @@ class Terms extends React.Component<TermsProps, TermsState> {
   };
 
   render() {
-    const { pid, children } = this.props;
+    // const { pid, children } = this.props;
+    const { list } = this.props;
+
     return (
       <div
         ref={this.onTermsRef.bind(this)}
         className='terms'
       >
         {
+          list.map((item, index) => {
+            return (
+              <Term item={item} key={uuidv4()}/>
+            );
+          })
+        }
+        {/* {
           children.map((item, index) => {
             return (
               <Term item={item} key={uuidv4()}/>
             );
           })
         }
-        <Wrapper uid={this.uid} pid={pid} children={children} />
+        <Wrapper uid={this.uid} pid={pid} children={children} /> */}
         {/* { dropOverlay.visible ?
           <div>
             <DropTarget uid={this.uid} />

@@ -2,16 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _, { DebouncedFunc } from 'lodash';
 import classnames from 'classnames';
-import { FlatItem } from 'renderer/Types';
+import { FlatItem, Terminal } from 'renderer/Types';
 import { setDropOverlay, setList } from 'renderer/reducers/app';
 import { getItemIndex } from 'renderer/util';
 import { DropTargetType } from 'renderer/parts/tabs/Tabs';
 
 interface TabProps {
   // terminal: Terminal_;
-  item: FlatItem;
+  // item: FlatItem;
+  // children: FlatItem[];
+  item: Terminal;
   index: number;
-  children: FlatItem[];
   className: string;
   updateDropTarget: (dropTarget: DropTargetType) => void;
 
@@ -82,7 +83,7 @@ class Tab extends React.Component<TabProps, TabState> {
     }
 	}
 
-  private computeDropTarget(e: DragEvent): DropTargetType {
+  /* private computeDropTarget(e: DragEvent): DropTargetType {
     const { index } = this.props;
 		const isLeftSideOfTab = this.getTabDragOverLocation(e) === 'left';
 		const isLastTab = index === this.props.children.length - 1;
@@ -103,15 +104,15 @@ class Tab extends React.Component<TabProps, TabState> {
 		const tabAfter: number = isLeftSideOfTab ? index : index+1;
 
 		return { leftElementIndex: tabBefore, rightElementIndex: tabAfter};
-	}
+	} */
 
   // (property) React.BaseSyntheticEvent
   // <DragEvent, EventTarget & HTMLDivElement, EventTarget>
   // .nativeEvent: DragEvent
   private doDragOver(e: DragEvent): void {
     const { index } = this.props
-    let dropTarget = this.computeDropTarget(e);
-    this.props.updateDropTarget(dropTarget);
+    // let dropTarget = this.computeDropTarget(e);
+    // this.props.updateDropTarget(dropTarget);
   }
 
   onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {

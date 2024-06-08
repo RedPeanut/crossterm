@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Tab from './Tab';
-import { FlatItem } from '../../Types';
+import { FlatItem, Terminal } from '../../Types';
 import { v4 as uuidv4 } from 'uuid';
 import { drop } from 'lodash';
 
@@ -9,8 +9,9 @@ export type DropTargetType = { leftElementIndex: number | undefined; rightElemen
 
 interface TabsProps {
   // list: Terminal_[];
-  pid: string;
-  children: FlatItem[];
+  // pid: string;
+  // children: FlatItem[];
+  list: Terminal[];
 }
 
 interface TabsState {
@@ -32,7 +33,8 @@ class Tabs extends React.Component<TabsProps, TabsState> {
   componentDidMount() {}
 
   render() {
-    const { children } = this.props;
+    // const { children } = this.props;
+    const { list } = this.props;
     const { dropTarget } = this.state;
 
     return (
@@ -40,7 +42,7 @@ class Tabs extends React.Component<TabsProps, TabsState> {
         <div className="tabs-and-actions-container">
           <div className="scrollable-element">
             <div className="tablist">
-              {
+              {/* {
                 children.map((item, i) => {
                   let className: string = '';
                   if(dropTarget) {
@@ -50,8 +52,27 @@ class Tabs extends React.Component<TabsProps, TabsState> {
                   return (
                     <Tab item={item}
                       key={uuidv4()}
-                      /* related drop-target effect */
+                      // related drop-target effect
                       index={i} children={children}
+                      className={className}
+                      updateDropTarget={(dropTarget) => { this.setState({dropTarget: dropTarget}); }}
+                    />
+                  );
+                })
+              } */}
+              {
+                list.map((item, i) => {
+                  let className: string = '';
+                  if(dropTarget) {
+                    if(dropTarget.leftElementIndex === i) className = 'drop-target-left';
+                    if(dropTarget.rightElementIndex === i) className = 'drop-target-right';
+                  }
+                  return (
+                    <Tab item={item}
+                      key={uuidv4()}
+                      // related drop-target effect
+                      index={i}
+                      // children={children}
                       className={className}
                       updateDropTarget={(dropTarget) => { this.setState({dropTarget: dropTarget}); }}
                     />

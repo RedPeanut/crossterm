@@ -74,6 +74,25 @@ export function isSplitItem(o: any) {
   return typeof o === 'object' && 'mode' in o && 'list' in o;
 } */
 
+export interface Terminal {
+  id:'',
+  selected?: boolean; // default: false
+  active?: boolean; // default: false
+
+  // properties that are describe to terminal
+  // text, position, etc ...
+}
+
+export interface SplitItem {
+  // id: string;
+  mode?: 'horizontal' | 'vertical';
+  list: (SplitItem | Terminal[])[];
+}
+
+export function isSplitItem(o: any) {
+  return 'mode' in o;
+}
+
 export interface FlatItem {
   id: string;
   pid?: string;

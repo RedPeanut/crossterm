@@ -13,6 +13,8 @@ export const SET_DROP_OVERLAY = 'SET_DROP_OVERLAY';
 export const GET_DROP_OVERLAY = 'GET_DROP_OVERLAY';
 export const SET_LIST = 'SET_LIST';
 export const GET_LIST = 'GET_LIST';
+export const SET_TREE = 'SET_TREE';
+export const GET_TREE = 'GET_TREE';
 export const SET_ADD = 'SET_ADD';
 export const GET_ADD = 'GET_ADD';
 
@@ -31,6 +33,10 @@ export function setDropOverlay(_v: {}) {
 
 export function setList(_v: {}) {
   return { type: SET_LIST, v: _v };
+}
+
+export function setTree(_v: {}) {
+  return { type: SET_TREE, v: _v };
 }
 
 export function setAdd(_v: {}) {
@@ -53,6 +59,7 @@ export const initialState/*: {
     style: {}
   },
   list: FlatItem[],
+  tree: SplitItem,
 } */ = {
   screen: {
     width: -1, // to be set
@@ -66,6 +73,35 @@ export const initialState/*: {
     visible: false,
     id: '',
     style: {},
+  },
+  /* initial case
+  tree: {list:[]}, */
+  /* case1. single multi tab
+  tree: {list:[
+    [{id:'a1',selected:false},{id:'a2',selected:true,active:true}]
+  ]}, */
+  /* case2. single split
+  tree: {
+    mode: 'horizontal',
+    // mode: 'vertical',
+    list:[
+      [{id:'a1',selected:false},{id:'a2',selected:true,active:true}],
+      [{id:'b1',selected:true}]
+    ]
+  }, */
+  /* case3. split vertical in left pane */
+  tree: {
+    mode: 'horizontal',
+    list:[
+      {
+        mode:'vertical',
+        list:[
+          [{id:'a1',selected:true}],
+          [{id:'a2',selected:true,active:true}]
+        ]
+      },
+      [{id:'b1',selected:true}]
+    ]
   },
   list: [{id:'0',children:[]}],
   // list: [{id:'0',children:[{id:'a1',selected:true,active:true},{id:'a2'},{id:'a3'}]}],
@@ -114,6 +150,13 @@ export default (state = initialState, action: { type: string; v: any }) => {
         list: action.v,
       };
     case GET_LIST:
+      return state.list;
+    case SET_TREE:
+      return {
+        ...state,
+        list: action.v,
+      };
+    case GET_TREE:
       return state.list;
     case SET_ADD:
       return {

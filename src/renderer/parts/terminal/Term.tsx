@@ -5,14 +5,15 @@ import { Terminal as xterm } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import { v4 as uuidv4 } from 'uuid';
-import { terminals } from '../../globals';
-import { FlatItem } from '../../Types';
 import classnames from 'classnames';
+import { terminals } from '../../globals';
+import { FlatItem, Terminal } from '../../Types';
 
 interface TermProps {
   // uid: string;
   // terminal: Terminal_;
-  item: FlatItem;
+  // item: FlatItem;
+  item: Terminal;
   style?: {};
 }
 
