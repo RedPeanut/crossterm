@@ -139,10 +139,11 @@ class Tab extends React.Component<TabProps, TabState> {
     // console.log(list);
     // console.log({i,j});
 
-    // turn off previous selected item
+    // turn off previous selected item if not solo
     const prev_cloned_item = _.cloneDeep(list[i]);
     console.log('prev_cloned_item =', prev_cloned_item);
-    prev_cloned_item.children[j].selected = false;
+    if(prev_cloned_item.children.length > 1)
+      prev_cloned_item.children[j].selected = false;
     prev_cloned_item.children[j].active = false;
     const prev_replaced_list = [
       ...list.slice(0, i),
