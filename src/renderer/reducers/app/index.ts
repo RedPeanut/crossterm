@@ -77,9 +77,11 @@ export const initialState/*: {
   /* initial case
   tree: {list:[]}, */
   /* case1. single multi tab
-  tree: {list:[
-    [{id:'a1',selected:false},{id:'a2',selected:true,active:true}]
-  ]}, */
+  tree: {
+    list:[
+      [{id:'a1',selected:false},{id:'a2',selected:true,active:true}]
+    ]
+  }, */
   /* case2. single split
   tree: {
     mode: 'horizontal',
@@ -89,10 +91,11 @@ export const initialState/*: {
       [{id:'b1',selected:true}]
     ]
   }, */
-  /* case3. split vertical in left pane */
+  /* case3. split vertical in right pane */
   tree: {
     mode: 'horizontal',
     list:[
+      [{id:'b1',selected:true}],
       {
         mode:'vertical',
         list:[
@@ -100,23 +103,48 @@ export const initialState/*: {
           [{id:'a2',selected:true,active:true}]
         ]
       },
-      [{id:'b1',selected:true}]
     ]
   },
+  /* case4. more complex
+  tree: {
+    mode: 'horizontal',
+    list:[
+      {
+        mode:'vertical',
+        list:[
+          {
+            mode:'horizontal',
+            list:[
+              [{id:'a1',selected:true}],
+              [{id:'a2',selected:true,active:true}]
+            ]
+          },
+          [{id:'a3',selected:true}]
+        ]
+      },
+      [{id:'b1',selected:true}]
+    ]
+  }, */
+
+  /* initial case */
   list: [{id:'0',children:[]}],
-  // list: [{id:'0',children:[{id:'a1',selected:true,active:true},{id:'a2'},{id:'a3'}]}],
-  // list: [
-  //   {id:'0',mode:'horizontal',children:[{id:'c1'},{id:'c2'}]},
-  //   {id:'c1',pid:'0',children:[{id:'a1',selected:true}]},
-  //   {id:'c2',pid:'0',children:[{id:'b1'},{id:'b2',selected:true,active:true}]},
-  // ],
-  // list: [
-  //   {id:'0',mode:'horizontal',children:[{id:'c1'},{id:'c2'}]},
-  //   {id:'c1',pid:'0',children:[{id:'a1',selected:true}]},
-  //   {id:'c2',pid:'0',mode:'vertical',children:[{id:'d1'},{id:'d2'}]},
-  //   {id:'d1',pid:'c2',children:[{id:'e1',selected:true,active:true}]},
-  //   {id:'d2',pid:'c2',children:[{id:'e2',selected:true}]},
-  // ],
+  /* case1. single multi tab
+  list: [{id:'0',children:[{id:'a1',selected:true,active:true},{id:'a2'},{id:'a3'}]}], */
+  /* case2. single split
+  list: [
+    {id:'0',mode:'horizontal',children:[{id:'c1'},{id:'c2'}]},
+    {id:'c1',pid:'0',children:[{id:'a1',selected:true}]},
+    {id:'c2',pid:'0',children:[{id:'b1'},{id:'b2',selected:true,active:true}]},
+  ], */
+  /* case3. split vertical in right pane
+  list: [
+    {id:'0',mode:'horizontal',children:[{id:'c1'},{id:'c2'}]},
+    {id:'c1',pid:'0',children:[{id:'d1'},{id:'d2'}]},
+    {id:'d1',pid:'c1',children:[{id:'e1',selected:true,active:true}]},
+    {id:'d2',pid:'c1',children:[{id:'e2',selected:true}]},
+    {id:'c2',pid:'0',mode:'vertical',children:[{id:'a1',selected:true}]},
+  ], */
+
   add: false,
 };
 
