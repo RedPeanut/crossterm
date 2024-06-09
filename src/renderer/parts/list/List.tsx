@@ -7,7 +7,9 @@ import ItemIcon from 'renderer/parts/ItemIcon';
 import ListItem from 'renderer/parts/list/ListItem';
 import Tree from 'renderer/parts/tree/Tree';
 import { setList, setTree } from 'renderer/reducers/app';
-import { SplitItem, Terminal, isSplitItem } from 'renderer/Types';
+import { ListObject, SplitItem, Terminal, isSplitItem } from 'renderer/Types';
+import { Center } from '@chakra-ui/react';
+import { BiChevronRight } from 'react-icons/bi';
 
 interface ListProps {
   // mapped value
@@ -17,6 +19,7 @@ interface ListProps {
 
 interface ListState {
   selected_ids: string[];
+  show_list: ListObject[];
 }
 
 class List extends React.Component<ListProps, ListState> {
@@ -24,7 +27,50 @@ class List extends React.Component<ListProps, ListState> {
   constructor(props: ListProps) {
     super(props);
     this.state = {
-      selected_ids: ['0']
+      selected_ids: ['0'],
+      show_list: [
+        {
+          type: "folder",
+          title: "folder",
+          id: "52528ee3-aa4f-44a5-b763-5cf69acacf51",
+          on: false,
+          children: [
+            {
+              title: "xyz",
+              id: "e54af9c1-f003-4b1b-8db4-e796f69a9a4d",
+              on: true
+            },
+            {
+              title: "title1",
+              id: "96367ed9-6fb1-434b-b45d-de9d2d21898a",
+              on: true
+            },
+            {
+              title: "title2",
+              id: "9a136351-e893-4be6-a931-1b6a5ce85031",
+              on: true
+            }
+          ],
+          "is_collapsed": false
+        },
+        {
+          type: "remote",
+          title: "remote",
+          url: "www.remote.com",
+          id: "8d65f5a3-306d-44c7-a43f-b5abc17b6a2b",
+          on: true
+        },
+        {
+          type: "group",
+          title: "group",
+          id: "cbf8ea19-4474-4c15-8af0-3a4bdcdff717"
+        },
+        {
+          type: "local",
+          title: "local",
+          id: "751b26d0-5c94-4328-a0e8-23fdd85d160f"
+        }
+      ]
     };
   }
 
@@ -170,59 +216,19 @@ class List extends React.Component<ListProps, ListState> {
   } */
 
   render() {
-
-    const data = [
-      {
-        "type": "folder",
-        "title": "folder",
-        "id": "52528ee3-aa4f-44a5-b763-5cf69acacf51",
-        "on": false,
-        "children": [
-          {
-            "title": "xyz",
-            "id": "e54af9c1-f003-4b1b-8db4-e796f69a9a4d",
-            "on": true
-          },
-          {
-            "title": "title1",
-            "id": "96367ed9-6fb1-434b-b45d-de9d2d21898a",
-            "on": true
-          },
-          {
-            "title": "title2",
-            "id": "9a136351-e893-4be6-a931-1b6a5ce85031",
-            "on": true
-          }
-        ],
-        "is_collapsed": false
-      },
-      {
-        "type": "remote",
-        "title": "remote",
-        "url": "www.remote.com",
-        "id": "8d65f5a3-306d-44c7-a43f-b5abc17b6a2b",
-        "on": true
-      },
-      {
-        "type": "group",
-        "title": "group",
-        "id": "cbf8ea19-4474-4c15-8af0-3a4bdcdff717"
-      },
-      {
-        "type": "local",
-        "title": "local",
-        "id": "751b26d0-5c94-4328-a0e8-23fdd85d160f"
-      }
-    ];
-
+    const { show_list } = this.state;
     return (
       <div className='list'>
         <Tree
-          data={data}
+          data={show_list}
           selected_ids={this.state.selected_ids}
           onChange={(list) => {
             // setShowList(list)
             // setList(list).catch((e) => console.error(e))
+            this.setState({
+              ...this.state,
+              show_list: list
+            });
           }}
           onSelect={(ids: string[]) => {
             // console.log(ids);
@@ -231,15 +237,14 @@ class List extends React.Component<ListProps, ListState> {
               selected_ids: ids || ['0']
             });
           }}
-          onDoubleClick={this.onDoubleClick.bind(this)}
           nodeRender={(data) => (
             <ListItem key={data.id} data={data} /* selected_ids={selected_ids} */ />
           )}
-          // collapseArrow={
-          //   <Center w="20px" h="20px">
-          //     <BiChevronRight />
-          //   </Center>
-          // }
+          collapseArrow={
+            <Center w="20px" h="20px">
+              <BiChevronRight />
+            </Center>
+          }
           nodeAttr={(item) => {
             return {
               can_drag: true,
@@ -273,6 +278,7 @@ class List extends React.Component<ListProps, ListState> {
           // nodeSelectedClassName={styles.node_selected}
           // nodeCollapseArrowClassName={styles.arrow}
           allowed_multiple_selection={true}
+          onDoubleClick={this.onDoubleClick.bind(this)}
         />
       </div>
     )

@@ -138,6 +138,11 @@ body { height: 100%; }
 
 .side-panel .list .tree .node .content .ln_header .arrow {
   cursor: pointer;
+  transform: rotate(90deg);
+}
+
+.side-panel .list .tree .node .content .ln_header .arrow.collapsed {
+  transform: rotate(0);
 }
 
 .side-panel .list .tree .node .list-item .title {

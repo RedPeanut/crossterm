@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setSomeVal } from '../../reducers/sample';
-import Node, { NodeUpdate } from './Node';
 import classnames from 'classnames';
-// import styles from './style.module.scss'
-import { TreeNodeData } from '../../Types';
+import _ from 'lodash';
+import Node, { NodeUpdate } from 'renderer/parts/tree/Node';
+import { TreeNodeData } from 'renderer/Types';
 
 export type DropWhereType = 'before' | 'in' | 'after';
 export type MultipleSelectType = 0 | 1 | 2;
@@ -78,6 +77,37 @@ class Tree extends React.Component<TreeProps, TreeState> {
     onDoubleClick && onDoubleClick(id);
   }
 
+  flatten(tree: TreeNodeData[]): TreeNodeData[] {
+    let arr: any[] = [];
+    Array.isArray(tree) &&
+      tree.map((item) => {
+        if(!item) return
+        arr.push(item)
+        if(Array.isArray(item.children)) {
+          let a = this.flatten(item.children)
+          arr = arr.concat(a)
+        }
+      });
+    return arr;
+  }
+
+  getNodeById(tree: TreeNodeData[], id: string): TreeNodeData | undefined {
+    return this.flatten(tree).find((i) => i.id === id);
+  }
+
+  onTreeChange(tree: TreeNodeData[]): void {
+    this.props.onChange && this.props.onChange(tree);
+  }
+
+  onNodeChange(id: string, data: Partial<TreeNodeData>) {
+    let _tree = _.cloneDeep(this.props.data);
+    let node = this.getNodeById(_tree, id);
+    if(!node) return;
+
+    Object.assign(node, data);
+    this.onTreeChange(_tree);
+  }
+
   render() {
     const tree: TreeNodeData[] = this.props.data;
     const { /* data as tree,  */className, selected_ids } = this.props;
@@ -93,12 +123,14 @@ class Tree extends React.Component<TreeProps, TreeState> {
                 tree={tree}
                 data={node}
                 render={this.props.nodeRender}
+                collapseArrow={this.props.collapseArrow}
                 // onDragStart={onDragStart}
                 // onDragEnd={onDragEnd}
                 selected_ids={selected_ids}
                 onSelect={this.onSelect_.bind(this)}
                 onDoubleClick={this.onDoubleClick_.bind(this)}
                 level={0}
+                onChange={this.onNodeChange.bind(this)}
               />
             )
           })

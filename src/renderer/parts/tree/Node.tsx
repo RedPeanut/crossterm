@@ -18,6 +18,7 @@ interface NodeProps {
   collapseArrow?: string | React.ReactElement
   level: number;
   indent_px?: number;
+  onChange: (id: string, data: Partial<TreeNodeData>) => void;
 
   // mapped value
   someVal: any, onSetSomeVal: any;
@@ -36,7 +37,10 @@ class Node extends React.Component<NodeProps, NodeState> {
   }
 
   render() {
-    const { data, render, onSelect, onDoubleClick, selected_ids, collapseArrow, level, indent_px } = this.props;
+    const {
+      data, render, onSelect, onDoubleClick, selected_ids, collapseArrow, level, indent_px,
+      onChange,
+    } = this.props;
     const is_selected = selected_ids.includes(data.id);
     const has_children = Array.isArray(data.children) && data.children.length > 0;
 
@@ -55,7 +59,11 @@ class Node extends React.Component<NodeProps, NodeState> {
             <div className={'ln_header'/* styles.ln_header */} data-role="tree-node-header">
               {
                 has_children ? (
-                  <div className='arrow'>
+                  <div className={classnames('arrow', data.is_collapsed ? 'collapsed' : '')}
+                    onClick={() => {
+                      onChange(data.id, { is_collapsed: !data.is_collapsed });
+                    }}
+                  >
                     {collapseArrow ? collapseArrow : '>'}
                   </div>) : null
               }
