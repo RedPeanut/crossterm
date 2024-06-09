@@ -296,7 +296,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
 
         const attach_list: FlatItem[] = [replaced_item, attach_before, attach_after];
         const new_list = [...list.slice(0, k), ...attach_list, ...list.slice(k+1)];
-        // console.log('new_list =', new_list);
+        console.log('new_list =', new_list);
         this.props.onSetList(new_list);
         break;
       }
@@ -319,8 +319,11 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
 
         const attach_list: FlatItem[] = [replaced_item, attach_before, attach_after];
         const new_list = [...list.slice(0, k), ...attach_list, ...list.slice(k+1)];
-        // console.log('new_list =', new_list);
+        console.log('new_list =', new_list);
         this.props.onSetList(new_list);
+        break;
+      }
+      default: {
         break;
       }
     }
