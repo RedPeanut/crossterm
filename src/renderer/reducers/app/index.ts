@@ -154,10 +154,10 @@ export default (state = initialState, action: { type: string; v: any }) => {
     case SET_TREE:
       return {
         ...state,
-        list: action.v,
+        tree: action.v,
       };
     case GET_TREE:
-      return state.list;
+      return state.tree;
     case SET_ADD:
       return {
         ...state,

@@ -344,12 +344,8 @@ class Main extends React.Component<Props, State> {
     */
 
     console.log('render() is called..');
-
     const { tree, list, add } = this.props;
-    /* const item = list[0];
-    const style = {}; */
-
-    const body = this.renderTreeRoot(tree, 0);
+    // console.log('tree =', tree);
 
     return (
       <div className="app">
@@ -380,7 +376,7 @@ class Main extends React.Component<Props, State> {
               : this.renderBodyListItem(list[0], 0, list, 0, list.length)
             } */}
 
-            { body }
+            { this.renderTreeRoot(tree, 0) }
 
           </Split>
         </div>

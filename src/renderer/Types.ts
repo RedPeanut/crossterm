@@ -75,7 +75,7 @@ export function isSplitItem(o: any) {
 } */
 
 export interface Terminal {
-  id:'',
+  id: string,
   selected?: boolean; // default: false
   active?: boolean; // default: false
 
