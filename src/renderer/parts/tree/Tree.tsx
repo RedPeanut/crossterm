@@ -107,13 +107,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
                 data={node}
                 render={this.props.nodeRender}
                 collapseArrow={this.props.collapseArrow}
-                // onDragStart={onDragStart}
-                // onDragEnd={onDragEnd}
                 selected_ids={selected_ids}
                 onSelect={this.onSelect_.bind(this)}
                 onDoubleClick={this.onDoubleClick_.bind(this)}
-                level={0}
                 onChange={this.onNodeChange.bind(this)}
+                level={0}
               />
             )
           })

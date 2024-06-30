@@ -45,14 +45,15 @@ class Node extends React.Component<NodeProps, NodeState> {
 
     return (
       <>
-        <div className={classnames('node'/* , styles.node */, is_selected && 'selected')}
+        <div
+          className={classnames('node'/* , styles.node */, is_selected && 'selected')}
+          style={{
+            paddingLeft: level * (indent_px || 20) + 4,
+          }}
           onClick={(e) => {
             onSelect(data.id);
           }}
           onDoubleClick={(e) => {onDoubleClick(data.id);}}
-          style={{
-            paddingLeft: level * (indent_px || 20) + 4,
-          }}
         >
           <div className={classnames('content'/* , styles.content */)}>
             <div className={'ln_header'/* styles.ln_header */} data-role="tree-node-header">
