@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import _ from 'lodash';
-import Node, { NodeUpdate } from 'renderer/parts/tree/Node';
 import { TreeNodeData } from 'renderer/Types';
+import { getNodeById } from 'renderer/parts/tree/fn';
+import Node, { NodeUpdate } from 'renderer/parts/tree/Node';
 
 export type DropWhereType = 'before' | 'in' | 'after';
 export type MultipleSelectType = 0 | 1 | 2;
@@ -53,7 +54,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     if(multiple_type === 0) {
       new_selected_ids = [id];
     } else if(multiple_type === 1) {
-      // // 按住 cmd/ctrl 多选 (여러 개를 선택하려면 cmd/ctrl을 누르세요)
+      // // 여러 개를 선택하려면 cmd/ctrl을 누르세요
       // if(!canBeSelected(tree, selected_ids, id)) {
       //   return;
       // }
@@ -63,7 +64,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
       //   new_selected_ids = [...selected_ids, id];
       // }
     } else if(multiple_type === 2) {
-      // // 按住 shift 多选 (여러 개를 선택하려면 Shift 키를 누른 채 선택하세요)
+      // // 여러 개를 선택하려면 Shift 키를 누른 채 선택하세요
       // new_selected_ids = selectTo(tree, selected_ids, id);
     }
 
@@ -77,31 +78,13 @@ class Tree extends React.Component<TreeProps, TreeState> {
     onDoubleClick && onDoubleClick(id);
   }
 
-  flatten(tree: TreeNodeData[]): TreeNodeData[] {
-    let arr: any[] = [];
-    Array.isArray(tree) &&
-      tree.map((item) => {
-        if(!item) return
-        arr.push(item)
-        if(Array.isArray(item.children)) {
-          let a = this.flatten(item.children)
-          arr = arr.concat(a)
-        }
-      });
-    return arr;
-  }
-
-  getNodeById(tree: TreeNodeData[], id: string): TreeNodeData | undefined {
-    return this.flatten(tree).find((i) => i.id === id);
-  }
-
   onTreeChange(tree: TreeNodeData[]): void {
     this.props.onChange && this.props.onChange(tree);
   }
 
   onNodeChange(id: string, data: Partial<TreeNodeData>) {
     let _tree = _.cloneDeep(this.props.data);
-    let node = this.getNodeById(_tree, id);
+    let node = getNodeById(_tree, id);
     if(!node) return;
 
     Object.assign(node, data);

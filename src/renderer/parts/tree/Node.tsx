@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setSomeVal } from '../../reducers/sample';
-// import styles from './style.module.scss'
-import { TreeNodeData } from '../../Types';
 import classnames from 'classnames';
-import { DropWhereType, MultipleSelectType } from './Tree';
+// import styles from './style.module.scss'
+import { TreeNodeData } from 'renderer/Types';
+import { DropWhereType, MultipleSelectType } from 'renderer/parts/tree/Tree';
 
 export type NodeUpdate = (data: Partial<TreeNodeData>) => void;
 
@@ -21,7 +20,7 @@ interface NodeProps {
   onChange: (id: string, data: Partial<TreeNodeData>) => void;
 
   // mapped value
-  someVal: any, onSetSomeVal: any;
+  // ...
 }
 interface NodeState {}
 
@@ -85,15 +84,11 @@ class Node extends React.Component<NodeProps, NodeState> {
 }
 
 const mapStateToProps = (state: any) => {
-  return {
-    someVal: state.sample.someVal,
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onSetSomeVal: (v: any) => dispatch(setSomeVal(v)),
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Node);
