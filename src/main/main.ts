@@ -20,6 +20,7 @@ import LastStateManager from './nedb/LastStateManager';
 import _ from 'lodash';
 import {v4 as uuidv4} from 'uuid';
 import TerminalLocal from './terminal/TerminalLocal';
+import { getAppDb } from './data';
 import { ConfigsType, configs } from '../common/configs';
 
 class AppUpdater {
@@ -146,6 +147,8 @@ const installIpc = () => {
 let win: BrowserWindow | null = null;
 
 const createWindow = async () => {
+
+  await getAppDb();
 
   if(Runtime.isDev) {
     await installExtensions();
