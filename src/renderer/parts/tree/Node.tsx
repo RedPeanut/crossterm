@@ -59,7 +59,7 @@ class Node extends React.Component<NodeProps, NodeState> {
             <div className={'ln_header'/* styles.ln_header */} data-role="tree-node-header">
               {
                 has_children ? (
-                  <div className={classnames('arrow', data.is_collapsed ? 'collapsed' : '')}
+                  <div className={classnames('arrow', data.is_collapsed && 'collapsed')}
                     onClick={() => {
                       onChange(data.id, { is_collapsed: !data.is_collapsed });
                     }}
