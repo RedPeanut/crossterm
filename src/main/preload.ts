@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent, IpcRenderer } from 'electron';
 
 export type MainEvents =
+  // terminal
   'new'
   | 'data'
   | 'maximize'
@@ -9,6 +10,13 @@ export type MainEvents =
   | 'open context menu'
   | 'close'
   | 'command'
+
+  // config
+  | 'config all'
+  | 'config get'
+  | 'config set'
+  | 'config update'
+
 ;
 
 export type RenderEvents =

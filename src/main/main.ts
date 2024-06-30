@@ -20,6 +20,7 @@ import LastStateManager from './nedb/LastStateManager';
 import _ from 'lodash';
 import {v4 as uuidv4} from 'uuid';
 import TerminalLocal from './terminal/TerminalLocal';
+import { ConfigsType, configs } from '../common/configs';
 
 class AppUpdater {
   constructor() {
@@ -95,6 +96,27 @@ const getWindowSize = async () => {
 }
 
 const installIpc = () => {
+
+  ipcMain.handle('config all', async (event, args: any[]) => {
+    let cfgs = await cfgdb.dict.cfg.all();
+    return Object.assign({}, configs, cfgs);
+  });
+  ipcMain.handle('config get', async (event, args: any[]) => {
+    let key = args[0] as keyof ConfigsType;
+    return await cfgdb.dict.cfg.get(key, configs[key]);
+  });
+  ipcMain.on('config set', async (event, args: any[]) => {
+    let key = args[0];
+    let value = args[1];
+    console.log(`config.set [${key}]: ${value}`);
+    await cfgdb.dict.cfg.set(key, value);
+  });
+  ipcMain.on('config update', async (event, args: any[]) => {
+    const old_configs = await cfgdb.dict.cfg.all();
+    let data = args[0];
+    await cfgdb.dict.cfg.update(data);
+  });
+
   const terminals = new Map<string, TerminalLocal>();
 
   ipcMain.on('new', (event, args: any[]) => {
