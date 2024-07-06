@@ -132,16 +132,16 @@ body { height: 100%; }
   align-items: center;
 }
 
-.side-panel .list .tree .node .content .ln_header {
+.side-panel .list .tree .node .ln_header {
   width: 20px;
 }
 
-.side-panel .list .tree .node .content .ln_header .arrow {
+.side-panel .list .tree .node .ln_header .arrow {
   cursor: pointer;
   transform: rotate(90deg);
 }
 
-.side-panel .list .tree .node .content .ln_header .arrow.collapsed {
+.side-panel .list .tree .node .ln_header .arrow.collapsed {
   transform: rotate(0);
 }
 
