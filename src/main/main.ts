@@ -9,7 +9,8 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
+import os from 'os';
+import { app, BrowserWindow, shell, ipcMain, screen, session } from 'electron';
 import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 import log from './log';
@@ -226,8 +227,20 @@ app.on('window-all-closed', () => {
   }
 });
 
+import installExtension, {
+  REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS
+} from 'electron-devtools-installer';
+
 app
   .whenReady()
+  .then(
+    () => {
+    [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].map(
+      (e) => installExtension(e)
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log('An error occurred: ', err))
+    )}
+  )
   .then(() => {
     createWindow();
     app.on('activate', () => {
