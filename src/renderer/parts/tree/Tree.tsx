@@ -33,16 +33,23 @@ interface TreeProps {
 interface TreeState {
   // tree: TreeNodeData[];
   is_dragging: boolean;
-  drag_source_id: string;
-  drop_target_id: string;
+  drag_source_id: string | null;
+  drop_target_id: string | null;
   selected_ids: string[];
-  drop_where: DropWhereType;
+  drop_where: DropWhereType | null;
 }
 
 class Tree extends React.Component<TreeProps, TreeState> {
 
   constructor(props: TreeProps) {
     super(props);
+    this.state = {
+      is_dragging: false,
+      drag_source_id: null,
+      drop_target_id: null,
+      selected_ids: [],
+      drop_where: null,
+    }
   }
 
   componentDidMount() {}
@@ -91,27 +98,86 @@ class Tree extends React.Component<TreeProps, TreeState> {
     this.onTreeChange(_tree);
   }
 
+  onDragStart = (id: string) => {
+    this.setState({
+      // ...this.state,
+      is_dragging: true,
+      drag_source_id: id,
+      drop_target_id: null,
+      drop_where: null
+    });
+  }
+
+  onDragEnd = () => {
+    const { is_dragging, drag_source_id, drop_target_id, drop_where } = this.state;
+    if(!is_dragging) return;
+
+    if(drag_source_id && drop_target_id && drop_where) {
+
+    }
+
+    this.setState({
+      // ...this.state,
+      is_dragging: false,
+      drag_source_id: null,
+      drop_target_id: null,
+      drop_where: null
+    });
+  }
+
+  setDropTargetId = (id: string | null) => {
+    this.setState({
+      // ...this.state,
+      drop_target_id: id
+    });
+  }
+
+  setDropWhere = (where: DropWhereType | null) => {
+    this.setState({
+      // ...this.state,
+      drop_where: where
+    });
+  }
+
   render() {
     const tree: TreeNodeData[] = this.props.data;
-    const { /* data as tree,  */className, selected_ids } = this.props;
+    const { /* data as tree,  */className, selected_ids, nodeAttr } = this.props;
     // this.state.selected_ids = this.props.selected_ids || [];
+    const { is_dragging,
+      drag_source_id,
+      drop_target_id,
+      drop_where
+    } = this.state;
 
     return (
-      <div className={classnames('tree', className)} /* onDrop={onDragEnd} */>
+      <div className={classnames('tree', className)} onDrop={this.onDragEnd}>
         {
           tree.map((node) => {
             return (
               <Node
                 key={node.id}
                 tree={tree}
+                level={0}
                 data={node}
+                nodeAttr={nodeAttr}
+
+                //
                 render={this.props.nodeRender}
                 collapseArrow={this.props.collapseArrow}
                 selected_ids={selected_ids}
                 onSelect={this.onSelect_.bind(this)}
                 onDoubleClick={this.onDoubleClick_.bind(this)}
                 onChange={this.onNodeChange.bind(this)}
-                level={0}
+
+                // drag related ...
+                onDragStart={this.onDragStart}
+                onDragEnd={this.onDragEnd}
+                setDropTargetId={this.setDropTargetId}
+                setDropWhere={this.setDropWhere}
+                drag_source_id={drag_source_id}
+                drop_target_id={drop_target_id}
+                drag_target_where={drop_where}
+                is_dragging={is_dragging}
               />
             )
           })
