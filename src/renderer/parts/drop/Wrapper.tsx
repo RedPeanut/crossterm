@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FlatItem } from 'renderer/Types';
-import DropOverlay from './DropOverlay';
-import DropTarget from './DropTarget';
+import { FlatItem, Terminal } from 'renderer/Types';
+import DropOverlay from 'renderer/parts/drop/DropOverlay';
+import DropTarget from 'renderer/parts/drop/DropTarget';
 
 interface Props {
   pid: string;
-  children: FlatItem[];
+  // children: FlatItem[];
+  list: Terminal[];
   uid: string;
 
   // mapped value
@@ -23,15 +24,15 @@ class Wrapper extends React.Component<Props, State> {
   componentDidMount() {}
 
   render() {
-    const {  dropOverlay, uid, pid, children } = this.props;
+    const { dropOverlay, uid, pid, list } = this.props;
     return (
       <div>
         {
-          // dropOverlay.visible ?
-          true ?
+          dropOverlay.visible ?
+          // true ?
             <div>
               <DropTarget uid={uid} />
-              <DropOverlay uid={uid} pid={pid} children={children} />
+              <DropOverlay uid={uid} pid={pid} list={list} />
             </div>
           : null
         }

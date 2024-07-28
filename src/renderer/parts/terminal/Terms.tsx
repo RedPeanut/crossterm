@@ -67,6 +67,8 @@ class Terms extends React.Component<TermsProps, TermsState> {
             );
           })
         }
+        {/* <Wrapper uid={this.uid} pid={pid} list={list} /> */}
+
         {/* {
           children.map((item, index) => {
             return (
@@ -75,6 +77,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
           })
         }
         <Wrapper uid={this.uid} pid={pid} children={children} /> */}
+
         {/* { dropOverlay.visible ?
           <div>
             <DropTarget uid={this.uid} />

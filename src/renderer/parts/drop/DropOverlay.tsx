@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import _, { DebouncedFunc } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { throws } from 'assert';
-import { setDropOverlay, setList } from '../../reducers/app';
-import { FlatItem } from '../../Types';
+import { FlatItem, Terminal } from 'renderer/Types';
+import { setDropOverlay, setList, setTree } from 'renderer/reducers/app';
+import { findActiveItemPos, selectActiveItem } from 'renderer/util';
 const debug = require('debug')('DropOverlay');
 
 export const enum GroupDirection {
@@ -15,11 +16,13 @@ interface DropOverlayProps {
   uid: string;
   // list: Terminal_[];
   pid: string;
-  children?: FlatItem[];
+  // children?: FlatItem[];
+  list: Terminal[];
 
   // mapped values
   dropOverlay: any; onSetDropOverlay: any;
-  list: any; onSetList: any;
+  tree: any; onSetTree: any;
+  // list: any; onSetList: any;
 }
 
 interface DropOverlayState {}
@@ -184,10 +187,10 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     let _e = e.nativeEvent;
     // console.log('_e =', _e);
     this.showDropTarget = false;
-    const { children, dropOverlay, uid } = this.props;
+    const { list, dropOverlay, uid } = this.props;
     // console.log('dropOverlay =', dropOverlay);
     // console.log('uuid =', uuid);
-    if(children && children.length > 0
+    if(list && list.length > 0
       // && dropOverlay.id === uuid
     ) {
       // console.log('>>> 1');
@@ -242,6 +245,57 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
+    console.log('onDrop event is called...');
+    e.preventDefault();
+    this.makeDropTargetHide();
+    const { tree, list, uid, pid } = this.props;
+    console.log(e.dataTransfer.getData('text/plain'));
+
+    // find active item index
+    const activeItemPos = findActiveItemPos(tree, 0, []);
+    console.log('activeItemPos =', activeItemPos);
+
+    if(activeItemPos) {
+      const activeItem = selectActiveItem(tree, 0, []);
+      console.log('activeItem =', activeItem);
+      /* // turn off active item
+      if(activeItem) {
+        activeItem.selected = false;
+        activeItem.active = false;
+      } */
+    }
+
+    // find target item index
+
+
+    switch(this.splitDirection) {
+      // insert before
+      case GroupDirection.UP:
+      case GroupDirection.LEFT: {
+        const before_id = uuidv4();
+        const after_id = uuidv4();
+
+        // console.log('new_list =', new_list);
+        // this.props.onSetList(new_list);
+        break;
+      }
+      // insert after
+      case GroupDirection.DOWN:
+      case GroupDirection.RIGHT: {
+        const before_id = uuidv4();
+        const after_id = uuidv4();
+
+        // console.log('new_list =', new_list);
+        // this.props.onSetList(new_list);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+  /* onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDrop event is called...');
     e.preventDefault();
     this.makeDropTargetHide();
@@ -327,7 +381,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
         break;
       }
     }
-  }
+  } */
 
   render() {
     // console.log('uuid =', this.props.uuid);
