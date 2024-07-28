@@ -11,13 +11,15 @@ export default class TerminalLocal extends EventEmitter {
   batcher: DataBatcher | null = null;
   shell: string | undefined;
   initTimestamp: number = new Date().getTime();
+  options: TerminalOptions;
 
   constructor(options: TerminalOptions) {
     super();
-    this.init(options);
+    this.options = options;
   }
 
-  init({uid}: TerminalOptions) {
+  start() {
+    const { uid } = this.options;
     // Initialize node-pty with an appropriate shell
     const shell = os.platform() === 'win32' ? 'cmd.exe' : 'bash';
     this.pty = spawn(shell!, [], {

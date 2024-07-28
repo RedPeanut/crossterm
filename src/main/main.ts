@@ -130,6 +130,7 @@ const installIpc = () => {
         // console.log('data event is called..., data =', data);
         win?.webContents.send('terminal data', data);
       });
+      terminal.start();
       terminals.set(arg.uid, terminal);
     } else if(arg.type === 'ssh') {
     }
