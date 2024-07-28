@@ -76,12 +76,12 @@ export const initialState/*: {
   },
   /* initial case
   tree: {list:[]}, */
-  /* case1. single multi tab
+  /* case1. single multi tab */
   tree: {
     list:[
       [{id:'a1',selected:false},{id:'a2',selected:true,active:true}]
     ]
-  }, */
+  },
   /* case2. single split
   tree: {
     mode: 'horizontal',
@@ -91,7 +91,7 @@ export const initialState/*: {
       [{id:'b1',selected:true}]
     ]
   }, */
-  /* case3. split vertical in right pane */
+  /* case3. split vertical in right pane
   tree: {
     mode: 'horizontal',
     list:[
@@ -104,7 +104,7 @@ export const initialState/*: {
         ]
       },
     ]
-  },
+  }, */
   /* case4. more complex
   tree: {
     mode: 'horizontal',

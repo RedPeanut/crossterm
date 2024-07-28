@@ -110,7 +110,7 @@ const installIpc = () => {
   ipcMain.on('config set', async (event, args: any[]) => {
     let key = args[0];
     let value = args[1];
-    console.log(`config.set [${key}]: ${value}`);
+    console.log(`config set [${key}]: ${value}`);
     await cfgdb.dict.cfg.set(key, value);
   });
   ipcMain.on('config update', async (event, args: any[]) => {
