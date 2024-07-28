@@ -90,7 +90,7 @@ export interface SplitItem {
 }
 
 export function isSplitItem(o: any) {
-  return 'mode' in o;
+  return 'mode' in o && 'list' in o;
 }
 
 export interface FlatItem {
