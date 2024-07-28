@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import update, { Spec } from 'immutability-helper';
+import { Center } from '@chakra-ui/react';
+import { BiChevronRight } from 'react-icons/bi';
+import { ListObject, SplitItem, Terminal, isSplitItem } from 'renderer/Types';
+import { setList, setTree } from 'renderer/reducers/app';
 import ItemIcon from 'renderer/parts/ItemIcon';
 import ListItem from 'renderer/parts/list/ListItem';
 import Tree from 'renderer/parts/tree/Tree';
-import { setList, setTree } from 'renderer/reducers/app';
-import { ListObject, SplitItem, Terminal, isSplitItem } from 'renderer/Types';
-import { Center } from '@chakra-ui/react';
-import { BiChevronRight } from 'react-icons/bi';
+import { findActiveItemPos, selectActiveItem } from 'renderer/util';
 
 interface ListProps {
   // mapped value
@@ -76,57 +77,13 @@ class List extends React.Component<ListProps, ListState> {
 
   componentDidMount() {}
 
-  findActiveItemPos(curr: SplitItem, depth: number, index: number[]): { depth: number, index: number[], pos: number } | undefined {
-    if(curr.list.length > 0) {
-      for(let i = 0; i < curr.list.length; i++) {
-        let item = curr.list[i];
-        // let _index = index.concat(i);
-        if(isSplitItem(item)) {
-          let retVal = this.findActiveItemPos(item as SplitItem, depth+1, index.concat(i));
-          if(retVal) return retVal;
-        } else {
-          item = item as Terminal[];
-          for(let j = 0; j < item.length; j++) {
-            let _item = item[j];
-            if(_item.active) {
-              return { depth, index: index.concat(i), pos: j }
-            }
-          }
-        }
-      }
-    }
-    return undefined;
-  }
-
-  selectActiveItem(curr: SplitItem, depth: number, index: number[]): Terminal | undefined {
-    if(curr.list.length > 0) {
-      for(let i = 0; i < curr.list.length; i++) {
-        let item = curr.list[i];
-        if(isSplitItem(item)) {
-          let retVal = this.selectActiveItem(item as SplitItem, depth+1, index.concat(i));
-          if(retVal) return retVal;
-        } else {
-          item = item as Terminal[];
-          for(let j = 0; j < item.length; j++) {
-            let _item = item[j];
-            if(_item.active) {
-              // let _index = index.concat(i);
-              return _item;
-            }
-          }
-        }
-      }
-    }
-    return undefined;
-  }
-
   onDoubleClick(id: string) {
     // insert terminal into active list
     const { tree } = this.props;
 
     // find active item position first
     // const { depth, index, pos } = this.findActiveItemPos(tree, 0);
-    const activeItemPos = this.findActiveItemPos(tree, 0, []);
+    const activeItemPos = findActiveItemPos(tree, 0, []);
     console.log('activeItemPos =', activeItemPos);
 
     const new_one: Terminal = {id:uuidv4(),selected:true,active:true};
@@ -135,7 +92,7 @@ class List extends React.Component<ListProps, ListState> {
     if(activeItemPos) {
 
       // turn off active item
-      const activeItem = this.selectActiveItem(tree, 0, []);
+      const activeItem = selectActiveItem(tree, 0, []);
       console.log('activeItem =', activeItem);
 
       if(activeItem) {

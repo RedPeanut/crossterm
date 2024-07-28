@@ -1,4 +1,48 @@
-import { FlatItem, isSplitItem_ } from "./Types";
+import { FlatItem, SplitItem, Terminal, isSplitItem, isSplitItem_ } from "./Types";
+
+export function findActiveItemPos(curr: SplitItem, depth: number, index: number[]): { depth: number, index: number[], pos: number } | undefined {
+  if(curr.list.length > 0) {
+    for(let i = 0; i < curr.list.length; i++) {
+      let item = curr.list[i];
+      // let _index = index.concat(i);
+      if(isSplitItem(item)) {
+        let retVal = findActiveItemPos(item as SplitItem, depth+1, index.concat(i));
+        if(retVal) return retVal;
+      } else {
+        item = item as Terminal[];
+        for(let j = 0; j < item.length; j++) {
+          let _item = item[j];
+          if(_item.active) {
+            return { depth, index: index.concat(i), pos: j }
+          }
+        }
+      }
+    }
+  }
+  return undefined;
+}
+
+export function selectActiveItem(curr: SplitItem, depth: number, index: number[]): Terminal | undefined {
+  if(curr.list.length > 0) {
+    for(let i = 0; i < curr.list.length; i++) {
+      let item = curr.list[i];
+      if(isSplitItem(item)) {
+        let retVal = selectActiveItem(item as SplitItem, depth+1, index.concat(i));
+        if(retVal) return retVal;
+      } else {
+        item = item as Terminal[];
+        for(let j = 0; j < item.length; j++) {
+          let _item = item[j];
+          if(_item.active) {
+            // let _index = index.concat(i);
+            return _item;
+          }
+        }
+      }
+    }
+  }
+  return undefined;
+}
 
 /* export function getActiveItemindex(list: FlatItem[]): {} {
   let i = 0, j = 0; // active item index
