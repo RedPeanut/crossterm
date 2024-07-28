@@ -410,14 +410,16 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
 const mapStateToProps = (state: any) => {
   return {
     dropOverlay: state.app.dropOverlay,
-    list: state.app.list,
+    tree: state.app.tree,
+    // list: state.app.list,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onSetDropOverlay: (v: any) => dispatch(setDropOverlay(v)),
-    onSetList: (v: any) => dispatch(setList(v)),
+    onSetTree: (v: any) => dispatch(setTree(v)),
+    // onSetList: (v: any) => dispatch(setList(v)),
   };
 };
 
