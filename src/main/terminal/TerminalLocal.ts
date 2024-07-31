@@ -4,6 +4,7 @@ import {IPty, spawn} from 'node-pty';
 import { TerminalOptions } from 'main/Types';
 import { EventEmitter } from 'events';
 import DataBatcher from './DataBatcher';
+import { TerminalItem } from 'common/Types';
 
 export default class TerminalLocal extends EventEmitter {
 
@@ -11,9 +12,9 @@ export default class TerminalLocal extends EventEmitter {
   batcher: DataBatcher | null = null;
   shell: string | undefined;
   initTimestamp: number = new Date().getTime();
-  options: TerminalOptions;
+  options: TerminalItem;
 
-  constructor(options: TerminalOptions) {
+  constructor(options: TerminalItem) {
     super();
     this.options = options;
   }

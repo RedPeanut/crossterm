@@ -10,7 +10,7 @@ import BookmarkPanel from './panel/BookmarkPanel';
 import Sample1Panel from './panel/Sample1Panel';
 import Sample2Panel from './panel/Sample2Panel';
 import Tabs from './tabs/Tabs';
-import { FlatItem, SplitItem, Terminal, isSplitItem, isSplitItem_ } from '../Types';
+import { SplitItem, isSplitItem } from '../Types';
 import { v4 as uuidv4 } from 'uuid';
 
 // import 'xterm/css/xterm.css';
@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { terminals } from '../globals';
 import Terms from './terminal/Terms';
 import Add from './Add';
+import { TerminalItem } from 'common/Types';
 
 interface Props {
   // mapped value
@@ -211,8 +212,8 @@ class Main extends React.Component<Props, State> {
         // if not split item must have one item (as Terminal[])
         result.push(
           <div className='body-item' style={style} key={uuidv4()}>
-            <Tabs list={item as Terminal[]} />
-            <Terms list={item as Terminal[]} />
+            <Tabs list={item as TerminalItem[]} />
+            <Terms list={item as TerminalItem[]} />
           </div>
         );
       }

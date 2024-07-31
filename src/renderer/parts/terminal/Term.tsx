@@ -7,13 +7,14 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 import { v4 as uuidv4 } from 'uuid';
 import classnames from 'classnames';
 import { terminals } from '../../globals';
-import { FlatItem, Terminal } from '../../Types';
+// import { FlatItem, Terminal } from '../../Types';
+import { TerminalItem } from 'common/Types';
 
 interface TermProps {
   // uid: string;
   // terminal: Terminal_;
   // item: FlatItem;
-  item: Terminal;
+  item: TerminalItem;
   style?: {};
 }
 

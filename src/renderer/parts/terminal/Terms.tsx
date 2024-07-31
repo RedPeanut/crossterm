@@ -2,15 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { setSomeVal } from '../../reducers/sample';
 import { v4 as uuidv4 } from 'uuid';
-import { FlatItem, Terminal } from '../../Types';
+// import { FlatItem, Terminal } from '../../Types';
 import Term from './Term';
 import Wrapper from '../drop/Wrapper';
+import { TerminalItem } from 'common/Types';
 
 interface TermsProps {
   // list: Terminal_[];
   // pid: string;
   // children: FlatItem[];
-  list: Terminal[];
+  list: TerminalItem[];
 
   // mapped value
   // dropOverlay: any;

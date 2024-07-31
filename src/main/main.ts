@@ -123,16 +123,16 @@ const installIpc = () => {
 
   ipcMain.on('new', (event, args: any[]) => {
     // console.log('[main.ts/new] args =', args);
-    const arg = args[0];
+    const arg: TerminalItem = args[0] as TerminalItem;
     if(arg.type === 'local') {
-      const terminal = new TerminalLocal({uid: arg.uid});
+      const terminal = new TerminalLocal(/* {uid: arg.uid} */arg);
       terminal.on('data', (data: string) => {
         // console.log('data event is called..., data =', data);
         win?.webContents.send('terminal data', data);
       });
       terminal.start();
       terminals.set(arg.uid, terminal);
-    } else if(arg.type === 'ssh') {
+    } else if(arg.type === 'remote') {
     }
   });
 
@@ -231,6 +231,7 @@ app.on('window-all-closed', () => {
 import installExtension, {
   REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS
 } from 'electron-devtools-installer';
+import { TerminalItem } from 'common/Types';
 
 app
   .whenReady()

@@ -5,12 +5,13 @@ import { v4 as uuidv4 } from 'uuid';
 import update, { Spec } from 'immutability-helper';
 import { Center } from '@chakra-ui/react';
 import { BiChevronRight } from 'react-icons/bi';
-import { ListItem, SplitItem, Terminal, isSplitItem } from 'renderer/Types';
+import { ListItem } from 'renderer/Types';
 import { setList, setTree } from 'renderer/reducers/app';
 import ItemIcon from 'renderer/parts/ItemIcon';
 import ListItem_ from 'renderer/parts/list/ListItem_';
 import Tree from 'renderer/parts/tree/Tree';
 import { findActiveItemPos, selectActiveItem } from 'renderer/util';
+import { TerminalItem } from 'common/Types';
 
 interface ListProps {
   // mapped value
@@ -86,7 +87,7 @@ class List extends React.Component<ListProps, ListState> {
     const activeItemPos = findActiveItemPos(tree, 0, []);
     console.log('activeItemPos =', activeItemPos);
 
-    const new_one: Terminal = {id:uuidv4(),selected:true,active:true};
+    const new_one: TerminalItem = {uid:uuidv4(),selected:true,active:true};
     let new_tree;
 
     if(activeItemPos) {

@@ -2,16 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _, { DebouncedFunc } from 'lodash';
 import classnames from 'classnames';
-import { FlatItem, Terminal } from 'renderer/Types';
+// import { FlatItem, Terminal } from 'renderer/Types';
 import { setDropOverlay, setList } from 'renderer/reducers/app';
 import { getItemIndex } from 'renderer/util';
 import { DropTargetType } from 'renderer/parts/tabs/Tabs';
+import { TerminalItem } from 'common/Types';
 
 interface TabProps {
   // terminal: Terminal_;
   // item: FlatItem;
   // children: FlatItem[];
-  item: Terminal;
+  item: TerminalItem;
   index: number;
   className: string;
   updateDropTarget: (dropTarget: DropTargetType) => void;
@@ -126,7 +127,9 @@ class Tab extends React.Component<TabProps, TabState> {
 
   handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
 
-  onClick(e: any) {
+  onClick(e: any) {}
+
+  /* onClick(e: any) {
     // change active in here
     const { list, item } = this.props;
 
@@ -171,7 +174,7 @@ class Tab extends React.Component<TabProps, TabState> {
     // console.log(this_replaced_list);
 
     this.props.onSetList(this_replaced_list);
-  }
+  } */
 
   render() {
     const { item, className } = this.props;

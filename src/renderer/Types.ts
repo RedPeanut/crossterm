@@ -1,7 +1,9 @@
+import { TerminalItem } from "common/Types";
+
 export type ListItemType = 'local' | 'remote' | 'group' | 'folder';
 export type FolderModeType = 0 | 1 | 2; // 0: 기본값; 1: 단일 선택 2: 다중 선택
 
-export interface ListObject {
+export interface ListItem {
   id: string;
   title?: string;
   on?: boolean;
@@ -19,7 +21,7 @@ export interface ListObject {
   // folder
   folder_mode?: FolderModeType;
   folder_open?: boolean;
-  children?: ListObject[];
+  children?: ListItem[];
 
   is_sys?: boolean;
 
@@ -74,19 +76,19 @@ export function isSplitItem(o: any) {
   return typeof o === 'object' && 'mode' in o && 'list' in o;
 } */
 
-export interface Terminal {
+/* export interface Terminal {
   id: string,
   selected?: boolean; // default: false
   active?: boolean; // default: false
 
   // properties that are describe to terminal
   // text, position, etc ...
-}
+} */
 
 export interface SplitItem {
   // id: string;
   mode?: 'horizontal' | 'vertical';
-  list: (SplitItem | Terminal[])[];
+  list: (SplitItem | TerminalItem[])[];
 }
 
 export function isSplitItem(o: any) {

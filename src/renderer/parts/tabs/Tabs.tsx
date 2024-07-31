@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Tab from './Tab';
-import { FlatItem, Terminal } from '../../Types';
+// import { FlatItem, Terminal } from '../../Types';
 import { v4 as uuidv4 } from 'uuid';
 import { drop } from 'lodash';
+import { TerminalItem } from 'common/Types';
 
 export type DropTargetType = { leftElementIndex: number | undefined; rightElementIndex: number | undefined } | undefined;
 
@@ -11,7 +12,7 @@ interface TabsProps {
   // list: Terminal_[];
   // pid: string;
   // children: FlatItem[];
-  list: Terminal[];
+  list: TerminalItem[];
 }
 
 interface TabsState {
