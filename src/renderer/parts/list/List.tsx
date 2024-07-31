@@ -5,10 +5,10 @@ import { v4 as uuidv4 } from 'uuid';
 import update, { Spec } from 'immutability-helper';
 import { Center } from '@chakra-ui/react';
 import { BiChevronRight } from 'react-icons/bi';
-import { ListObject, SplitItem, Terminal, isSplitItem } from 'renderer/Types';
+import { ListItem, SplitItem, Terminal, isSplitItem } from 'renderer/Types';
 import { setList, setTree } from 'renderer/reducers/app';
 import ItemIcon from 'renderer/parts/ItemIcon';
-import ListItem from 'renderer/parts/list/ListItem';
+import ListItem_ from 'renderer/parts/list/ListItem_';
 import Tree from 'renderer/parts/tree/Tree';
 import { findActiveItemPos, selectActiveItem } from 'renderer/util';
 
@@ -20,7 +20,7 @@ interface ListProps {
 
 interface ListState {
   selected_ids: string[];
-  show_list: ListObject[];
+  show_list: ListItem[];
 }
 
 class List extends React.Component<ListProps, ListState> {
@@ -195,7 +195,7 @@ class List extends React.Component<ListProps, ListState> {
             });
           }}
           nodeRender={(data) => (
-            <ListItem key={data.id} data={data} /* selected_ids={selected_ids} */ />
+            <ListItem_ key={data.id} data={data} /* selected_ids={selected_ids} */ />
           )}
           collapseArrow={
             <Center w="20px" h="20px">

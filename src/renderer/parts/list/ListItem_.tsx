@@ -4,16 +4,16 @@ import { setSomeVal } from '../../reducers/sample';
 // import styles from './ListItem.module.scss'
 import classnames from 'classnames';
 import ItemIcon from '../ItemIcon';
-import { ListObject } from '../../Types';
+import { ListItem } from '../../Types';
 
 interface ListItemProps {
-  data: ListObject;
+  data: ListItem;
 
   // mapped value
 }
 interface ListItemState {}
 
-class ListItem extends React.Component<ListItemProps, ListItemState> {
+class ListItem_ extends React.Component<ListItemProps, ListItemState> {
 
   constructor(props: ListItemProps) {
     super(props);
@@ -50,4 +50,4 @@ const mapDispatchToProps = (dispatch: any) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListItem);
+export default connect(mapStateToProps, mapDispatchToProps)(ListItem_);
