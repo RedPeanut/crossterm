@@ -74,14 +74,14 @@ export const initialState/*: {
     id: '',
     style: {},
   },
-  /* initial case
-  tree: {list:[]}, */
-  /* case1. single multi tab */
+  /* initial case */
+  tree: { list: [] },
+  /* case1. single multi tab
   tree: {
     list:[
       [{id:'a1',selected:false},{id:'a2',selected:true,active:true}]
     ]
-  },
+  }, */
   /* case2. single split
   tree: {
     mode: 'horizontal',

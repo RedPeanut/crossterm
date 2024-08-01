@@ -10,7 +10,8 @@ export interface ListItem {
   type?: ListItemType;
 
   // remote
-  url?: string;
+  url?: { host: string, port: number, username: string, password: string };
+  size?: { row: number, col: number }
   last_refresh?: string;
   last_refresh_ms?: number;
   refresh_interval?: number; // 단위: 초

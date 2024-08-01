@@ -1,4 +1,16 @@
-import { FlatItem, SplitItem, Terminal, isSplitItem, isSplitItem_ } from "./Types";
+import { TerminalItem } from "common/Types";
+import { FlatItem, ListItem, SplitItem, isSplitItem, isSplitItem_ } from "./Types";
+
+export const flatten = (list: ListItem[]): ListItem[] => {
+  let new_list: ListItem[] = [];
+  list.map((item) => {
+    new_list.push(item);
+    if (item.children) {
+      new_list = [...new_list, ...flatten(item.children)];
+    }
+  });
+  return new_list;
+}
 
 export function findActiveItemPos(curr: SplitItem, depth: number, index: number[]): { depth: number, index: number[], pos: number } | undefined {
   if(curr.list.length > 0) {
@@ -9,7 +21,7 @@ export function findActiveItemPos(curr: SplitItem, depth: number, index: number[
         let retVal = findActiveItemPos(item as SplitItem, depth+1, index.concat(i));
         if(retVal) return retVal;
       } else {
-        item = item as Terminal[];
+        item = item as TerminalItem[];
         for(let j = 0; j < item.length; j++) {
           let _item = item[j];
           if(_item.active) {
@@ -22,7 +34,7 @@ export function findActiveItemPos(curr: SplitItem, depth: number, index: number[
   return undefined;
 }
 
-export function selectActiveItem(curr: SplitItem, depth: number, index: number[]): Terminal | undefined {
+export function selectActiveItem(curr: SplitItem, depth: number, index: number[]): TerminalItem | undefined {
   if(curr.list.length > 0) {
     for(let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
@@ -30,7 +42,7 @@ export function selectActiveItem(curr: SplitItem, depth: number, index: number[]
         let retVal = selectActiveItem(item as SplitItem, depth+1, index.concat(i));
         if(retVal) return retVal;
       } else {
-        item = item as Terminal[];
+        item = item as TerminalItem[];
         for(let j = 0; j < item.length; j++) {
           let _item = item[j];
           if(_item.active) {

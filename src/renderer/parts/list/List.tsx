@@ -10,7 +10,7 @@ import { setList, setTree } from 'renderer/reducers/app';
 import ItemIcon from 'renderer/parts/ItemIcon';
 import ListItem_ from 'renderer/parts/list/ListItem_';
 import Tree from 'renderer/parts/tree/Tree';
-import { findActiveItemPos, selectActiveItem } from 'renderer/util';
+import { findActiveItemPos, flatten, selectActiveItem } from 'renderer/util';
 import { TerminalItem } from 'common/Types';
 
 interface ListProps {
@@ -38,9 +38,16 @@ class List extends React.Component<ListProps, ListState> {
           on: false,
           children: [
             {
-              title: 'xyz',
               id: 'e54af9c1-f003-4b1b-8db4-e796f69a9a4d',
-              on: true
+              title: 'xyz',
+              type: 'remote',
+              url: {
+                host: '192.168.0.24',
+                port: 22,
+                username: 'kimjk',
+                password: '1234',
+              },
+              size: { row: 24, col: 80 }
             },
             {
               title: 'title1',
@@ -58,7 +65,7 @@ class List extends React.Component<ListProps, ListState> {
         {
           type: 'remote',
           title: 'remote',
-          url: 'www.remote.com',
+          // url: 'www.remote.com',
           id: '8d65f5a3-306d-44c7-a43f-b5abc17b6a2b',
           on: true
         },
@@ -81,13 +88,22 @@ class List extends React.Component<ListProps, ListState> {
   onDoubleClick(id: string) {
     // insert terminal into active list
     const { tree } = this.props;
+    const { show_list } = this.state;
+
+    const item: ListItem | undefined = flatten(show_list).find((item) => item.id === id);
+
+    if(!item) throw Error;
+
+    const new_one: TerminalItem = {
+      // type: item?.type, size: { row: 24, col: 80 },
+      type: item.type, size: item.size , url: item.url,
+      uid: uuidv4(), selected: true, active: true,
+    };
 
     // find active item position first
     // const { depth, index, pos } = this.findActiveItemPos(tree, 0);
     const activeItemPos = findActiveItemPos(tree, 0, []);
     console.log('activeItemPos =', activeItemPos);
-
-    const new_one: TerminalItem = {uid:uuidv4(),selected:true,active:true};
     let new_tree;
 
     if(activeItemPos) {

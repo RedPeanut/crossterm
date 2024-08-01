@@ -21,6 +21,7 @@ import LastStateManager from './nedb/LastStateManager';
 import _ from 'lodash';
 import {v4 as uuidv4} from 'uuid';
 import TerminalLocal from './terminal/TerminalLocal';
+import TerminalSsh from './terminal/TerminalSsh';
 import { getAppDb } from './data';
 import { ConfigsType, configs } from '../common/configs';
 
@@ -133,6 +134,12 @@ const installIpc = () => {
       terminal.start();
       terminals.set(arg.uid, terminal);
     } else if(arg.type === 'remote') {
+      const terminal = new TerminalSsh(/* {uid: arg.uid} */arg);
+      terminal.on('data', (data: string) => {
+        // console.log('data event is called..., data =', data);
+        win?.webContents.send('terminal data', data);
+      });
+      terminal.start();
     }
   });
 
