@@ -16,17 +16,17 @@ export interface ListItem {
   last_refresh_ms?: number;
   refresh_interval?: number; // 단위: 초
 
-  // group
-  include?: string[];
+  // // group
+  // include?: string[];
 
   // folder
   folder_mode?: FolderModeType;
   folder_open?: boolean;
   children?: ListItem[];
 
-  is_sys?: boolean;
+  // is_sys?: boolean;
 
-  [key: string]: any;
+  [key: string]: any; // ??
 }
 
 export interface TreeNodeData {
@@ -93,7 +93,7 @@ export interface SplitItem {
 }
 
 export function isSplitItem(o: any) {
-  return 'mode' in o && 'list' in o;
+  return 'mode' in o && 'list' in o && o.list.length > 0;
 }
 
 export interface FlatItem {
