@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import _, { DebouncedFunc } from 'lodash';
 import classnames from 'classnames';
 // import { FlatItem, Terminal } from 'renderer/Types';
-import { setDropOverlay, setList } from 'renderer/reducers/app';
-import { getItemIndex } from 'renderer/util';
+import { setDropOverlay, setTree } from 'renderer/reducers/app';
+import { findActiveItem, findItemById } from 'renderer/util';
 import { DropTargetType } from 'renderer/parts/tabs/Tabs';
 import { TerminalItem } from 'common/Types';
+import update, { Spec } from 'immutability-helper';
 
 interface TabProps {
   // terminal: Terminal_;
@@ -20,7 +21,8 @@ interface TabProps {
 
   // mapped value
   dropOverlay: any; onSetDropOverlay: any;
-  list: any; onSetList: any;
+  // list: any; onSetList: any;
+  tree: any; onSetTree: any;
 }
 
 interface TabState {}
@@ -128,7 +130,71 @@ class Tab extends React.Component<TabProps, TabState> {
 
   handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
 
-  onClick(e: any) {}
+  onClick(e: any) {
+    // HERE: change active
+    const { tree, item: currItem } = this.props;
+
+    // find active item index
+    const find_active = findActiveItem(tree, 0, []);
+    // console.log('activeItem =', activeItem);
+
+    if(find_active) {
+
+      const { depth, index, pos, item: activeItem, group } = find_active;
+      let new_tree;
+
+      // turn off active item's selected property if current is in same group
+      let same_group = false;
+      for(let i = 0; i < group.length; i++) {
+        if(group[i].uid === currItem.uid) {
+          same_group = true;
+          break;
+        }
+      }
+
+      //
+      let replace_one: TerminalItem = {
+          ...activeItem,
+        selected: same_group ? false : activeItem.selected,
+        active: false
+      };
+
+      // const { depth, index, pos } = activeItemPos;
+      let $query: Spec<any, never> = { $splice: [[ pos, 1, replace_one ]]};
+
+      // attach backward
+      for(let i = index.length-1; i > -1; i--) {
+        $query = { list: { [index[i]]: $query }};
+      }
+
+      // console.log('tree =', tree);
+      // console.log('$query =', JSON.stringify($query));
+      new_tree = update(tree, $query);
+      // console.log('new_tree =', new_tree);
+
+      const find_curr = findItemById(tree, 0, [], currItem.uid);
+      // console.log('_find =', _find);
+
+      if(find_curr) {
+        let replace_one = {
+          ...currItem,
+          selected: same_group ? true : currItem.selected,
+          active: true
+        };
+
+        const { depth, index, pos } = find_curr;
+        let $query: Spec<any, never> = { $splice: [[ pos, 1, replace_one ]]};
+
+        // attach backward
+        for(let i = index.length-1; i > -1; i--) {
+          $query = { list: { [index[i]]: $query }};
+        }
+        new_tree = update(new_tree, $query);
+        // console.log('new_tree =', new_tree);
+        this.props.onSetTree(new_tree);
+      }
+    }
+  }
 
   /* onClick(e: any) {
     // change active in here
@@ -143,7 +209,7 @@ class Tab extends React.Component<TabProps, TabState> {
     // console.log(list);
     // console.log({i,j});
 
-    // turn off previous selected item if not solo
+    // turn off previous selected item if not single
     const prev_cloned_item = _.cloneDeep(list[i]);
     console.log('prev_cloned_item =', prev_cloned_item);
     if(prev_cloned_item.children.length > 1)
@@ -224,14 +290,16 @@ class Tab extends React.Component<TabProps, TabState> {
 const mapStateToProps = (state: any) => {
   return {
     dropOverlay: state.app.dropOverlay,
-    list: state.app.list,
+    // list: state.app.list,
+    tree: state.app.tree
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     onSetDropOverlay: (v: any) => dispatch(setDropOverlay(v)),
-    onSetList: (v: any) => dispatch(setList(v)),
+    // onSetList: (v: any) => dispatch(setList(v)),
+    onSetTree: (v: any) => dispatch(setTree(v)),
   };
 };
 
