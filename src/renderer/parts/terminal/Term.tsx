@@ -47,12 +47,14 @@ class Term extends React.Component<TermProps, TermState> {
   componentDidMount() {
     // let returnValue = window.electron.api.send('api:createTerminal', { type: 'local', size: { col: 80, row: 24 } });
     // console.log('[app] returnValue =', returnValue);
-    
-    // const { item } = this.props;
-    // console.log('this.props.item =', this.props.item);
+
+    const { item } = this.props;
+    // console.log('item =', item);
+    // if(item.type === null || item.type === undefined) item.type = 'local';
+    item.type = item.type ?? 'local';
 
     let returnValue = window.ipc.send('new', {
-      ...this.props.item,
+      ...item,
       uid: this.uid,
       // type: 'local',
       // size: { col: 80, row: 24 },
