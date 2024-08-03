@@ -5,7 +5,7 @@ export const flatten = (list: ListItem[]): ListItem[] => {
   let new_list: ListItem[] = [];
   list.map((item) => {
     new_list.push(item);
-    if (item.children) {
+    if(item.children) {
       new_list = [...new_list, ...flatten(item.children)];
     }
   });
