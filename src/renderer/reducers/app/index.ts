@@ -74,33 +74,33 @@ export const initialState/*: {
     id: '',
     style: {},
   },
-  /* initial case */
-  tree: { list: [] },
+  /* initial case
+  tree: { list: [] }, */
   /* case1. single multi tab
   tree: {
     list:[
-      [{id:'a1',selected:false},{id:'a2',selected:true,active:true}]
+      [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
     ]
   }, */
-  /* case2. single split
+  /* case2. single split */
   tree: {
     mode: 'horizontal',
     // mode: 'vertical',
     list:[
-      [{id:'a1',selected:false},{id:'a2',selected:true,active:true}],
-      [{id:'b1',selected:true}]
+      [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}],
+      [{uid:'b1',selected:true}]
     ]
-  }, */
+  },
   /* case3. split vertical in right pane
   tree: {
     mode: 'horizontal',
     list:[
-      [{id:'b1',selected:true}],
+      [{uid:'b1',selected:true}],
       {
         mode:'vertical',
         list:[
-          [{id:'a1',selected:true}],
-          [{id:'a2',selected:true,active:true}]
+          [{uid:'a1',selected:true}],
+          [{uid:'a2',selected:true,active:true}]
         ]
       },
     ]
@@ -115,14 +115,14 @@ export const initialState/*: {
           {
             mode:'horizontal',
             list:[
-              [{id:'a1',selected:true}],
-              [{id:'a2',selected:true,active:true}]
+              [{uid:'a1',selected:true}],
+              [{uid:'a2',selected:true,active:true}]
             ]
           },
-          [{id:'a3',selected:true}]
+          [{uid:'a3',selected:true}]
         ]
       },
-      [{id:'b1',selected:true}]
+      [{uid:'b1',selected:true}]
     ]
   }, */
 
