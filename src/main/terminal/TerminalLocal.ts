@@ -1,9 +1,10 @@
 import os from 'os';
 import {IPty, spawn} from 'node-pty';
 // import TerminalBase from './TerminalBase';
-import { TerminalOptions } from 'main/Types';
+// import { TerminalOptions } from 'main/Types';
 import { EventEmitter } from 'events';
 import DataBatcher from './DataBatcher';
+// import DataBatcher from 'main/terminal/DataBatcher'; // why not
 import { TerminalItem } from 'common/Types';
 
 export default class TerminalLocal extends EventEmitter {
