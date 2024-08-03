@@ -10,7 +10,7 @@ import { setList, setTree } from 'renderer/reducers/app';
 import ItemIcon from 'renderer/parts/ItemIcon';
 import ListItem_ from 'renderer/parts/list/ListItem_';
 import Tree from 'renderer/parts/tree/Tree';
-import { findActiveItemPos, flatten, selectActiveItem } from 'renderer/util';
+import { findActiveItem, flatten } from 'renderer/util';
 import { TerminalItem } from 'common/Types';
 
 interface ListProps {
@@ -94,23 +94,17 @@ class List extends React.Component<ListProps, ListState> {
     };
 
     // find active item position first
-    // const { depth, index, pos } = this.findActiveItemPos(tree, 0);
-    const activeItemPos = findActiveItemPos(tree, 0, []);
-    console.log('activeItemPos =', activeItemPos);
+    const find_active = findActiveItem(tree, 0, []);
+    // console.log('find_active =', find_active);
     let new_tree;
 
-    if(activeItemPos) {
+    if(find_active) {
+
+      const { depth, index, pos, item: activeItem } = find_active;
 
       // turn off active item
-      const activeItem = selectActiveItem(tree, 0, []);
-      console.log('activeItem =', activeItem);
-
-      if(activeItem) {
-        activeItem.selected = false;
-        activeItem.active = false;
-      }
-
-      const { depth, index, pos } = activeItemPos;
+      activeItem.selected = false;
+      activeItem.active = false;
 
       // make query language
       // https://github.com/kolodny/immutability-helper?tab=readme-ov-file#nested-collections
@@ -122,8 +116,8 @@ class List extends React.Component<ListProps, ListState> {
       for(let i = index.length-1; i > -1; i--) {
         $query = { list: { [index[i]]: $query }};
       }
-      console.log('tree =', tree);
-      console.log('$query =', JSON.stringify($query));
+      // console.log('tree =', tree);
+      // console.log('$query =', JSON.stringify($query));
       new_tree = update(tree, $query);
     } else {
       new_tree = update(tree, { list: { $push: [ [new_one] ] } });
