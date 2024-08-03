@@ -19,7 +19,7 @@ export default class TerminalSsh extends EventEmitter {
   }
 
   start() {
-    console.log('start() is called..');
+    // console.log('start() is called..');
     // const { uid } = this.options;
     this.batcher = new DataBatcher(this.options.uid);
     this.batcher.on('flush', (data: string) => {
@@ -43,7 +43,7 @@ export default class TerminalSsh extends EventEmitter {
     conn.on('handshake', async handshake => {});
     conn.on('x11', () => {});
     conn.on('ready', () => {
-      console.log('ready event is called..');
+      // console.log('ready event is called..');
       connected = true;
       // open shell channel
       conn.shell({ term: 'xterm-256color' }, {}, (err, stream) => {
@@ -62,7 +62,7 @@ export default class TerminalSsh extends EventEmitter {
       console.log('error =', error);
     });
 
-    console.log('this.options =', this.options);
+    // console.log('this.options =', this.options);
     if(this.options.url) {
       conn.connect({
         host: this.options.url.host,

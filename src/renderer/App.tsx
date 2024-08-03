@@ -15,7 +15,7 @@ export default function App() {
   const { colorMode, setColorMode } = useColorMode();
 
   useEffect(() => {
-    console.log('colorMode =', colorMode);
+    // console.log('colorMode =', colorMode);
     if(colorMode !== 'dark')
       setColorMode('dark');
   })

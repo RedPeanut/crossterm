@@ -344,7 +344,7 @@ class Main extends React.Component<Props, State> {
     ]
     */
 
-    console.log('render() is called..');
+    // console.log('render() is called..');
     const { tree, list, add } = this.props;
     // console.log('tree =', tree);
 
