@@ -212,8 +212,8 @@ class Main extends React.Component<Props, State> {
         // if not split item must have one item (as Terminal[])
         result.push(
           <div className='body-item' style={style} key={uuidv4()}>
-            <Tabs list={item as TerminalItem[]} />
-            <Terms list={item as TerminalItem[]} />
+            <Tabs group={item as TerminalItem[]} />
+            <Terms group={item as TerminalItem[]} />
           </div>
         );
       }

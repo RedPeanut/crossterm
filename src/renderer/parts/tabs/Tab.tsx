@@ -12,6 +12,7 @@ interface TabProps {
   // terminal: Terminal_;
   // item: FlatItem;
   // children: FlatItem[];
+  group: TerminalItem[];
   item: TerminalItem;
   index: number;
   className: string;

@@ -12,7 +12,7 @@ interface TabsProps {
   // list: Terminal_[];
   // pid: string;
   // children: FlatItem[];
-  list: TerminalItem[];
+  group: TerminalItem[];
 }
 
 interface TabsState {
@@ -35,7 +35,7 @@ class Tabs extends React.Component<TabsProps, TabsState> {
 
   render() {
     // const { children } = this.props;
-    const { list } = this.props;
+    const { group } = this.props;
     const { dropTarget } = this.state;
 
     return (
@@ -62,14 +62,16 @@ class Tabs extends React.Component<TabsProps, TabsState> {
                 })
               } */}
               {
-                list.map((item, i) => {
+                group.map((item, i) => {
                   let className: string = '';
                   if(dropTarget) {
                     if(dropTarget.leftElementIndex === i) className = 'drop-target-left';
                     if(dropTarget.rightElementIndex === i) className = 'drop-target-right';
                   }
                   return (
-                    <Tab item={item}
+                    <Tab
+                      group={group}
+                      item={item}
                       key={uuidv4()}
                       // related drop-target effect
                       index={i}

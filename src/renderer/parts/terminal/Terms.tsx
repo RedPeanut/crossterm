@@ -11,7 +11,7 @@ interface TermsProps {
   // list: Terminal_[];
   // pid: string;
   // children: FlatItem[];
-  list: TerminalItem[];
+  group: TerminalItem[];
 
   // mapped value
   // dropOverlay: any;
@@ -54,7 +54,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
 
   render() {
     // const { pid, children } = this.props;
-    const { list } = this.props;
+    const { group } = this.props;
 
     return (
       <div
@@ -62,7 +62,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
         className='terms'
       >
         {
-          list.map((item, index) => {
+          group.map((item, index) => {
             return (
               <Term item={item} key={uuidv4()}/>
             );
