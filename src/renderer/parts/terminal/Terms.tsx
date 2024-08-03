@@ -64,7 +64,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
         {
           group.map((item, index) => {
             return (
-              <Term item={item} key={uuidv4()}/>
+              <Term group={group} item={item} key={uuidv4()}/>
             );
           })
         }

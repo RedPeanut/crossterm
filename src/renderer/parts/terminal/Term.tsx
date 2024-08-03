@@ -14,6 +14,7 @@ interface TermProps {
   // uid: string;
   // terminal: Terminal_;
   // item: FlatItem;
+  group: TerminalItem[];
   item: TerminalItem;
   style?: {};
 }
