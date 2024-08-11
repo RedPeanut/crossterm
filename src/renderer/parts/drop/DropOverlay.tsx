@@ -2,9 +2,11 @@ import React, {  } from 'react';
 import { connect } from 'react-redux';
 import _, { DebouncedFunc } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { throws } from 'assert';
-import { setDropOverlay, setList, setTree } from 'renderer/reducers/app';
+import { setDropOverlay, setTree } from 'renderer/reducers/app';
+import { findActiveItem, findItemById } from 'renderer/util';
 import { TerminalItem } from 'common/Types';
+import { Mode, SplitItem } from 'renderer/Types';
+import update, { Spec } from 'immutability-helper';
 const debug = require('debug')('DropOverlay');
 
 export const enum GroupDirection {
@@ -248,6 +250,232 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     console.log('onDrop event is called...');
     e.preventDefault();
     this.makeDropTargetHide();
+    const { tree, dropOverlay } = this.props;
+    console.log(e.dataTransfer.getData('text/plain'));
+
+    // find active item index
+    const find_active = findActiveItem(tree, 0, []);
+    // console.log('find_active =', find_active);
+
+    if(find_active) {
+      const { item: activeItem } = find_active;
+
+      // // todo: turn off selected if not single
+      // activeItem.selected = false;
+
+      // // turn off active item
+      // activeItem.active = false;
+    }
+
+    // find drag item
+    const find_drag = findItemById(tree, 0, [], dropOverlay.drag_id);
+    if(!find_drag)
+      throw new Error('cannot find drag item');
+    const { index: find_drag_index, pos: find_drag_pos, item: find_drag_item, group: find_drag_group, splitItem: find_drag_splitItem } = find_drag;
+    // console.log('find_drag =', find_drag);
+
+    switch(this.splitDirection) {
+      // insert before
+      case GroupDirection.UP:
+      case GroupDirection.LEFT: {
+        let mode: Mode = this.splitDirection === GroupDirection.UP ? 'vertical' : 'horizontal';
+
+        // make split item
+        if(find_drag_splitItem.mode !== mode) {
+          if(find_drag_splitItem.list.length === 1) { // single list
+            let $query: Spec<any, never>;;
+            let new_tree;
+
+            // copy group item into split list
+            let new_split: SplitItem = { mode: mode, list: [] }
+            let before_list = [], after_list = [];
+            for(let i = 0; i < find_drag_group.length; i++) {
+              if(find_drag_group[i].uid === find_drag_item.uid)
+                before_list.push(find_drag_group[i]);
+              else
+                after_list.push(find_drag_group[i]);
+            }
+            after_list[before_list.length-1].selected = true;
+
+            new_split.list.push(before_list);
+            new_split.list.push(after_list);
+
+            // replace split
+            // ex) update(tree, { list: {  } });
+            $query = { $set: new_split };
+            for(let i = find_drag_index.length-1-1 /*  */; i > -1; i--) {
+              $query = { list: { [find_drag_index[i]]: $query }};
+            }
+            console.log('$query =', $query);
+            new_tree = update(tree, $query);
+
+            console.log('new_tree =', new_tree);
+            this.props.onSetTree(new_tree);
+          } else { // list.length > 1
+            let $query: Spec<any, never>;;
+            let new_tree;
+
+            let new_split: SplitItem = { mode: mode, list: [] }
+
+            // copy group item into split list
+            let before_list = [], after_list = [];
+            for(let i = 0; i < find_drag_group.length; i++) {
+              if(find_drag_group[i].uid === find_drag_item.uid)
+                before_list.push(find_drag_group[i]);
+              else
+              after_list.push(find_drag_group[i]);
+            }
+            after_list[after_list.length-1].selected = true;
+
+            new_split.list.push(before_list);
+            new_split.list.push(after_list);
+            // console.log('new_split =', new_split);
+
+            // replace group into split
+            // ex) update(tree, { list: {  } });
+            $query = { $set: new_split };
+            for(let i = find_drag_index.length-1; i > -1; i--) {
+              $query = { list: { [find_drag_index[i]]: $query }};
+            }
+            console.log('$query =', $query);
+            new_tree = update(tree, $query);
+
+            console.log('new_tree =', new_tree);
+            this.props.onSetTree(new_tree);
+          }
+        }
+        // make group
+        else {
+          let $query: Spec<any, never>;
+          let new_tree;
+
+          // unshift group
+          let new_group: any = [];
+          new_group.push(find_drag_group[find_drag_pos]);
+          $query = { list: { $unshift: [ new_group ] } }; // 주의: 배열
+          for(let i = find_drag_index.length-1-1 /*  */; i > -1; i--) {
+            $query = { list: { [find_drag_index[i]]: $query }};
+          }
+          console.log('$query =', $query);
+          new_tree = update(tree, $query);
+          console.log('new_tree =', new_tree);
+
+          // splice item in group
+          $query = { $splice: [[find_drag_pos, 1]] };
+          for(let i = find_drag_index.length-1; i > -1; i--) {
+            $query = { list: { [find_drag_index[i]]: $query }};
+          }
+          console.log('$query =', $query);
+          new_tree = update(new_tree, $query);
+          console.log('new_tree =', new_tree);
+
+          this.props.onSetTree(new_tree);
+        }
+        break;
+      }
+      // insert after
+      case GroupDirection.DOWN:
+      case GroupDirection.RIGHT: {
+        let mode: Mode = this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
+
+        // make split item
+        if(find_drag_splitItem.mode !== mode) {
+          if(find_drag_splitItem.list.length === 1) { // single list
+            let $query: Spec<any, never>;;
+            let new_tree;
+
+            // copy group item into split list
+            let new_split: SplitItem = { mode: mode, list: [] }
+            let before_list = [], after_list = [];
+            for(let i = 0; i < find_drag_group.length; i++) {
+              if(find_drag_group[i].uid === find_drag_item.uid)
+                after_list.push(find_drag_group[i]);
+              else
+                before_list.push(find_drag_group[i]);
+            }
+            before_list[before_list.length-1].selected = true;
+
+            new_split.list.push(before_list);
+            new_split.list.push(after_list);
+
+            // replace split
+            // ex) update(tree, { list: {  } });
+            $query = { $set: new_split };
+
+            for(let i = find_drag_index.length-1-1 /*  */; i > -1; i--) {
+              $query = { list: { [find_drag_index[i]]: $query }};
+            }
+            console.log('$query =', $query);
+            new_tree = update(tree, $query);
+
+            console.log('new_tree =', new_tree);
+            this.props.onSetTree(new_tree);
+          } else { // list.length > 1
+            let $query: Spec<any, never>;;
+            let new_tree;
+
+            let new_split: SplitItem = { mode: mode, list: [] }
+
+            // copy group item into split list
+            let before_list = [], after_list = [];
+            for(let i = 0; i < find_drag_group.length; i++) {
+              if(find_drag_group[i].uid === find_drag_item.uid)
+                after_list.push(find_drag_group[i]);
+              else
+                before_list.push(find_drag_group[i]);
+            }
+            before_list[before_list.length-1].selected = true;
+
+            new_split.list.push(before_list);
+            new_split.list.push(after_list);
+            // console.log('new_split =', new_split);
+
+            // replace group into split
+            // ex) update(tree, { list: {  } });
+            $query = { $set: new_split };
+            for(let i = find_drag_index.length-1; i > -1; i--) {
+              $query = { list: { [find_drag_index[i]]: $query }};
+            }
+            console.log('$query =', $query);
+            new_tree = update(tree, $query);
+
+            console.log('new_tree =', new_tree);
+            this.props.onSetTree(new_tree);
+          }
+        }
+        // make group
+        else {
+          let $query: Spec<any, never>;
+          let new_tree;
+
+          // push group
+          let new_group: any = [];
+          new_group.push(find_drag_group[find_drag_pos]);
+          $query = { list: { $push: [ new_group ] } }; // 주의: 배열
+          for(let i = find_drag_index.length-1-1 /*  */; i > -1; i--) {
+            $query = { list: { [find_drag_index[i]]: $query }};
+          }
+          console.log('$query =', $query);
+          new_tree = update(tree, $query);
+          console.log('new_tree =', new_tree);
+
+          // splice item in group
+          $query = { $splice: [[find_drag_pos, 1]] };
+          for(let i = find_drag_index.length-1; i > -1; i--) {
+            $query = { list: { [find_drag_index[i]]: $query }};
+          }
+          console.log('$query =', $query);
+          new_tree = update(new_tree, $query);
+          console.log('new_tree =', new_tree);
+
+          this.props.onSetTree(new_tree);
+        }
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   }
 
   /* onDrop = (e: React.DragEvent<HTMLDivElement>): void => {

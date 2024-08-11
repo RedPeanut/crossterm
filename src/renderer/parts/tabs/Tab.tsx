@@ -53,7 +53,7 @@ class Tab extends React.Component<TabProps, TabState> {
     e.dataTransfer.setData('text/plain', JSON.stringify(this.props.item));
     this.props.onSetDropOverlay({
       ...this.props.dropOverlay,
-      drag_id: this.props.groupId,
+      drag_id: this.props.item.uid,
       visible: true
     });
   };

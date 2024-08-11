@@ -86,9 +86,11 @@ export function isSplitItem(o: any) {
   // text, position, etc ...
 } */
 
+export type Mode = 'horizontal' | 'vertical';
+
 export interface SplitItem {
   // id: string;
-  mode?: 'horizontal' | 'vertical';
+  mode?: Mode; //'horizontal' | 'vertical';
   list: (SplitItem | TerminalItem[])[];
 }
 
