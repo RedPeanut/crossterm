@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import _, { DebouncedFunc } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { throws } from 'assert';
-import { FlatItem, Terminal } from 'renderer/Types';
 import { setDropOverlay, setList, setTree } from 'renderer/reducers/app';
-import { findActiveItemPos, selectActiveItem } from 'renderer/util';
+import { TerminalItem } from 'common/Types';
 const debug = require('debug')('DropOverlay');
 
 export const enum GroupDirection {
@@ -13,11 +12,11 @@ export const enum GroupDirection {
 }
 
 interface DropOverlayProps {
-  uid: string;
+  terms_uid: string;
   // list: Terminal_[];
-  pid: string;
+  // pid: string;
   // children?: FlatItem[];
-  list: Terminal[];
+  group: TerminalItem[];
 
   // mapped values
   dropOverlay: any; onSetDropOverlay: any;
@@ -90,8 +89,8 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     overlay.style.height = options.height;
   } */
 
-  private doPositionOverlay(e: any): void { // mousePosX: number, mousePosY: number): void {
-
+  doPositionOverlay(e: any): void { // mousePosX: number, mousePosY: number): void {
+    // console.log('doPositionOverlay() is called..');
     let style = {};
 
     const clientWidth = this.clientWidth;
@@ -173,7 +172,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
-    console.log('onDragStart() is called...');
+    console.log('onDragStart event is called...');
     // console.log('e =', e);
     // this._startX = dom.offsetLeft;
     // this._startY = dom.offsetTop;
@@ -182,35 +181,34 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
-    console.log('onDragEnter() is called...');
+    console.log('onDragEnter event is called...');
     // console.log('e =', e);
     let _e = e.nativeEvent;
     // console.log('_e =', _e);
     this.showDropTarget = false;
-    const { list, dropOverlay, uid } = this.props;
+    const { group, dropOverlay, terms_uid } = this.props;
     // console.log('dropOverlay =', dropOverlay);
     // console.log('uuid =', uuid);
-    if(list && list.length > 0
+    if(group && group.length > 0
       // && dropOverlay.id === uuid
     ) {
       // console.log('>>> 1');
       this.showDropTarget = true;
       this.props.onSetDropOverlay({
         ...dropOverlay,
-        id: uid,
-        // style: {
-        //   ...this.props.dropOverlay.style,
-        //   opacity: '1',
-        // },
-        // showDropTarget: true,
+        drag_id: terms_uid,
+        style: {
+          ...this.props.dropOverlay.style,
+          opacity: '1',
+        },
       });
     }
     // this.setState({startDropOverlay: startDropOverlay});
   }
 
-  private makeDropTargetHide(): void {
+  makeDropTargetHide(): void {
     this.showDropTarget = false;
-    const { dropOverlay, uid } = this.props;
+    const { dropOverlay, terms_uid } = this.props;
     this.props.onSetDropOverlay({
       ...dropOverlay,
       style: {
@@ -221,12 +219,13 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
-    console.log('onDragLeave() is called...');
+    console.log('onDragLeave event is called...');
     this.makeDropTargetHide();
   }
 
   onDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
-    console.log('onDragEnd() is called...');
+    console.log('onDragEnd event is called...');
+    this.makeDropTargetHide();
   }
 
   onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -245,10 +244,18 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
+    this.props.onSetDropOverlay({
+      ...this.props.dropOverlay,
+      drag_id: '',
+      visible: false,
+    });
+  }
+
+  /* onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDrop event is called...');
     e.preventDefault();
     this.makeDropTargetHide();
-    const { tree, list, uid, pid } = this.props;
+    const { tree, group, terms_uid } = this.props;
     console.log(e.dataTransfer.getData('text/plain'));
 
     // find active item index
@@ -258,11 +265,11 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     if(activeItemPos) {
       const activeItem = selectActiveItem(tree, 0, []);
       console.log('activeItem =', activeItem);
-      /* // turn off active item
-      if(activeItem) {
-        activeItem.selected = false;
-        activeItem.active = false;
-      } */
+      // // turn off active item
+      // if(activeItem) {
+      //   activeItem.selected = false;
+      //   activeItem.active = false;
+      // }
     }
 
     // find target item index
@@ -293,7 +300,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
         break;
       }
     }
-  }
+  } */
 
   /* onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDrop event is called...');

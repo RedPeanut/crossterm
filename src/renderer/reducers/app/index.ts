@@ -71,7 +71,7 @@ export const initialState/*: {
   },
   dropOverlay: {
     visible: false,
-    id: '',
+    drag_id: '',
     style: {},
   },
   /* initial case

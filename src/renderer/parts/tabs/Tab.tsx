@@ -45,35 +45,37 @@ class Tab extends React.Component<TabProps, TabState> {
   }
 
   onDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
-    // console.log('onDragStart event is called...');
+    console.log('onDragStart event is called...');
     // console.log('id =', id);
     // console.log('dom =', dom);
     // console.log('e =', e);
     e.dataTransfer.setData('text/plain', JSON.stringify(this.props.item));
     this.props.onSetDropOverlay({
       ...this.props.dropOverlay,
+      // drag_id: this.props.item.uid,
       visible: true
     });
   };
 
   onDragEnter = (e: React.DragEvent<HTMLDivElement>): void => {
-    // console.log('onDragEnter event is called...');
+    console.log('onDragEnter event is called...');
     const target = e.target as HTMLElement;
   };
 
   onDragLeave = (e: React.DragEvent<HTMLDivElement>): void => {
-    // console.log('onDragLeave event is called...');
+    console.log('onDragLeave event is called...');
   };
 
   onDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
-    // console.log('onDragEnd event is called...');
+    console.log('onDragEnd event is called...');
     this.props.onSetDropOverlay({
       ...this.props.dropOverlay,
+      drag_id: '',
       visible: false,
     });
   };
 
-  private getTabDragOverLocation(e: DragEvent): 'left' | 'right' {
+  getTabDragOverLocation(e: DragEvent): 'left' | 'right' {
     const clientWidth = this.clientWidth;
     // const clientHeight = this.clientHeight;
     const mousePosX = e.offsetX;
@@ -85,38 +87,38 @@ class Tab extends React.Component<TabProps, TabState> {
     } else {
       return 'right';
     }
-	}
+  }
 
-  /* private computeDropTarget(e: DragEvent): DropTargetType {
+  computeDropTarget(e: DragEvent): DropTargetType {
     const { index } = this.props;
-		const isLeftSideOfTab = this.getTabDragOverLocation(e) === 'left';
-		const isLastTab = index === this.props.children.length - 1;
-		const isFirstTab = index === 0;
+    const isLeftSideOfTab = this.getTabDragOverLocation(e) === 'left';
+    const isLastTab = index === this.props.group.length - 1;
+    const isFirstTab = index === 0;
 
-		// Before first tab
-		if(isLeftSideOfTab && isFirstTab) {
-			return { leftElementIndex: undefined, rightElementIndex: index };
-		}
+    // Before first tab
+    if(isLeftSideOfTab && isFirstTab) {
+      return { leftElementIndex: undefined, rightElementIndex: index };
+    }
 
-		// After last tab
-		if(!isLeftSideOfTab && isLastTab) {
-			return { leftElementIndex: index, rightElementIndex: undefined };
-		}
+    // After last tab
+    if(!isLeftSideOfTab && isLastTab) {
+      return { leftElementIndex: index, rightElementIndex: undefined };
+    }
 
-		// Between two tabs
-		const tabBefore: number = isLeftSideOfTab ? index-1 : index;
-		const tabAfter: number = isLeftSideOfTab ? index : index+1;
+    // Between two tabs
+    const tabBefore: number = isLeftSideOfTab ? index-1 : index;
+    const tabAfter: number = isLeftSideOfTab ? index : index+1;
 
-		return { leftElementIndex: tabBefore, rightElementIndex: tabAfter};
-	} */
+    return { leftElementIndex: tabBefore, rightElementIndex: tabAfter};
+  }
 
   // (property) React.BaseSyntheticEvent
   // <DragEvent, EventTarget & HTMLDivElement, EventTarget>
   // .nativeEvent: DragEvent
-  private doDragOver(e: DragEvent): void {
+  doDragOver(e: DragEvent): void {
     const { index } = this.props
-    // let dropTarget = this.computeDropTarget(e);
-    // this.props.updateDropTarget(dropTarget);
+    let dropTarget = this.computeDropTarget(e);
+    this.props.updateDropTarget(dropTarget);
   }
 
   onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -126,11 +128,17 @@ class Tab extends React.Component<TabProps, TabState> {
 
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
+    // console.log('onDrop event is called...');
+    this.props.onSetDropOverlay({
+      ...this.props.dropOverlay,
+      drag_id: '',
+      visible: false,
+    });
   }
 
   handleContextMenu = (e: any) => { console.log('handleContextMenu() is called...'); };
 
-  onClick(e: any) {
+  onMouseDown(e: any) {
     // HERE: change active
     const { tree, item: currItem } = this.props;
 
@@ -266,7 +274,7 @@ class Tab extends React.Component<TabProps, TabState> {
         )}
         style={style}
         // selected='false'
-        onClick={this.onClick.bind(this)}
+        onMouseDown={this.onMouseDown.bind(this)}
         draggable
         onDragStart={this.onDragStart}
         onDragEnter={this.onDragEnter}

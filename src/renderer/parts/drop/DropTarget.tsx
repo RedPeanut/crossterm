@@ -6,9 +6,8 @@ interface DropTargetProps {
   // children?: React.ReactElement | React.ReactElement[];
   // list: Terminal[];
   // ref?: string;
-  id?: string;
+  terms_uid?: string;
   key?: string;
-  uid?: string;
 
   // mapped value
   dropOverlay: any;
@@ -41,7 +40,7 @@ class DropTarget extends React.Component<DropTargetProps, DropTargetState> {
     // console.log('shouldComponentUpdate() is called...');
     // console.log(`nextProps = ${JSON.stringify(nextProps)}, nextState = ${JSON.stringify(nextState)}`);
     if(nextProps.dropOverlay && nextProps.dropOverlay.style) {
-      if(nextProps.dropOverlay.id !== this.props.uid)
+      if(nextProps.dropOverlay.drag_id !== this.props.terms_uid)
         return false;
       else
         return JSON.stringify(nextProps.dropOverlay) !== JSON.stringify(this.props.dropOverlay)
@@ -57,6 +56,7 @@ class DropTarget extends React.Component<DropTargetProps, DropTargetState> {
   }
 
   render() {
+    // console.log('render() is called..');
     // console.log('ref =', this.props.ref);
     // console.log('id =', this.props.id);
     // console.log('key =', this.props.key);

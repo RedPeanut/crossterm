@@ -21,14 +21,14 @@ interface TermsState {}
 
 class Terms extends React.Component<TermsProps, TermsState> {
 
-  uid: string;
+  terms_uid: string;
   termsRef: HTMLElement | null;
   resizeObserver!: ResizeObserver;
   resizeTimeout!: NodeJS.Timeout;
 
   constructor(props: TermsProps) {
     super(props);
-    this.uid = uuidv4();
+    this.terms_uid = uuidv4();
     this.termsRef = null;
   }
 
@@ -68,7 +68,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
             );
           })
         }
-        {/* <Wrapper uid={this.uid} pid={pid} list={list} /> */}
+        <Wrapper terms_uid={this.terms_uid} group={group} />
 
         {/* {
           children.map((item, index) => {
