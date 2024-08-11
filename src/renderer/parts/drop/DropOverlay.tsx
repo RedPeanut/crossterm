@@ -12,6 +12,7 @@ export const enum GroupDirection {
 }
 
 interface DropOverlayProps {
+  groupId: string;
   terms_uid: string;
   // list: Terminal_[];
   // pid: string;
@@ -186,7 +187,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
     let _e = e.nativeEvent;
     // console.log('_e =', _e);
     this.showDropTarget = false;
-    const { group, dropOverlay, terms_uid } = this.props;
+    const { group, dropOverlay, groupId, terms_uid } = this.props;
     // console.log('dropOverlay =', dropOverlay);
     // console.log('uuid =', uuid);
     if(group && group.length > 0
@@ -196,7 +197,8 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
       this.showDropTarget = true;
       this.props.onSetDropOverlay({
         ...dropOverlay,
-        drag_id: terms_uid,
+        // drag_id: groupId,
+        target_id: terms_uid,
         style: {
           ...this.props.dropOverlay.style,
           opacity: '1',
@@ -208,7 +210,7 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
 
   makeDropTargetHide(): void {
     this.showDropTarget = false;
-    const { dropOverlay, terms_uid } = this.props;
+    const { dropOverlay, groupId } = this.props;
     this.props.onSetDropOverlay({
       ...dropOverlay,
       style: {
@@ -225,7 +227,6 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
 
   onDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDragEnd event is called...');
-    this.makeDropTargetHide();
   }
 
   onDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -244,11 +245,9 @@ class DropOverlay extends React.Component<DropOverlayProps, DropOverlayState> {
   }
 
   onDrop = (e: React.DragEvent<HTMLDivElement>): void => {
-    this.props.onSetDropOverlay({
-      ...this.props.dropOverlay,
-      drag_id: '',
-      visible: false,
-    });
+    console.log('onDrop event is called...');
+    e.preventDefault();
+    this.makeDropTargetHide();
   }
 
   /* onDrop = (e: React.DragEvent<HTMLDivElement>): void => {

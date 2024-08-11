@@ -210,10 +210,11 @@ class Main extends React.Component<Props, State> {
         );
       } else {
         // if not split item must have one item (as Terminal[])
+        let key, groupId = key = uuidv4();
         result.push(
-          <div className='body-item' style={style} key={uuidv4()}>
-            <Tabs group={item as TerminalItem[]} />
-            <Terms group={item as TerminalItem[]} />
+          <div className='body-item' style={style} key={key}>
+            <Tabs groupId={groupId} group={item as TerminalItem[]} />
+            <Terms groupId={groupId} group={item as TerminalItem[]} />
           </div>
         );
       }

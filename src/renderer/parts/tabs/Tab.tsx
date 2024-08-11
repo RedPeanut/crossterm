@@ -14,6 +14,7 @@ interface TabProps {
   // item: FlatItem;
   // children: FlatItem[];
   group: TerminalItem[];
+  groupId: string;
   item: TerminalItem;
   index: number;
   className: string;
@@ -52,7 +53,7 @@ class Tab extends React.Component<TabProps, TabState> {
     e.dataTransfer.setData('text/plain', JSON.stringify(this.props.item));
     this.props.onSetDropOverlay({
       ...this.props.dropOverlay,
-      // drag_id: this.props.item.uid,
+      drag_id: this.props.groupId,
       visible: true
     });
   };
@@ -68,11 +69,11 @@ class Tab extends React.Component<TabProps, TabState> {
 
   onDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
     console.log('onDragEnd event is called...');
-    this.props.onSetDropOverlay({
+    /* this.props.onSetDropOverlay({
       ...this.props.dropOverlay,
       drag_id: '',
       visible: false,
-    });
+    }); */
   };
 
   getTabDragOverLocation(e: DragEvent): 'left' | 'right' {

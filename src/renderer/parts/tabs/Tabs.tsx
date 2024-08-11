@@ -13,6 +13,7 @@ interface TabsProps {
   // pid: string;
   // children: FlatItem[];
   group: TerminalItem[];
+  groupId: string;
 }
 
 interface TabsState {
@@ -35,7 +36,7 @@ class Tabs extends React.Component<TabsProps, TabsState> {
 
   render() {
     // const { children } = this.props;
-    const { group } = this.props;
+    const { group, groupId } = this.props;
     const { dropTarget } = this.state;
 
     return (
@@ -71,6 +72,7 @@ class Tabs extends React.Component<TabsProps, TabsState> {
                   return (
                     <Tab
                       group={group}
+                      groupId={groupId}
                       item={item}
                       key={uuidv4()}
                       // related drop-target effect

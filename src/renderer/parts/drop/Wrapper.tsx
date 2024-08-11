@@ -8,6 +8,7 @@ interface Props {
   // pid: string;
   // children: FlatItem[];
   group: TerminalItem[];
+  groupId: string;
   terms_uid: string;
 
   // mapped value
@@ -21,18 +22,27 @@ class Wrapper extends React.Component<Props, State> {
     super(props);
   }
 
+  // update - render 전 - (props, state 변경시, true만 render 호출)
+  shouldComponentUpdate(nextProps: any, nextState: any) {
+    // console.log('shouldComponentUpdate() is called...');
+    /* if(nextProps.dropOverlay && nextProps.dropOverlay.style && nextProps.dropOverlay.target_id === this.props.terms_uid)
+      return true;
+    else
+      return false; */
+    return true;
+  }
+
   componentDidMount() {}
 
   render() {
-    const { dropOverlay, terms_uid, group } = this.props;
+    const { dropOverlay, groupId, group, terms_uid } = this.props;
     return (
       <div>
         {
           dropOverlay.visible ?
-          // true ?
             <div>
-              <DropTarget terms_uid={terms_uid} />
-              <DropOverlay terms_uid={terms_uid} group={group} />
+              <DropTarget groupId={groupId} terms_uid={terms_uid} />
+              <DropOverlay groupId={groupId} group={group} terms_uid={terms_uid} />
             </div>
           : null
         }

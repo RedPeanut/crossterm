@@ -12,6 +12,7 @@ interface TermsProps {
   // pid: string;
   // children: FlatItem[];
   group: TerminalItem[];
+  groupId: string;
 
   // mapped value
   // dropOverlay: any;
@@ -54,7 +55,7 @@ class Terms extends React.Component<TermsProps, TermsState> {
 
   render() {
     // const { pid, children } = this.props;
-    const { group } = this.props;
+    const { group, groupId } = this.props;
 
     return (
       <div
@@ -64,11 +65,11 @@ class Terms extends React.Component<TermsProps, TermsState> {
         {
           group.map((item, index) => {
             return (
-              <Term group={group} item={item} key={uuidv4()}/>
+              <Term groupId={groupId} group={group} item={item} key={uuidv4()}/>
             );
           })
         }
-        <Wrapper terms_uid={this.terms_uid} group={group} />
+        <Wrapper groupId={groupId} group={group} terms_uid={this.terms_uid} />
 
         {/* {
           children.map((item, index) => {
