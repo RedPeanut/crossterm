@@ -27,10 +27,10 @@
  */
 
 import './index.css';
-import { MainLayout } from './MainLayout';
+import { Workbench } from './workbench/browser/Workbench';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
 export type CodeWindow = Window & typeof globalThis;
 export const mainWindow = window as CodeWindow;
-const mainLayout = new MainLayout(mainWindow.document.body);
+const mainLayout = new Workbench(mainWindow.document.body);
