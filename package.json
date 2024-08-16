@@ -1,6 +1,6 @@
 {
-  "name": "electron-app-webpack-ts",
-  "productName": "electron-app-webpack-ts",
+  "name": "crossterm2",
+  "productName": "crossterm2",
   "version": "0.0.1",
   "description": "My Electron application description",
   "main": ".webpack/main",
