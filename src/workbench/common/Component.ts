@@ -1,10 +1,7 @@
 export class Component {
-
-  constructor(
-		private readonly id: string
-  ) {}
-
-  getId(): string {
-    return this.id;
+  private id: string;
+  constructor(id: string) {
+    this.id = id;
   }
+  getId(): string { return this.id; }
 }

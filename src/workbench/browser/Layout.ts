@@ -4,13 +4,13 @@ import { Part } from './Part';
 
 export abstract class Layout extends Disposable {
 
-  readonly mainContainer = document.createElement('div');
-  private readonly parts = new Map<string, Part>();
-  
-  constructor(
-    protected readonly parent: HTMLElement
-  ) {
+  parent: HTMLElement;
+  mainContainer = document.createElement('div');
+  parts = new Map<string, Part>();
+
+  constructor(parent: HTMLElement) {
     super();
+    this.parent = parent;
   }
   
   registerPart(part: Part): void {

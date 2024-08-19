@@ -8,15 +8,17 @@ class PartLayout {
 
 export abstract class Part extends Component {
 
-  private parent: HTMLElement | undefined;
-  private headerArea: HTMLElement | undefined;
-  private titleArea: HTMLElement | undefined;
-  private contentArea: HTMLElement | undefined;
-  private footerArea: HTMLElement | undefined;
-  private partLayout: PartLayout | undefined;
+  parent: HTMLElement | undefined;
+  headerArea: HTMLElement | undefined;
+  titleArea: HTMLElement | undefined;
+  contentArea: HTMLElement | undefined;
+  footerArea: HTMLElement | undefined;
+  partLayout: PartLayout | undefined;
+  options: IPartOptions | undefined;
 
-  constructor(id: string, private options: IPartOptions) {
+  constructor(id: string, options: IPartOptions) {
     super(id);
+    this.options = options;
   }
 
   create(parent: HTMLElement, options?: object): void {
