@@ -1,8 +1,17 @@
 import { Parts } from './Workbench';
 import { Disposable, IDisposable } from '../../base/common/Lifecycle';
 import { Part } from './Part';
+import { Splittable } from '../../base/browser/ui/SplitView';
 
-export abstract class Layout extends Disposable {
+export abstract class Layout extends Disposable implements Splittable {
+
+  get element(): HTMLElement {
+    return this.mainContainer;
+  }
+
+  layoutContainer(offset: number): void {
+    // not implemented yet
+  }
 
   parent: HTMLElement;
   mainContainer = document.createElement('div');

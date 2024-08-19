@@ -1,7 +1,94 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+/* Common */
+* { margin: 0; padding: 0; }
+html { height: 100%; color: white; }
+body { height: 100%; }
+
+/* App */
+.workbench {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #252526;
+}
+
+/* SplitView */
+.split-view {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.split-view .sash-container {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.split-view .sash-container .sash {
+	pointer-events: initial;
+}
+
+.split-view .split-view-container {
+	width: 100%;
+	height: 100%;
+	white-space: nowrap;
+	position: relative;
+}
+
+.split-view .split-view-container .split-view-view {
+	white-space: initial;
+	position: absolute;
+  /* display: flex; */
+}
+
+/* .split-view .split-view-container .split-view-view:not(.visible) {
+	display: none;
+} */
+
+.split-view.vertical .split-view-container .split-view-view {
+	width: 100%;
+}
+
+.split-view.horizontal .split-view-container .split-view-view {
+	height: 100%;
+}
+
+/* Titlebar */
+.part.titlebar {
+  padding-left: 80px;
+  border-bottom: 1px solid rgb(43, 43, 43);
+  height: 42px;
+  width: 100%;
+  display: flex;
+  background-color: grey;
+}
+
+/* Activitybar */
+.part.activitybar {
+  width: 48px;
+  height: 100%;
+  /* flex-shrink: 0; */
+  background-color: red;
+}
+
+/* Body */
+.body {
+  background-color: rgb(255, 0, 255); /* rgb(31, 31, 31); */
+  /* flex-grow: 1; */
+}
+
+/* Sidebar */
+.part.sidebar {
+  width: 220px;
+  height: 100%;
+  border-right: 1px solid rgb(43, 43, 43);
+  /* flex-shrink: 0; */
+  background-color: green;
+}
+
+/* Session */
+.part.session {
+  background-color: blue;
 }

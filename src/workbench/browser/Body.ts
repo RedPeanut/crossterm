@@ -38,10 +38,10 @@ export class Body extends Layout {
     sidebarPart.create();
     const sessionPart = new SessionPart(this.mainContainer, Parts.SESSION_PART, 'none', ['session'], null);
     sessionPart.create();
-    /* const splitView = new SplitView(this.mainContainer, {});
+    const splitView = new SplitView(this.mainContainer, {});
     splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);
-    splitView.addView(sessionPart); */
+    splitView.addView(sessionPart);
 
     this.parent.appendChild(this.mainContainer);
   }

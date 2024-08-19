@@ -1,6 +1,11 @@
 import { append, $ } from "../dom";
 import { Orientation, Sash } from "./sash/Sash";
 
+export interface Splittable {
+  get element(): HTMLElement;
+  layoutContainer(offset: number): void;
+}
+
 /** The interface to implement for views within a {@link SplitView}.
 export interface SplitViewItem { 
   element?: HTMLElement;
@@ -48,7 +53,7 @@ export class SplitView {
 
   container: HTMLElement;
   orientation: Orientation;
-  viewItems: SplitViewItem[] = [];
+  viewItems: Splittable[] = [];
   el: HTMLElement;
   //viewItems: ViewItem[];
   sashContainer: HTMLElement;
@@ -73,7 +78,7 @@ export class SplitView {
     return null;
   }
 
-  addView(item: SplitViewItem, index: number = this.viewItems.length) {
+  addView(item: Splittable, index: number = this.viewItems.length) {
     // add view
     const div = $('.split-view-view');
     if(index === this.viewItems.length)

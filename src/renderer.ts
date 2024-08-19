@@ -34,4 +34,4 @@ console.log('👋 This message is being logged by "renderer.js", included via we
 export type CodeWindow = Window & typeof globalThis;
 export const mainWindow = window as CodeWindow;
 const mainLayout = new Workbench(mainWindow.document.body);
-mainLayout.create();
+mainLayout.startup();

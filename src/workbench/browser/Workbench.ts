@@ -64,10 +64,10 @@ export class Workbench extends Layout {
     const statusbarPart = new StatusbarPart(this.mainContainer, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
     statusbarPart.create();
 
-    /* const splitView = this.splitView = new SplitView(this.mainContainer, {});
+    const splitView = /* this.splitView =  */new SplitView(this.mainContainer, {});
     splitView.addView(titlebarPart);
     splitView.addView(body);
-    splitView.addView(statusbarPart); */
+    splitView.addView(statusbarPart);
     
     this.parent.appendChild(this.mainContainer);
   }
@@ -93,4 +93,16 @@ export class Workbench extends Layout {
     return part;
   } */
 
+  layout(): void {
+    let dimension = getClientArea(this.parent);
+    console.log('dimension =', dimension);
+    position(this.mainContainer, 0, 0, 0, 0, 'relative');
+    size(this.mainContainer, dimension.width, dimension.height);
+    // this.splitView.layout();
+  }
+
+  startup(): void {
+    this.create();
+    this.layout();
+  }
 }

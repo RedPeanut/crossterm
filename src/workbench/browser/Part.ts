@@ -1,3 +1,4 @@
+import { Splittable } from "../../base/browser/ui/SplitView";
 import { Component } from "../common/Component";
 
 export interface IPartOptions {}
@@ -6,7 +7,15 @@ class PartLayout {
   constructor(private options: IPartOptions, private contentArea: HTMLElement | undefined) { }
 }
 
-export abstract class Part extends Component {
+export abstract class Part extends Component implements Splittable {
+
+  get element(): HTMLElement {
+    return this.contentArea;
+  }
+
+  layoutContainer(offset: number): void {
+    // not implemented yet
+  }
 
   parent: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;
