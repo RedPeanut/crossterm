@@ -7,7 +7,7 @@ import { ActivitybarPart } from './parts/activitybar/ActivitybarPart';
 import { BodyPart } from './parts/body/BodyPart';
 import { StatusbarPart } from './parts/statusbar/StatusbarPart';
 import { Body } from './Body';
-import { SplitView } from '../../base/browser/ui/SplitView';
+import { SplitView, SplitViewItem } from '../../base/browser/ui/SplitView';
 import { getClientArea, position, size } from '../../base/browser/dom';
 // import Runtime from './Runtime';
 
