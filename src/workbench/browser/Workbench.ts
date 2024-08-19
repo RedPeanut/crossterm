@@ -41,14 +41,15 @@ export class Workbench extends Layout {
       // { id: Parts.PANEL_PART, role: 'none', classes: ['panel', 'basepanel', positionToString(this.getPanelPosition())] },
       // { id: Parts.STATUSBAR_PART, role: 'status', classes: ['statusbar'] }
     ]) {
-      const part = this.createPart(klass, id, role, classes, options);
+      // const part = this.createPart(klass, id, role, classes, options);
+      const part = new klass(this.mainContainer, id, role, classes, options);
       this.registerPart(part);
-      this.getPart(id).create(this.mainContainer, options);
+      this.getPart(id).create();
     }
     this.parent.appendChild(this.mainContainer);
   }
 
-  createPart<T extends Part>(
+  /* createPart<T extends Part>(
       // https://stackoverflow.com/questions/24677592/generic-type-inference-with-class-argument/26696435#26696435
       // According to the language spec, need to refer to the class type by it's ctor fn.
       klass: { new(id: string, options: IPartOptions): T; },
@@ -59,7 +60,7 @@ export class Workbench extends Layout {
   ): Part {
     const part = new klass(id, null);
     return part;
-  }
+  } */
 
   /* createPart(id: string, role: string, classes: string[]): HTMLElement {
     const part = document.createElement('div');

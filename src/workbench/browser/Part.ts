@@ -14,26 +14,31 @@ export abstract class Part extends Component {
   contentArea: HTMLElement | undefined;
   footerArea: HTMLElement | undefined;
   partLayout: PartLayout | undefined;
-  options: IPartOptions | undefined;
 
-  constructor(id: string, options: IPartOptions) {
+  role: string;
+  classes: string[];
+  options: object;
+
+  constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(id);
+    this.parent = parent;
+    this.role = role;
+    this.classes = classes;
     this.options = options;
   }
 
-  create(parent: HTMLElement, options?: object): void {
-    this.parent = parent;
-    this.titleArea = this.createTitleArea(parent, options);
-    this.contentArea = this.createContentArea(parent, options);
-    this.partLayout = new PartLayout(this.options, this.contentArea);
+  create(): void {
+    this.titleArea = this.createTitleArea();
+    this.contentArea = this.createContentArea();
+    // this.partLayout = new PartLayout(this.options, this.contentArea);
   }
 
-  createTitleArea(parent: HTMLElement, options: object): HTMLElement {
+  createTitleArea(): HTMLElement {
     // Method not implemented yet
     return null;
   }
 
-  createContentArea(parent: HTMLElement, options: object): HTMLElement {
+  createContentArea(): HTMLElement {
     // Method not implemented yet
     return null;
   }
