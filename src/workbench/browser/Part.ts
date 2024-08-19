@@ -31,6 +31,8 @@ export abstract class Part extends Component {
     this.titleArea = this.createTitleArea();
     this.contentArea = this.createContentArea();
     // this.partLayout = new PartLayout(this.options, this.contentArea);
+    this.titleArea && this.parent.appendChild(this.titleArea);
+    this.contentArea && this.parent.appendChild(this.contentArea);
   }
 
   createTitleArea(): HTMLElement {
@@ -39,8 +41,11 @@ export abstract class Part extends Component {
   }
 
   createContentArea(): HTMLElement {
-    // Method not implemented yet
-    return null;
+    const part = document.createElement('div');
+    part.classList.add('part', 'content-area', ...this.classes);
+    part.id = this.getId();
+    part.setAttribute('role', this.role);
+    return part;
   }
 
   // abstract toJSON(): object;
