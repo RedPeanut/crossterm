@@ -27,10 +27,18 @@ export abstract class Layout extends Disposable implements Splittable {
     this.parts.set(id, part);
   }
 
-  protected getPart(key: Parts): Part {
+  /* getPart(key: Parts): Part {
     const part = this.parts.get(key);
     if (!part) {
       throw new Error(`Unknown part ${key}`);
+    }
+    return part;
+  } */
+
+  getPart(id: string): Part {
+    const part = this.parts.get(id);
+    if (!part) {
+      throw new Error(`Unknown part ${id}`);
     }
     return part;
   }
