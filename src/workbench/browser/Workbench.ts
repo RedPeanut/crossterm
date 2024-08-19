@@ -52,13 +52,13 @@ export class Workbench extends Layout {
   /* createPart<T extends Part>(
       // https://stackoverflow.com/questions/24677592/generic-type-inference-with-class-argument/26696435#26696435
       // According to the language spec, need to refer to the class type by it's ctor fn.
-      klass: { new(id: string, options: IPartOptions): T; },
+      klass: { new(id: string, role: string, classes: string[], options: object): T; },
       id: string, 
       role: string, 
       classes: string[], 
       options: {}
   ): Part {
-    const part = new klass(id, null);
+    const part = new klass(id, role, classes, options);
     return part;
   } */
 
