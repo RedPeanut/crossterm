@@ -21,7 +21,7 @@ export interface ISplitViewItemView {
 export abstract class SplitViewItem {
   _size: number;
   set size(size: number) { this._size = size; }
-	get size(): number { return this._size; }
+  get size(): number { return this._size; }
 
   // container: HTMLElement;
   // view: TView;
@@ -52,7 +52,7 @@ export class SplitView {
   el: HTMLElement;
   //viewItems: ViewItem[];
   sashContainer: HTMLElement;
-	viewContainer: HTMLElement;
+  viewContainer: HTMLElement;
   sashDragState: ISashDragState | undefined;
 
   constructor(container: HTMLElement, options: ISplitViewOptions) {
@@ -62,9 +62,9 @@ export class SplitView {
 
     this.el = document.createElement('div');
     this.el.classList.add('split-view');
-		this.el.classList.add(this.orientation === Orientation.VERTICAL ? 'vertical' : 'horizontal');
+    this.el.classList.add(this.orientation === Orientation.VERTICAL ? 'vertical' : 'horizontal');
     this.sashContainer = append(this.el, $('.sash-container'));
-		this.viewContainer = append(this.el, $('.split-view-container'));
+    this.viewContainer = append(this.el, $('.split-view-container'));
     this.container.appendChild(this.el);
   }
 

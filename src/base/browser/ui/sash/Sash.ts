@@ -15,7 +15,7 @@ export interface ISashEvent {
 
 export interface ISashOptions {
   readonly orientation: Orientation;
-	readonly size?: number;
+  readonly size?: number;
 }
 
 export class Sash {

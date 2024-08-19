@@ -5,7 +5,7 @@ import { SidebarPart } from "./parts/sidebar/SidebarPart";
 import { SessionPart } from "./parts/session/SessionPart";
 
 export const enum Parts {
-	ACTIVITYBAR_PART = 'workbench.parts.activitybar',
+  ACTIVITYBAR_PART = 'workbench.parts.activitybar',
   SIDEBAR_PART = 'workbench.parts.sidebar',
   SESSION_PART = 'workbench.parts.session',
 }
@@ -29,17 +29,17 @@ export class Body extends Layout {
     } */
     const activitybarPart = new ActivitybarPart(this.mainContainer, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
     activitybarPart.create();
-		// let accessor = new SplitViewItem();
-		// activitybarPart.accessor = new SplitViewItem() {
-		// 	layoutContainer(offset: number) {}
-		// };
+    // let accessor = new SplitViewItem();
+    // activitybarPart.accessor = new SplitViewItem() {
+    //   layoutContainer(offset: number) {}
+    // };
 
     const sidebarPart = new SidebarPart(this.mainContainer, Parts.SIDEBAR_PART, 'none', ['sidebar'], null);
     sidebarPart.create();
     const sessionPart = new SessionPart(this.mainContainer, Parts.SESSION_PART, 'none', ['session'], null);
     sessionPart.create();
     /* const splitView = new SplitView(this.mainContainer, {});
-		splitView.addView(activitybarPart);
+    splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);
     splitView.addView(sessionPart); */
 

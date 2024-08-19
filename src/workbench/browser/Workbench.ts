@@ -89,7 +89,7 @@ export class Workbench extends Layout {
     const part = document.createElement('div');
     part.classList.add('part', ...classes);
     part.id = id;
-		part.setAttribute('role', role);
+    part.setAttribute('role', role);
     return part;
   } */
 
