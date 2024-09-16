@@ -1,8 +1,8 @@
-import { $ } from '../../../../base/browser/dom';
-import { SplitView } from '../../../../base/browser/ui/SplitView';
-import { Part } from '../../Part';
-import { SessionPart } from '../session/SessionPart';
-import { SidebarPart } from '../sidebar/SidebarPart';
+import { $ } from '../../../base/browser/dom';
+import { SplitView } from '../../../base/browser/ui/SplitView';
+import { Part } from '../Part';
+import { SessionPart } from './SessionPart';
+import { SidebarPart } from './SidebarPart';
 
 export const enum Parts {
   SIDEBAR_PART = 'workbench.parts.sidebar',

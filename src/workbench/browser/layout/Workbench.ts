@@ -1,14 +1,14 @@
-import { coalesce } from '../../base/common/arrays';
-import { isLinux, isWindows } from '../../base/common/platform';
-import { Layout } from './Layout';
-import { IPartOptions, Part } from './Part';
-import { TitlebarPart } from './parts/titlebar/TitlebarPart';
-import { ActivitybarPart } from './parts/activitybar/ActivitybarPart';
-import { BodyPart } from './parts/body/BodyPart';
-import { StatusbarPart } from './parts/statusbar/StatusbarPart';
+import { coalesce } from '../../../base/common/arrays';
+import { isLinux, isWindows } from '../../../base/common/platform';
+import { Layout } from '../Layout';
+import { IPartOptions, Part } from '../Part';
+import { TitlebarPart } from '../parts/TitlebarPart';
+import { ActivitybarPart } from '../parts/ActivitybarPart';
+import { BodyPart } from '../parts/BodyPart';
+import { StatusbarPart } from '../parts/StatusbarPart';
 import { Body } from './Body';
-import { SplitView, SplitViewItem } from '../../base/browser/ui/SplitView';
-import { getClientArea, position, size } from '../../base/browser/dom';
+import { SplitView, SplitViewItem } from '../../../base/browser/ui/SplitView';
+import { getClientArea, position, size } from '../../../base/browser/dom';
 // import Runtime from './Runtime';
 
 export const enum Parts {

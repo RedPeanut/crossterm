@@ -1,8 +1,8 @@
-import { SplitView, SplitViewItem } from "../../base/browser/ui/SplitView";
-import { Layout } from "./Layout";
-import { ActivitybarPart } from "./parts/activitybar/ActivitybarPart";
-import { SidebarPart } from "./parts/sidebar/SidebarPart";
-import { SessionPart } from "./parts/session/SessionPart";
+import { SplitView, SplitViewItem } from "../../../base/browser/ui/SplitView";
+import { Layout } from "../Layout";
+import { ActivitybarPart } from "../parts/ActivitybarPart";
+import { SidebarPart } from "../parts/SidebarPart";
+import { SessionPart } from "../parts/SessionPart";
 
 export const enum Parts {
   ACTIVITYBAR_PART = 'workbench.parts.activitybar',

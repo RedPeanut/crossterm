@@ -1,4 +1,4 @@
-import { Parts } from './Workbench';
+import { Parts } from './layout/Workbench';
 import { Disposable, IDisposable } from '../../base/common/Lifecycle';
 import { Part } from './Part';
 import { Splittable } from '../../base/browser/ui/SplitView';
