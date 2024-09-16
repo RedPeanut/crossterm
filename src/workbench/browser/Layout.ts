@@ -1,9 +1,9 @@
 import { Parts } from './layout/Workbench';
 import { Disposable, IDisposable } from '../../base/common/Lifecycle';
 import { Part } from './Part';
-import { Splittable } from '../../base/browser/ui/SplitView';
+import { SplitViewItem } from '../../base/browser/ui/SplitView';
 
-export abstract class Layout extends Disposable implements Splittable {
+export abstract class Layout extends Disposable implements SplitViewItem {
 
   get element(): HTMLElement {
     return this.mainContainer;

@@ -1,7 +1,7 @@
 import { append, $ } from "../dom";
 import { Orientation, Sash } from "./sash/Sash";
 
-export interface Splittable {
+export interface SplitViewItem {
   get element(): HTMLElement;
   layoutContainer(offset: number): void;
 }
@@ -23,7 +23,7 @@ export interface ISplitViewItemView {
   maximumSize: number;
 }
 
-export abstract class SplitViewItem {
+/* export abstract class SplitViewItem {
   _size: number;
   set size(size: number) { this._size = size; }
   get size(): number { return this._size; }
@@ -41,7 +41,7 @@ export abstract class SplitViewItem {
 
   layout(offset: number): void {}
   abstract layoutContainer(offset: number): void;
-}
+} */
 
 interface ISashDragState {}
 
@@ -53,7 +53,7 @@ export class SplitView {
 
   container: HTMLElement;
   orientation: Orientation;
-  viewItems: Splittable[] = [];
+  viewItems: SplitViewItem[] = [];
   el: HTMLElement;
   //viewItems: ViewItem[];
   sashContainer: HTMLElement;
@@ -78,7 +78,7 @@ export class SplitView {
     return null;
   }
 
-  addView(item: Splittable, index: number = this.viewItems.length) {
+  addView(item: SplitViewItem, index: number = this.viewItems.length) {
     // add view
     const div = $('.split-view-view');
     if(index === this.viewItems.length)
