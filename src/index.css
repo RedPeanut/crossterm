@@ -92,3 +92,11 @@ body { height: 100%; }
 .part.session {
   background-color: blue;
 }
+
+/* StatusBar */
+.part.statusbar {
+  height: 22px;
+  width: 100%;
+  display: flex;
+  background-color: purple;
+}
