@@ -80,11 +80,11 @@ export class SplitView {
 
   addView(item: SplitViewItem, index: number = this.viewItems.length) {
     // add view
-    const div = $('.split-view-view');
+    const container = $('.split-view-view');
     if(index === this.viewItems.length)
-      this.viewContainer.appendChild(div);
+      this.viewContainer.appendChild(container);
     else
-      this.viewContainer.insertBefore(div, this.viewContainer.children.item(index));
+      this.viewContainer.insertBefore(container, this.viewContainer.children.item(index));
     this.viewItems.splice(index, 0, item);
 
     // add sash
@@ -94,7 +94,7 @@ export class SplitView {
 
     // // append
     // const child = view.mainContainer ? view.mainContainer : view.element;
-    div.appendChild(item.getElement());
+    container.appendChild(item.getElement());
   }
 
   layout(size: number) {
