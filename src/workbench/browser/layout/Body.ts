@@ -1,8 +1,9 @@
-import { SplitView, SplitViewItem } from "../../../base/browser/ui/SplitView";
+import { SplitView, SplitViewItem, VerticalViewItem } from "../../../base/browser/ui/SplitView";
 import { Layout } from "../Layout";
 import { ActivitybarPart } from "../parts/ActivitybarPart";
 import { SidebarPart } from "../parts/SidebarPart";
 import { SessionPart } from "../parts/SessionPart";
+import { Orientation } from "../../../base/browser/ui/sash/Sash";
 
 export const enum Parts {
   ACTIVITYBAR_PART = 'workbench.parts.activitybar',
@@ -10,7 +11,12 @@ export const enum Parts {
   SESSION_PART = 'workbench.parts.session',
 }
 
-export class Body extends Layout {
+export class Body extends Layout implements VerticalViewItem {
+
+  layoutContainer(offset: number): void {
+    this.splitViewContainer.style.top = `${offset}px`;
+    this.splitViewContainer.style.height = `${this.size}px`;
+  }
 
   constructor(parent: HTMLElement) { 
     super(parent);
@@ -38,7 +44,7 @@ export class Body extends Layout {
     sidebarPart.create();
     const sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], null);
     sessionPart.create();
-    const splitView = new SplitView(this.mainContainer, {});
+    const splitView = new SplitView(this.mainContainer, { orientation: Orientation.HORIZONTAL });
     splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);
     splitView.addView(sessionPart);

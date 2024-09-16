@@ -9,13 +9,26 @@ class PartLayout {
 
 export abstract class Part extends Component implements SplitViewItem {
 
+  setSize(size: number): void {
+    this.size = size;
+  }
+
+  getSize(): number {
+    return this.size;
+  }
+
   getElement(): HTMLElement {
     return this.contentArea;
   }
 
-  layoutContainer(offset: number): void {
-    // not implemented yet
+  setSplitViewContainer(container: HTMLElement): void {
+    this.splitViewContainer = container;
   }
+
+  abstract layoutContainer(offset: number): void;
+
+  size: number = 0;
+  splitViewContainer: HTMLElement | undefined;
 
   parent: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;

@@ -4,12 +4,19 @@ import { Layout } from '../Layout';
 import { IPartOptions, Part } from '../Part';
 import { TitlebarPart } from '../parts/TitlebarPart';
 import { ActivitybarPart } from '../parts/ActivitybarPart';
-import { BodyPart } from '../parts/BodyPart';
+// import { BodyPart } from '../parts/BodyPart';
 import { StatusbarPart } from '../parts/StatusbarPart';
 import { Body } from './Body';
 import { SplitView, SplitViewItem } from '../../../base/browser/ui/SplitView';
 import { getClientArea, position, size } from '../../../base/browser/dom';
+import { Orientation } from '../../../base/browser/ui/sash/Sash';
 // import Runtime from './Runtime';
+
+export const TITLEBAR_HEIGHT = 42;
+export const ACTIVITYBAR_WIDTH = 48;
+export const SIDEBAR_WIDTH = 220;
+// export const SESSION_WIDTH = ;
+export const STATUSBAR_HEIGHT = 22;
 
 export const enum Parts {
   TITLEBAR_PART = 'workbench.parts.titlebar',
@@ -25,6 +32,12 @@ export const enum Parts {
 }
 
 export class Workbench extends Layout {
+
+  layoutContainer(offset: number): void {
+    throw new Error('Method not implemented.');
+  }
+
+  splitView: SplitView;
 
   constructor(parent: HTMLElement) { 
     super(parent);
@@ -64,7 +77,7 @@ export class Workbench extends Layout {
     const statusbarPart = new StatusbarPart(null, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
     statusbarPart.create();
 
-    const splitView = /* this.splitView =  */new SplitView(this.mainContainer, {});
+    const splitView = this.splitView = new SplitView(this.mainContainer, { orientation: Orientation.VERTICAL });
     splitView.addView(titlebarPart);
     splitView.addView(body);
     splitView.addView(statusbarPart);
@@ -98,7 +111,10 @@ export class Workbench extends Layout {
     console.log('dimension =', dimension);
     position(this.mainContainer, 0, 0, 0, 0, 'relative');
     size(this.mainContainer, dimension.width, dimension.height);
-    // this.splitView.layout();
+    if(this.splitView.orientation === Orientation.HORIZONTAL)
+      this.splitView.layout(dimension.width);
+    else
+      this.splitView.layout(dimension.height);
   }
 
   startup(): void {
