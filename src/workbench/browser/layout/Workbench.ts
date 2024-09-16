@@ -55,13 +55,13 @@ export class Workbench extends Layout {
       this.getPart(id).create();
     } */
 
-    const titlebarPart = new TitlebarPart(this.mainContainer, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
+    const titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
     titlebarPart.create();
-
-    const body = new Body(this.mainContainer);
+    
+    const body = new Body(null);
     body.create();
 
-    const statusbarPart = new StatusbarPart(this.mainContainer, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
+    const statusbarPart = new StatusbarPart(null, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
     statusbarPart.create();
 
     const splitView = /* this.splitView =  */new SplitView(this.mainContainer, {});

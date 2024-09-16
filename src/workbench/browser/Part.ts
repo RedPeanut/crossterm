@@ -9,7 +9,7 @@ class PartLayout {
 
 export abstract class Part extends Component implements SplitViewItem {
 
-  get element(): HTMLElement {
+  getElement(): HTMLElement {
     return this.contentArea;
   }
 
@@ -40,10 +40,10 @@ export abstract class Part extends Component implements SplitViewItem {
     this.titleArea = this.createTitleArea();
     this.contentArea = this.createContentArea();
     // this.partLayout = new PartLayout(this.options, this.contentArea);
-    this.titleArea && this.parent.appendChild(this.titleArea);
-    this.contentArea && this.parent.appendChild(this.contentArea);
+    this.titleArea && this.parent && this.parent.appendChild(this.titleArea);
+    this.contentArea && this.parent && this.parent.appendChild(this.contentArea);
   }
-
+  
   createTitleArea(): HTMLElement {
     // Method not implemented yet
     return null;

@@ -2,7 +2,7 @@ import { append, $ } from "../dom";
 import { Orientation, Sash } from "./sash/Sash";
 
 export interface SplitViewItem {
-  get element(): HTMLElement;
+  getElement(): HTMLElement;
   layoutContainer(offset: number): void;
 }
 
@@ -94,7 +94,7 @@ export class SplitView {
 
     // // append
     // const child = view.mainContainer ? view.mainContainer : view.element;
-    // div.appendChild(child);
+    div.appendChild(item.getElement());
   }
 
   layout(size: number) {

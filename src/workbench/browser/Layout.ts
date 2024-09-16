@@ -5,7 +5,7 @@ import { SplitViewItem } from '../../base/browser/ui/SplitView';
 
 export abstract class Layout extends Disposable implements SplitViewItem {
 
-  get element(): HTMLElement {
+  getElement(): HTMLElement {
     return this.mainContainer;
   }
 

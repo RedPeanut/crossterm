@@ -17,7 +17,7 @@ export class Body extends Layout {
   }
 
   create(): void {
-    this.mainContainer.classList.add(...['body']);
+    this.mainContainer.classList.add(...['body', 'layout']);
     /* for(const { klass, id, role, classes, options } of [
       { klass: SidebarPart, id: Parts.SIDEBAR_PART, role: 'none', classes: ['sidebar', this.getSideBarPosition() === Position.LEFT ? 'left' : 'right'] },
       { klass: SessionPart, id: Parts.SESSION_PART, role: 'main', classes: ['editor'], options: { restorePreviousState: this.willRestoreEditors() } },
@@ -27,23 +27,23 @@ export class Body extends Layout {
       // this.getPart(id).create(this.mainContainer, options);
       this.getPart(id).create();
     } */
-    const activitybarPart = new ActivitybarPart(this.mainContainer, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
+    const activitybarPart = new ActivitybarPart(null, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
     activitybarPart.create();
     // let accessor = new SplitViewItem();
     // activitybarPart.accessor = new SplitViewItem() {
     //   layoutContainer(offset: number) {}
     // };
 
-    const sidebarPart = new SidebarPart(this.mainContainer, Parts.SIDEBAR_PART, 'none', ['sidebar'], null);
+    const sidebarPart = new SidebarPart(null, Parts.SIDEBAR_PART, 'none', ['sidebar'], null);
     sidebarPart.create();
-    const sessionPart = new SessionPart(this.mainContainer, Parts.SESSION_PART, 'none', ['session'], null);
+    const sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], null);
     sessionPart.create();
     const splitView = new SplitView(this.mainContainer, {});
     splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);
     splitView.addView(sessionPart);
 
-    this.parent.appendChild(this.mainContainer);
+    this.parent && this.parent.appendChild(this.mainContainer);
   }
 
 }
