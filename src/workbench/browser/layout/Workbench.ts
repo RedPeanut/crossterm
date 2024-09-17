@@ -12,10 +12,12 @@ import { getClientArea, position, size } from '../../../base/browser/dom';
 import { Orientation } from '../../../base/browser/ui/sash/Sash';
 // import Runtime from './Runtime';
 
+export type LayoutSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
+
 export const TITLEBAR_HEIGHT = 42;
 export const ACTIVITYBAR_WIDTH = 48;
 export const SIDEBAR_WIDTH = 220;
-// export const SESSION_WIDTH = ;
+// export const SESSION_WIDTH = 'fill_parent';
 export const STATUSBAR_HEIGHT = 22;
 
 export const enum Parts {
@@ -71,7 +73,7 @@ export class Workbench extends Layout {
     const titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
     titlebarPart.create();
     
-    const body = new Body(null);
+    const body = new Body(null, { sizeType: 'fill_parent' });
     body.create();
 
     const statusbarPart = new StatusbarPart(null, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);

@@ -1,3 +1,4 @@
+import { LayoutSizeType } from "../../../workbench/browser/layout/Workbench";
 import { append, $ } from "../dom";
 import { Orientation, Sash } from "./sash/Sash";
 
@@ -6,10 +7,14 @@ export interface SplitViewItem {
   // setSize(size: number): void;
   // getElement(): HTMLElement;
   // setSplitViewContainer(container: HTMLElement): void;
+
   get size(): number;
   set size(size: number);
   get element(): HTMLElement;
   set splitViewContainer(container: HTMLElement);
+  set sizeType(sizeType: LayoutSizeType);
+  get sizeType(): LayoutSizeType;
+
   layoutContainer(offset: number): void;
 }
 

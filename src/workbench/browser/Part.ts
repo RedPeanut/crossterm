@@ -1,7 +1,10 @@
 import { SplitViewItem } from "../../base/browser/ui/SplitView";
 import { Component } from "../common/Component";
+import { LayoutSizeType } from "./layout/Workbench";
 
-export interface PartOptions {}
+export interface PartOptions {
+  sizeType?: LayoutSizeType;
+}
 
 class PartLayout {
   constructor(private options: PartOptions, private contentArea: HTMLElement | undefined) { }
@@ -25,10 +28,19 @@ export abstract class Part extends Component implements SplitViewItem {
     this._splitViewContainer = container;
   }
 
+  set sizeType(sizeType: LayoutSizeType) {
+    this._sizeType = sizeType;
+  }
+
+  get sizeType(): LayoutSizeType {
+    return this._sizeType;
+  }
+
   abstract layoutContainer(offset: number): void;
 
   _size: number = 0;
   _splitViewContainer: HTMLElement | undefined;
+  _sizeType: LayoutSizeType = 'wrap_content';
 
   parent: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;
@@ -39,14 +51,17 @@ export abstract class Part extends Component implements SplitViewItem {
 
   role: string;
   classes: string[];
-  options: object;
+  // options: object;
 
-  constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
+  constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: PartOptions) {
     super(id);
     this.parent = parent;
     this.role = role;
     this.classes = classes;
-    this.options = options;
+    // this.options = options;
+    if(options) {
+      this._sizeType = options.sizeType;
+    }
   }
 
   create(): void {

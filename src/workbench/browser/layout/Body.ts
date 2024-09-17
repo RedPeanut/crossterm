@@ -4,11 +4,16 @@ import { ActivitybarPart } from "../parts/ActivitybarPart";
 import { SidebarPart } from "../parts/SidebarPart";
 import { SessionPart } from "../parts/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
+import { LayoutSizeType } from "./Workbench";
 
 export const enum Parts {
   ACTIVITYBAR_PART = 'workbench.part.activitybar',
   SIDEBAR_PART = 'workbench.part.sidebar',
   SESSION_PART = 'workbench.part.session',
+}
+
+export interface BodyOptions {
+  sizeType?: LayoutSizeType;
 }
 
 export class Body extends Layout implements VerticalViewItem {
@@ -18,8 +23,11 @@ export class Body extends Layout implements VerticalViewItem {
     this._splitViewContainer.style.height = `${this._size}px`;
   }
 
-  constructor(parent: HTMLElement) { 
+  constructor(parent: HTMLElement, options: BodyOptions) {
     super(parent);
+    if(options) {
+      this._sizeType = options.sizeType;
+    }
   }
 
   create(): void {
