@@ -5,11 +5,11 @@ import { Part } from '../Part';
 export class SidebarPart extends Part implements HorizontalViewItem {
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
-    this.size = SIDEBAR_WIDTH;
+    this._size = SIDEBAR_WIDTH;
   }
 
   layoutContainer(offset: number): void {
-    this.splitViewContainer.style.left = `${offset}px`;
-    this.splitViewContainer.style.width = `${this.size}px`;
+    this._splitViewContainer.style.left = `${offset}px`;
+    this._splitViewContainer.style.width = `${this._size}px`;
   }
 }

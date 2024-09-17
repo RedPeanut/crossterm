@@ -14,8 +14,8 @@ export const enum Parts {
 export class Body extends Layout implements VerticalViewItem {
 
   layoutContainer(offset: number): void {
-    this.splitViewContainer.style.top = `${offset}px`;
-    this.splitViewContainer.style.height = `${this.size}px`;
+    this._splitViewContainer.style.top = `${offset}px`;
+    this._splitViewContainer.style.height = `${this._size}px`;
   }
 
   constructor(parent: HTMLElement) { 

@@ -5,26 +5,26 @@ import { SplitViewItem } from '../../base/browser/ui/SplitView';
 
 export abstract class Layout extends Disposable implements SplitViewItem {
 
-  setSize(size: number): void {
-    this.size = size;
+  set size(size: number) {
+    this._size = size;
   }
 
-  getSize(): number {
-    return this.size;
+  get size(): number {
+    return this._size;
   }
 
-  getElement(): HTMLElement {
+  get element(): HTMLElement {
     return this.mainContainer;
   }
 
-  setSplitViewContainer(container: HTMLElement): void {
-    this.splitViewContainer = container;
+  set splitViewContainer(container: HTMLElement) {
+    this._splitViewContainer = container;
   }
 
   abstract layoutContainer(offset: number): void;
 
-  size: number = 0;
-  splitViewContainer: HTMLElement | undefined;
+  _size: number = 0;
+  _splitViewContainer: HTMLElement | undefined;
 
   parent: HTMLElement;
   mainContainer = document.createElement('div');

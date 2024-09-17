@@ -2,10 +2,14 @@ import { append, $ } from "../dom";
 import { Orientation, Sash } from "./sash/Sash";
 
 export interface SplitViewItem {
-  getSize(): number;
-  setSize(size: number): void;
-  getElement(): HTMLElement;
-  setSplitViewContainer(container: HTMLElement): void;
+  // getSize(): number;
+  // setSize(size: number): void;
+  // getElement(): HTMLElement;
+  // setSplitViewContainer(container: HTMLElement): void;
+  get size(): number;
+  set size(size: number);
+  get element(): HTMLElement;
+  set splitViewContainer(container: HTMLElement);
   layoutContainer(offset: number): void;
 }
 
@@ -88,7 +92,7 @@ export class SplitView {
   addView(item: SplitViewItem, index: number = this.viewItems.length) {
     // add view
     const container = $('.split-view-view');
-    item.setSplitViewContainer(container);
+    item.splitViewContainer = container;
 
     if(index === this.viewItems.length)
       this.viewContainer.appendChild(container);
@@ -103,7 +107,7 @@ export class SplitView {
 
     // // append
     // const child = view.mainContainer ? view.mainContainer : view.element;
-    container.appendChild(item.getElement());
+    container.appendChild(item.element);
   }
 
   layout(size: number) {
@@ -120,8 +124,8 @@ export class SplitView {
     for(let i = 0; i < this.viewItems.length; i++) {
       const item = this.viewItems[i];
       item.layoutContainer(offset);
-      console.log(`[${i}] ${item.getSize()}`);
-      offset += item.getSize();
+      console.log(`[${i}] ${item.size}`);
+      offset += item.size;
     }
   }
 
