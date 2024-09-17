@@ -120,7 +120,20 @@ export class SplitView {
     let total = 0;
     for(let i = 0; i < this.viewItems.length; i++) {
       const item = this.viewItems[i];
+      if(item.sizeType === 'wrap_content') {
+        total += item.size;
+        size -= item.size;
+      }
     }
+
+    // fill empty space
+    for(let i = 0; i < this.viewItems.length; i++) {
+      const item = this.viewItems[i];
+      if(item.sizeType === 'fill_parent') {
+        item.size = size;
+      }
+    }
+
     this.layoutViews();
   }
 

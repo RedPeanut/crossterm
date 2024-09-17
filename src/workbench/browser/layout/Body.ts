@@ -5,6 +5,7 @@ import { SidebarPart } from "../parts/SidebarPart";
 import { SessionPart } from "../parts/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
 import { LayoutSizeType } from "./Workbench";
+import { getClientArea } from "../../../base/browser/dom";
 
 export const enum Parts {
   ACTIVITYBAR_PART = 'workbench.part.activitybar',
@@ -21,7 +22,12 @@ export class Body extends Layout implements VerticalViewItem {
   layoutContainer(offset: number): void {
     this._splitViewContainer.style.top = `${offset}px`;
     this._splitViewContainer.style.height = `${this._size}px`;
+    let dimension = getClientArea(this.mainContainer);
+    console.log('dimension =', dimension);
+    this.splitView.layout(dimension.width);
   }
+
+  splitView: SplitView;
 
   constructor(parent: HTMLElement, options: BodyOptions) {
     super(parent);
@@ -43,16 +49,11 @@ export class Body extends Layout implements VerticalViewItem {
     } */
     const activitybarPart = new ActivitybarPart(null, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
     activitybarPart.create();
-    // let accessor = new SplitViewItem();
-    // activitybarPart.accessor = new SplitViewItem() {
-    //   layoutContainer(offset: number) {}
-    // };
-
     const sidebarPart = new SidebarPart(null, Parts.SIDEBAR_PART, 'none', ['sidebar'], null);
     sidebarPart.create();
-    const sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], null);
+    const sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], { sizeType: 'fill_parent' });
     sessionPart.create();
-    const splitView = new SplitView(this.mainContainer, { orientation: Orientation.HORIZONTAL });
+    const splitView = this.splitView = new SplitView(this.mainContainer, { orientation: Orientation.HORIZONTAL });
     splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);
     splitView.addView(sessionPart);

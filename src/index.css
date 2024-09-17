@@ -74,9 +74,10 @@ body { height: 100%; }
 }
 
 /* Body */
-.body {
+.layout.body {
   background-color: rgb(255, 0, 255); /* rgb(31, 31, 31); */
   /* flex-grow: 1; */
+  position: relative; width: 100%; height: 100%;
 }
 
 /* Sidebar */
