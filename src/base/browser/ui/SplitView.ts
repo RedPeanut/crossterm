@@ -53,9 +53,9 @@ export interface ISplitViewItemView {
   abstract layoutContainer(offset: number): void;
 } */
 
-interface ISashDragState {}
+interface SashDragState {}
 
-export interface ISplitViewOptions {
+export interface SplitViewOptions {
   orientation?: Orientation;
 }
 
@@ -69,9 +69,9 @@ export class SplitView {
   //viewItems: ViewItem[];
   sashContainer: HTMLElement;
   viewContainer: HTMLElement;
-  sashDragState: ISashDragState | undefined;
+  sashDragState: SashDragState | undefined;
 
-  constructor(container: HTMLElement, options: ISplitViewOptions) {
+  constructor(container: HTMLElement, options: SplitViewOptions) {
     this.container = container;
     this.orientation = options.orientation != null ? options.orientation : Orientation.VERTICAL;
     // this.viewItems = [];

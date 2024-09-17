@@ -1,7 +1,7 @@
 import { coalesce } from '../../../base/common/arrays';
 import { isLinux, isWindows } from '../../../base/common/platform';
 import { Layout } from '../Layout';
-import { IPartOptions, Part } from '../Part';
+import { PartOptions, Part } from '../Part';
 import { TitlebarPart } from '../parts/TitlebarPart';
 import { ActivitybarPart } from '../parts/ActivitybarPart';
 // import { BodyPart } from '../parts/BodyPart';
