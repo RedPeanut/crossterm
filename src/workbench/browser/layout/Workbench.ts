@@ -19,16 +19,16 @@ export const SIDEBAR_WIDTH = 220;
 export const STATUSBAR_HEIGHT = 22;
 
 export const enum Parts {
-  TITLEBAR_PART = 'workbench.parts.titlebar',
-  // BANNER_PART = 'workbench.parts.banner',
-  // ACTIVITYBAR_PART = 'workbench.parts.activitybar',
-  // SIDEBAR_PART = 'workbench.parts.sidebar',
-  // PANEL_PART = 'workbench.parts.panel',
-  // AUXILIARYBAR_PART = 'workbench.parts.auxiliarybar',
-  // EDITOR_PART = 'workbench.parts.editor',
-  // SESSION_PART = 'workbench.parts.session',
-  BODY_PART = 'workbench.parts.body',
-  STATUSBAR_PART = 'workbench.parts.statusbar'
+  TITLEBAR_PART = 'workbench.part.titlebar',
+  // BANNER_PART = 'workbench.part.banner',
+  // ACTIVITYBAR_PART = 'workbench.part.activitybar',
+  // SIDEBAR_PART = 'workbench.part.sidebar',
+  // PANEL_PART = 'workbench.part.panel',
+  // AUXILIARYBAR_PART = 'workbench.part.auxiliarybar',
+  // EDITOR_PART = 'workbench.part.editor',
+  // SESSION_PART = 'workbench.part.session',
+  BODY_PART = 'workbench.part.body',
+  STATUSBAR_PART = 'workbench.part.statusbar'
 }
 
 export class Workbench extends Layout {

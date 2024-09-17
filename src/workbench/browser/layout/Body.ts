@@ -6,9 +6,9 @@ import { SessionPart } from "../parts/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
 
 export const enum Parts {
-  ACTIVITYBAR_PART = 'workbench.parts.activitybar',
-  SIDEBAR_PART = 'workbench.parts.sidebar',
-  SESSION_PART = 'workbench.parts.session',
+  ACTIVITYBAR_PART = 'workbench.part.activitybar',
+  SIDEBAR_PART = 'workbench.part.sidebar',
+  SESSION_PART = 'workbench.part.session',
 }
 
 export class Body extends Layout implements VerticalViewItem {
