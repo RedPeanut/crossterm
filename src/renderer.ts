@@ -29,10 +29,22 @@
 import './index.css';
 import '@vscode/codicons/dist/codicon.css';
 import { Workbench } from './workbench/browser/layout/Workbench';
+import { domContentLoaded } from './base/browser/dom';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
 export type CodeWindow = Window & typeof globalThis;
 export const mainWindow = window as CodeWindow;
-const mainLayout = new Workbench(mainWindow.document.body);
-mainLayout.startup();
+
+export class Renderer {
+  constructor() {}
+
+  async open() {
+    await Promise.all([domContentLoaded(mainWindow)]);
+    const workbench = new Workbench(mainWindow.document.body);
+    workbench.startup();
+  }
+}
+
+const renderer = new Renderer();
+renderer.open();

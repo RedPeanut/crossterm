@@ -145,3 +145,17 @@ export function position(element: HTMLElement, top: number, right?: number, bott
 
   element.style.position = position;
 }
+export function domContentLoaded(targetWindow: Window): Promise<void> {
+  return new Promise<void>(resolve => {
+    const readyState = targetWindow.document.readyState;
+    if (readyState === 'complete' || (targetWindow.document && targetWindow.document.body !== null)) {
+      resolve(undefined);
+    } else {
+      const listener = () => {
+        targetWindow.window.removeEventListener('DOMContentLoaded', listener, false);
+        resolve();
+      };
+      targetWindow.window.addEventListener('DOMContentLoaded', listener, false);
+    }
+  });
+}
