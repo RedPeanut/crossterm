@@ -10,6 +10,7 @@ import { Body } from './Body';
 import { SplitView, SplitViewItem } from '../../../base/browser/ui/SplitView';
 import { getClientArea, position, size } from '../../../base/browser/dom';
 import { Orientation } from '../../../base/browser/ui/sash/Sash';
+import { setService } from '../../../renderer';
 // import Runtime from './Runtime';
 
 export type LayoutSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
@@ -29,12 +30,19 @@ export const enum Parts {
   STATUSBAR_PART = 'workbench.part.statusbar'
 }
 
-export class Workbench extends Layout {
+export interface WorkbenchLayoutService {
+  toggleSidebar(): void;
+}
+
+export class Workbench extends Layout implements WorkbenchLayoutService {
 
   layoutContainer(offset: number): void {
     throw new Error('Method not implemented.');
   }
 
+  titlebarPart: TitlebarPart;
+  bodyLayout: Body;
+  statusbarPart: StatusbarPart;
   splitView: SplitView;
 
   constructor(parent: HTMLElement) { 
@@ -49,13 +57,13 @@ export class Workbench extends Layout {
     const workbenchClasses = coalesce(['workbench', platformClass]);
     this.mainContainer.classList.add(...workbenchClasses);
 
-    const titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
+    const titlebarPart = this.titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
     titlebarPart.create();
     
-    const body = new Body(null, { sizeType: 'fill_parent' });
+    const body = this.bodyLayout = new Body(null, { sizeType: 'fill_parent' });
     body.create();
 
-    const statusbarPart = new StatusbarPart(null, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
+    const statusbarPart = this.statusbarPart = new StatusbarPart(null, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
     statusbarPart.create();
 
     const splitView = this.splitView = new SplitView(this.mainContainer, { orientation: Orientation.VERTICAL });
@@ -99,7 +107,13 @@ export class Workbench extends Layout {
   }
 
   startup(): void {
+    setService("layoutService", this);
     this.create();
     this.layout();
   }
+
+  toggleSidebar(): void {
+    throw new Error('Method not implemented.');
+  }
+  
 }

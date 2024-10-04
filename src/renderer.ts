@@ -28,10 +28,20 @@
 
 import './index.css';
 import '@vscode/codicons/dist/codicon.css';
-import { Workbench } from './workbench/browser/layout/Workbench';
+import { Workbench, WorkbenchLayoutService } from './workbench/browser/layout/Workbench';
 import { domContentLoaded } from './base/browser/dom';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
+
+const _services = new Map<string, any>();
+
+export function setService(id: string, service: any): void {
+  _services.set(id, service);
+}
+
+export function getService(id: string): any {
+  return _services.get(id);
+}
 
 export type CodeWindow = Window & typeof globalThis;
 export const mainWindow = window as CodeWindow;
