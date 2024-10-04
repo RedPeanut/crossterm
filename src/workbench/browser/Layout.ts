@@ -59,7 +59,7 @@ export abstract class Layout extends Disposable implements SplitViewItem {
 
   getPart(id: string): Part {
     const part = this.parts.get(id);
-    if (!part) {
+    if(!part) {
       throw new Error(`Unknown part ${id}`);
     }
     return part;
