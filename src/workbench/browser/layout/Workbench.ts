@@ -22,13 +22,9 @@ export const STATUSBAR_HEIGHT = 22;
 
 export const enum Parts {
   TITLEBAR_PART = 'workbench.part.titlebar',
-  // BANNER_PART = 'workbench.part.banner',
-  // ACTIVITYBAR_PART = 'workbench.part.activitybar',
-  // SIDEBAR_PART = 'workbench.part.sidebar',
-  // PANEL_PART = 'workbench.part.panel',
-  // AUXILIARYBAR_PART = 'workbench.part.auxiliarybar',
-  // EDITOR_PART = 'workbench.part.editor',
-  // SESSION_PART = 'workbench.part.session',
+  ACTIVITYBAR_PART = 'workbench.part.activitybar',
+  SIDEBAR_PART = 'workbench.part.sidebar',
+  SESSION_PART = 'workbench.part.session',
   BODY_PART = 'workbench.part.body',
   STATUSBAR_PART = 'workbench.part.statusbar'
 }
@@ -52,23 +48,6 @@ export class Workbench extends Layout {
     const platformClass = isWindows ? 'windows' : isLinux ? 'linux' : 'mac'; //Runtime.isWindows ? 'windows' : Runtime.isLinux ? 'linux' : 'mac';
     const workbenchClasses = coalesce(['workbench', platformClass]);
     this.mainContainer.classList.add(...workbenchClasses);
-
-    /* // create parts
-    for (const { klass, id, role, classes, options } of [
-      { klass: TitlebarPart, id: Parts.TITLEBAR_PART, role: 'none', classes: ['titlebar'], options: {} },
-      { klass: ActivitybarPart, id: Parts.ACTIVITYBAR_PART, role: 'none', classes: ['activitybar'], options: {} },
-      // { id: Parts.SIDEBAR_PART, role: 'none', classes: ['sidebar', this.getSideBarPosition() === Position.LEFT ? 'left' : 'right'] },
-      // { id: Parts.SESSION_PART, role: 'main', classes: ['editor'], options: { restorePreviousState: this.willRestoreEditors() } },
-      // { id: Parts.PANEL_PART, role: 'none', classes: ['panel', 'basepanel', positionToString(this.getPanelPosition())] },
-      { klass: BodyPart, id: Parts.BODY_PART, role: 'none', classes: ['body'], options: {} },
-      { klass: StatusbarPart, id: Parts.STATUSBAR_PART, role: 'status', classes: ['statusbar'] }
-    ]) {
-      // const part = this.createPart(klass, id, role, classes, options);
-      const part = new klass(this.mainContainer, id, role, classes, options);
-      this.registerPart(part);
-      // this.getPart(id).create(this.mainContainer, options);
-      this.getPart(id).create();
-    } */
 
     const titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
     titlebarPart.create();

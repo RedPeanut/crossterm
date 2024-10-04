@@ -4,14 +4,8 @@ import { ActivitybarPart } from "../parts/ActivitybarPart";
 import { SidebarPart } from "../parts/SidebarPart";
 import { SessionPart } from "../parts/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
-import { LayoutSizeType } from "./Workbench";
+import { LayoutSizeType, Parts } from "./Workbench";
 import { getClientArea } from "../../../base/browser/dom";
-
-export const enum Parts {
-  ACTIVITYBAR_PART = 'workbench.part.activitybar',
-  SIDEBAR_PART = 'workbench.part.sidebar',
-  SESSION_PART = 'workbench.part.session',
-}
 
 export interface BodyOptions {
   sizeType?: LayoutSizeType;
