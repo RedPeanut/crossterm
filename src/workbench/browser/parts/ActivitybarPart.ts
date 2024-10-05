@@ -2,6 +2,8 @@ import { getService, workbenchLayoutServiceId } from '../../../service';
 import { HorizontalViewItem } from '../../../base/browser/ui/SplitView';
 import { ACTIVITYBAR_WIDTH, WorkbenchLayoutService } from '../layout/Workbench';
 import { Part } from '../Part';
+import { BookmarkComposite } from '../composite/BookmarkComposite';
+import { SampleComposite } from '../composite/SampleComposite';
 
 export class ActivitybarPart extends Part implements HorizontalViewItem {
 
@@ -20,35 +22,39 @@ export class ActivitybarPart extends Part implements HorizontalViewItem {
 
   override createContentArea(): HTMLElement {
     const part = super.createContentArea();
+
     const ul = document.createElement('ul');
     ul.className = 'actions-container';
 
     let actionList = [
       {
         title: 'Bookmarks',
+        composite: BookmarkComposite,
+        codicon: 'info',
+        onClick: (e: any) => {
+          // 
+        }
+      },
+      {
+        title: 'Sample',
+        composite: SampleComposite,
+        codicon: 'info',
         onClick: (e: any) => {}
       },
     ];
 
-    let onClick = (e: any) => {
-      for(let i = 0; i < actionList.length; i++) {
-
-      }
-      // how control sidebar in here?
-    };
-
-    ['Bookmarks', 'Sample1', 'Sample2'].forEach((action) => {
+    actionList.forEach((item) => {
       const li = document.createElement('li');
       li.classList.add(...'action-item'.split(' '));
-      li.addEventListener('click', (e) => {
-        this.workbenchLayoutService.toggleSidebar();
-      });
+      li.addEventListener('click', item.onClick);
       const a = document.createElement('a');
-      a.classList.add(...'codicon codicon-info'.split(' '));
+      a.classList.add(...`codicon codicon-${item.codicon}`.split(' '));
       li.appendChild(a);
       ul.appendChild(li);
     });
+
     part.appendChild(ul);
+
     return part;
   }
 }
