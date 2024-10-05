@@ -22,12 +22,12 @@ export const SIDEBAR_WIDTH = 220;
 export const STATUSBAR_HEIGHT = 22;
 
 export const enum Parts {
-  TITLEBAR_PART = 'workbench.part.titlebar',
-  ACTIVITYBAR_PART = 'workbench.part.activitybar',
-  SIDEBAR_PART = 'workbench.part.sidebar',
-  SESSION_PART = 'workbench.part.session',
-  BODY_PART = 'workbench.part.body',
-  STATUSBAR_PART = 'workbench.part.statusbar'
+  TITLEBAR_PART = 'part.titlebar',
+  ACTIVITYBAR_PART = 'part.activitybar',
+  SIDEBAR_PART = 'part.sidebar',
+  SESSION_PART = 'part.session',
+  BODY_LAYOUT = 'layout.body',
+  STATUSBAR_PART = 'part.statusbar'
 }
 
 export interface LayoutService {
