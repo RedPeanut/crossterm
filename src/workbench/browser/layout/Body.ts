@@ -7,6 +7,8 @@ import { Orientation } from "../../../base/browser/ui/sash/Sash";
 import { LayoutSizeType, Parts, WorkbenchLayoutService } from "./Workbench";
 import { getClientArea } from "../../../base/browser/dom";
 import { bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../../../service";
+import { BookmarkComposite } from "../composite/BookmarkComposite";
+import { SampleComposite } from "../composite/SampleComposite";
 
 export interface BodyOptions {
   sizeType?: LayoutSizeType;
@@ -27,6 +29,9 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
     this.splitView.layout(dimension.width);
   }
 
+  activitybarPart: ActivitybarPart;
+  sidebarPart: SidebarPart;
+  sessionPart: SessionPart;
   splitView: SplitView;
 
   constructor(parent: HTMLElement, options: BodyOptions) {
@@ -48,11 +53,11 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
       // this.getPart(id).create(this.mainContainer, options);
       this.getPart(id).create();
     } */
-    const activitybarPart = new ActivitybarPart(null, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
+    const activitybarPart = this.activitybarPart = new ActivitybarPart(null, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
     activitybarPart.create();
-    const sidebarPart = new SidebarPart(null, Parts.SIDEBAR_PART, 'none', ['sidebar'], null);
+    const sidebarPart = this.sidebarPart = new SidebarPart(null, Parts.SIDEBAR_PART, 'none', ['sidebar'], null);
     sidebarPart.create();
-    const sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], { sizeType: 'fill_parent' });
+    const sessionPart = this.sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], { sizeType: 'fill_parent' });
     sessionPart.create();
     const splitView = this.splitView = new SplitView(this.mainContainer, { orientation: Orientation.HORIZONTAL });
     splitView.addView(activitybarPart);
@@ -63,7 +68,52 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
   }
 
   inflate(): void {
-  
+    const compositeList = [
+      {
+        title: 'Bookmarks',
+        composite: BookmarkComposite,
+        id: BookmarkComposite.ID,
+        codicon: 'info',
+        onClick: (e: any) => {
+          const activeComposite = this.sidebarPartService.getActiveComposite();
+          // toggle or switch
+          console.log('activeComposite =', activeComposite);
+          console.log('typeof activeComposite =', typeof activeComposite);
+          console.log('instanceof BookmarkComposite =', activeComposite instanceof BookmarkComposite);
+        }
+      },
+      {
+        title: 'Sample',
+        composite: SampleComposite,
+        id: SampleComposite.ID,
+        codicon: 'info',
+        onClick: (e: any) => {}
+      },
+    ];
+
+    // todo: get stored selected action from concrete
+
+    const activitybarPartContent = this.activitybarPart.getContentArea();
+
+    const ul = document.createElement('ul');
+    ul.className = 'actions-container';
+
+    compositeList.forEach((item) => {
+      const li = document.createElement('li');
+      li.classList.add(...'action-item'.split(' '));
+      li.addEventListener('click', item.onClick);
+      const a = document.createElement('a');
+      a.classList.add(...`codicon codicon-${item.codicon}`.split(' '));
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+
+    activitybarPartContent.appendChild(ul);
+
+    // const sidebarPartContent = this.sidebarPart.getContentArea();
+    const selected = compositeList[0];
+    const composite = new selected.composite(selected.id);
+    this.sidebarPartService.showComposite(composite);
   }
 
   sidebarPartService: SidebarPartService;

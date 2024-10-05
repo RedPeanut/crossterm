@@ -23,7 +23,7 @@ export class ActivitybarPart extends Part implements HorizontalViewItem {
   override createContentArea(): HTMLElement {
     const part = super.createContentArea();
 
-    const ul = document.createElement('ul');
+    /* const ul = document.createElement('ul');
     ul.className = 'actions-container';
 
     let actionList = [
@@ -53,7 +53,7 @@ export class ActivitybarPart extends Part implements HorizontalViewItem {
       ul.appendChild(li);
     });
 
-    part.appendChild(ul);
+    part.appendChild(ul); */
 
     return part;
   }
