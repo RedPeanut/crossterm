@@ -159,3 +159,16 @@ export function domContentLoaded(targetWindow: Window): Promise<void> {
     }
   });
 }
+export function show(...elements: HTMLElement[]): void {
+  for(const element of elements) {
+    element.style.display = '';
+    element.removeAttribute('aria-hidden');
+  }
+}
+
+export function hide(...elements: HTMLElement[]): void {
+  for(const element of elements) {
+    element.style.display = 'none';
+    element.setAttribute('aria-hidden', 'true');
+  }
+}

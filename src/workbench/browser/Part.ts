@@ -64,6 +64,10 @@ export abstract class Part extends Component implements SplitViewItem {
     }
   }
 
+  getContentArea(): HTMLElement | undefined {
+    return this.contentArea;
+  }
+
   create(): void {
     this.titleArea = this.createTitleArea();
     this.contentArea = this.createContentArea();
