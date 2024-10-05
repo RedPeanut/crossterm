@@ -1,18 +1,21 @@
 import { SplitView, SplitViewItem, VerticalViewItem } from "../../../base/browser/ui/SplitView";
 import { Layout } from "../Layout";
 import { ActivitybarPart } from "../parts/ActivitybarPart";
-import { SidebarPart } from "../parts/SidebarPart";
+import { SidebarPart, SidebarPartService } from "../parts/SidebarPart";
 import { SessionPart } from "../parts/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
 import { LayoutSizeType, Parts, WorkbenchLayoutService } from "./Workbench";
 import { getClientArea } from "../../../base/browser/dom";
-import { Service } from "../../../service";
+import { bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../../../service";
 
 export interface BodyOptions {
   sizeType?: LayoutSizeType;
 }
 
-export interface BodyLayoutService extends Service {}
+export interface BodyLayoutService extends Service {
+  getServices(): void;
+  inflate(): void;
+}
 
 export class Body extends Layout implements VerticalViewItem, BodyLayoutService {
 
@@ -31,6 +34,7 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
     if(options) {
       this._sizeType = options.sizeType;
     }
+    setService(bodyLayoutServiceId, this);
   }
 
   create(): void {
@@ -56,6 +60,16 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
     splitView.addView(sessionPart);
 
     this.parent && this.parent.appendChild(this.mainContainer);
+  }
+
+  inflate(): void {
+  
+  }
+
+  sidebarPartService: SidebarPartService;
+
+  getServices(): void {
+    this.sidebarPartService = getService(sidebarPartServiceId);
   }
 
 }

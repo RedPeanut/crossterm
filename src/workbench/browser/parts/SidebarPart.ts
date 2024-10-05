@@ -1,4 +1,4 @@
-import { Service, sidebarPartServiceId } from '../../../service';
+import { Service, setService, sidebarPartServiceId } from '../../../service';
 import { $, hide, show } from '../../../base/browser/dom';
 import { HorizontalViewItem } from '../../../base/browser/ui/SplitView';
 import { Composite } from '../Composite';
@@ -19,6 +19,7 @@ export class SidebarPart extends Part implements HorizontalViewItem, SidebarPart
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
     this._size = SIDEBAR_WIDTH;
+    setService(sidebarPartServiceId, this);
   }
 
   layoutContainer(offset: number): void {

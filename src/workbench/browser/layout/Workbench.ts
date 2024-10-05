@@ -6,11 +6,11 @@ import { TitlebarPart } from '../parts/TitlebarPart';
 import { ActivitybarPart } from '../parts/ActivitybarPart';
 // import { BodyPart } from '../parts/BodyPart';
 import { StatusbarPart } from '../parts/StatusbarPart';
-import { Body } from './Body';
+import { Body, BodyLayoutService } from './Body';
 import { SplitView, SplitViewItem } from '../../../base/browser/ui/SplitView';
 import { getClientArea, position, size } from '../../../base/browser/dom';
 import { Orientation } from '../../../base/browser/ui/sash/Sash';
-import { Service, setService, workbenchLayoutServiceId } from '../../../service';
+import { bodyLayoutServiceId, getService, Service, setService, workbenchLayoutServiceId } from '../../../service';
 // import Runtime from './Runtime';
 
 export type LayoutSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
@@ -47,6 +47,7 @@ export class Workbench extends Layout implements WorkbenchLayoutService {
 
   constructor(parent: HTMLElement) { 
     super(parent);
+    setService(workbenchLayoutServiceId, this);
   }
 
   create(): void {
@@ -106,9 +107,17 @@ export class Workbench extends Layout implements WorkbenchLayoutService {
       this.splitView.layout(dimension.height);
   }
 
+  bodyLayoutService: BodyLayoutService;
+
+  getServices(): void {
+    this.bodyLayoutService = getService(bodyLayoutServiceId);
+    this.bodyLayoutService.getServices();
+  }
+
   startup(): void {
-    setService(workbenchLayoutServiceId, this);
     this.create();
+    this.getServices();
+    this.bodyLayoutService.inflate();
     this.layout();
   }
 
