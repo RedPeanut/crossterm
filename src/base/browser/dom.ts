@@ -48,10 +48,6 @@ export enum Namespace {
   SVG = 'http://www.w3.org/2000/svg'
 }
 
-export function $<T extends HTMLElement>(description: string, attrs?: { [key: string]: any }, ...children: Array<Node | string>): T {
-  return _$(Namespace.HTML, description, attrs, ...children);
-}
-
 function _$<T extends Element>(namespace: Namespace, description: string, attrs?: { [key: string]: any }, ...children: Array<Node | string>): T {
   const match = SELECTOR_REGEX.exec(description);
 
@@ -75,6 +71,11 @@ function _$<T extends Element>(namespace: Namespace, description: string, attrs?
   result.append(...children);
   return result;
 }
+
+export function $<T extends HTMLElement>(description: string, attrs?: { [key: string]: any }, ...children: Array<Node | string>): T {
+  return _$(Namespace.HTML, description, attrs, ...children);
+}
+
 
 export class Dimension {
   width: number;

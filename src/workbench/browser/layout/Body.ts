@@ -26,7 +26,7 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
     this._splitViewContainer.style.height = `${this._size}px`;
     let dimension = getClientArea(this.mainContainer);
     console.log('dimension =', dimension);
-    this.splitView.layout(dimension.width);
+    this.splitView.layout(dimension.width); // Orientation.HORIZONTAL
   }
 
   activitybarPart: ActivitybarPart;
