@@ -1,10 +1,12 @@
 export interface Service { /* marker */ }
 
-export const layoutServiceId = "layoutService";
+export const workbenchLayoutServiceId = "workbenchLayoutService";
+export const bodyLayoutServiceId = "bodyLayoutService";
 export const blarBlarServiceId = "blarBlarService";
 
-type ServiceId = typeof layoutServiceId // LayoutService
-    | typeof blarBlarServiceId // BlarBlarService
+type ServiceId = typeof workbenchLayoutServiceId // WorkbenchLayoutService
+  | typeof bodyLayoutServiceId // BodyLayoutService
+  | typeof blarBlarServiceId // BlarBlarService
 ;
 
 const _services = new Map<string, any>();

@@ -4,14 +4,17 @@ import { ActivitybarPart } from "../parts/ActivitybarPart";
 import { SidebarPart } from "../parts/SidebarPart";
 import { SessionPart } from "../parts/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
-import { LayoutSizeType, Parts, LayoutService } from "./Workbench";
+import { LayoutSizeType, Parts, WorkbenchLayoutService } from "./Workbench";
 import { getClientArea } from "../../../base/browser/dom";
+import { Service } from "../../../service";
 
 export interface BodyOptions {
   sizeType?: LayoutSizeType;
 }
 
-export class Body extends Layout implements VerticalViewItem {
+export interface BodyLayoutService extends Service {}
+
+export class Body extends Layout implements VerticalViewItem, BodyLayoutService {
 
   layoutContainer(offset: number): void {
     this._splitViewContainer.style.top = `${offset}px`;

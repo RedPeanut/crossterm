@@ -1,16 +1,16 @@
-import { getService, layoutServiceId } from '../../../service';
+import { getService, workbenchLayoutServiceId } from '../../../service';
 import { HorizontalViewItem } from '../../../base/browser/ui/SplitView';
-import { ACTIVITYBAR_WIDTH, LayoutService } from '../layout/Workbench';
+import { ACTIVITYBAR_WIDTH, WorkbenchLayoutService } from '../layout/Workbench';
 import { Part } from '../Part';
 
 export class ActivitybarPart extends Part implements HorizontalViewItem {
 
-  layoutService: LayoutService;
+  workbenchLayoutService: WorkbenchLayoutService;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
     this._size = ACTIVITYBAR_WIDTH;
-    this.layoutService = getService(layoutServiceId);
+    this.workbenchLayoutService = getService(workbenchLayoutServiceId);
   }
 
   layoutContainer(offset: number): void {
@@ -41,7 +41,7 @@ export class ActivitybarPart extends Part implements HorizontalViewItem {
       const li = document.createElement('li');
       li.classList.add(...'action-item'.split(' '));
       li.addEventListener('click', (e) => {
-        this.layoutService.toggleSidebar();
+        this.workbenchLayoutService.toggleSidebar();
       });
       const a = document.createElement('a');
       a.classList.add(...'codicon codicon-info'.split(' '));
