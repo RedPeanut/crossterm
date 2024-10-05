@@ -4,7 +4,7 @@ import { ActivitybarPart } from "../parts/ActivitybarPart";
 import { SidebarPart } from "../parts/SidebarPart";
 import { SessionPart } from "../parts/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
-import { LayoutSizeType, Parts, WorkbenchLayoutService } from "./Workbench";
+import { LayoutSizeType, Parts, LayoutService } from "./Workbench";
 import { getClientArea } from "../../../base/browser/dom";
 
 export interface BodyOptions {

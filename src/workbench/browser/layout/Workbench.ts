@@ -10,7 +10,7 @@ import { Body } from './Body';
 import { SplitView, SplitViewItem } from '../../../base/browser/ui/SplitView';
 import { getClientArea, position, size } from '../../../base/browser/dom';
 import { Orientation } from '../../../base/browser/ui/sash/Sash';
-import { setService } from '../../../renderer';
+import { setService, layoutServiceId } from '../../../service';
 // import Runtime from './Runtime';
 
 export type LayoutSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
@@ -30,11 +30,11 @@ export const enum Parts {
   STATUSBAR_PART = 'workbench.part.statusbar'
 }
 
-export interface WorkbenchLayoutService {
+export interface LayoutService {
   toggleSidebar(): void;
 }
 
-export class Workbench extends Layout implements WorkbenchLayoutService {
+export class Workbench extends Layout implements LayoutService {
 
   layoutContainer(offset: number): void {
     throw new Error('Method not implemented.');
@@ -107,7 +107,7 @@ export class Workbench extends Layout implements WorkbenchLayoutService {
   }
 
   startup(): void {
-    setService("layoutService", this);
+    setService(layoutServiceId, this);
     this.create();
     this.layout();
   }

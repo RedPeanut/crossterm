@@ -1,16 +1,16 @@
-import { getService } from '../../../renderer';
+import { getService, layoutServiceId } from '../../../service';
 import { HorizontalViewItem } from '../../../base/browser/ui/SplitView';
-import { ACTIVITYBAR_WIDTH, WorkbenchLayoutService } from '../layout/Workbench';
+import { ACTIVITYBAR_WIDTH, LayoutService } from '../layout/Workbench';
 import { Part } from '../Part';
 
 export class ActivitybarPart extends Part implements HorizontalViewItem {
 
-  layoutService: WorkbenchLayoutService;
+  layoutService: LayoutService;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
     this._size = ACTIVITYBAR_WIDTH;
-    this.layoutService = getService("layoutService");
+    this.layoutService = getService(layoutServiceId);
   }
 
   layoutContainer(offset: number): void {
