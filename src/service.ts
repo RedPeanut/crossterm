@@ -2,10 +2,12 @@ export interface Service { /* marker */ }
 
 export const workbenchLayoutServiceId = "workbenchLayoutService";
 export const bodyLayoutServiceId = "bodyLayoutService";
+export const sidebarPartServiceId = "sidebarPartService";
 export const blarBlarServiceId = "blarBlarService";
 
 type ServiceId = typeof workbenchLayoutServiceId // WorkbenchLayoutService
   | typeof bodyLayoutServiceId // BodyLayoutService
+  | typeof sidebarPartServiceId // SidebarPartService
   | typeof blarBlarServiceId // BlarBlarService
 ;
 
