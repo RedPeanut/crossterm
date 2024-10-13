@@ -11,21 +11,21 @@ export interface SidebarPartService extends Service {
   hideActiveComposite(): Composite | undefined;
 }
 
-export class SidebarPart extends Part implements HorizontalViewItem, SidebarPartService {
+export class SidebarPart extends Part implements SidebarPartService {
 
   mapCompositeToCompositeContainer = new Map<string, HTMLElement>();
   activeComposite: Composite | undefined;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
-    this._size = SIDEBAR_WIDTH;
+    this.size = SIDEBAR_WIDTH;
     setService(sidebarPartServiceId, this);
   }
 
-  layoutContainer(offset: number): void {
+  /* layoutContainer(offset: number): void {
     this._splitViewContainer.style.left = `${offset}px`;
     this._splitViewContainer.style.width = `${this._size}px`;
-  }
+  } */
 
   showComposite(composite: Composite): void {
     // Remember Composite

@@ -41,7 +41,7 @@ export class Workbench extends Layout implements WorkbenchLayoutService {
   titlebarPart: TitlebarPart;
   bodyLayout: Body;
   statusbarPart: StatusbarPart;
-  splitView: SplitView;
+  splitView: SplitView<TitlebarPart | Body | StatusbarPart>;
 
   constructor(parent: HTMLElement) { 
     super(parent);

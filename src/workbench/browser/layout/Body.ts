@@ -1,4 +1,4 @@
-import { SplitView, SplitViewItem, SplitViewItemSizeType, VerticalViewItem } from "../../../base/browser/ui/SplitView";
+import { SplitView, SplitViewItem, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from "../../../base/browser/ui/SplitView";
 import { Layout } from "../Layout";
 import { ActivitybarPart } from "../parts/ActivitybarPart";
 import { SidebarPart, SidebarPartService } from "../parts/SidebarPart";
@@ -19,25 +19,39 @@ export interface BodyLayoutService extends Service {
   inflate(): void;
 }
 
-export class Body extends Layout implements VerticalViewItem, BodyLayoutService {
+export class Body extends Layout implements BodyLayoutService, SplitViewItemView {
 
-  layoutContainer(offset: number): void {
+  get element(): HTMLElement { return this.mainContainer; }
+
+  _size: number = 0;
+  get size(): number { return this._size; }
+  set size(size: number) { this._size = size; }
+
+  _sizeType: SplitViewItemSizeType = 'wrap_content';
+  get sizeType(): SplitViewItemSizeType { return this._sizeType; }
+  set sizeType(sizeType: SplitViewItemSizeType) { this._sizeType = sizeType; }
+
+  /* layoutContainer(offset: number): void {
     this._splitViewContainer.style.top = `${offset}px`;
     this._splitViewContainer.style.height = `${this._size}px`;
     let dimension = getClientArea(this.mainContainer);
     console.log('dimension =', dimension);
     this.splitView.layout(dimension.width); // Orientation.HORIZONTAL
+  } */
+  layout(offset: number, size: number): void {
+    let dimension = getClientArea(this.mainContainer);
+    this.splitView.layout(dimension.width);
   }
 
   activitybarPart: ActivitybarPart;
   sidebarPart: SidebarPart;
   sessionPart: SessionPart;
-  splitView: SplitView;
+  splitView: SplitView<ActivitybarPart | SidebarPart | SessionPart>;
 
   constructor(parent: HTMLElement, options: BodyOptions) {
     super(parent);
     if(options) {
-      this._sizeType = options.sizeType;
+      this.sizeType = options.sizeType;
     }
     setService(bodyLayoutServiceId, this);
   }
@@ -70,7 +84,7 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
   setSidebarHidden(hidden: boolean): void {
     let found = false, i = 0;
     for(; i < this.splitView.viewItems.length; i++) {
-      if(this.splitView.viewItems[i] === this.sidebarPart) {
+      if(this.splitView.viewItems[i].view === this.sidebarPart) {
         found = true;
         break;
       }

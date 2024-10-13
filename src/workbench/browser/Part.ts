@@ -1,17 +1,29 @@
-import { SplitViewItem, SplitViewItemSizeType } from "../../base/browser/ui/SplitView";
+import { SplitViewItem, SplitViewItemSizeType, SplitViewItemView } from "../../base/browser/ui/SplitView";
 import { Component } from "../common/Component";
 
 export interface PartOptions {
-  sizeType?: SplitViewItemSizeType;
+  // sizeType?: SplitViewItemSizeType;
 }
 
 class PartLayout {
   constructor(private options: PartOptions, private contentArea: HTMLElement | undefined) { }
 }
 
-export abstract class Part extends Component implements SplitViewItem {
+export abstract class Part extends Component implements SplitViewItemView {
 
-  set size(size: number) {
+  get element(): HTMLElement { return this.contentArea;}
+
+  _size: number = 0;
+  get size(): number { return this._size; }
+  set size(size: number) { this._size = size; }
+
+  _sizeType: SplitViewItemSizeType = 'wrap_content';
+  get sizeType(): SplitViewItemSizeType { return this._sizeType; }
+  set sizeType(sizeType: SplitViewItemSizeType) { this._sizeType = sizeType; }
+
+  layout(offset: number, size: number): void {}
+
+  /* set size(size: number) {
     this._size = size;
   }
 
@@ -66,7 +78,7 @@ export abstract class Part extends Component implements SplitViewItem {
       this.size = 0;
     }
     this.splitViewContainer.classList.toggle('visible', visible);
-  }
+  } */
 
   parent: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;
@@ -86,7 +98,7 @@ export abstract class Part extends Component implements SplitViewItem {
     this.classes = classes;
     // this.options = options;
     if(options) {
-      this._sizeType = options.sizeType;
+      // this._sizeType = options.sizeType;
     }
   }
 

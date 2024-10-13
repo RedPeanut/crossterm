@@ -5,20 +5,20 @@ import { Part } from '../Part';
 import { BookmarkComposite } from '../composite/BookmarkComposite';
 import { SampleComposite } from '../composite/SampleComposite';
 
-export class ActivitybarPart extends Part implements HorizontalViewItem {
+export class ActivitybarPart extends Part {
 
   workbenchLayoutService: WorkbenchLayoutService;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
-    this._size = ACTIVITYBAR_WIDTH;
+    this.size = ACTIVITYBAR_WIDTH;
     this.workbenchLayoutService = getService(workbenchLayoutServiceId);
   }
 
-  layoutContainer(offset: number): void {
+  /* layoutContainer(offset: number): void {
     this._splitViewContainer.style.left = `${offset}px`;
     this._splitViewContainer.style.width = `${this._size}px`;
-  }
+  } */
 
   override createContentArea(): HTMLElement {
     const part = super.createContentArea();

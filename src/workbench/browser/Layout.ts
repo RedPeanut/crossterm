@@ -3,9 +3,9 @@ import { Disposable, IDisposable } from '../../base/common/Lifecycle';
 import { Part } from './Part';
 import { SplitViewItem, SplitViewItemSizeType } from '../../base/browser/ui/SplitView';
 
-export abstract class Layout extends Disposable implements SplitViewItem {
+export abstract class Layout extends Disposable {
 
-  set size(size: number) {
+  /* set size(size: number) {
     this._size = size;
   }
 
@@ -60,7 +60,7 @@ export abstract class Layout extends Disposable implements SplitViewItem {
       this.size = 0;
     }
     this.splitViewContainer.classList.toggle('visible', visible);
-  }
+  } */
 
   parent: HTMLElement;
   mainContainer = document.createElement('div');

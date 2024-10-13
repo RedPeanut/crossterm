@@ -3,7 +3,7 @@ import { Orientation, Sash } from "./sash/Sash";
 
 export type SplitViewItemSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
 
-export interface SplitViewItem {
+/* export interface SplitViewItem {
   
   // getSize(): number;
   // setSize(size: number): void;
@@ -26,7 +26,74 @@ export interface SplitViewItem {
 }
 
 export interface VerticalViewItem {}
-export interface HorizontalViewItem {}
+export interface HorizontalViewItem {} */
+
+export interface SplitViewItemView {
+  get element(): HTMLElement;
+  get size(): number;
+  set size(size: number);
+  get sizeType(): SplitViewItemSizeType;
+  set sizeType(sizeType: SplitViewItemSizeType);
+  layout(offset: number, size: number): void;
+}
+
+export abstract class SplitViewItem<T extends SplitViewItemView> {
+
+  _cachedVisibleSize: number | undefined = undefined;
+  get cachedVisibleSize(): number | undefined { return this._cachedVisibleSize; }
+  set cachedVisibleSize(cachedVisibleSize: number | undefined) { this._cachedVisibleSize = cachedVisibleSize; }
+
+  get visible(): boolean {
+    return typeof this._cachedVisibleSize === 'undefined';
+  }
+
+  setVisible(visible: boolean): void {
+
+    if(visible === this.visible) {
+      return;
+    }
+
+    if(visible) {
+      this.view.size = this.cachedVisibleSize;
+      this.cachedVisibleSize = undefined;
+    } else {
+      this.cachedVisibleSize = this.view.size;
+      this.view.size = 0;
+    }
+    this._container.classList.toggle('visible', visible);
+  }
+
+  _view: T;
+  get view() { return this._view; }
+
+  _container: HTMLElement;
+
+  constructor(
+    container: HTMLElement
+    , view: T
+  ) {
+    this._container = container;
+    this._view = view;
+  }
+
+  abstract layoutContainer(offset: number): void;
+}
+
+export class VerticalViewItem<T extends SplitViewItemView> extends SplitViewItem<T> {
+  layoutContainer(offset: number): void {
+		this._container.style.top = `${offset}px`;
+		this._container.style.height = `${this.view.size}px`;
+    this._view.layout(offset, this.view.size);
+	}
+}
+
+export class HorizontalViewItem<T extends SplitViewItemView> extends SplitViewItem<T> {
+  layoutContainer(offset: number): void {
+		this._container.style.left = `${offset}px`;
+		this._container.style.width = `${this.view.size}px`;
+    this._view.layout(offset, this.view.size);
+  }
+}
 
 interface SashDragState {}
 
@@ -34,12 +101,12 @@ export interface SplitViewOptions {
   orientation?: Orientation;
 }
 
-export class SplitView {
+export class SplitView<T extends SplitViewItemView> {
 
   size: number;
   container: HTMLElement;
   orientation: Orientation;
-  viewItems: SplitViewItem[] = [];
+  viewItems: SplitViewItem<T>[] = [];
   el: HTMLElement;
   //viewItems: ViewItem[];
   sashContainer: HTMLElement;
@@ -59,20 +126,23 @@ export class SplitView {
     this.container.appendChild(this.el);
   }
 
-  removeView(index: number): SplitViewItem {
+  removeView(index: number): SplitViewItem<T> {
     // not implemented yet
     return null;
   }
 
-  addView(item: SplitViewItem, index: number = this.viewItems.length) {
+  addView(view: T, index: number = this.viewItems.length) {
     // add view
     const container = $('.split-view-view');
-    item.splitViewContainer = container;
+    // item.splitViewContainer = container;
 
     if(index === this.viewItems.length)
       this.viewContainer.appendChild(container);
     else
       this.viewContainer.insertBefore(container, this.viewContainer.children.item(index));
+    const item = this.orientation === Orientation.VERTICAL
+      ? new VerticalViewItem(container, view)
+      : new HorizontalViewItem(container, view);
     this.viewItems.splice(index, 0, item);
 
     // add sash
@@ -80,9 +150,8 @@ export class SplitView {
       const sash = new Sash(this.sashContainer, null);
     }
 
-    // // append
-    // const child = view.mainContainer ? view.mainContainer : view.element;
-    container.appendChild(item.element);
+    // append
+    container.appendChild(view.element);
   }
 
   layout(size: number) {
@@ -90,17 +159,17 @@ export class SplitView {
     let total = 0;
     for(let i = 0; i < this.viewItems.length; i++) {
       const item = this.viewItems[i];
-      if(item.sizeType === 'wrap_content') {
-        total += item.size;
-        size -= item.size;
+      if(item.view.sizeType === 'wrap_content') {
+        total += item.view.size;
+        size -= item.view.size;
       }
     }
 
     // fill empty space
     for(let i = 0; i < this.viewItems.length; i++) {
       const item = this.viewItems[i];
-      if(item.sizeType === 'fill_parent') {
-        item.size = size;
+      if(item.view.sizeType === 'fill_parent') {
+        item.view.size = size;
       }
     }
 
@@ -113,7 +182,7 @@ export class SplitView {
       const item = this.viewItems[i];
       item.layoutContainer(offset);
       // console.log(`[${i}] ${item.size}`);
-      offset += item.size;
+      offset += item.view.size;
     }
   }
 
