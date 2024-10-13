@@ -1,7 +1,7 @@
-import { LayoutSizeType, Parts } from './layout/Workbench';
+import { Parts } from './layout/Workbench';
 import { Disposable, IDisposable } from '../../base/common/Lifecycle';
 import { Part } from './Part';
-import { SplitViewItem } from '../../base/browser/ui/SplitView';
+import { SplitViewItem, SplitViewItemSizeType } from '../../base/browser/ui/SplitView';
 
 export abstract class Layout extends Disposable implements SplitViewItem {
 
@@ -21,11 +21,11 @@ export abstract class Layout extends Disposable implements SplitViewItem {
     this._splitViewContainer = container;
   }
 
-  set sizeType(sizeType: LayoutSizeType) {
+  set sizeType(sizeType: SplitViewItemSizeType) {
     this._sizeType = sizeType;
   }
 
-  get sizeType(): LayoutSizeType {
+  get sizeType(): SplitViewItemSizeType {
     return this._sizeType;
   }
   
@@ -33,7 +33,7 @@ export abstract class Layout extends Disposable implements SplitViewItem {
 
   _size: number = 0;
   _splitViewContainer: HTMLElement | undefined;
-  _sizeType: LayoutSizeType = 'wrap_content';
+  _sizeType: SplitViewItemSizeType = 'wrap_content';
 
   parent: HTMLElement;
   mainContainer = document.createElement('div');

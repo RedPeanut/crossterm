@@ -1,9 +1,8 @@
-import { SplitViewItem } from "../../base/browser/ui/SplitView";
+import { SplitViewItem, SplitViewItemSizeType } from "../../base/browser/ui/SplitView";
 import { Component } from "../common/Component";
-import { LayoutSizeType } from "./layout/Workbench";
 
 export interface PartOptions {
-  sizeType?: LayoutSizeType;
+  sizeType?: SplitViewItemSizeType;
 }
 
 class PartLayout {
@@ -28,11 +27,11 @@ export abstract class Part extends Component implements SplitViewItem {
     this._splitViewContainer = container;
   }
 
-  set sizeType(sizeType: LayoutSizeType) {
+  set sizeType(sizeType: SplitViewItemSizeType) {
     this._sizeType = sizeType;
   }
 
-  get sizeType(): LayoutSizeType {
+  get sizeType(): SplitViewItemSizeType {
     return this._sizeType;
   }
 
@@ -40,7 +39,7 @@ export abstract class Part extends Component implements SplitViewItem {
 
   _size: number = 0;
   _splitViewContainer: HTMLElement | undefined;
-  _sizeType: LayoutSizeType = 'wrap_content';
+  _sizeType: SplitViewItemSizeType = 'wrap_content';
 
   parent: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;

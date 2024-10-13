@@ -13,8 +13,6 @@ import { Orientation } from '../../../base/browser/ui/sash/Sash';
 import { bodyLayoutServiceId, getService, Service, setService, workbenchLayoutServiceId } from '../../../service';
 // import Runtime from './Runtime';
 
-export type LayoutSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
-
 export const TITLEBAR_HEIGHT = 42;
 export const ACTIVITYBAR_WIDTH = 48;
 export const SIDEBAR_WIDTH = 220;
