@@ -160,6 +160,7 @@ export function domContentLoaded(targetWindow: Window): Promise<void> {
     }
   });
 }
+
 export function show(...elements: HTMLElement[]): void {
   for(const element of elements) {
     element.style.display = '';

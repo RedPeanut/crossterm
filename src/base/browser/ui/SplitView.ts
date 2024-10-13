@@ -28,43 +28,6 @@ export interface SplitViewItem {
 export interface VerticalViewItem {}
 export interface HorizontalViewItem {}
 
-/** The interface to implement for views within a {@link SplitView}.
-export interface SplitViewItem { 
-  element?: HTMLElement;
-  mainContainer?: HTMLElement;
-} */
-
-/* export abstract class SplitViewItem {
-  element: HTMLElement;
-  get element(): HTMLElement {}
-} */
-
-export interface ISplitViewItemView {
-  element: HTMLElement;
-  minimumSize: number;
-  maximumSize: number;
-}
-
-/* export abstract class SplitViewItem {
-  _size: number;
-  set size(size: number) { this._size = size; }
-  get size(): number { return this._size; }
-
-  // container: HTMLElement;
-  // view: TView;
-  _element: HTMLElement;
-  // set element(element: HTMLElement) { this._element = element; }
-  get element(): HTMLElement { return this._element; }
-
-  constructor(element: HTMLElement) {
-    this._element = element;
-    // this.view = view;
-  }
-
-  layout(offset: number): void {}
-  abstract layoutContainer(offset: number): void;
-} */
-
 interface SashDragState {}
 
 export interface SplitViewOptions {
