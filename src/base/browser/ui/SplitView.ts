@@ -4,6 +4,7 @@ import { Orientation, Sash } from "./sash/Sash";
 export type SplitViewItemSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
 
 export interface SplitViewItem {
+  
   // getSize(): number;
   // setSize(size: number): void;
   // getElement(): HTMLElement;
@@ -12,11 +13,16 @@ export interface SplitViewItem {
   get size(): number;
   set size(size: number);
   get element(): HTMLElement;
+  get splitViewContainer(): HTMLElement;
   set splitViewContainer(container: HTMLElement);
   set sizeType(sizeType: SplitViewItemSizeType);
   get sizeType(): SplitViewItemSizeType;
 
   layoutContainer(offset: number): void;
+
+  set cachedVisibleSize(cachedVisibleSize: number | undefined);
+  get cachedVisibleSize(): number | undefined;
+  setVisible(visible: boolean): void;
 }
 
 export interface VerticalViewItem {}
@@ -143,7 +149,7 @@ export class SplitView {
     for(let i = 0; i < this.viewItems.length; i++) {
       const item = this.viewItems[i];
       item.layoutContainer(offset);
-      console.log(`[${i}] ${item.size}`);
+      // console.log(`[${i}] ${item.size}`);
       offset += item.size;
     }
   }
@@ -154,4 +160,14 @@ export class SplitView {
     });
   } */
 
+  setViewVisible(index: number, visible: boolean): void {
+    if(index < 0 || index >= this.viewItems.length) {
+      throw new Error('Index out of bounds');
+    }
+
+    const viewItem = this.viewItems[index];
+    viewItem.setVisible(visible);
+
+    this.layoutViews();
+  }
 }

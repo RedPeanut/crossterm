@@ -1,7 +1,17 @@
+import * as dom from '../../../base/browser/dom';
 import { Composite } from "../Composite";
 
 export class BookmarkComposite extends Composite {
-  public static ID: string = 'composite.bookmark';
+  static ID: string = 'composite.bookmark';
 
-  override create(parent: HTMLElement): void {}
+  container: HTMLElement;
+
+  constructor() {
+    super(BookmarkComposite.ID);
+  }
+
+  override create(parent: HTMLElement): void {
+    super.create(parent);
+    this.container = dom.append(parent, dom.$('.bookmark-composite'));
+  }
 }

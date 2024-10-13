@@ -67,27 +67,62 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
     this.parent && this.parent.appendChild(this.mainContainer);
   }
 
+  setSidebarHidden(hidden: boolean): void {
+    let found = false, i = 0;
+    for(; i < this.splitView.viewItems.length; i++) {
+      if(this.splitView.viewItems[i] === this.sidebarPart) {
+        found = true;
+        break;
+      }
+    }
+
+    if(found)
+      this.splitView.setViewVisible(i, !hidden);
+  }
+
+  setPartHidden(hidden: boolean, part: Parts): void {
+    switch(part) {
+      case Parts.SIDEBAR_PART:
+        return this.setSidebarHidden(hidden);
+    }
+  }
+
   inflate(): void {
     const compositeList = [
       {
         title: 'Bookmarks',
-        composite: BookmarkComposite,
+        composite: new BookmarkComposite(),
         id: BookmarkComposite.ID,
         codicon: 'info',
         onClick: (e: any) => {
-          const activeComposite = this.sidebarPartService.getActiveComposite();
           // toggle or switch
-          console.log('activeComposite =', activeComposite);
-          console.log('typeof activeComposite =', typeof activeComposite);
-          console.log('instanceof BookmarkComposite =', activeComposite instanceof BookmarkComposite);
+          const activeComposite = this.sidebarPartService.getActiveComposite();
+          if(activeComposite instanceof BookmarkComposite) {
+            this.sidebarPartService.hideActiveComposite();
+            this.setPartHidden(true, Parts.SIDEBAR_PART);
+          } else {
+            this.sidebarPartService.hideActiveComposite();
+            this.sidebarPartService.showComposite(compositeList[0].composite);
+            this.setPartHidden(false, Parts.SIDEBAR_PART);
+          }
         }
       },
       {
         title: 'Sample',
-        composite: SampleComposite,
+        composite: new SampleComposite(),
         id: SampleComposite.ID,
         codicon: 'info',
-        onClick: (e: any) => {}
+        onClick: (e: any) => {
+          const activeComposite = this.sidebarPartService.getActiveComposite();
+          if(activeComposite instanceof SampleComposite) {
+            this.sidebarPartService.hideActiveComposite();
+            this.setPartHidden(true, Parts.SIDEBAR_PART);
+          } else {
+            this.sidebarPartService.hideActiveComposite();
+            this.sidebarPartService.showComposite(compositeList[1].composite);
+            this.setPartHidden(false, Parts.SIDEBAR_PART);
+          }
+        }
       },
     ];
 
@@ -112,7 +147,7 @@ export class Body extends Layout implements VerticalViewItem, BodyLayoutService 
 
     // const sidebarPartContent = this.sidebarPart.getContentArea();
     const selected = compositeList[0];
-    const composite = new selected.composite(selected.id);
+    const composite = selected.composite;
     this.sidebarPartService.showComposite(composite);
   }
 
