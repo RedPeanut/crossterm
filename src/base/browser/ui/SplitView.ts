@@ -67,6 +67,7 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
   get view() { return this._view; }
 
   _container: HTMLElement;
+  get container() { return this._container; }
 
   constructor(
     container: HTMLElement
@@ -81,17 +82,17 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
 
 export class VerticalViewItem<T extends SplitViewItemView> extends SplitViewItem<T> {
   layoutContainer(offset: number): void {
-		this._container.style.top = `${offset}px`;
-		this._container.style.height = `${this.view.size}px`;
-    this._view.layout(offset, this.view.size);
-	}
+    this.container.style.top = `${offset}px`;
+    this.container.style.height = `${this.view.size}px`;
+    this.view.layout(offset, this.view.size);
+  }
 }
 
 export class HorizontalViewItem<T extends SplitViewItemView> extends SplitViewItem<T> {
   layoutContainer(offset: number): void {
-		this._container.style.left = `${offset}px`;
-		this._container.style.width = `${this.view.size}px`;
-    this._view.layout(offset, this.view.size);
+    this.container.style.left = `${offset}px`;
+    this.container.style.width = `${this.view.size}px`;
+    this.view.layout(offset, this.view.size);
   }
 }
 
