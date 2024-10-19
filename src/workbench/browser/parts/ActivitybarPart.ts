@@ -8,6 +8,7 @@ import { ActivitybarItem, ActivitybarItemImpl } from './item/ActivitybarItem';
 
 export interface ActivitybarPartService {
   addItem(ul:HTMLElement, item: any): void;
+  updateChecked(id: string, checked: boolean): void;
 }
 
 export class ActivitybarPart extends Part implements ActivitybarPartService {
@@ -72,6 +73,13 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
       let impl: ActivitybarItem = new ActivitybarItemImpl(ul, item.id, item.composite);
       impl.append(item.onClick, item.codicon);
       this.itemMap.set(item.id, impl);
+    }
+  }
+
+  updateChecked(id: string, checked: boolean): void {
+    let impl = this.itemMap.get(id);
+    if(impl) {
+      impl.updateChecked(checked);
     }
   }
 

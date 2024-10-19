@@ -140,7 +140,9 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
       },
     ];
 
-    // todo: get stored selected action from concrete
+    // todo: get active item from disk
+    const activeItemIndex = 0;
+    const selected = items[activeItemIndex];
 
     const activitybarPartContent = this.activitybarPart.getContentArea();
 
@@ -152,9 +154,9 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
     });
 
     activitybarPartContent.appendChild(ul);
+    this.activitybarPartService.updateChecked(selected.id, true);
 
     // const sidebarPartContent = this.sidebarPart.getContentArea();
-    const selected = items[0];
     const composite = selected.composite;
     this.sidebarPartService.showComposite(composite);
   }

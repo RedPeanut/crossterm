@@ -94,6 +94,18 @@ body { height: 100%; }
   color: rgb(215, 215, 215);
 }
 
+.activitybar .activitybar-item.checked .active-item-indicator:before {
+  /* border-color: #0078d4; */
+  content: "";
+  position: absolute;
+  /* z-index: 1; */
+  top: 0;
+  height: 100%;
+  width: 0;
+  border-left: 2px solid;
+  color: #0078d4;
+}
+
 /* Body */
 .layout.body {
   /* background-color: rgb(255, 0, 255); rgb(31, 31, 31); */

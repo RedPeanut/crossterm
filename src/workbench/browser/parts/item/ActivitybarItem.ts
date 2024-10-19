@@ -6,6 +6,7 @@ export interface ActivitybarItemOptions {}
 
 export interface ActivitybarItem {
   append(onClick: (e: any) => {}, codicon: string): void;
+  updateChecked(checked: boolean): void;
   get id(): string;
   get element(): HTMLElement;
 }
@@ -44,6 +45,10 @@ export class ActivitybarItemImpl implements ActivitybarItem {
       append(li, $('.active-item-indicator'));
   
       this._container.appendChild(li);
+  }
+
+  updateChecked(checked: boolean): void {
+    this._element.classList.toggle('checked', checked);
   }
 
 }
