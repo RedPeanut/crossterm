@@ -13,12 +13,12 @@ export interface ActivitybarPartService {
 
 export class ActivitybarPart extends Part implements ActivitybarPartService {
 
-  workbenchLayoutService: WorkbenchLayoutService;
+  // workbenchLayoutService: WorkbenchLayoutService;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
     this.size = ACTIVITYBAR_WIDTH;
-    this.workbenchLayoutService = getService(workbenchLayoutServiceId);
+    // this.workbenchLayoutService = getService(workbenchLayoutServiceId);
     setService(activitybarPartServiceId, this);
   }
 
