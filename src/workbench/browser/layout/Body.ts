@@ -145,7 +145,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
     const activitybarPartContent = this.activitybarPart.getContentArea();
 
     const ul = document.createElement('ul');
-    ul.className = 'actions-container';
+    ul.className = 'activitybar-item-container';
 
     items.forEach((item) => {
       const li = document.createElement('li');

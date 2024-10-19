@@ -26,8 +26,8 @@
  * ```
  */
 
-import './index.css';
 import '@vscode/codicons/dist/codicon.css';
+import './index.css';
 import { Workbench, WorkbenchLayoutService } from './workbench/browser/layout/Workbench';
 import { domContentLoaded } from './base/browser/dom';
 
