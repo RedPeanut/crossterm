@@ -74,15 +74,15 @@ body { height: 100%; }
   white-space: nowrap;
 }
 
-.action-item {
+.activitybar-item {
   cursor: pointer;
 }
 
-.action-item.disabled {
+.activitybar-item.disabled {
   cursor: default;
 }
 
-.action-item .codicon {
+.activitybar-item .codicon {
   display: flex;
   align-items: center;
   width: 16px;

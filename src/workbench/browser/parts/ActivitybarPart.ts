@@ -45,7 +45,7 @@ export class ActivitybarPart extends Part {
 
     actionList.forEach((item) => {
       const li = document.createElement('li');
-      li.classList.add(...'action-item'.split(' '));
+      li.classList.add(...'activitybar-item'.split(' '));
       li.addEventListener('click', item.onClick);
       const a = document.createElement('a');
       a.classList.add(...`codicon codicon-${item.codicon}`.split(' '));
