@@ -9,6 +9,7 @@ import { getClientArea } from "../../../base/browser/dom";
 import { activitybarPartServiceId, bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../../../service";
 import { BookmarkComposite } from "../composite/BookmarkComposite";
 import { SampleComposite } from "../composite/SampleComposite";
+import { ActivitybarItem } from "../parts/item/ActivitybarItem";
 
 export interface BodyOptions {
   sizeType?: SplitViewItemSizeType;
@@ -110,6 +111,17 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
         codicon: 'info',
         onClick: (e: any) => {
           // toggle or switch
+          const activeItem: ActivitybarItem = this.activitybarPartService.getActiveItem();
+          if(activeItem) {
+            if(activeItem.id === items[0].id) {
+              activeItem.element.classList.remove('checked');
+            } else {
+              activeItem.element.classList.remove('checked');
+              this.activitybarPartService.updateChecked(items[0].id, true);
+            }
+          } else
+            this.activitybarPartService.updateChecked(items[0].id, true);
+
           const activeComposite = this.sidebarPartService.getActiveComposite();
           if(activeComposite instanceof BookmarkComposite) {
             this.sidebarPartService.hideActiveComposite();
@@ -127,6 +139,17 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
         composite: new SampleComposite(),
         codicon: 'info',
         onClick: (e: any) => {
+          const activeItem: ActivitybarItem = this.activitybarPartService.getActiveItem();
+          if(activeItem) {
+            if(activeItem.id === items[1].id) {
+              activeItem.element.classList.remove('checked');
+            } else {
+              activeItem.element.classList.remove('checked');
+              this.activitybarPartService.updateChecked(items[1].id, true);
+            }
+          } else
+            this.activitybarPartService.updateChecked(items[1].id, true);
+
           const activeComposite = this.sidebarPartService.getActiveComposite();
           if(activeComposite instanceof SampleComposite) {
             this.sidebarPartService.hideActiveComposite();

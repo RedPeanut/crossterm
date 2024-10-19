@@ -9,6 +9,7 @@ import { ActivitybarItem, ActivitybarItemImpl } from './item/ActivitybarItem';
 export interface ActivitybarPartService {
   addItem(ul:HTMLElement, item: any): void;
   updateChecked(id: string, checked: boolean): void;
+  getActiveItem(): ActivitybarItem | undefined;
 }
 
 export class ActivitybarPart extends Part implements ActivitybarPartService {
@@ -81,6 +82,15 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
     if(impl) {
       impl.updateChecked(checked);
     }
+  }
+
+  getActiveItem(): ActivitybarItem | undefined {
+    for(let entry of this.itemMap.entries()) {
+      // console.log(entry);
+      if(entry[1].element.classList.contains('checked'))
+        return entry[1];
+    }
+    return undefined;
   }
 
 }
