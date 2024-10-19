@@ -1,12 +1,12 @@
 import { SplitView, SplitViewItem, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from "../../../base/browser/ui/SplitView";
 import { Layout } from "../Layout";
-import { ActivitybarPart } from "../parts/ActivitybarPart";
+import { ActivitybarPart, ActivitybarPartService } from "../parts/ActivitybarPart";
 import { SidebarPart, SidebarPartService } from "../parts/SidebarPart";
 import { SessionPart } from "../parts/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
 import { Parts, WorkbenchLayoutService } from "./Workbench";
 import { getClientArea } from "../../../base/browser/dom";
-import { bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../../../service";
+import { activitybarPartServiceId, bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../../../service";
 import { BookmarkComposite } from "../composite/BookmarkComposite";
 import { SampleComposite } from "../composite/SampleComposite";
 
@@ -165,9 +165,11 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
     this.sidebarPartService.showComposite(composite);
   }
 
+  activitybarPartService: ActivitybarPartService;
   sidebarPartService: SidebarPartService;
 
   getServices(): void {
+    this.activitybarPartService = getService(activitybarPartServiceId);
     this.sidebarPartService = getService(sidebarPartServiceId);
   }
 

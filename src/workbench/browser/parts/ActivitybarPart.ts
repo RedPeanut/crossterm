@@ -1,11 +1,13 @@
-import { getService, workbenchLayoutServiceId } from '../../../service';
+import { activitybarPartServiceId, getService, setService, workbenchLayoutServiceId } from '../../../service';
 import { HorizontalViewItem } from '../../../base/browser/ui/SplitView';
 import { ACTIVITYBAR_WIDTH, WorkbenchLayoutService } from '../layout/Workbench';
 import { Part } from '../Part';
 import { BookmarkComposite } from '../composite/BookmarkComposite';
 import { SampleComposite } from '../composite/SampleComposite';
 
-export class ActivitybarPart extends Part {
+export interface ActivitybarPartService {}
+
+export class ActivitybarPart extends Part implements ActivitybarPartService {
 
   workbenchLayoutService: WorkbenchLayoutService;
 
@@ -13,6 +15,7 @@ export class ActivitybarPart extends Part {
     super(parent, id, role, classes, options);
     this.size = ACTIVITYBAR_WIDTH;
     this.workbenchLayoutService = getService(workbenchLayoutServiceId);
+    setService(activitybarPartServiceId, this);
   }
 
   /* layoutContainer(offset: number): void {
