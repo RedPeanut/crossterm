@@ -4,8 +4,11 @@ import { ACTIVITYBAR_WIDTH, WorkbenchLayoutService } from '../layout/Workbench';
 import { Part } from '../Part';
 import { BookmarkComposite } from '../composite/BookmarkComposite';
 import { SampleComposite } from '../composite/SampleComposite';
+import { ActivitybarItem, ActivitybarItemImpl } from './item/ActivitybarItem';
 
-export interface ActivitybarPartService {}
+export interface ActivitybarPartService {
+  addItem(ul:HTMLElement, item: any): void;
+}
 
 export class ActivitybarPart extends Part implements ActivitybarPartService {
 
@@ -60,4 +63,16 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
     return part;
   }
+
+  itemMap = new Map<string, ActivitybarItem>();
+
+  addItem(ul: HTMLElement, item: any): void {
+    let activitybarItem = this.itemMap.get(item.id);
+    if(!activitybarItem) {
+      let impl: ActivitybarItem = new ActivitybarItemImpl(ul, item.id, item.composite);
+      impl.append(item.onClick, item.codicon);
+      this.itemMap.set(item.id, impl);
+    }
+  }
+
 }

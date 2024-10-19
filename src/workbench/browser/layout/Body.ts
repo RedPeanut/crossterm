@@ -105,8 +105,8 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
     const items = [
       {
         title: 'Bookmarks',
+        id: 'activitybar-item.bookmark',
         composite: new BookmarkComposite(),
-        id: BookmarkComposite.ID,
         codicon: 'info',
         onClick: (e: any) => {
           // toggle or switch
@@ -123,8 +123,8 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
       },
       {
         title: 'Sample',
+        id: 'activitybar-item.sample',
         composite: new SampleComposite(),
-        id: SampleComposite.ID,
         codicon: 'info',
         onClick: (e: any) => {
           const activeComposite = this.sidebarPartService.getActiveComposite();
@@ -148,13 +148,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
     ul.className = 'activitybar-item-container';
 
     items.forEach((item) => {
-      const li = document.createElement('li');
-      li.classList.add(...'activitybar-item'.split(' '));
-      li.addEventListener('click', item.onClick);
-      const a = document.createElement('a');
-      a.classList.add(...`codicon codicon-${item.codicon}`.split(' '));
-      li.appendChild(a);
-      ul.appendChild(li);
+      this.activitybarPartService.addItem(ul, item);
     });
 
     activitybarPartContent.appendChild(ul);
