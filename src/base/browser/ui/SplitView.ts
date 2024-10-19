@@ -166,7 +166,7 @@ export class SplitView<T extends SplitViewItemView> {
       }
     }
 
-    // fill empty space
+    // fill empty space (dangling implementation)
     for(let i = 0; i < this.viewItems.length; i++) {
       const item = this.viewItems[i];
       if(item.view.sizeType === 'fill_parent') {
