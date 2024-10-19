@@ -102,7 +102,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
   }
 
   inflate(): void {
-    const compositeList = [
+    const items = [
       {
         title: 'Bookmarks',
         composite: new BookmarkComposite(),
@@ -116,7 +116,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
             this.sidebarPartService.hideActiveComposite();
-            this.sidebarPartService.showComposite(compositeList[0].composite);
+            this.sidebarPartService.showComposite(items[0].composite);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
         }
@@ -133,7 +133,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
             this.sidebarPartService.hideActiveComposite();
-            this.sidebarPartService.showComposite(compositeList[1].composite);
+            this.sidebarPartService.showComposite(items[1].composite);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
         }
@@ -147,7 +147,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
     const ul = document.createElement('ul');
     ul.className = 'actions-container';
 
-    compositeList.forEach((item) => {
+    items.forEach((item) => {
       const li = document.createElement('li');
       li.classList.add(...'activitybar-item'.split(' '));
       li.addEventListener('click', item.onClick);
@@ -160,7 +160,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
     activitybarPartContent.appendChild(ul);
 
     // const sidebarPartContent = this.sidebarPart.getContentArea();
-    const selected = compositeList[0];
+    const selected = items[0];
     const composite = selected.composite;
     this.sidebarPartService.showComposite(composite);
   }
