@@ -108,7 +108,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
         title: 'Bookmarks',
         id: 'activitybar-item.bookmark',
         composite: new BookmarkComposite(),
-        codicon: 'info',
+        codicon: 'bookmark',
         onClick: (e: any) => {
           // toggle or switch
           const activeItem: ActivitybarItem = this.activitybarPartService.getActiveItem();

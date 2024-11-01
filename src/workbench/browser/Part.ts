@@ -11,7 +11,7 @@ class PartLayout {
 
 export abstract class Part extends Component implements SplitViewItemView {
 
-  get element(): HTMLElement { return this.contentArea;}
+  get element(): HTMLElement { return this.contentArea; }
 
   _size: number = 0;
   get size(): number { return this._size; }

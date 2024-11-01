@@ -22,9 +22,9 @@ export const STATUSBAR_HEIGHT = 22;
 export const enum Parts {
   TITLEBAR_PART = 'part.titlebar',
   ACTIVITYBAR_PART = 'part.activitybar',
+  BODY_LAYOUT = 'layout.body',
   SIDEBAR_PART = 'part.sidebar',
   SESSION_PART = 'part.session',
-  BODY_LAYOUT = 'layout.body',
   STATUSBAR_PART = 'part.statusbar'
 }
 
