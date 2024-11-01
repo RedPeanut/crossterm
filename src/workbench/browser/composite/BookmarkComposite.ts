@@ -1,3 +1,4 @@
+import { List } from '../../../base/browser/ui/List';
 import * as dom from '../../../base/browser/dom';
 import { Composite } from "../Composite";
 
@@ -13,5 +14,7 @@ export class BookmarkComposite extends Composite {
   override create(parent: HTMLElement): void {
     super.create(parent);
     this.container = dom.append(parent, dom.$('.bookmark-composite'));
+    const list = new List(this.container);
+    list.render();
   }
 }

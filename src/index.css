@@ -122,6 +122,56 @@ body { height: 100%; }
   background-color: green;
 }
 
+/* List, Tree, Node, ListItem */
+.sidebar .list {
+  padding: 5px 10px;
+  overflow: auto;
+}
+
+.sidebar .list .tree {}
+.sidebar .list .tree .node {
+  line-height: 28px;
+  font-size: 16px;
+  padding-left: 4px;
+}
+.sidebar .list .tree .node.selected {
+  background-color: rgb(71 85 102);
+  border-radius: 4px;
+}
+
+.sidebar .list .tree .node .content {
+  margin: 2px 0;
+  display: flex;
+  /* align-items: center; */
+}
+
+.sidebar .list .tree .node .ln_header {
+  width: 20px;
+}
+
+.sidebar .list .tree .node .ln_header .arrow {
+  cursor: pointer;
+  transform: rotate(90deg);
+}
+
+.sidebar .list .tree .node .ln_header .arrow.collapsed {
+  transform: rotate(0);
+}
+
+.sidebar .list .tree .node .ln_body {
+  width: 100%;
+}
+
+.sidebar .list .tree .node .list-item .title {
+  cursor: default;
+}
+
+.sidebar .list .tree .node .list-item span {
+  margin-right: 7px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* Session */
 .part.session {
   background-color: blue;
