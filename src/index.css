@@ -9,7 +9,8 @@ body { height: 100%; }
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #252526;
+  /* background-color: #252526; */
+  background-color: rgb(24,24,24);
 }
 
 /* SplitView */
@@ -72,6 +73,7 @@ body { height: 100%; }
   /* flex-shrink: 0; */
   /* background-color: red; */
   white-space: nowrap;
+  border-right: 1px solid rgb(43,43,43);
 }
 
 .activitybar-item {
@@ -119,7 +121,7 @@ body { height: 100%; }
   height: 100%;
   border-right: 1px solid rgb(43, 43, 43);
   /* flex-shrink: 0; */
-  background-color: green;
+  /* background-color: green; */
 }
 
 /* List, Tree, Node, ListItem */
