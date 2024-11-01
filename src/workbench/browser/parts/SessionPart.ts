@@ -13,4 +13,9 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
     // this.size = SESSION_WIDTH;
     this.sizeType = 'fill_parent';
   }
+
+  createContentArea(): HTMLElement {
+    const container: HTMLElement = super.createContentArea();
+    return container;
+  }
 }
