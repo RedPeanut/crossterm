@@ -41,7 +41,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
 
       if(isSplitItem(item)) {
       } else {
-        const groupView = new GroupView(null, item as TerminalItem[]);
+        const groupView = new GroupView(null, item as TerminalItem[], style);
         groupView.create();
         result.push(groupView);
       }
@@ -54,9 +54,9 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
     if(isSplitItem(root)) {
     } else {
       const wrapper = $('.wrapper');
-      const views: SplitViewItemView[] = this.renderTreeList(wrapper, root, depth+1);
-      for(let i = 0; i < views.length; i++)
-        wrapper.appendChild(views[i].element);
+      const results: SplitViewItemView[] = this.renderTreeList(wrapper, root, depth+1);
+      for(let i = 0; i < results.length; i++)
+        wrapper.appendChild(results[i].element);
       result.push(wrapper);
     }
     return result;

@@ -21,18 +21,21 @@ export class GroupView implements SplitViewItemView {
   container: HTMLElement;
   _element: HTMLElement;
   group: TerminalItem[];
+  style: {};
 
-  constructor(container: HTMLElement, group: TerminalItem[]) {
+  constructor(container: HTMLElement, group: TerminalItem[], style: {}) {
     this.container = container;
     this.group = group;
+    this.style = style;
   }
 
   create(): HTMLElement {
     const el = this._element = $('.group-view');
+    // el.style = this.style;
     const tabs = new Tabs(el, this.group);
-    tabs.create();
+    el.appendChild(tabs.create());
     const terms = new Terms(el, this.group);
-    terms.create();
+    el.appendChild(terms.create());
     // this.container.appendChild(el);
     return null;
   }

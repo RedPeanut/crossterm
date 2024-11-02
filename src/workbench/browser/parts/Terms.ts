@@ -13,8 +13,8 @@ export class Terms {
     create(): HTMLElement {
       const terms = $('.terms');
       this.group.map((item, i) => {
-        const term = new Term(terms, item); 
-        term.create();
+        const term = new Term(null, item); 
+        terms.appendChild(term.create());
       });
       return terms;
     }

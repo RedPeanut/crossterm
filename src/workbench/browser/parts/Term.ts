@@ -1,3 +1,4 @@
+import { $ } from "../../../base/browser/dom";
 import { TerminalItem } from "../../../Types";
 
 export class Term {
@@ -8,5 +9,8 @@ export class Term {
     this.container = container;
   }
   
-  create(): HTMLElement { return null; }
+  create(): HTMLElement {
+    const term = $('.term');
+    return term;
+  }
 }
