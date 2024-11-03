@@ -178,7 +178,38 @@ body { height: 100%; }
 .part.session {
   width: 100%;
   height: 100%;
-  background-color: blue;
+  /* background-color: blue; */
+}
+
+.part.session .wrapper { height: 100%; }
+.part.session .wrapper .group-view { height: 100%; }
+
+.tabs {}
+.terms {
+  position: relative;
+  height: calc(100% - 35px);
+}
+
+.tabs .tablist {
+  display: flex;
+  height: 35px;
+}
+
+.tabs .tab {
+  /* left: auto; */
+  border-right: 1px solid rgb(43, 43, 43);
+  background-color: rgb(24, 24, 24);
+  width: 120px;
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.terms .term {
+  height: 100%;
 }
 
 /* StatusBar */
