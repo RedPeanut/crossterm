@@ -1,15 +1,15 @@
 import { SplitView, SplitViewItem, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from "../../../base/browser/ui/SplitView";
 import { Layout } from "../Layout";
-import { ActivitybarPart, ActivitybarPartService } from "../parts/ActivitybarPart";
-import { SidebarPart, SidebarPartService } from "../parts/SidebarPart";
-import { SessionPart } from "../parts/SessionPart";
+import { ActivitybarPart, ActivitybarPartService } from "../part/ActivitybarPart";
+import { SidebarPart, SidebarPartService } from "../part/SidebarPart";
+import { SessionPart } from "../part/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
 import { Parts, WorkbenchLayoutService } from "./Workbench";
 import { getClientArea } from "../../../base/browser/dom";
 import { activitybarPartServiceId, bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../../../service";
 import { BookmarkComposite } from "../composite/BookmarkComposite";
 import { SampleComposite } from "../composite/SampleComposite";
-import { ActivitybarItem } from "../parts/item/ActivitybarItem";
+import { ActivitybarItem } from "../part/item/ActivitybarItem";
 
 export interface BodyOptions {
   sizeType?: SplitViewItemSizeType;
