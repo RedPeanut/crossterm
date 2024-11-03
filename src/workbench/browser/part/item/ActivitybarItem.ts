@@ -1,6 +1,6 @@
 import { $, append } from "../../../../base/browser/dom";
 import { Component } from "../../../../workbench/common/Component";
-import { Composite } from "../../Composite";
+import { Panel } from "../../Panel";
 
 export interface ActivitybarItemOptions {}
 
@@ -16,17 +16,17 @@ export class ActivitybarItemImpl implements ActivitybarItem {
 
   _container: HTMLElement;
   _id: string;
-  _composite: Composite;
+  _panel: Panel;
   _element: HTMLElement;
   // checked: boolean = false;
 
   get id(): string { return this._id; }
   get element(): HTMLElement { return this._element; }
 
-  constructor(container: HTMLElement, id: string, composite: Composite, options: ActivitybarItemOptions = {}) {
+  constructor(container: HTMLElement, id: string, panel: Panel, options: ActivitybarItemOptions = {}) {
     this._container = container;
     this._id = id;
-    this._composite = composite;
+    this._panel = panel;
   }
 
   append(onClick: (e: any) => {}, codicon: string): void {

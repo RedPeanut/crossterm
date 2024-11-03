@@ -7,8 +7,8 @@ import { Orientation } from "../../../base/browser/ui/sash/Sash";
 import { Parts, WorkbenchLayoutService } from "./Workbench";
 import { getClientArea } from "../../../base/browser/dom";
 import { activitybarPartServiceId, bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../../../service";
-import { BookmarkComposite } from "../composite/BookmarkComposite";
-import { SampleComposite } from "../composite/SampleComposite";
+import { BookmarkPanel } from "../panel/BookmarkPanel";
+import { SamplePanel } from "../panel/SamplePanel";
 import { ActivitybarItem } from "../part/item/ActivitybarItem";
 
 export interface BodyOptions {
@@ -107,7 +107,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
       {
         title: 'Bookmarks',
         id: 'activitybar-item.bookmark',
-        composite: new BookmarkComposite(),
+        panel: new BookmarkPanel(),
         codicon: 'bookmark',
         onClick: (e: any) => {
           // toggle or switch
@@ -122,13 +122,13 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
           } else
             this.activitybarPartService.updateChecked(items[0].id, true);
 
-          const activeComposite = this.sidebarPartService.getActiveComposite();
-          if(activeComposite instanceof BookmarkComposite) {
-            this.sidebarPartService.hideActiveComposite();
+          const activePanel = this.sidebarPartService.getActivePanel();
+          if(activePanel instanceof BookmarkPanel) {
+            this.sidebarPartService.hideActivePanel();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
-            this.sidebarPartService.hideActiveComposite();
-            this.sidebarPartService.showComposite(items[0].composite);
+            this.sidebarPartService.hideActivePanel();
+            this.sidebarPartService.showPanel(items[0].panel);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
         }
@@ -136,7 +136,7 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
       {
         title: 'Sample',
         id: 'activitybar-item.sample',
-        composite: new SampleComposite(),
+        panel: new SamplePanel(),
         codicon: 'info',
         onClick: (e: any) => {
           const activeItem: ActivitybarItem = this.activitybarPartService.getActiveItem();
@@ -150,13 +150,13 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
           } else
             this.activitybarPartService.updateChecked(items[1].id, true);
 
-          const activeComposite = this.sidebarPartService.getActiveComposite();
-          if(activeComposite instanceof SampleComposite) {
-            this.sidebarPartService.hideActiveComposite();
+          const activePanel = this.sidebarPartService.getActivePanel();
+          if(activePanel instanceof SamplePanel) {
+            this.sidebarPartService.hideActivePanel();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
-            this.sidebarPartService.hideActiveComposite();
-            this.sidebarPartService.showComposite(items[1].composite);
+            this.sidebarPartService.hideActivePanel();
+            this.sidebarPartService.showPanel(items[1].panel);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
         }
@@ -180,8 +180,8 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
     this.activitybarPartService.updateChecked(selected.id, true);
 
     // const sidebarPartContent = this.sidebarPart.getContentArea();
-    const composite = selected.composite;
-    this.sidebarPartService.showComposite(composite);
+    const panel = selected.panel;
+    this.sidebarPartService.showPanel(panel);
   }
 
   activitybarPartService: ActivitybarPartService;

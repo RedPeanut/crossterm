@@ -1,6 +1,6 @@
 import { Component } from "../common/Component";
 
-export abstract class Composite extends Component {
+export abstract class Panel extends Component {
   
   parent: HTMLElement | undefined;
   visible = false;

@@ -1,20 +1,20 @@
 import { Service, setService, sidebarPartServiceId } from '../../../service';
 import { $, hide, show } from '../../../base/browser/dom';
 import { HorizontalViewItem } from '../../../base/browser/ui/SplitView';
-import { Composite } from '../Composite';
+import { Panel } from '../Panel';
 import { SIDEBAR_WIDTH } from '../layout/Workbench';
 import { Part } from '../Part';
 
 export interface SidebarPartService extends Service {
-  showComposite(composite: Composite): void;
-  getActiveComposite(): Composite | undefined;
-  hideActiveComposite(): Composite | undefined;
+  showPanel(panel: Panel): void;
+  getActivePanel(): Panel | undefined;
+  hideActivePanel(): Panel | undefined;
 }
 
 export class SidebarPart extends Part implements SidebarPartService {
 
-  mapCompositeToCompositeContainer = new Map<string, HTMLElement>();
-  activeComposite: Composite | undefined;
+  mapPanelToPanelContainer = new Map<string, HTMLElement>();
+  activePanel: Panel | undefined;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
@@ -27,52 +27,52 @@ export class SidebarPart extends Part implements SidebarPartService {
     this._splitViewContainer.style.width = `${this._size}px`;
   } */
 
-  showComposite(composite: Composite): void {
-    // Remember Composite
-    this.activeComposite = composite;
+  showPanel(panel: Panel): void {
+    // Remember Panel
+    this.activePanel = panel;
 
-    let compositeContainer = this.mapCompositeToCompositeContainer.get(composite.getId());
-    if(!compositeContainer) {
-      compositeContainer = $('.composite');
-      compositeContainer.id = composite.getId();
-      composite.create(compositeContainer);
-      this.mapCompositeToCompositeContainer.set(composite.getId(), compositeContainer);
+    let panelContainer = this.mapPanelToPanelContainer.get(panel.getId());
+    if(!panelContainer) {
+      panelContainer = $('.panel');
+      panelContainer.id = panel.getId();
+      panel.create(panelContainer);
+      this.mapPanelToPanelContainer.set(panel.getId(), panelContainer);
     }
     const contentArea = this.getContentArea();
-    contentArea.appendChild(compositeContainer);
-    show(compositeContainer);
-    composite.setVisible(true);
+    contentArea.appendChild(panelContainer);
+    show(panelContainer);
+    panel.setVisible(true);
 
-    /* // Make sure the composite is layed out
+    /* // Make sure the panel is layed out
     if(this.contentAreaSize) {
-      composite.layout(this.contentAreaSize);
+      panel.layout(this.contentAreaSize);
     } */
   }
 
-  getActiveComposite(): Composite | undefined {
-    return this.activeComposite;
+  getActivePanel(): Panel | undefined {
+    return this.activePanel;
   }
 
-  hideActiveComposite(): Composite | undefined {
-    if(!this.activeComposite) {
+  hideActivePanel(): Panel | undefined {
+    if(!this.activePanel) {
       return undefined; // Nothing to do
     }
 
-    const composite = this.activeComposite;
-    this.activeComposite = undefined;
+    const panel = this.activePanel;
+    this.activePanel = undefined;
 
-    const compositeContainer = this.mapCompositeToCompositeContainer.get(composite.getId());
+    const panelContainer = this.mapPanelToPanelContainer.get(panel.getId());
 
-    // Indicate to Composite
-    composite.setVisible(false);
+    // Indicate to Panel
+    panel.setVisible(false);
 
     // Take Container Off-DOM and hide
-    if(compositeContainer) {
-      compositeContainer.remove();
-      hide(compositeContainer);
+    if(panelContainer) {
+      panelContainer.remove();
+      hide(panelContainer);
     }
     
-    return composite;
+    return panel;
   }
 
 }
