@@ -36,7 +36,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
       if(parent.list) {
         const sizeProperty = parent.mode === 'vertical' ? 'height' : 'width';
         const size = Math.floor(100 / parent.list.length) + '%';
-        style = {[sizeProperty]: size};
+        style = { [sizeProperty]: size };
       }
 
       if(isSplitItem(item)) {
