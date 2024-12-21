@@ -44,6 +44,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
     super(parent, id, role, classes, options);
     // this.size = SESSION_WIDTH;
     this.sizeType = 'fill_parent';
+    this.border = true;
   }
 
   renderTreeList(container: HTMLElement, parent: SplitItem, depth: number): SplitViewItemView[] {

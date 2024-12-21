@@ -167,16 +167,16 @@ export class SplitView<T extends SplitViewItemView> {
 
   /**
    * Sizing from total size
-   * @param size Total size
+   * @param totalSize Total size
    */
-  layout(size: number) {
-    this.size = size;
+  layout(totalSize: number) {
+    this.size = totalSize;
 
     if(this.proportions) {
       let total = 0;
       for(let i = 0; i < this.viewItems.length; i++) {
         const item = this.viewItems[i];
-        item.view.size = size * this.proportions[i];
+        item.view.size = totalSize * this.proportions[i];
       }
       this.layoutViews();
     } else {
@@ -184,8 +184,9 @@ export class SplitView<T extends SplitViewItemView> {
       for(let i = 0; i < this.viewItems.length; i++) {
         const item = this.viewItems[i];
         if(item.view.sizeType === 'wrap_content') {
-          total += item.view.size;
-          size -= item.view.size;
+          let itemSize = (item.view.border ? 1 : 0) + item.view.size;
+          total += itemSize;
+          totalSize -= itemSize;
         }
       }
   
@@ -193,7 +194,7 @@ export class SplitView<T extends SplitViewItemView> {
       for(let i = 0; i < this.viewItems.length; i++) {
         const item = this.viewItems[i];
         if(item.view.sizeType === 'fill_parent') {
-          item.view.size = size;
+          item.view.size = totalSize;
         }
       }
   
@@ -205,9 +206,9 @@ export class SplitView<T extends SplitViewItemView> {
     let offset = 0;
     for(let i = 0; i < this.viewItems.length; i++) {
       const item = this.viewItems[i];
-      item.layoutContainer(offset);
+      item.layoutContainer((item.view.border ? 1 : 0) + offset);
       // console.log(`[${i}] ${item.size}`);
-      offset += item.view.size + (item.view.border ? 1 : 0);
+      offset += (item.view.border ? 1 : 0) + item.view.size;
     }
   }
 
