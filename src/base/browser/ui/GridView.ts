@@ -24,6 +24,10 @@ export class GridView implements SplitViewItemView {
   get sizeType(): SplitViewItemSizeType { return this._sizeType; }
   set sizeType(sizeType: SplitViewItemSizeType) { this._sizeType = sizeType; }
 
+  _border: boolean = false;
+  get border(): boolean { return this._border; }
+  set border(border: boolean) { this._border = border; }
+
   layout(offset: number, size: number): void {
     this.splitView.layout(size);
   }

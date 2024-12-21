@@ -32,6 +32,10 @@ export class Body extends Layout implements BodyLayoutService, SplitViewItemView
   get sizeType(): SplitViewItemSizeType { return this._sizeType; }
   set sizeType(sizeType: SplitViewItemSizeType) { this._sizeType = sizeType; }
 
+  _border: boolean = false;
+  get border(): boolean { return this._border; }
+  set border(border: boolean) { this._border = border; }
+
   /* layoutContainer(offset: number): void {
     this._splitViewContainer.style.top = `${offset}px`;
     this._splitViewContainer.style.height = `${this._size}px`;

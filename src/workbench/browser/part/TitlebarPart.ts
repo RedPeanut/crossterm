@@ -6,6 +6,7 @@ export class TitlebarPart extends Part {
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
     this.size = TITLEBAR_HEIGHT;
+    this.border = true;
   }
 
   /* layoutContainer(offset: number): void {

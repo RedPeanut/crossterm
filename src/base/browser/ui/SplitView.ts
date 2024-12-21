@@ -34,6 +34,8 @@ export interface SplitViewItemView {
   set size(size: number);
   get sizeType(): SplitViewItemSizeType;
   set sizeType(sizeType: SplitViewItemSizeType);
+  get border(): boolean;
+  set border(border: boolean);
   layout(offset: number, size: number): void;
 }
 
@@ -205,7 +207,7 @@ export class SplitView<T extends SplitViewItemView> {
       const item = this.viewItems[i];
       item.layoutContainer(offset);
       // console.log(`[${i}] ${item.size}`);
-      offset += item.view.size;
+      offset += item.view.size + (item.view.border ? 1 : 0);
     }
   }
 
