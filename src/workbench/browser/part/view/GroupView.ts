@@ -4,6 +4,10 @@ import { SplitViewItemSizeType, SplitViewItemView } from "../../../../base/brows
 import { Tabs } from "../Tabs";
 import { Terms } from "../Terms";
 
+export interface GroupViewOptions {
+  style?: {}
+}
+
 export class GroupView implements SplitViewItemView {
 
   get element(): HTMLElement { return this._element; }
@@ -16,6 +20,10 @@ export class GroupView implements SplitViewItemView {
   get sizeType(): SplitViewItemSizeType { return this._sizeType; }
   set sizeType(sizeType: SplitViewItemSizeType) { this._sizeType = sizeType; }
 
+  _border: boolean = false;
+  get border(): boolean { return this._border; }
+  set border(border: boolean) { this._border = border; }
+  
   layout(offset: number, size: number): void {}
   
   container: HTMLElement;
@@ -23,10 +31,10 @@ export class GroupView implements SplitViewItemView {
   group: TerminalItem[];
   style: {};
 
-  constructor(container: HTMLElement, group: TerminalItem[], style: {}) {
+  constructor(container: HTMLElement, group: TerminalItem[], options: GroupViewOptions) {
     this.container = container;
     this.group = group;
-    this.style = style;
+    this.style = options.style;
   }
 
   create(): HTMLElement {
@@ -37,7 +45,7 @@ export class GroupView implements SplitViewItemView {
     const terms = new Terms(el, this.group);
     el.appendChild(terms.create());
     // this.container.appendChild(el);
-    return null;
+    return el;
   }
 
 }

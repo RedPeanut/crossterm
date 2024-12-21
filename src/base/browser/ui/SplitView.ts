@@ -113,6 +113,7 @@ export class SplitView<T extends SplitViewItemView> {
   sashContainer: HTMLElement;
   viewContainer: HTMLElement;
   sashDragState: SashDragState | undefined;
+  proportions: (number | undefined)[] | undefined = undefined;
 
   constructor(container: HTMLElement, options: SplitViewOptions) {
     this.container = container;
@@ -155,26 +156,47 @@ export class SplitView<T extends SplitViewItemView> {
     container.appendChild(view.element);
   }
 
+  saveProportions() {
+    this.proportions = [this.viewItems.length];
+    for(let i = 0; i < this.viewItems.length; i++)
+      this.proportions[i] = 1 / this.viewItems.length;
+    console.log('this.proportions =', this.proportions);
+  }
+
+  /**
+   * Sizing from total size
+   * @param size Total size
+   */
   layout(size: number) {
     this.size = size;
-    let total = 0;
-    for(let i = 0; i < this.viewItems.length; i++) {
-      const item = this.viewItems[i];
-      if(item.view.sizeType === 'wrap_content') {
-        total += item.view.size;
-        size -= item.view.size;
-      }
-    }
 
-    // fill empty space (dangling implementation)
-    for(let i = 0; i < this.viewItems.length; i++) {
-      const item = this.viewItems[i];
-      if(item.view.sizeType === 'fill_parent') {
-        item.view.size = size;
+    if(this.proportions) {
+      let total = 0;
+      for(let i = 0; i < this.viewItems.length; i++) {
+        const item = this.viewItems[i];
+        item.view.size = size * this.proportions[i];
       }
+      this.layoutViews();
+    } else {
+      let total = 0;
+      for(let i = 0; i < this.viewItems.length; i++) {
+        const item = this.viewItems[i];
+        if(item.view.sizeType === 'wrap_content') {
+          total += item.view.size;
+          size -= item.view.size;
+        }
+      }
+  
+      // fill empty space (dangling implementation)
+      for(let i = 0; i < this.viewItems.length; i++) {
+        const item = this.viewItems[i];
+        if(item.view.sizeType === 'fill_parent') {
+          item.view.size = size;
+        }
+      }
+  
+      this.layoutViews();
     }
-
-    this.layoutViews();
   }
 
   layoutViews(): void {
@@ -203,4 +225,5 @@ export class SplitView<T extends SplitViewItemView> {
 
     this.layoutViews();
   }
+
 }
