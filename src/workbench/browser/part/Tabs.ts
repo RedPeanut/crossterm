@@ -14,7 +14,7 @@ export class Tabs {
   create(): HTMLElement {
     const tabs = $('.tabs');
     const tablist = $('.tablist');
-    console.log('this.group =', this.group);
+    // console.log('this.group =', this.group);
     this.group.map((item, i) => {
       const tab = new Tab(null, item); 
       tablist.appendChild(tab.create());

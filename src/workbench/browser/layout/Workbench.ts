@@ -96,7 +96,7 @@ export class Workbench extends Layout implements WorkbenchLayoutService {
 
   layout(): void {
     let dimension = getClientArea(this.parent);
-    console.log('dimension =', dimension);
+    // console.log('dimension =', dimension);
     position(this.mainContainer, 0, 0, 0, 0, 'relative');
     size(this.mainContainer, dimension.width, dimension.height);
     if(this.splitView.orientation === Orientation.HORIZONTAL)

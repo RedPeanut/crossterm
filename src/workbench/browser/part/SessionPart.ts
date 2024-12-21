@@ -12,7 +12,6 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
     // console.log('[SessionPart] layout() is called ..');
     // console.log({ offset, size });
     if(this.gridView) {
-      this.gridView.saveProportions();
       this.gridView.layout(offset, size);
     }
   }
@@ -30,13 +29,27 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
       [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
     ]
   }; */
-  /* case2. single split */
+  /* case2. single split
   tree: SplitItem = {
-    mode: 'horizontal',
-    // mode: 'vertical',
+    // mode: 'horizontal',
+    mode: 'vertical',
     list:[
       [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}],
       [{uid:'b1',selected:true}]
+    ]
+  }; */
+  /* case3. split vertical in right pane */
+  tree: SplitItem = {
+    mode: 'horizontal',
+    list:[
+      [{uid:'b1',selected:true}],
+      {
+        mode:'vertical',
+        list:[
+          [{uid:'a1',selected:true}],
+          [{uid:'a2',selected:true,active:true}]
+        ]
+      },
     ]
   };
 
@@ -85,7 +98,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
 
   renderTreeRoot(container: HTMLElement, root: SplitItem, depth: number): HTMLElement[] {
     let result: HTMLElement[] = [];
-    console.log(isSplitItem(root));
+    // console.log(isSplitItem(root));
     if(isSplitItem(root)) {
       const orientation = root.mode === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
       const gridView = this.gridView = new GridView(null, { orientation: orientation, length: root.list.length });
@@ -118,7 +131,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
   }
 
   override createContentArea(): HTMLElement {
-    console.log('[SessionPart] createContentArea() is called ..');
+    // console.log('[SessionPart] createContentArea() is called ..');
     const container: HTMLElement = super.createContentArea();
     const results: HTMLElement[] = this.renderTreeRoot(container, this.tree, 0);
     for(let i = 0; i < results.length; i++)

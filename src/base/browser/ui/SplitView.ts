@@ -162,7 +162,7 @@ export class SplitView<T extends SplitViewItemView> {
     this.proportions = [this.viewItems.length];
     for(let i = 0; i < this.viewItems.length; i++)
       this.proportions[i] = 1 / this.viewItems.length;
-    console.log('this.proportions =', this.proportions);
+    // console.log('this.proportions =', this.proportions);
   }
 
   /**

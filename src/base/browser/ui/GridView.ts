@@ -1,4 +1,4 @@
-import { $ } from "../../../base/browser/dom";
+import { $, getClientArea } from "../../../base/browser/dom";
 import { Orientation } from "./sash/Sash";
 import { SplitView, SplitViewItemSizeType, SplitViewItemView, SplitViewOptions } from "./SplitView";
 
@@ -29,11 +29,15 @@ export class GridView implements SplitViewItemView {
   set border(border: boolean) { this._border = border; }
 
   layout(offset: number, size: number): void {
-    this.splitView.layout(size);
-  }
-
-  saveProportions() {
+    // console.log('size =', size);
+    // console.trace();
+    let dimension = getClientArea(this.element);
+    console.log('dimension =', dimension);
     this.splitView.saveProportions();
+    if(this.splitView.orientation === Orientation.HORIZONTAL)
+      this.splitView.layout(dimension.width);
+    else
+      this.splitView.layout(dimension.height);
   }
 
   container: HTMLElement;
