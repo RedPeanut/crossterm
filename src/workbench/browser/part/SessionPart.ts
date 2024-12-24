@@ -23,12 +23,13 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
 
   /* initial case
   tree: SplitItem = { mode: 'horizontal', list: [] }; */
-  /* case1. single multi tab 
+  /* case1. single multi tab */
   tree: SplitItem = {
+    mode: 'horizontal',
     list:[
       [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
     ]
-  }; */
+  }; //*/
   /* case2. single split
   tree: SplitItem = {
     // mode: 'horizontal',
@@ -38,7 +39,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
       [{uid:'b1',selected:true}]
     ]
   }; */
-  /* case3. split vertical in right pane */
+  /* case3. split vertical in right pane
   tree: SplitItem = {
     mode: 'horizontal',
     list:[
@@ -51,7 +52,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
         ]
       },
     ]
-  };
+  }; //*/
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
@@ -99,7 +100,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
   renderTreeRoot(container: HTMLElement, root: SplitItem, depth: number): HTMLElement[] {
     let result: HTMLElement[] = [];
     // console.log(isSplitItem(root));
-    if(isSplitItem(root)) {
+    // if(isSplitItem(root)) {
       const orientation = root.mode === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
       const gridView = this.gridView = new GridView(null, { orientation: orientation, length: root.list.length });
       const element = gridView.create();
@@ -118,15 +119,15 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
           splitView.addView(results[i]);
         // result.push(this.element);
       } */
-    } else {
-      const wrapper = $('.wrapper');
-      const results: SplitViewItemView[] = this.renderTreeList(wrapper, root, depth+1);
-      if(results.length > 0) {
-        for(let i = 0; i < results.length; i++)
-          wrapper.appendChild(results[i].element);
-        result.push(wrapper);
-      }
-    }
+    // } else {
+    //   const wrapper = $('.wrapper');
+    //   const results: SplitViewItemView[] = this.renderTreeList(wrapper, root, depth+1);
+    //   if(results.length > 0) {
+    //     for(let i = 0; i < results.length; i++)
+    //       wrapper.appendChild(results[i].element);
+    //     result.push(wrapper);
+    //   }
+    // }
     return result;
   }
 
