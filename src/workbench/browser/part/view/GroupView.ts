@@ -26,13 +26,13 @@ export class GroupView implements SplitViewItemView {
   
   layout(offset: number, size: number): void {}
   
-  container: HTMLElement;
+  parent: HTMLElement;
   _element: HTMLElement;
   group: TerminalItem[];
   style: {};
 
-  constructor(container: HTMLElement, group: TerminalItem[], options: GroupViewOptions) {
-    this.container = container;
+  constructor(parent: HTMLElement, group: TerminalItem[], options: GroupViewOptions) {
+    this.parent = parent;
     this.group = group;
     this.style = options.style;
   }

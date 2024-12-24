@@ -40,13 +40,13 @@ export class GridView implements SplitViewItemView {
       this.splitView.layout(dimension.height);
   }
 
-  container: HTMLElement;
+  parent: HTMLElement;
   _element: HTMLElement;
   splitView: SplitView<SplitViewItemView>;
   options: GridViewOptions;
 
-  constructor(container: HTMLElement, options: GridViewOptions) {
-    this.container = container;
+  constructor(parent: HTMLElement, options: GridViewOptions) {
+    this.parent = parent;
     this.options = options;
   }
 

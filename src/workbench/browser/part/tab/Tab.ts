@@ -2,15 +2,17 @@ import { $ } from "../../../../base/browser/dom";
 import { TerminalItem } from "../../../../Types";
 
 export class Tab {
-  container: HTMLElement;
+  parent: HTMLElement;
+  element: HTMLElement;
   item: TerminalItem;
 
-  constructor(container: HTMLElement, item: TerminalItem) {
-    this.container = container;
+  constructor(parent: HTMLElement, item: TerminalItem) {
+    this.parent = parent;
+    this.item = item;
   }
   
   create(): HTMLElement { 
-    const tab = $('.tab');
-    return tab;
+    const el = this.element = $('.tab');
+    return el;
   }
 }

@@ -2,11 +2,11 @@ import { $ } from "../../../../base/browser/dom";
 import { TerminalItem } from "../../../../Types";
 
 export class Term {
-  container: HTMLElement;
+  parent: HTMLElement;
   item: TerminalItem;
   
-  constructor(container: HTMLElement, item: TerminalItem) {
-    this.container = container;
+  constructor(parent: HTMLElement, item: TerminalItem) {
+    this.parent = parent;
   }
   
   create(): HTMLElement {

@@ -3,11 +3,11 @@ import { TerminalItem } from "../../../../Types";
 import { Tab } from "./Tab";
 
 export class Tabs {
-  container: HTMLElement;
+  parent: HTMLElement;
   group: TerminalItem[];
   
-  constructor(container: HTMLElement, group: TerminalItem[]) {
-    this.container = container;
+  constructor(parent: HTMLElement, group: TerminalItem[]) {
+    this.parent = parent;
     this.group = group;
   }
 

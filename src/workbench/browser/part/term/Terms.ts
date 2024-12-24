@@ -3,19 +3,21 @@ import { TerminalItem } from "../../../../Types";
 import { Term } from "./Term";
 
 export class Terms {
-    container: HTMLElement;
+    parent: HTMLElement;
+    element: HTMLElement;
     group: TerminalItem[];
-    constructor(container: HTMLElement, group: TerminalItem[]) {
-      this.container = container;
+
+    constructor(parent: HTMLElement, group: TerminalItem[]) {
+      this.parent = parent;
       this.group = group;
     }
 
     create(): HTMLElement {
-      const terms = $('.terms');
+      const el = this.element = $('.terms');
       this.group.map((item, i) => {
         const term = new Term(null, item); 
-        terms.appendChild(term.create());
+        el.appendChild(term.create());
       });
-      return terms;
+      return el;
     }
   }
