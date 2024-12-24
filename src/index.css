@@ -216,6 +216,8 @@ body { height: 100%; }
   height: 100%;
 }
 
+.group-view { width:100%; height:100%; }
+
 /* StatusBar */
 .part.statusbar {
   height: 22px;
