@@ -12,8 +12,8 @@ export class Tab {
   }
   
   onDragStart(e: any): void {
-    console.log('onDragStart event is called...');
-    console.log('e =', e);
+    // console.log('onDragStart event is called...');
+    // console.log('e =', e);
   }
   onDragEnter(e: any): void {}
   onDragLeave(e: any): void {}

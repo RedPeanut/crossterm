@@ -1,12 +1,12 @@
 import { Orientation } from '../../../base/browser/ui/sash/Sash';
 import { isSplitItem, SplitItem, TerminalItem } from '../../../Types';
 import { $ } from '../../../base/browser/dom';
-import { HorizontalViewItem, SplitView, SplitViewItemView } from '../../../base/browser/ui/SplitView';
+import { SplitViewItemView } from '../../../base/browser/ui/SplitView';
 import { Part } from '../Part';
 import { GroupView } from './view/GroupView';
 import { GridView } from '../../../base/browser/ui/GridView';
 
-export class SessionPart extends Part /* implements HorizontalViewItem */ {
+export class SessionPart extends Part {
   
   override layout(offset: number, size: number): void {
     // console.log('[SessionPart] layout() is called ..');
@@ -23,7 +23,7 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
 
   /* initial case
   tree: SplitItem = { mode: 'horizontal', list: [] }; */
-  /* case1. single multi tab */
+  /* case1. single multi tab
   tree: SplitItem = {
     mode: 'horizontal',
     list:[
@@ -38,8 +38,8 @@ export class SessionPart extends Part /* implements HorizontalViewItem */ {
       [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}],
       [{uid:'b1',selected:true}]
     ]
-  }; */
-  /* case3. split vertical in right pane
+  }; //*/
+  /* case3. split vertical in right pane */
   tree: SplitItem = {
     mode: 'horizontal',
     list:[

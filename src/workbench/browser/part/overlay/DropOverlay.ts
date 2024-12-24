@@ -118,7 +118,7 @@ export class DropOverlay {
     this.throttle_doPositionOverlay(e);
   }
   onDrop(e: any): void {
-    console.log('onDragOver event is called...');
+    // console.log('onDrop event is called...');
     e.preventDefault();
     this.target.element.style.opacity = '0';
   }
