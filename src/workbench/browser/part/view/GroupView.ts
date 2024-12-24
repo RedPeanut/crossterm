@@ -1,8 +1,8 @@
 import { TerminalItem } from "../../../../Types";
 import { $ } from "../../../../base/browser/dom";
 import { SplitViewItemSizeType, SplitViewItemView } from "../../../../base/browser/ui/SplitView";
-import { Tabs } from "../Tabs";
-import { Terms } from "../Terms";
+import { Tabs } from "../tab/Tabs";
+import { Terms } from "../term/Terms";
 
 export interface GroupViewOptions {
   style?: {}

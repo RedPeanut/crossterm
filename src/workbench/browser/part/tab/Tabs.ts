@@ -1,5 +1,5 @@
-import { $ } from "../../../base/browser/dom";
-import { TerminalItem } from "../../../Types";
+import { $ } from "../../../../base/browser/dom";
+import { TerminalItem } from "../../../../Types";
 import { Tab } from "./Tab";
 
 export class Tabs {

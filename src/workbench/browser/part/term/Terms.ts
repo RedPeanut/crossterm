@@ -1,5 +1,5 @@
-import { $ } from "../../../base/browser/dom";
-import { TerminalItem } from "../../../Types";
+import { $ } from "../../../../base/browser/dom";
+import { TerminalItem } from "../../../../Types";
 import { Term } from "./Term";
 
 export class Terms {
