@@ -1,6 +1,6 @@
 import { activitybarPartServiceId, getService, setService, workbenchLayoutServiceId } from '../../../service';
 import { HorizontalViewItem } from '../../../base/browser/ui/SplitView';
-import { ACTIVITYBAR_WIDTH, WorkbenchLayoutService } from '../layout/Workbench';
+import { ACTIVITYBAR_WIDTH, WorkbenchLayoutService } from '../layout/WorkbenchLayout';
 import { Part } from '../Part';
 import { BookmarkPanel } from '../panel/BookmarkPanel';
 import { SamplePanel } from '../panel/SamplePanel';

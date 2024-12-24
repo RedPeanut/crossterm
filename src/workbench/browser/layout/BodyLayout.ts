@@ -4,7 +4,7 @@ import { ActivitybarPart, ActivitybarPartService } from "../part/ActivitybarPart
 import { SidebarPart, SidebarPartService } from "../part/SidebarPart";
 import { SessionPart } from "../part/SessionPart";
 import { Orientation } from "../../../base/browser/ui/sash/Sash";
-import { Parts, WorkbenchLayoutService } from "./Workbench";
+import { Parts, WorkbenchLayoutService } from "./WorkbenchLayout";
 import { getClientArea } from "../../../base/browser/dom";
 import { activitybarPartServiceId, bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../../../service";
 import { BookmarkPanel } from "../panel/BookmarkPanel";
@@ -20,7 +20,7 @@ export interface BodyLayoutService extends Service {
   inflate(): void;
 }
 
-export class Body extends Layout implements BodyLayoutService, SplitViewItemView {
+export class BodyLayout extends Layout implements BodyLayoutService, SplitViewItemView {
 
   get element(): HTMLElement { return this.mainContainer; }
 

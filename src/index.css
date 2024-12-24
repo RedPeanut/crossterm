@@ -4,7 +4,7 @@ html { height: 100%; color: white; }
 body { height: 100%; }
 
 /* App */
-.workbench {
+.layout.workbench {
   width: 100%;
   height: 100%;
   display: flex;

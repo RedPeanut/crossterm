@@ -28,7 +28,7 @@
 
 import '@vscode/codicons/dist/codicon.css';
 import './index.css';
-import { Workbench, WorkbenchLayoutService } from './workbench/browser/layout/Workbench';
+import { WorkbenchLayout, WorkbenchLayoutService } from './workbench/browser/layout/WorkbenchLayout';
 import { domContentLoaded } from './base/browser/dom';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
@@ -41,8 +41,8 @@ export class Renderer {
 
   async open() {
     await Promise.all([domContentLoaded(mainWindow)]);
-    const workbench = new Workbench(mainWindow.document.body);
-    workbench.startup();
+    const workbenchLayout = new WorkbenchLayout(mainWindow.document.body);
+    workbenchLayout.startup();
   }
 }
 

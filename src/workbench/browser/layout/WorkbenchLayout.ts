@@ -6,7 +6,7 @@ import { TitlebarPart } from '../part/TitlebarPart';
 import { ActivitybarPart } from '../part/ActivitybarPart';
 // import { BodyPart } from '../part/BodyPart';
 import { StatusbarPart } from '../part/StatusbarPart';
-import { Body, BodyLayoutService } from './Body';
+import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../../../base/browser/ui/SplitView';
 import { getClientArea, position, size } from '../../../base/browser/dom';
 import { Orientation } from '../../../base/browser/ui/sash/Sash';
@@ -32,16 +32,16 @@ export interface WorkbenchLayoutService extends Service {
   toggleSidebar(): void;
 }
 
-export class Workbench extends Layout implements WorkbenchLayoutService {
+export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
 
   layoutContainer(offset: number): void {
     throw new Error('Method not implemented.');
   }
 
   titlebarPart: TitlebarPart;
-  bodyLayout: Body;
+  bodyLayout: BodyLayout;
   statusbarPart: StatusbarPart;
-  splitView: SplitView<TitlebarPart | Body | StatusbarPart>;
+  splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
 
   constructor(parent: HTMLElement) { 
     super(parent);
@@ -53,21 +53,21 @@ export class Workbench extends Layout implements WorkbenchLayoutService {
 
     //
     const platformClass = isWindows ? 'windows' : isLinux ? 'linux' : 'mac'; //Runtime.isWindows ? 'windows' : Runtime.isLinux ? 'linux' : 'mac';
-    const workbenchClasses = coalesce(['workbench', platformClass]);
+    const workbenchClasses = coalesce(['workbench', 'layout', platformClass]);
     this.mainContainer.classList.add(...workbenchClasses);
 
     const titlebarPart = this.titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
     titlebarPart.create();
     
-    const body = this.bodyLayout = new Body(null, { sizeType: 'fill_parent' });
-    body.create();
+    const bodyLayout = this.bodyLayout = new BodyLayout(null, { sizeType: 'fill_parent' });
+    bodyLayout.create();
 
     const statusbarPart = this.statusbarPart = new StatusbarPart(null, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
     statusbarPart.create();
 
     const splitView = this.splitView = new SplitView(this.mainContainer, { orientation: Orientation.VERTICAL });
     splitView.addView(titlebarPart);
-    splitView.addView(body);
+    splitView.addView(bodyLayout);
     splitView.addView(statusbarPart);
     
     this.parent.appendChild(this.mainContainer);

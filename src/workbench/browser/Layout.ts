@@ -1,4 +1,4 @@
-import { Parts } from './layout/Workbench';
+import { Parts } from './layout/WorkbenchLayout';
 import { Disposable, IDisposable } from '../../base/common/Lifecycle';
 import { Part } from './Part';
 import { SplitViewItem, SplitViewItemSizeType } from '../../base/browser/ui/SplitView';

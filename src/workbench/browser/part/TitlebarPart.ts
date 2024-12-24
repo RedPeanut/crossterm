@@ -1,5 +1,5 @@
 import { VerticalViewItem } from '../../../base/browser/ui/SplitView';
-import { TITLEBAR_HEIGHT } from '../layout/Workbench';
+import { TITLEBAR_HEIGHT } from '../layout/WorkbenchLayout';
 import { Part } from '../Part';
 
 export class TitlebarPart extends Part {

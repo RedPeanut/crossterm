@@ -2,7 +2,7 @@ import { Service, setService, sidebarPartServiceId } from '../../../service';
 import { $, hide, show } from '../../../base/browser/dom';
 import { HorizontalViewItem } from '../../../base/browser/ui/SplitView';
 import { Panel } from '../Panel';
-import { SIDEBAR_WIDTH } from '../layout/Workbench';
+import { SIDEBAR_WIDTH } from '../layout/WorkbenchLayout';
 import { Part } from '../Part';
 
 export interface SidebarPartService extends Service {

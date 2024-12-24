@@ -1,4 +1,4 @@
-import { STATUSBAR_HEIGHT } from '../layout/Workbench';
+import { STATUSBAR_HEIGHT } from '../layout/WorkbenchLayout';
 import { Part } from '../Part';
 
 export class StatusbarPart extends Part {
