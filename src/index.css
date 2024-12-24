@@ -213,10 +213,32 @@ body { height: 100%; }
 }
 
 .terms .term {
+  position: absolute;
+  width: 100%;
   height: 100%;
 }
 
 .group-view { width:100%; height:100%; }
+
+.drop-target {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgb(83, 89, 93, 0.5)
+}
+
+.drop-overlay {
+  opacity: 0;
+  position: absolute;
+  /* z-index: 10; */
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
 
 /* StatusBar */
 .part.statusbar {

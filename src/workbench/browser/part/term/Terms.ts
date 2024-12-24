@@ -1,5 +1,7 @@
 import { $ } from "../../../../base/browser/dom";
 import { TerminalItem } from "../../../../Types";
+import { DropOverlay } from "../overlay/DropOverlay";
+import { DropTarget } from "../overlay/DropTarget";
 import { Term } from "./Term";
 
 export class Terms {
@@ -18,6 +20,11 @@ export class Terms {
         const term = new Term(null, item); 
         el.appendChild(term.create());
       });
+
+      const dropTarget = new DropTarget(null, this.group); 
+      el.appendChild(dropTarget.create());
+      const dropOverlay = new DropOverlay(null, this.group, dropTarget);
+      el.appendChild(dropOverlay.create());
       return el;
     }
   }
