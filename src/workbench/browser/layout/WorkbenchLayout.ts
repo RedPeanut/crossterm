@@ -10,7 +10,8 @@ import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../../../base/browser/ui/SplitView';
 import { getClientArea, position, size } from '../../../base/browser/dom';
 import { Orientation } from '../../../base/browser/ui/sash/Sash';
-import { bodyLayoutServiceId, getService, Service, setService, workbenchLayoutServiceId } from '../../../service';
+import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, workbenchLayoutServiceId } from '../../../service';
+import { SessionPartService } from '../part/SessionPart';
 // import Runtime from './Runtime';
 
 export const TITLEBAR_HEIGHT = 42;
@@ -106,10 +107,12 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
   }
 
   bodyLayoutService: BodyLayoutService;
+  sessionPartService: SessionPartService;
 
   getServices(): void {
     this.bodyLayoutService = getService(bodyLayoutServiceId);
     this.bodyLayoutService.getServices();
+    this.sessionPartService = getService(sessionPartServiceId);
   }
 
   startup(): void {
@@ -117,6 +120,9 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
     this.getServices();
     this.bodyLayoutService.inflate();
     this.layout();
+
+    // create terminal after layout
+    this.sessionPartService.createTerminal();
   }
 
   toggleSidebar(): void {

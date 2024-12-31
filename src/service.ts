@@ -4,12 +4,14 @@ export const workbenchLayoutServiceId = "workbenchLayoutService";
 export const bodyLayoutServiceId = "bodyLayoutService";
 export const activitybarPartServiceId = "activitybarPartService";
 export const sidebarPartServiceId = "sidebarPartService";
+export const sessionPartServiceId = "sessionPartService";
 export const blarBlarServiceId = "blarBlarService";
 
 type ServiceId = typeof workbenchLayoutServiceId // WorkbenchLayoutService
   | typeof bodyLayoutServiceId // BodyLayoutService
   | typeof activitybarPartServiceId // ActivitybarPartService
   | typeof sidebarPartServiceId // SidebarPartService
+  | typeof sessionPartServiceId // SessionPartService
   | typeof blarBlarServiceId // BlarBlarService
 ;
 

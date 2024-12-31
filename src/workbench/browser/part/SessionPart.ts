@@ -5,8 +5,13 @@ import { SplitViewItemView } from '../../../base/browser/ui/SplitView';
 import { Part } from '../Part';
 import { GroupView } from './view/GroupView';
 import { GridView } from '../../../base/browser/ui/GridView';
+import { Service, sessionPartServiceId, setService } from '../../../service';
 
-export class SessionPart extends Part {
+export interface SessionPartService extends Service {
+  createTerminal(): void;
+}
+
+export class SessionPart extends Part implements SessionPartService {
   
   override layout(offset: number, size: number): void {
     // console.log('[SessionPart] layout() is called ..');
@@ -23,7 +28,7 @@ export class SessionPart extends Part {
 
   /* initial case
   tree: SplitItem = { mode: 'horizontal', list: [] }; */
-  /* case1. single multi tab
+  /* case1. single multi tab */
   tree: SplitItem = {
     mode: 'horizontal',
     list:[
@@ -39,7 +44,7 @@ export class SessionPart extends Part {
       [{uid:'b1',selected:true}]
     ]
   }; //*/
-  /* case3. split vertical in right pane */
+  /* case3. split vertical in right pane
   tree: SplitItem = {
     mode: 'horizontal',
     list:[
@@ -59,6 +64,7 @@ export class SessionPart extends Part {
     // this.size = SESSION_WIDTH;
     this.sizeType = 'fill_parent';
     this.border = true;
+    setService(sessionPartServiceId, this);
   }
 
   renderTreeList(container: HTMLElement, parent: SplitItem, depth: number): SplitViewItemView[] {
@@ -138,6 +144,20 @@ export class SessionPart extends Part {
     for(let i = 0; i < results.length; i++)
       container.appendChild(results[i]);
     return container;
+  }
+
+  createTerminal(): void {
+    const viewItems = this.gridView.splitView.viewItems;
+    for(let i = 0; i < viewItems.length; i++) {
+      // console.log(this.gridView.splitView.viewItems[i].view instanceof GroupView);
+      // console.log(this.gridView.splitView.viewItems[i] instanceof SplitViewItem);
+      if(this.gridView.splitView.viewItems[i].view instanceof GroupView) {
+        const v: GroupView = this.gridView.splitView.viewItems[i].view as GroupView;
+        for(let j = 0; j < v.terms.terms.length; j++) {
+          v.terms.terms[j].createTerminal();
+        }
+      }
+    }
   }
 
 }

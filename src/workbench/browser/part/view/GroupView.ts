@@ -31,6 +31,9 @@ export class GroupView implements SplitViewItemView {
   group: TerminalItem[];
   style: {};
 
+  tabs: Tabs;
+  terms: Terms;
+
   constructor(parent: HTMLElement, group: TerminalItem[], options: GroupViewOptions) {
     this.parent = parent;
     this.group = group;
@@ -40,9 +43,9 @@ export class GroupView implements SplitViewItemView {
   create(): HTMLElement {
     const el = this._element = $('.group-view');
     // el.style = this.style;
-    const tabs = new Tabs(el, this.group);
+    const tabs = this.tabs = new Tabs(el, this.group);
     el.appendChild(tabs.create());
-    const terms = new Terms(el, this.group);
+    const terms = this.terms = new Terms(el, this.group);
     el.appendChild(terms.create());
     // this.container.appendChild(el);
     return el;

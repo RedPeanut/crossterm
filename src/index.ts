@@ -37,8 +37,13 @@ const getWindowSize = () => {
 }
 
 const installIpc = () => {
-  ipcMain.on('new', (event, args: any[]) => {});
-  ipcMain.on('data', (event, args: any[]) => {});
+  ipcMain.on('new', (event, args: any[]) => {
+    console.log('[index.ts/new] args =', args);
+  });
+
+  ipcMain.on('data', (event, args: any[]) => {
+    console.log('[index.ts/data] args =', args);
+  });
 }
 
 const createWindow = (): void => {
