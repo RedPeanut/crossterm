@@ -42,7 +42,7 @@ const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     // autoHideMenuBar: true,
-    // titleBarStyle: 'hiddenInset',
+    // titleBarStyle: 'hidden',
     // show: false,
     x, y, width, height,
     webPreferences: {

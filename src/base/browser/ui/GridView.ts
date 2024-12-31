@@ -32,7 +32,7 @@ export class GridView implements SplitViewItemView {
     // console.log('size =', size);
     // console.trace();
     let dimension = getClientArea(this.element);
-    console.log('dimension =', dimension);
+    // console.log('dimension =', dimension);
     this.splitView.saveProportions();
     if(this.splitView.orientation === Orientation.HORIZONTAL)
       this.splitView.layout(dimension.width);
