@@ -194,7 +194,7 @@ export class SplitView<T extends SplitViewItemView> {
       for(let i = 0; i < this.viewItems.length; i++) {
         const item = this.viewItems[i];
         if(item.view.sizeType === 'fill_parent') {
-          item.view.size = totalSize;
+          item.view.size = totalSize - (item.view.border ? 1 : 0);
         }
       }
   
