@@ -33,6 +33,14 @@ import { domContentLoaded } from './base/browser/dom';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
+import { ElectronHandler } from './preload';
+
+declare global {
+  interface Window {
+    ipc: ElectronHandler;
+  }
+}
+
 export type CodeWindow = Window & typeof globalThis;
 export const mainWindow = window as CodeWindow;
 
