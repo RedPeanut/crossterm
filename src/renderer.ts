@@ -28,8 +28,8 @@
 
 import '@vscode/codicons/dist/codicon.css';
 import './index.css';
-import { WorkbenchLayout, WorkbenchLayoutService } from './workbench/browser/layout/WorkbenchLayout';
-import { domContentLoaded } from './base/browser/dom';
+import { WorkbenchLayout, WorkbenchLayoutService } from './renderer/layout/WorkbenchLayout';
+import { domContentLoaded } from './renderer/util/dom';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
