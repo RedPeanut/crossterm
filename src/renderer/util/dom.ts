@@ -1,6 +1,6 @@
 //# region Multi-Window Support Utilities
 
-import { mainWindow, CodeWindow } from "../../renderer";
+import { mainWindow, CodeWindow } from "..";
 
 export const {
   getWindow,

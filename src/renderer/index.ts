@@ -28,12 +28,12 @@
 
 import '@vscode/codicons/dist/codicon.css';
 import './index.css';
-import { WorkbenchLayout, WorkbenchLayoutService } from './renderer/layout/WorkbenchLayout';
-import { domContentLoaded } from './renderer/util/dom';
+import { WorkbenchLayout, WorkbenchLayoutService } from './layout/WorkbenchLayout';
+import { domContentLoaded } from './util/dom';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
-import { ElectronHandler } from './preload';
+import { ElectronHandler } from '../main/preload';
 
 declare global {
   interface Window {
