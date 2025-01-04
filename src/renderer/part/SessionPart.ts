@@ -33,7 +33,7 @@ export class SessionPart extends Part implements SessionPartService {
   tree: SplitItem = {
     mode: 'horizontal',
     list:[
-      [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
+      [{uid:'a1',selected:false}] //,{uid:'a2',selected:true,active:true}]
     ]
   }; //*/
   /* case2. single split
