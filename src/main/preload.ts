@@ -1,29 +1,50 @@
-// Disable no-unused-vars, broken for spread args
-/* eslint no-unused-vars: off */
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+// See the Electron documentation for details on how to use preload scripts:
+// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
-export type Channels = 'ipc-example';
+import { contextBridge, ipcRenderer, IpcRendererEvent, IpcRenderer } from 'electron';
+
+export type MainEvents =
+  // terminal
+  'new'
+  | 'data'
+  | 'maximize'
+  | 'minimize'
+  | 'resize'
+  | 'open context menu'
+  | 'close'
+  | 'command'
+
+  // config
+  | 'config all'
+  | 'config get'
+  | 'config set'
+  | 'config update'
+
+;
+
+export type RenderEvents =
+  'terminal add'
+  | 'terminal data'
+  | 'terminal exit'
+;
+
+export type Channels = MainEvents | RenderEvents;
 
 const electronHandler = {
-  ipcRenderer: {
-    sendMessage(channel: Channels, ...args: unknown[]) {
-      ipcRenderer.send(channel, ...args);
-    },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
-      ipcRenderer.on(channel, subscription);
-
-      return () => {
-        ipcRenderer.removeListener(channel, subscription);
-      };
-    },
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
-    },
+  send(channel: Channels, ...args: any[]) {
+    ipcRenderer.send(channel, args);
+  },
+  invoke(channel: Channels, ...args: any[]) {
+    return ipcRenderer.invoke(channel, args);
+  },
+  on: (channel: Channels, cb: (...args: unknown[]) => void) => {
+    ipcRenderer.on(channel, cb)
+  },
+  off: (channel: Channels, cb: (...args: unknown[]) => void) => {
+    ipcRenderer.removeListener(channel, cb)
   },
 };
 
-contextBridge.exposeInMainWorld('electron', electronHandler);
+contextBridge.exposeInMainWorld('ipc', electronHandler);
 
 export type ElectronHandler = typeof electronHandler;

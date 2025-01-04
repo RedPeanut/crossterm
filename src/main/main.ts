@@ -9,11 +9,13 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, screen, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { TerminalItem } from '../common/Types';
+import TerminalLocal from './terminal/TerminalLocal';
 
 class AppUpdater {
   constructor() {
@@ -24,12 +26,6 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -56,6 +52,55 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+const getMaxScreenSize = () => {
+  let rect = { x: -1, y: -1, height: -1, width: -1 };
+  const _screen = screen.getDisplayMatching(rect);
+  return {
+    ..._screen.workArea
+  }
+}
+
+const getWindowSize = () => {
+
+  // todo: if dev maxmize window
+  // else if exist last state window size then use
+  // else set to default size (width: 1024, height: 728)
+
+  const {
+    width: maxWidth,
+    height: maxHeight
+  } = getMaxScreenSize();
+
+  return {
+    x: 0, y: 0,
+    width: maxWidth,
+    height: maxHeight
+  }
+}
+
+const installIpc = () => {
+  const terminals = new Map<string, TerminalLocal>();
+
+  ipcMain.on('new', (event, args: any[]) => {
+    console.log('[index.ts/new] args =', args);
+    const arg: TerminalItem = args[0] as TerminalItem;
+    if(arg.type === 'local') {
+      const terminal = new TerminalLocal(arg);
+      terminal.on('data', (data: string) => {
+        // console.log('data event is called..., data =', data);
+        mainWindow?.webContents.send('terminal data', data);
+      });
+      terminal.start();
+      terminals.set(arg.uid, terminal);
+    } else if(arg.type === 'remote') {
+    }
+  });
+
+  ipcMain.on('data', (event, args: any[]) => {
+    console.log('[index.ts/data] args =', args);
+  });
+}
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
@@ -69,10 +114,13 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  const { x, y, width, height } = getWindowSize();
+
   mainWindow = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728,
+    // show: false,
+    // width: 1024, height: 728,
+    titleBarStyle: 'hidden',
+    x, y, width, height,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -80,6 +128,8 @@ const createWindow = async () => {
         : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
   });
+
+  installIpc();
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
