@@ -14,5 +14,9 @@
     "postinstall": "npm run rebuild && npm run link-modules",
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@vscode/codicons": "0.0.36",
+    "node-pty": "1.0.0",
+    "ssh2": "1.15.0"
+  }
 }

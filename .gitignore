@@ -4,6 +4,7 @@ node_modules
 # OSX
 .DS_Store
 
+release/app/package-lock.json
 release/app/dist
 release/build
 .erb/dll
