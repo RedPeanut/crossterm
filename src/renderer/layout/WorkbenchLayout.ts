@@ -12,6 +12,7 @@ import { getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
 import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, workbenchLayoutServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
+import { terminals } from '../../globals';
 // import Runtime from './Runtime';
 
 export const TITLEBAR_HEIGHT = 42;
@@ -115,13 +116,28 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
     this.sessionPartService = getService(sessionPartServiceId);
   }
 
+  installIpc(): void {
+    window.ipc.on('terminal data', (...args: any[]) => {
+      // console.log('terminal data event is called..');
+      // console.log('args =', args);
+      const raw: string = args[1];
+      const uid = raw.slice(0, 36);
+      const data = raw.slice(36);
+      const term = terminals[uid];
+      if(term) {
+        term.xterm.write(data);
+      }
+    });
+  }
+
   startup(): void {
     this.create();
     this.getServices();
     this.bodyLayoutService.inflate();
     this.layout();
+    this.installIpc();
 
-    // create terminal after layout
+    // create terminal after layout n ipc install
     this.sessionPartService.createTerminal();
   }
 
