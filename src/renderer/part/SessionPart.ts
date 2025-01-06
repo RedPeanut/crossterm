@@ -10,6 +10,8 @@ import { TerminalItem } from '../../common/Types';
 
 export interface SessionPartService extends Service {
   createTerminal(): void;
+  getServices(): void;
+  makeOverlayVisible(b: boolean): void;
 }
 
 export class SessionPart extends Part implements SessionPartService {
@@ -29,14 +31,14 @@ export class SessionPart extends Part implements SessionPartService {
 
   /* initial case
   tree: SplitItem = { mode: 'horizontal', list: [] }; */
-  /* case1. single multi tab */
+  /* case1. single multi tab
   tree: SplitItem = {
     mode: 'horizontal',
     list:[
-      [{uid:'a1',selected:false}] //,{uid:'a2',selected:true,active:true}]
+      [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
     ]
   }; //*/
-  /* case2. single split
+  ///* case2. single split
   tree: SplitItem = {
     // mode: 'horizontal',
     mode: 'vertical',
@@ -161,4 +163,29 @@ export class SessionPart extends Part implements SessionPartService {
     }
   }
 
+  getServices(): void {
+    const viewItems = this.gridView.splitView.viewItems;
+    for(let i = 0; i < viewItems.length; i++) {
+      // console.log(this.gridView.splitView.viewItems[i].view instanceof GroupView);
+      // console.log(this.gridView.splitView.viewItems[i] instanceof SplitViewItem);
+      if(this.gridView.splitView.viewItems[i].view instanceof GroupView) {
+        const v: GroupView = this.gridView.splitView.viewItems[i].view as GroupView;
+        for(let j = 0; j < v.tabs.tabs.length; j++) {
+          v.tabs.tabs[j].getServices();
+        }
+      }
+    }
+  }
+
+  makeOverlayVisible(b: boolean): void {
+    const viewItems = this.gridView.splitView.viewItems;
+    for(let i = 0; i < viewItems.length; i++) {
+      // console.log(this.gridView.splitView.viewItems[i].view instanceof GroupView);
+      // console.log(this.gridView.splitView.viewItems[i] instanceof SplitViewItem);
+      if(this.gridView.splitView.viewItems[i].view instanceof GroupView) {
+        const v: GroupView = this.gridView.splitView.viewItems[i].view as GroupView;
+        v.terms.wrapper.style.display = b ? 'block' : 'none';
+      }
+    }
+  }
 }

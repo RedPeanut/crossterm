@@ -114,6 +114,7 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
     this.bodyLayoutService = getService(bodyLayoutServiceId);
     this.bodyLayoutService.getServices();
     this.sessionPartService = getService(sessionPartServiceId);
+    this.sessionPartService.getServices();
   }
 
   installIpc(): void {

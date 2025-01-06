@@ -9,6 +9,7 @@ export class Terms {
   element: HTMLElement;
   group: TerminalItem[];
   terms: Term[];
+  wrapper: HTMLElement;
 
   constructor(parent: HTMLElement, group: TerminalItem[]) {
     this.parent = parent;
@@ -24,10 +25,14 @@ export class Terms {
       this.terms[i] = term;
     });
 
+    const wrapper = this.wrapper = $('.wrapper');
     const dropTarget = new DropTarget(null, this.group);
-    el.appendChild(dropTarget.create());
+    wrapper.appendChild(dropTarget.create());
     const dropOverlay = new DropOverlay(null, this.group, dropTarget);
-    el.appendChild(dropOverlay.create());
+    wrapper.appendChild(dropOverlay.create());
+    wrapper.style.display = 'none';
+    el.appendChild(wrapper);
+
     return el;
   }
 }
