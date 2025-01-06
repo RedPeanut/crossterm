@@ -13,7 +13,7 @@ export interface SessionPartService extends Service {
 }
 
 export class SessionPart extends Part implements SessionPartService {
-  
+
   override layout(offset: number, size: number): void {
     // console.log('[SessionPart] layout() is called ..');
     // console.log({ offset, size });

@@ -44,7 +44,7 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
   statusbarPart: StatusbarPart;
   splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
 
-  constructor(parent: HTMLElement) { 
+  constructor(parent: HTMLElement) {
     super(parent);
     setService(workbenchLayoutServiceId, this);
   }
@@ -59,7 +59,7 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
 
     const titlebarPart = this.titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
     titlebarPart.create();
-    
+
     const bodyLayout = this.bodyLayout = new BodyLayout(null, { sizeType: 'fill_parent' });
     bodyLayout.create();
 
@@ -70,7 +70,7 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
     splitView.addView(titlebarPart);
     splitView.addView(bodyLayout);
     splitView.addView(statusbarPart);
-    
+
     this.parent.appendChild(this.mainContainer);
   }
 
@@ -78,9 +78,9 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
       // https://stackoverflow.com/questions/24677592/generic-type-inference-with-class-argument/26696435#26696435
       // According to the language spec, need to refer to the class type by it's ctor fn.
       klass: { new(id: string, role: string, classes: string[], options: object): T; },
-      id: string, 
-      role: string, 
-      classes: string[], 
+      id: string,
+      role: string,
+      classes: string[],
       options: {}
   ): Part {
     const part = new klass(id, role, classes, options);
@@ -128,5 +128,5 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
   toggleSidebar(): void {
     throw new Error('Method not implemented.');
   }
-  
+
 }

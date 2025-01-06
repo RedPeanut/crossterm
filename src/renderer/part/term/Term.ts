@@ -20,7 +20,7 @@ export class Term {
     this.uid = uuidv4();
     this.fitAddon = new FitAddon();
   }
-  
+
   create(): HTMLElement {
     const term = $('.term');
     term.id = this.uid;

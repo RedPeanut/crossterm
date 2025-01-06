@@ -10,7 +10,7 @@ export class Tab {
     this.parent = parent;
     this.item = item;
   }
-  
+
   onDragStart(e: any): void {
     // console.log('onDragStart event is called...');
     // console.log('e =', e);
@@ -21,7 +21,7 @@ export class Tab {
   onDragOver(e: any): void {}
   onDrop(e: any): void {}
 
-  create(): HTMLElement { 
+  create(): HTMLElement {
     const el = this.element = $('.tab');
     el.draggable = true;
     el.ondragstart = this.onDragStart;
