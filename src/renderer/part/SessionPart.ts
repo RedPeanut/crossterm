@@ -7,6 +7,7 @@ import { GroupView } from './view/GroupView';
 import { GridView } from '../component/GridView';
 import { Service, sessionPartServiceId, setService } from '../Service';
 import { TerminalItem } from '../../common/Types';
+import { tree } from '../../globals';
 
 export interface SessionPartService extends Service {
   createTerminal(): void;
@@ -28,39 +29,6 @@ export class SessionPart extends Part implements SessionPartService {
     this._splitViewContainer.style.left = `${offset}px`;
     this._splitViewContainer.style.width = `${this._size}px`;
   } */
-
-  /* initial case
-  tree: SplitItem = { mode: 'horizontal', list: [] }; */
-  /* case1. single multi tab
-  tree: SplitItem = {
-    mode: 'horizontal',
-    list:[
-      [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
-    ]
-  }; //*/
-  ///* case2. single split
-  tree: SplitItem = {
-    // mode: 'horizontal',
-    mode: 'vertical',
-    list:[
-      [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}],
-      [{uid:'b1',selected:true}]
-    ]
-  }; //*/
-  /* case3. split vertical in right pane
-  tree: SplitItem = {
-    mode: 'horizontal',
-    list:[
-      [{uid:'b1',selected:true}],
-      {
-        mode:'vertical',
-        list:[
-          [{uid:'a1',selected:true}],
-          [{uid:'a2',selected:true,active:true}]
-        ]
-      },
-    ]
-  }; //*/
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
@@ -125,7 +93,7 @@ export class SessionPart extends Part implements SessionPartService {
   override createContentArea(): HTMLElement {
     // console.log('[SessionPart] createContentArea() is called ..');
     const container: HTMLElement = super.createContentArea();
-    const results: HTMLElement[] = this.renderTreeRoot(container, this.tree, 0);
+    const results: HTMLElement[] = this.renderTreeRoot(container, tree, 0);
     for(let i = 0; i < results.length; i++)
       container.appendChild(results[i]);
     return container;
