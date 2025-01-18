@@ -2,6 +2,9 @@ import { TerminalItem } from "../../../common/Types";
 import { $ } from "../../util/dom";
 import _, { DebouncedFunc } from 'lodash';
 import { DropTarget } from "./DropTarget";
+import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../../Service";
+import { SessionPartService } from "../SessionPart";
+import { BodyLayoutService } from "../../layout/BodyLayout";
 
 export const enum GroupDirection {
   UP, DOWN, LEFT, RIGHT
@@ -18,6 +21,9 @@ export class DropOverlay {
 
   splitDirection: GroupDirection | undefined;
   throttle_doPositionOverlay: DebouncedFunc<(...args: any[]) => any>;
+
+  sessionPartService: SessionPartService;
+  bodyLayoutService: BodyLayoutService;
 
   constructor(parent: HTMLElement, group: TerminalItem[], target: DropTarget) {
     this.parent = parent;
@@ -135,4 +141,8 @@ export class DropOverlay {
     return el;
   }
 
+  getServices(): void {
+    this.sessionPartService = getService(sessionPartServiceId);
+    this.bodyLayoutService = getService(bodyLayoutServiceId);
+  }
 }

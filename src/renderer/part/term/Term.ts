@@ -10,6 +10,7 @@ import { terminals } from '../../../globals';
 export class Term {
   parent: HTMLElement;
   item: TerminalItem;
+  element: HTMLElement;
 
   uid: string;
   xterm: xterm | null = null;
@@ -22,7 +23,7 @@ export class Term {
   }
 
   create(): HTMLElement {
-    const term = $('.term');
+    const term = this.element = $('.term');
     term.id = this.uid;
     return term;
   }

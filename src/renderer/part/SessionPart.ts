@@ -120,9 +120,9 @@ export class SessionPart extends Part implements SessionPartService {
       // console.log(this.gridView.splitView.viewItems[i] instanceof SplitViewItem);
       if(this.gridView.splitView.viewItems[i].view instanceof GroupView) {
         const v: GroupView = this.gridView.splitView.viewItems[i].view as GroupView;
-        for(let j = 0; j < v.tabs.tabs.length; j++) {
+        for(let j = 0; j < v.tabs.tabs.length; j++)
           v.tabs.tabs[j].getServices();
-        }
+        v.terms.dropOverlay.getServices();
       }
     }
   }

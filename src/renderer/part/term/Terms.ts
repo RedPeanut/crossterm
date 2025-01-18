@@ -10,6 +10,8 @@ export class Terms {
   group: TerminalItem[];
   terms: Term[];
   wrapper: HTMLElement;
+  dropTarget: DropTarget;
+  dropOverlay: DropOverlay;
 
   constructor(parent: HTMLElement, group: TerminalItem[]) {
     this.parent = parent;
@@ -26,9 +28,9 @@ export class Terms {
     });
 
     const wrapper = this.wrapper = $('.wrapper');
-    const dropTarget = new DropTarget(null, this.group);
+    const dropTarget = this.dropTarget = new DropTarget(null, this.group);
     wrapper.appendChild(dropTarget.create());
-    const dropOverlay = new DropOverlay(null, this.group, dropTarget);
+    const dropOverlay = this.dropOverlay = new DropOverlay(null, this.group, dropTarget);
     wrapper.appendChild(dropOverlay.create());
     wrapper.style.display = 'none';
     el.appendChild(wrapper);
