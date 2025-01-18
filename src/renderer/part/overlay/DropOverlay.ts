@@ -10,7 +10,7 @@ export const enum GroupDirection {
 export interface DropOverlayOptions {}
 
 export class DropOverlay {
-  
+
   parent: HTMLElement;
   element: HTMLElement;
   group: TerminalItem[];
@@ -117,6 +117,7 @@ export class DropOverlay {
     e.preventDefault();
     this.throttle_doPositionOverlay(e);
   }
+
   onDrop(e: any): void {
     // console.log('onDrop event is called...');
     e.preventDefault();

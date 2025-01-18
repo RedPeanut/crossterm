@@ -108,35 +108,17 @@ export class SessionPart extends Part implements SessionPartService {
 
   renderTreeRoot(container: HTMLElement, root: SplitItem, depth: number): HTMLElement[] {
     let result: HTMLElement[] = [];
-    // console.log(isSplitItem(root));
-    // if(isSplitItem(root)) {
-      const orientation = root.mode === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
-      const gridView = this.gridView = new GridView(null, { orientation: orientation, length: root.list.length });
-      const element = gridView.create();
-      const results: SplitViewItemView[] = this.renderTreeList(null, root, depth+1);
-      if(results.length > 0) {
-        // element.style.width = '100%';
-        // element.style.height = '100%';
-        for(let i = 0; i < results.length; i++)
-          gridView.addView(results[i]);
-        result.push(gridView.element);
-      }
-      /* const splitView = this.splitView = new SplitView(container, { orientation: orientation });
-      const results: SplitViewItemView[] = this.renderTreeList(container, root, depth+1);
-      if(results.length > 0) {
-        for(let i = 0; i < results.length; i++)
-          splitView.addView(results[i]);
-        // result.push(this.element);
-      } */
-    // } else {
-    //   const wrapper = $('.wrapper');
-    //   const results: SplitViewItemView[] = this.renderTreeList(wrapper, root, depth+1);
-    //   if(results.length > 0) {
-    //     for(let i = 0; i < results.length; i++)
-    //       wrapper.appendChild(results[i].element);
-    //     result.push(wrapper);
-    //   }
-    // }
+    const orientation = root.mode === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
+    const gridView = this.gridView = new GridView(null, { orientation: orientation, length: root.list.length });
+    const element = gridView.create();
+    const results: SplitViewItemView[] = this.renderTreeList(null, root, depth+1);
+    if(results.length > 0) {
+      // element.style.width = '100%';
+      // element.style.height = '100%';
+      for(let i = 0; i < results.length; i++)
+        gridView.addView(results[i]);
+      result.push(gridView.element);
+    }
     return result;
   }
 

@@ -4,7 +4,7 @@ import { Orientation, Sash } from "./Sash";
 export type SplitViewItemSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
 
 /* export interface SplitViewItem {
-  
+
   // getSize(): number;
   // setSize(size: number): void;
   // getElement(): HTMLElement;
@@ -189,7 +189,7 @@ export class SplitView<T extends SplitViewItemView> {
           totalSize -= itemSize;
         }
       }
-  
+
       // fill empty space (dangling implementation)
       for(let i = 0; i < this.viewItems.length; i++) {
         const item = this.viewItems[i];
@@ -197,7 +197,7 @@ export class SplitView<T extends SplitViewItemView> {
           item.view.size = totalSize - (item.view.border ? 1 : 0);
         }
       }
-  
+
       this.layoutViews();
     }
   }
