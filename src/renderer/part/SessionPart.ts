@@ -97,6 +97,21 @@ export class SessionPart extends Part implements SessionPartService {
     return container;
   }
 
+  createTerminal_r(v: GridView): void {
+    // const v: GridView = this.gridView.splitView.viewItems[i].view as GridView;
+    const viewItems = v.splitView.viewItems;
+    for(let k = 0; k < viewItems.length; k++) {
+      if(viewItems[k].view instanceof GroupView) {
+        const v: GroupView = viewItems[k].view as GroupView;
+        for(let l = 0; l < v.terms.terms.length; l++)
+          v.terms.terms[l].createTerminal();
+      } else if(viewItems[k].view instanceof GridView) {
+        // recurrence
+        this.createTerminal_r(v);
+      }
+    }
+  }
+
   createTerminal(): void {
     const viewItems = this.gridView.splitView.viewItems;
     for(let i = 0; i < viewItems.length; i++) {
@@ -107,6 +122,35 @@ export class SessionPart extends Part implements SessionPartService {
         for(let j = 0; j < v.terms.terms.length; j++) {
           v.terms.terms[j].createTerminal();
         }
+      } else if(this.gridView.splitView.viewItems[i].view instanceof GridView) {
+        const v: GridView = this.gridView.splitView.viewItems[i].view as GridView;
+        const viewItems = v.splitView.viewItems;
+        for(let k = 0; k < viewItems.length; k++) {
+          if(viewItems[k].view instanceof GroupView) {
+            const v: GroupView = viewItems[k].view as GroupView;
+            for(let l = 0; l < v.terms.terms.length; l++)
+              v.terms.terms[l].createTerminal();
+          } else if(viewItems[k].view instanceof GridView) {
+            // recurrence
+            this.createTerminal_r(v);
+          }
+        }
+      }
+    }
+  }
+
+  getServices_r(v: GridView): void {
+    // const v: GridView = this.gridView.splitView.viewItems[i].view as GridView;
+    const viewItems = v.splitView.viewItems;
+    for(let k = 0; k < viewItems.length; k++) {
+      if(viewItems[k].view instanceof GroupView) {
+        const v: GroupView = viewItems[k].view as GroupView;
+        for(let l = 0; l < v.tabs.tabs.length; l++)
+          v.tabs.tabs[l].getServices();
+        v.terms.dropOverlay.getServices();
+      } else if(viewItems[k].view instanceof GridView) {
+        // recurrence
+        this.getServices_r(v);
       }
     }
   }
@@ -121,6 +165,20 @@ export class SessionPart extends Part implements SessionPartService {
         for(let j = 0; j < v.tabs.tabs.length; j++)
           v.tabs.tabs[j].getServices();
         v.terms.dropOverlay.getServices();
+      } else if(this.gridView.splitView.viewItems[i].view instanceof GridView) {
+        const v: GridView = this.gridView.splitView.viewItems[i].view as GridView;
+        const viewItems = v.splitView.viewItems;
+        for(let k = 0; k < viewItems.length; k++) {
+          if(viewItems[k].view instanceof GroupView) {
+            const v: GroupView = viewItems[k].view as GroupView;
+            for(let l = 0; l < v.tabs.tabs.length; l++)
+              v.tabs.tabs[l].getServices();
+            v.terms.dropOverlay.getServices();
+          } else if(viewItems[k].view instanceof GridView) {
+            // recurrence
+            this.getServices_r(v);
+          }
+        }
       }
     }
   }

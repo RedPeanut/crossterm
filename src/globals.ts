@@ -11,7 +11,7 @@ export const tree: SplitItem = {
     [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
   ]
 }; //*/
-///* case2. single split
+/* case2. single split
 export const tree: SplitItem = {
   // mode: 'horizontal',
   mode: 'vertical',
@@ -20,7 +20,7 @@ export const tree: SplitItem = {
     [{uid:'b1',selected:true}]
   ]
 }; //*/
-/* case3. split vertical in right pane
+///* case3. split vertical in right pane
 export const tree: SplitItem = {
   mode: 'horizontal',
   list:[
