@@ -58,6 +58,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     if(options) {
       this.sizeType = options.sizeType;
     }
+    this.border = true;
     setService(bodyLayoutServiceId, this);
   }
 
