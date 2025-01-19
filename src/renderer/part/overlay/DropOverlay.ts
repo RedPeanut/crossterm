@@ -105,8 +105,8 @@ export class DropOverlay {
 
     this.target.element.style.top = style.top;
     this.target.element.style.left = style.left;
-		this.target.element.style.width = style.width;
-		this.target.element.style.height = style.height;
+    this.target.element.style.width = style.width;
+    this.target.element.style.height = style.height;
 
     // Make sure the overlay is visible now
     this.target.element.style.opacity = '1';
