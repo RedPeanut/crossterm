@@ -3,8 +3,9 @@ import { $ } from "../../util/dom";
 import _, { DebouncedFunc } from 'lodash';
 import { DropTarget } from "./DropTarget";
 import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../../Service";
-import { SessionPartService } from "../SessionPart";
 import { BodyLayoutService } from "../../layout/BodyLayout";
+import { SessionPartService } from "../SessionPart";
+import { tree } from "../../../globals";
 
 export const enum GroupDirection {
   UP, DOWN, LEFT, RIGHT
@@ -128,6 +129,11 @@ export class DropOverlay {
     // console.log('onDrop event is called...');
     e.preventDefault();
     this.target.element.style.opacity = '0';
+
+    // (tree.list[1] as TerminalItem[]).push(tree.list[0][1]);
+    // (tree.list[0] as TerminalItem[]).pop();
+    // this.bodyLayoutService.recreate();
+    // this.bodyLayoutService.layout(0, 0); // not use param
   }
 
   create(): HTMLElement {

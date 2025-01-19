@@ -130,6 +130,26 @@ export class SplitView<T extends SplitViewItemView> {
     this.container.appendChild(this.el);
   }
 
+  replaceView(_old: T, _new: T) {
+    // remove n add
+    for(let i = 0; i < this.viewItems.length; i++) {
+      if(_old === this.viewItems[i].view) {
+        const container = $('.split-view-view');
+
+        this.viewContainer.insertBefore(container, this.viewContainer.children.item(i));
+        this.viewContainer.removeChild(this.viewContainer.children.item(i+1));
+
+        const item = this.orientation === Orientation.VERTICAL
+          ? new VerticalViewItem(container, _new)
+          : new HorizontalViewItem(container, _new);
+        const viewItemToRemove = this.viewItems.splice(i, 1, item)[0];
+
+        container.appendChild(_new.element);
+        break;
+      }
+    }
+  }
+
   removeView(index: number): SplitViewItem<T> {
     // not implemented yet
     return null;

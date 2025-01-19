@@ -21,11 +21,26 @@ export class Terms {
   create(): HTMLElement {
     const el = this.element = $('.terms');
     this.terms = new Array<Term>(this.group.length);
-    this.group.map((item, i) => {
+
+    /* this.group.map((item, i) => {
       const term = new Term(null, item);
       el.appendChild(term.create());
       this.terms[i] = term;
-    });
+    }); */
+
+    for(let i = 0; i < this.group.length; i++) {
+      let item: TerminalItem = this.group[i];
+      if(item.term) {
+        const term: Term = item.term;
+        el.appendChild(term.element);
+        this.terms[i] = term;
+      } else {
+        const term = new Term(null, item);
+        el.appendChild(term.create());
+        this.terms[i] = term;
+        item.term = term;
+      }
+    }
 
     const wrapper = this.wrapper = $('.wrapper');
     const dropTarget = this.dropTarget = new DropTarget(null, this.group);

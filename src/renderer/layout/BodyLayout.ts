@@ -18,6 +18,8 @@ export interface BodyOptions {
 export interface BodyLayoutService extends Service {
   getServices(): void;
   inflate(): void;
+  recreate(): void;
+  layout(offset: number, size: number): void;
 }
 
 export class BodyLayout extends Layout implements BodyLayoutService, SplitViewItemView {
@@ -187,6 +189,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     // const sidebarPartContent = this.sidebarPart.getContentArea();
     const panel = selected.panel;
     this.sidebarPartService.showPanel(panel);
+  }
+
+  recreate(): void {
+    const _old = this.sessionPart;
+    const _new = this.sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], { sizeType: 'fill_parent' });
+    _new.create();
+    this.splitView.replaceView(_old, _new);
   }
 
   activitybarPartService: ActivitybarPartService;
