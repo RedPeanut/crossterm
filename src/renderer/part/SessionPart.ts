@@ -1,7 +1,7 @@
 import { Orientation } from '../component/Sash';
 import { isSplitItem, SplitItem } from '../Types';
 import { $ } from '../util/dom';
-import { SplitViewItemView } from '../component/SplitView';
+import { SplitViewItem, SplitViewItemView } from '../component/SplitView';
 import { Part } from '../Part';
 import { GroupView } from './view/GroupView';
 import { GridView } from '../component/GridView';
@@ -13,6 +13,7 @@ export interface SessionPartService extends Service {
   createTerminal(): void;
   getServices(): void;
   makeOverlayVisible(b: boolean): void;
+  controlTabStyle({depth, index, pos}, {selected, active}): void;
 }
 
 export class SessionPart extends Part implements SessionPartService {
@@ -194,4 +195,48 @@ export class SessionPart extends Part implements SessionPartService {
       }
     }
   }
+
+  controlTabStyle_r(
+      {depth, index, pos}: {depth: number, index: number[], pos: number},
+      {selected, active}: {selected: boolean, active: boolean},
+      {curr, gridView}: {curr: number, gridView: GridView}
+  ): void {
+    const viewItems = gridView.splitView.viewItems;
+    if(viewItems[index[curr]].view instanceof GroupView) {
+      const v: GroupView = viewItems[index[curr]].view as GroupView;
+
+      if(selected) v.tabs.tabs[pos].element.classList.add('selected');
+      else v.tabs.tabs[pos].element.classList.remove('selected');
+
+      if(active) v.tabs.tabs[pos].element.classList.add('active');
+      else v.tabs.tabs[pos].element.classList.remove('active');
+    } else if(viewItems[curr].view instanceof GridView) {
+      this.controlTabStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, gridView: viewItems[curr].view as GridView});
+    }
+  }
+
+  /**
+   * Very complex because of recurrence
+   * @param ...
+   */
+  controlTabStyle(
+      {depth, index, pos}: {depth: number, index: number[], pos: number},
+      {selected, active}: {selected: boolean, active: boolean}
+  ): void {
+    const viewItems = this.gridView.splitView.viewItems;
+    if(index != null && index.length > 0) {
+      if(viewItems[index[0]].view instanceof GroupView) {
+        const v: GroupView = viewItems[index[0]].view as GroupView;
+
+        if(selected) v.tabs.tabs[pos].element.classList.add('selected');
+        else v.tabs.tabs[pos].element.classList.remove('selected');
+
+        if(active) v.tabs.tabs[pos].element.classList.add('active');
+        else v.tabs.tabs[pos].element.classList.remove('active');
+      } else if(viewItems[index[0]].view instanceof GridView) {
+        this.controlTabStyle_r({depth, index, pos}, {selected, active}, {curr: 0+1, gridView: viewItems[index[0]].view as GridView});
+      }
+    }
+  }
+
 }
