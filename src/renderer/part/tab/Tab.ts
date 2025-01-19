@@ -30,7 +30,14 @@ export class Tab {
   onDrop(e: any): void {}
 
   create(): HTMLElement {
+    const item = this.item;
+
     const el = this.element = $('.tab');
+    if(item.selected) el.classList.add('selected');
+    if(item.active) el.classList.add('active');
+    el.style.setProperty('--tab-border-bottom-color', 'rgb(31, 31, 31)');
+    el.style.setProperty('--tab-border-top-color', 'rgb(0, 120, 212)');
+
     el.draggable = true;
     el.ondragstart = this.onDragStart.bind(this);
     el.ondragenter = this.onDragEnter.bind(this);
@@ -41,6 +48,9 @@ export class Tab {
 
     const tabBorderTopContainer = $('.tab-border-top-container');
     el.appendChild(tabBorderTopContainer);
+    const label = $('.label');
+    label.innerText = '탭입니다';
+    el.appendChild(label);
     const tabActionsContainer = $('.tab-actions');
     el.appendChild(tabActionsContainer);
     const tabBorderBottomContainer = $('.tab-border-bottom-container');
