@@ -189,10 +189,6 @@ body { height: 100%; }
 }
 
 .tabs {}
-.terms {
-  position: relative;
-  height: calc(100% - 35px);
-}
 
 .tabs .tablist {
   display: flex;
@@ -210,6 +206,11 @@ body { height: 100%; }
   align-items: center;
   cursor: pointer;
   padding-left: 10px;
+}
+
+.terms {
+  position: relative;
+  height: calc(100% - 35px);
 }
 
 .terms .term {
