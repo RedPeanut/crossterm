@@ -18,14 +18,17 @@ export class Tab {
   onDragStart(e: any): void {
     console.log('onDragStart event is called...');
     // console.log('e =', e);
-    this.sessionPartService && this.sessionPartService.makeOverlayVisible(true);
+    this.sessionPartService.makeOverlayVisible(true);
   }
+
   onDragEnter(e: any): void {}
   onDragLeave(e: any): void {}
+
   onDragEnd(e: any): void {
     console.log('onDragEnd event is called...');
-    this.sessionPartService && this.sessionPartService.makeOverlayVisible(false);
+    this.sessionPartService.makeOverlayVisible(false);
   }
+
   onDragOver(e: any): void {}
   onDrop(e: any): void {}
 
