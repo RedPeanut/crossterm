@@ -1,13 +1,13 @@
 export interface Service { /* marker */ }
 
-export const workbenchLayoutServiceId = "workbenchLayoutService";
+export const mainLayoutServiceId = "mainLayoutService";
 export const bodyLayoutServiceId = "bodyLayoutService";
 export const activitybarPartServiceId = "activitybarPartService";
 export const sidebarPartServiceId = "sidebarPartService";
 export const sessionPartServiceId = "sessionPartService";
 export const blarBlarServiceId = "blarBlarService";
 
-type ServiceId = typeof workbenchLayoutServiceId // WorkbenchLayoutService
+type ServiceId = typeof mainLayoutServiceId // MainLayoutService
   | typeof bodyLayoutServiceId // BodyLayoutService
   | typeof activitybarPartServiceId // ActivitybarPartService
   | typeof sidebarPartServiceId // SidebarPartService

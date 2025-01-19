@@ -2,7 +2,7 @@ console.log('👋 This message is being logged by "renderer", included via webpa
 
 import '@vscode/codicons/dist/codicon.css';
 import './index.css';
-import { WorkbenchLayout, WorkbenchLayoutService } from './layout/WorkbenchLayout';
+import { MainLayout, MainLayoutService } from './layout/MainLayout';
 import { domContentLoaded } from './util/dom';
 
 import { ElectronHandler } from '../main/preload';
@@ -21,8 +21,8 @@ export class Renderer {
 
   async open() {
     await Promise.all([domContentLoaded(mainWindow)]);
-    const workbenchLayout = new WorkbenchLayout(mainWindow.document.body);
-    workbenchLayout.startup();
+    const mainLayout = new MainLayout(mainWindow.document.body);
+    mainLayout.startup();
   }
 }
 

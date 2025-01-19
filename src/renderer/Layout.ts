@@ -1,4 +1,4 @@
-import { Parts } from './layout/WorkbenchLayout';
+import { Parts } from './layout/MainLayout';
 import { Part } from './Part';
 import { SplitViewItem, SplitViewItemSizeType } from './component/SplitView';
 
@@ -31,7 +31,7 @@ export abstract class Layout {
   get sizeType(): SplitViewItemSizeType {
     return this._sizeType;
   }
-  
+
   abstract layoutContainer(offset: number): void;
 
   _size: number = 0;
@@ -68,7 +68,7 @@ export abstract class Layout {
   constructor(parent: HTMLElement) {
     this.parent = parent;
   }
-  
+
   registerPart(part: Part): void {
     const id = part.getId();
     this.parts.set(id, part);

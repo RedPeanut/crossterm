@@ -10,7 +10,7 @@ import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../component/SplitView';
 import { getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
-import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, workbenchLayoutServiceId } from '../Service';
+import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 // import Runtime from './Runtime';
@@ -30,11 +30,11 @@ export const enum Parts {
   STATUSBAR_PART = 'part.statusbar'
 }
 
-export interface WorkbenchLayoutService extends Service {
+export interface MainLayoutService extends Service {
   toggleSidebar(): void;
 }
 
-export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
+export class MainLayout extends Layout implements MainLayoutService {
 
   layoutContainer(offset: number): void {
     throw new Error('Method not implemented.');
@@ -47,7 +47,7 @@ export class WorkbenchLayout extends Layout implements WorkbenchLayoutService {
 
   constructor(parent: HTMLElement) {
     super(parent);
-    setService(workbenchLayoutServiceId, this);
+    setService(mainLayoutServiceId, this);
   }
 
   create(): void {

@@ -1,5 +1,5 @@
 import { VerticalViewItem } from '../component/SplitView';
-import { TITLEBAR_HEIGHT } from '../layout/WorkbenchLayout';
+import { TITLEBAR_HEIGHT } from '../layout/MainLayout';
 import { Part } from '../Part';
 
 export class TitlebarPart extends Part {

@@ -1,6 +1,6 @@
-import { activitybarPartServiceId, getService, setService, workbenchLayoutServiceId } from '../Service';
+import { activitybarPartServiceId, getService, setService, mainLayoutServiceId } from '../Service';
 import { HorizontalViewItem } from '../component/SplitView';
-import { ACTIVITYBAR_WIDTH, WorkbenchLayoutService } from '../layout/WorkbenchLayout';
+import { ACTIVITYBAR_WIDTH, MainLayoutService } from '../layout/MainLayout';
 import { Part } from '../Part';
 import { BookmarkPanel } from '../panel/BookmarkPanel';
 import { SamplePanel } from '../panel/SamplePanel';
@@ -14,13 +14,13 @@ export interface ActivitybarPartService {
 
 export class ActivitybarPart extends Part implements ActivitybarPartService {
 
-  // workbenchLayoutService: WorkbenchLayoutService;
+  // mainLayoutService: MainLayoutService;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
     this.size = ACTIVITYBAR_WIDTH;
     // this.border = true;
-    // this.workbenchLayoutService = getService(workbenchLayoutServiceId);
+    // this.mainLayoutService = getService(mainLayoutServiceId);
     setService(activitybarPartServiceId, this);
   }
 
@@ -41,7 +41,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
         panel: BookmarkPanel,
         codicon: 'info',
         onClick: (e: any) => {
-          // 
+          //
         }
       },
       {

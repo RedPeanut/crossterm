@@ -2,7 +2,7 @@ import { Service, setService, sidebarPartServiceId } from '../Service';
 import { $, hide, show } from '../util/dom';
 import { HorizontalViewItem } from '../component/SplitView';
 import { Panel } from '../Panel';
-import { SIDEBAR_WIDTH } from '../layout/WorkbenchLayout';
+import { SIDEBAR_WIDTH } from '../layout/MainLayout';
 import { Part } from '../Part';
 
 export interface SidebarPartService extends Service {
@@ -72,7 +72,7 @@ export class SidebarPart extends Part implements SidebarPartService {
       panelContainer.remove();
       hide(panelContainer);
     }
-    
+
     return panel;
   }
 

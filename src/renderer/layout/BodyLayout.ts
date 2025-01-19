@@ -4,7 +4,7 @@ import { ActivitybarPart, ActivitybarPartService } from "../part/ActivitybarPart
 import { SidebarPart, SidebarPartService } from "../part/SidebarPart";
 import { SessionPart } from "../part/SessionPart";
 import { Orientation } from "../component/Sash";
-import { Parts, WorkbenchLayoutService } from "./WorkbenchLayout";
+import { Parts, MainLayoutService } from "./MainLayout";
 import { getClientArea } from "../util/dom";
 import { activitybarPartServiceId, bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../Service";
 import { BookmarkPanel } from "../panel/BookmarkPanel";
