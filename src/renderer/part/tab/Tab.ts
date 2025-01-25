@@ -44,12 +44,12 @@ export class Tab {
 
       const find_curr = findItemById(tree, 0, [], currItem.uid);
       if(find_curr) {
-        if(same_group) currItem.selected = true;
+        currItem.selected = true;
         currItem.active = true;
 
         const { depth, index, pos } = find_curr;
         // console.log('find_curr =', find_curr);
-        this.sessionPartService.controlTabStyle({depth, index, pos}, {selected: same_group ? true : currItem.selected, active: true});
+        this.sessionPartService.controlTabStyle({depth, index, pos}, {selected: true, active: true});
       }
     }
   }

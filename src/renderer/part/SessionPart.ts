@@ -217,8 +217,11 @@ export class SessionPart extends Part implements SessionPartService {
     if(viewItems[index[curr]].view instanceof GroupView) {
       const v: GroupView = viewItems[index[curr]].view as GroupView;
 
-      if(selected) v.tabs.tabs[pos].element.classList.add('selected');
-      else v.tabs.tabs[pos].element.classList.remove('selected');
+      if(selected) {
+        for(let i = 0; i < v.tabs.tabs.length; i++)
+          v.tabs.tabs[i].element.classList.remove('selected');
+        v.tabs.tabs[pos].element.classList.add('selected');
+      } else v.tabs.tabs[pos].element.classList.remove('selected');
 
       if(active) v.tabs.tabs[pos].element.classList.add('active');
       else v.tabs.tabs[pos].element.classList.remove('active');
@@ -240,8 +243,11 @@ export class SessionPart extends Part implements SessionPartService {
       if(viewItems[index[0]].view instanceof GroupView) {
         const v: GroupView = viewItems[index[0]].view as GroupView;
 
-        if(selected) v.tabs.tabs[pos].element.classList.add('selected');
-        else v.tabs.tabs[pos].element.classList.remove('selected');
+        if(selected) {
+          for(let i = 0; i < v.tabs.tabs.length; i++)
+            v.tabs.tabs[i].element.classList.remove('selected');
+          v.tabs.tabs[pos].element.classList.add('selected');
+        } else v.tabs.tabs[pos].element.classList.remove('selected');
 
         if(active) v.tabs.tabs[pos].element.classList.add('active');
         else v.tabs.tabs[pos].element.classList.remove('active');
