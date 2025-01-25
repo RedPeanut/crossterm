@@ -184,14 +184,26 @@ export class SessionPart extends Part implements SessionPartService {
     }
   }
 
+  makeOverlayVisible_r(gridView: GridView, b: boolean): void {
+    const viewItems = gridView.splitView.viewItems;
+    for(let i = 0; i < viewItems.length; i++) {
+      if(viewItems[i].view instanceof GroupView) {
+        const v: GroupView = viewItems[i].view as GroupView;
+        v.terms.wrapper.style.display = b ? 'block' : 'none';
+      } else if(viewItems[i].view instanceof GridView) {
+        this.makeOverlayVisible_r(viewItems[i].view as GridView, b);
+      }
+    }
+  }
+
   makeOverlayVisible(b: boolean): void {
     const viewItems = this.gridView.splitView.viewItems;
     for(let i = 0; i < viewItems.length; i++) {
-      // console.log(this.gridView.splitView.viewItems[i].view instanceof GroupView);
-      // console.log(this.gridView.splitView.viewItems[i] instanceof SplitViewItem);
-      if(this.gridView.splitView.viewItems[i].view instanceof GroupView) {
-        const v: GroupView = this.gridView.splitView.viewItems[i].view as GroupView;
+      if(viewItems[i].view instanceof GroupView) {
+        const v: GroupView = viewItems[i].view as GroupView;
         v.terms.wrapper.style.display = b ? 'block' : 'none';
+      } else if(viewItems[i].view instanceof GridView) {
+        this.makeOverlayVisible_r(viewItems[i].view as GridView, b);
       }
     }
   }
