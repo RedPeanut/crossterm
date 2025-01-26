@@ -5,10 +5,6 @@ export interface PartOptions {
   // sizeType?: SplitViewItemSizeType;
 }
 
-class PartLayout {
-  constructor(private options: PartOptions, private contentArea: HTMLElement | undefined) { }
-}
-
 export abstract class Part extends Component implements SplitViewItemView {
 
   get element(): HTMLElement { return this.contentArea; }
@@ -32,7 +28,6 @@ export abstract class Part extends Component implements SplitViewItemView {
   titleArea: HTMLElement | undefined;
   contentArea: HTMLElement | undefined;
   footerArea: HTMLElement | undefined;
-  partLayout: PartLayout | undefined;
 
   role: string;
   classes: string[];

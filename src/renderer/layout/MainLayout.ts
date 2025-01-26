@@ -55,8 +55,8 @@ export class MainLayout extends Layout implements MainLayoutService {
 
     //
     const platformClass = isWindows ? 'windows' : isLinux ? 'linux' : 'mac'; //Runtime.isWindows ? 'windows' : Runtime.isLinux ? 'linux' : 'mac';
-    const workbenchClasses = coalesce(['workbench', 'layout', platformClass]);
-    this.mainContainer.classList.add(...workbenchClasses);
+    const classes = coalesce(['main', 'layout', platformClass]);
+    this.container.classList.add(...classes);
 
     const titlebarPart = this.titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
     titlebarPart.create();
@@ -67,40 +67,19 @@ export class MainLayout extends Layout implements MainLayoutService {
     const statusbarPart = this.statusbarPart = new StatusbarPart(null, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
     statusbarPart.create();
 
-    const splitView = this.splitView = new SplitView(this.mainContainer, { orientation: Orientation.VERTICAL });
+    const splitView = this.splitView = new SplitView(this.container, { orientation: Orientation.VERTICAL });
     splitView.addView(titlebarPart);
     splitView.addView(bodyLayout);
     splitView.addView(statusbarPart);
 
-    this.parent.appendChild(this.mainContainer);
+    this.parent.appendChild(this.container);
   }
-
-  /* createPart<T extends Part>(
-      // https://stackoverflow.com/questions/24677592/generic-type-inference-with-class-argument/26696435#26696435
-      // According to the language spec, need to refer to the class type by it's ctor fn.
-      klass: { new(id: string, role: string, classes: string[], options: object): T; },
-      id: string,
-      role: string,
-      classes: string[],
-      options: {}
-  ): Part {
-    const part = new klass(id, role, classes, options);
-    return part;
-  } */
-
-  /* createPart(id: string, role: string, classes: string[]): HTMLElement {
-    const part = document.createElement('div');
-    part.classList.add('part', ...classes);
-    part.id = id;
-    part.setAttribute('role', role);
-    return part;
-  } */
 
   layout(): void {
     let dimension = getClientArea(this.parent);
     // console.log('dimension =', dimension);
-    position(this.mainContainer, 0, 0, 0, 0, 'relative');
-    size(this.mainContainer, dimension.width, dimension.height);
+    position(this.container, 0, 0, 0, 0, 'relative');
+    size(this.container, dimension.width, dimension.height);
     if(this.splitView.orientation === Orientation.HORIZONTAL)
       this.splitView.layout(dimension.width);
     else

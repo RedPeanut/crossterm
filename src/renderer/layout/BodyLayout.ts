@@ -24,7 +24,7 @@ export interface BodyLayoutService extends Service {
 
 export class BodyLayout extends Layout implements BodyLayoutService, SplitViewItemView {
 
-  get element(): HTMLElement { return this.mainContainer; }
+  get element(): HTMLElement { return this.container; }
 
   _size: number = 0;
   get size(): number { return this._size; }
@@ -46,7 +46,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     this.splitView.layout(dimension.width); // Orientation.HORIZONTAL
   } */
   layout(offset: number, size: number): void {
-    let dimension = getClientArea(this.mainContainer);
+    let dimension = getClientArea(this.container);
     this.splitView.layout(dimension.width);
   }
 
@@ -65,7 +65,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
   }
 
   create(): void {
-    this.mainContainer.classList.add(...['body', 'layout']);
+    this.container.classList.add(...['body', 'layout']);
     /* for(const { klass, id, role, classes, options } of [
       { klass: SidebarPart, id: Parts.SIDEBAR_PART, role: 'none', classes: ['sidebar', this.getSideBarPosition() === Position.LEFT ? 'left' : 'right'] },
       { klass: SessionPart, id: Parts.SESSION_PART, role: 'main', classes: ['editor'], options: { restorePreviousState: this.willRestoreEditors() } },
@@ -81,12 +81,12 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     sidebarPart.create();
     const sessionPart = this.sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], { sizeType: 'fill_parent' });
     sessionPart.create();
-    const splitView = this.splitView = new SplitView(this.mainContainer, { orientation: Orientation.HORIZONTAL });
+    const splitView = this.splitView = new SplitView(this.container, { orientation: Orientation.HORIZONTAL });
     splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);
     splitView.addView(sessionPart);
 
-    this.parent && this.parent.appendChild(this.mainContainer);
+    this.parent && this.parent.appendChild(this.container);
   }
 
   setSidebarHidden(hidden: boolean): void {
