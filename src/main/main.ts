@@ -82,7 +82,7 @@ const installIpc = () => {
   const terminals = new Map<string, TerminalLocal>();
 
   ipcMain.on('new', (event, args: any[]) => {
-    console.log('[index.ts/new] args =', args);
+    // console.log('[main.ts/new] args =', args);
     const arg: TerminalItem = args[0] as TerminalItem;
     if(arg.type === 'local') {
       const terminal = new TerminalLocal(arg);
@@ -97,7 +97,12 @@ const installIpc = () => {
   });
 
   ipcMain.on('data', (event, args: any[]) => {
-    console.log('[index.ts/data] args =', args);
+    // console.log('[main.ts/data] args =', args);
+    const arg = args[0];
+    const terminal = arg && arg.uid && terminals.get(arg.uid);
+    if(terminal) {
+      terminal.write(arg.data);
+    }
   });
 }
 
