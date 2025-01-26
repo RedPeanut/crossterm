@@ -40,7 +40,7 @@ export class Tab {
       activeItem.active = false;
 
       // console.log('find_active =', find_active);
-      this.sessionPartService.controlTabStyle({depth, index, pos}, {selected: same_group ? false : activeItem.selected, active: false});
+      this.sessionPartService.controlStyle({depth, index, pos}, {selected: same_group ? false : activeItem.selected, active: false});
 
       const find_curr = findItemById(tree, 0, [], currItem.uid);
       if(find_curr) {
@@ -49,7 +49,7 @@ export class Tab {
 
         const { depth, index, pos } = find_curr;
         // console.log('find_curr =', find_curr);
-        this.sessionPartService.controlTabStyle({depth, index, pos}, {selected: true, active: true});
+        this.sessionPartService.controlStyle({depth, index, pos}, {selected: true, active: true});
       }
     }
   }

@@ -13,7 +13,7 @@ export interface SessionPartService extends Service {
   createTerminal(): void;
   getServices(): void;
   makeOverlayVisible(b: boolean): void;
-  controlTabStyle({depth, index, pos}, {selected, active}): void;
+  controlStyle({depth, index, pos}, {selected, active}): void;
 }
 
 export class SessionPart extends Part implements SessionPartService {
@@ -208,7 +208,7 @@ export class SessionPart extends Part implements SessionPartService {
     }
   }
 
-  controlTabStyle_r(
+  controlStyle_r(
       {depth, index, pos}: {depth: number, index: number[], pos: number},
       {selected, active}: {selected: boolean, active: boolean},
       {curr, gridView}: {curr: number, gridView: GridView}
@@ -218,15 +218,26 @@ export class SessionPart extends Part implements SessionPartService {
       const v: GroupView = viewItems[index[curr]].view as GroupView;
 
       if(selected) {
-        for(let i = 0; i < v.tabs.tabs.length; i++)
+        for(let i = 0; i < v.tabs.tabs.length; i++) {
           v.tabs.tabs[i].element.classList.remove('selected');
+          v.terms.terms[i].element.classList.remove('selected');
+        }
         v.tabs.tabs[pos].element.classList.add('selected');
-      } else v.tabs.tabs[pos].element.classList.remove('selected');
+        v.terms.terms[pos].element.classList.add('selected');
+      } else {
+        v.tabs.tabs[pos].element.classList.remove('selected');
+        v.terms.terms[pos].element.classList.remove('selected');
+      }
 
-      if(active) v.tabs.tabs[pos].element.classList.add('active');
-      else v.tabs.tabs[pos].element.classList.remove('active');
+      if(active) {
+        v.tabs.tabs[pos].element.classList.add('active');
+        v.terms.terms[pos].element.classList.add('active');
+      } else {
+        v.tabs.tabs[pos].element.classList.remove('active');
+        v.terms.terms[pos].element.classList.remove('active');
+      }
     } else if(viewItems[curr].view instanceof GridView) {
-      this.controlTabStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, gridView: viewItems[curr].view as GridView});
+      this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, gridView: viewItems[curr].view as GridView});
     }
   }
 
@@ -234,7 +245,7 @@ export class SessionPart extends Part implements SessionPartService {
    * Very complex because of recurrence
    * @param ...
    */
-  controlTabStyle(
+  controlStyle(
       {depth, index, pos}: {depth: number, index: number[], pos: number},
       {selected, active}: {selected: boolean, active: boolean}
   ): void {
@@ -244,15 +255,26 @@ export class SessionPart extends Part implements SessionPartService {
         const v: GroupView = viewItems[index[0]].view as GroupView;
 
         if(selected) {
-          for(let i = 0; i < v.tabs.tabs.length; i++)
+          for(let i = 0; i < v.tabs.tabs.length; i++) {
             v.tabs.tabs[i].element.classList.remove('selected');
+            v.terms.terms[i].element.classList.remove('selected');
+          }
           v.tabs.tabs[pos].element.classList.add('selected');
-        } else v.tabs.tabs[pos].element.classList.remove('selected');
+          v.terms.terms[pos].element.classList.add('selected');
+        } else {
+          v.tabs.tabs[pos].element.classList.remove('selected');
+          v.terms.terms[pos].element.classList.remove('selected');
+        }
 
-        if(active) v.tabs.tabs[pos].element.classList.add('active');
-        else v.tabs.tabs[pos].element.classList.remove('active');
+        if(active) {
+          v.tabs.tabs[pos].element.classList.add('active');
+          v.terms.terms[pos].element.classList.add('active');
+        } else {
+          v.tabs.tabs[pos].element.classList.remove('active');
+          v.terms.terms[pos].element.classList.remove('active');
+        }
       } else if(viewItems[index[0]].view instanceof GridView) {
-        this.controlTabStyle_r({depth, index, pos}, {selected, active}, {curr: 0+1, gridView: viewItems[index[0]].view as GridView});
+        this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: 0+1, gridView: viewItems[index[0]].view as GridView});
       }
     }
   }

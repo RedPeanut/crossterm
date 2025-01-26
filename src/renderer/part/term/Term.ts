@@ -18,14 +18,18 @@ export class Term {
 
   constructor(parent: HTMLElement, item: TerminalItem) {
     this.parent = parent;
+    this.item = item;
     this.uid = uuidv4();
     this.fitAddon = new FitAddon();
   }
 
   create(): HTMLElement {
-    const term = this.element = $('.term');
-    term.id = this.uid;
-    return term;
+    const el = this.element = $('.term');
+    const item = this.item;
+    if(item.selected) el.classList.add('selected');
+    if(item.active) el.classList.add('active');
+    el.id = this.uid;
+    return el;
   }
 
   createTerminal(): void {
