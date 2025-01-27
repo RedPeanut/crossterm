@@ -1,11 +1,12 @@
 import { TerminalItem } from "../common/Types";
 
 export type Mode = 'horizontal' | 'vertical';
+export type Group = TerminalItem[];
 
 export interface SplitItem {
   // id: string;
   mode?: Mode; //'horizontal' | 'vertical';
-  list: (SplitItem | TerminalItem[])[];
+  list: (SplitItem | Group)[];
 }
 
 export function isSplitItem(o: any) {
