@@ -12,7 +12,7 @@ export const wrapper: { [key: string]: SplitItem } = {
       [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
     ]
   } //*/
-  /* case2. single split
+  ///* case2. single split
   'tree': {
     // mode: 'horizontal',
     mode: 'vertical',
@@ -31,7 +31,7 @@ export const wrapper: { [key: string]: SplitItem } = {
       [{uid:'a3',selected:true}]
     ]
   } //*/
-  ///* case3. split vertical in right pane
+  /* case3. split vertical in right pane
   'tree': {
     mode: 'horizontal',
     list:[

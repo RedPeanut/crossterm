@@ -151,6 +151,7 @@ export class DropOverlay {
     if(curr_group === drag_group) {
       // let new_group: Group = [];
       curr_group.splice(drag_pos, 1)[0];
+      curr_group[curr_group.length-1].selected = true;
 
       let new_split: SplitItem = { mode: mode, list: []};
       if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {

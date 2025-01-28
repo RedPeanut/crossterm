@@ -32,6 +32,8 @@ export class Terms {
       let item: TerminalItem = this.group[i];
       if(item.term) {
         const term: Term = item.term;
+        if(item.selected) term.element.classList.add('selected');
+        if(item.active) term.element.classList.add('active');
         el.appendChild(term.element);
         this.terms[i] = term;
       } else {
