@@ -1,4 +1,4 @@
-import { SplitItem } from "./renderer/Types";
+import { isSplitItem, SplitItem } from "./renderer/Types";
 
 export const terminals: { [key: string]: any } = {};
 
