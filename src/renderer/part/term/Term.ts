@@ -67,4 +67,7 @@ export class Term {
       data: data
     });
   }
+
+  fit() { this.fitAddon.fit(); }
+
 }

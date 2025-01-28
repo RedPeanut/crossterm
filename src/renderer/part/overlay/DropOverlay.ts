@@ -219,8 +219,9 @@ export class DropOverlay {
     this.bodyLayoutService.recreate();
     this.bodyLayoutService.layout(0, 0); // not use param
 
-    // reconnect service
-    getService(sessionPartServiceId).getServices();
+    const sessionPartService = getService(sessionPartServiceId)
+    sessionPartService.getServices(); // reconnect service
+    sessionPartService.fit(); // fit again
   }
 
   create(): HTMLElement {

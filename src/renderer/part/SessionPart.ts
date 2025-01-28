@@ -14,6 +14,7 @@ export interface SessionPartService extends Service {
   getServices(): void;
   makeOverlayVisible(b: boolean): void;
   controlStyle({depth, index, pos}, {selected, active}): void;
+  fit(): void;
 }
 
 export class SessionPart extends Part implements SessionPartService {
@@ -207,4 +208,20 @@ export class SessionPart extends Part implements SessionPartService {
     this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: 0, gridView: this.gridView});
   }
 
+  fit_r(gridView: GridView): void {
+    const viewItems = gridView.splitView.viewItems;
+    for(let i = 0; i < viewItems.length; i++) {
+      if(viewItems[i].view instanceof GroupView) {
+        const v: GroupView = viewItems[i].view as GroupView;
+        for(let i = 0; i < v.terms.terms.length; i++)
+          v.terms.terms[i].fit();
+      } else if(viewItems[i].view instanceof GridView) {
+        this.fit_r(viewItems[i].view as GridView);
+      }
+    }
+  }
+
+  fit(): void {
+    this.fit_r(this.gridView);
+  }
 }
