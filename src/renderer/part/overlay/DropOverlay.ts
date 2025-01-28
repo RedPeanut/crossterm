@@ -5,7 +5,6 @@ import { DropTarget } from "./DropTarget";
 import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../../Service";
 import { BodyLayoutService } from "../../layout/BodyLayout";
 import { SessionPartService } from "../SessionPart";
-import { tree } from "../../../globals";
 
 export const enum GroupDirection {
   UP, DOWN, LEFT, RIGHT

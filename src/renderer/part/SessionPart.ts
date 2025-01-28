@@ -7,7 +7,7 @@ import { GroupView } from './view/GroupView';
 import { GridView } from '../component/GridView';
 import { Service, sessionPartServiceId, setService } from '../Service';
 import { TerminalItem } from '../../common/Types';
-import { tree } from '../../globals';
+import { wrapper } from '../../globals';
 
 export interface SessionPartService extends Service {
   createTerminal(): void;
@@ -92,7 +92,7 @@ export class SessionPart extends Part implements SessionPartService {
   override createContentArea(): HTMLElement {
     // console.log('[SessionPart] createContentArea() is called ..');
     const container: HTMLElement = super.createContentArea();
-    const results: HTMLElement[] = this.renderTreeRoot(container, tree, 0);
+    const results: HTMLElement[] = this.renderTreeRoot(container, wrapper.tree, 0);
     for(let i = 0; i < results.length; i++)
       container.appendChild(results[i]);
     return container;

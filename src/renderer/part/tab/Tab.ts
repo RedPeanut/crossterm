@@ -2,7 +2,7 @@ import { $ } from "../../util/dom";
 import { TerminalItem } from "../../../common/Types";
 import { SessionPartService } from "../SessionPart";
 import { getService, sessionPartServiceId } from "../../Service";
-import { tree } from "../../../globals";
+import { wrapper } from "../../../globals";
 import { findActiveItem, findItemById } from "../../utils";
 
 export class Tab {
@@ -22,7 +22,7 @@ export class Tab {
     const currItem = this.item;
 
     // find active item index
-    const find_active = findActiveItem(tree, 0, []);
+    const find_active = findActiveItem(wrapper.tree, 0, []);
 
     if(find_active) {
       const { depth, index, pos, item: activeItem, group } = find_active;
@@ -42,7 +42,7 @@ export class Tab {
       // console.log('find_active =', find_active);
       this.sessionPartService.controlStyle({depth, index, pos}, {selected: same_group ? false : activeItem.selected, active: false});
 
-      const find_curr = findItemById(tree, 0, [], currItem.uid);
+      const find_curr = findItemById(wrapper.tree, 0, [], currItem.uid);
       if(find_curr) {
         currItem.selected = true;
         currItem.active = true;
