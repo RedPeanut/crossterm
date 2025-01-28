@@ -145,74 +145,107 @@ export class DropOverlay {
     console.log('find_curr =', find_curr);
     const { depth: curr_depth, index: curr_index, group: curr_group, splitItem: curr_splitItem } = find_curr;
 
-    let mode: Mode = this.splitDirection === GroupDirection.UP
-      || this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
-
-    if(curr_group === drag_group) {
-      // let new_group: Group = [];
-      curr_group.splice(drag_pos, 1)[0];
-      curr_group[curr_group.length-1].selected = true;
-
-      let new_split: SplitItem = { mode: mode, list: []};
-      if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
-        new_split.list.push([drag_item]);
-        new_split.list.push(curr_group);
+    if(this.splitDirection !== GroupDirection.UP
+      && this.splitDirection !== GroupDirection.DOWN
+      && this.splitDirection !== GroupDirection.LEFT
+      && this.splitDirection !== GroupDirection.RIGHT
+    ) {
+      if(curr_group === drag_group) {
+        // nothing do
+        return;
       } else {
-        new_split.list.push(curr_group);
-        new_split.list.push([drag_item]);
-      }
+        /* 예)
+        {
+          mode: 'vertical',
+          list:[
+            [{a1},{a2}],
+            [{b1}]
+          ]
+        }
+        -> drop a2 to b1
+        {
+          mode: 'vertical',
+          list:[
+            [{a1}],
+            [{b1},{a2}]
+          ]
+        }
+        */
 
-      // replace
-      let new_list: (SplitItem | Group)[] = [];
-      // curr_index[curr_index.length-1] : 현재 떨구려는 리스트의 인덱스
-      const curr_drop_index = curr_index[curr_index.length-1];
-      if(0 < curr_drop_index) {
-        for(let i = 0; i <= curr_drop_index-1; i++)
-          new_list.push(curr_splitItem.list[i])
+        drag_group.splice(drag_pos, 1)[0];
+        drag_group[drag_group.length-1].selected = true;
+        curr_group.push(drag_item);
       }
-      new_list.push(new_split);
-      if(curr_drop_index < curr_splitItem.list.length-1) {
-        for(let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
-          new_list.push(curr_splitItem.list[i]);
-      }
-      curr_splitItem.list = new_list;
-
-      cleanSingleSplitItemOnce(wrapper.tree);
     } else {
-      let new_split: SplitItem = { mode: mode, list: []};
-      if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
-        new_split.list.push([drag_item]);
-        new_split.list.push(curr_group);
+      const mode: Mode = this.splitDirection === GroupDirection.UP
+        || this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
+
+      if(curr_group === drag_group) {
+        // let new_group: Group = [];
+        curr_group.splice(drag_pos, 1)[0];
+        curr_group[curr_group.length-1].selected = true;
+
+        let new_split: SplitItem = { mode: mode, list: []};
+        if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
+          new_split.list.push([drag_item]);
+          new_split.list.push(curr_group);
+        } else {
+          new_split.list.push(curr_group);
+          new_split.list.push([drag_item]);
+        }
+
+        // replace
+        let new_list: (SplitItem | Group)[] = [];
+        // curr_index[curr_index.length-1] : 현재 떨구려는 리스트의 인덱스
+        const curr_drop_index = curr_index[curr_index.length-1];
+        if(0 < curr_drop_index) {
+          for(let i = 0; i <= curr_drop_index-1; i++)
+            new_list.push(curr_splitItem.list[i])
+        }
+        new_list.push(new_split);
+        if(curr_drop_index < curr_splitItem.list.length-1) {
+          for(let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
+            new_list.push(curr_splitItem.list[i]);
+        }
+        curr_splitItem.list = new_list;
+
+        cleanSingleSplitItemOnce(wrapper.tree);
       } else {
-        new_split.list.push(curr_group);
-        new_split.list.push([drag_item]);
-      }
+        let new_split: SplitItem = { mode: mode, list: []};
+        if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
+          new_split.list.push([drag_item]);
+          new_split.list.push(curr_group);
+        } else {
+          new_split.list.push(curr_group);
+          new_split.list.push([drag_item]);
+        }
 
-      ///* // replace
-      let new_list: (SplitItem | Group)[] = [];
-      // curr_index[curr_index.length-1] : 현재 떨구려는 리스트의 인덱스
-      const curr_drop_index = curr_index[curr_index.length-1];
-      if(0 < curr_drop_index) {
-        for(let i = 0; i <= curr_drop_index-1; i++)
-          new_list.push(curr_splitItem.list[i])
-      }
-      new_list.push(new_split);
-      if(curr_drop_index < curr_splitItem.list.length-1) {
-        for(let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
-          new_list.push(curr_splitItem.list[i]);
-      }
-      curr_splitItem.list = new_list; //*/
+        // replace
+        let new_list: (SplitItem | Group)[] = [];
+        // curr_index[curr_index.length-1] : 현재 떨구려는 리스트의 인덱스
+        const curr_drop_index = curr_index[curr_index.length-1];
+        if(0 < curr_drop_index) {
+          for(let i = 0; i <= curr_drop_index-1; i++)
+            new_list.push(curr_splitItem.list[i])
+        }
+        new_list.push(new_split);
+        if(curr_drop_index < curr_splitItem.list.length-1) {
+          for(let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
+            new_list.push(curr_splitItem.list[i]);
+        }
+        curr_splitItem.list = new_list;
 
-      // remove
-      if(drag_group.length > 1)
-        drag_group.splice(drag_pos, 1);
-      else {
-        // drag_group = null; // constant error
-        // drag_splitItem.list[drag_index[drag_index.length-1]] = null;
-        drag_splitItem.list.splice(drag_index[drag_index.length-1], 1)[0]
-      }
+        // remove
+        if(drag_group.length > 1)
+          drag_group.splice(drag_pos, 1);
+        else {
+          // drag_group = null; // constant error
+          // drag_splitItem.list[drag_index[drag_index.length-1]] = null;
+          drag_splitItem.list.splice(drag_index[drag_index.length-1], 1)[0]
+        }
 
-      cleanSingleSplitItemOnce(wrapper.tree);
+        cleanSingleSplitItemOnce(wrapper.tree);
+      }
     }
 
     console.log('wrapper.tree =', wrapper.tree);
