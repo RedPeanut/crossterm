@@ -6,7 +6,7 @@ export type Group = TerminalItem[];
 export interface SplitItem {
   // id: string;
   mode?: Mode; //'horizontal' | 'vertical';
-  list: (SplitItem | Group)[];
+  list?: (SplitItem | Group)[];
 }
 
 export function isSplitItem(o: any) {

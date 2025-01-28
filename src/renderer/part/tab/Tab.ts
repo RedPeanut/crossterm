@@ -57,6 +57,7 @@ export class Tab {
   onDragStart(e: any): void {
     console.log('onDragStart event is called...');
     // console.log('e =', e);
+    e.dataTransfer.setData('text', this.item.uid);
     this.sessionPartService.makeOverlayVisible(true);
   }
 

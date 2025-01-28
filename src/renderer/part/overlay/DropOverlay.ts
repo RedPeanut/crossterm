@@ -5,6 +5,9 @@ import { DropTarget } from "./DropTarget";
 import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../../Service";
 import { BodyLayoutService } from "../../layout/BodyLayout";
 import { SessionPartService } from "../SessionPart";
+import { wrapper } from "../../../globals";
+import { cleanSingleSplitItemOnce, findActiveItem, findItemById, findSplitItemByGroup } from "../../utils";
+import { Group, Mode, SplitItem } from "../../Types";
 
 export const enum GroupDirection {
   UP, DOWN, LEFT, RIGHT
@@ -19,8 +22,9 @@ export class DropOverlay {
   group: TerminalItem[];
   target: DropTarget;
 
-  splitDirection: GroupDirection | undefined;
+  //
   throttle_doPositionOverlay: DebouncedFunc<(...args: any[]) => any>;
+  splitDirection: GroupDirection | undefined;
 
   sessionPartService: SessionPartService;
   bodyLayoutService: BodyLayoutService;
@@ -129,10 +133,93 @@ export class DropOverlay {
     e.preventDefault();
     this.target.element.style.opacity = '0';
 
-    // (tree.list[1] as TerminalItem[]).push(tree.list[0][1]);
-    // (tree.list[0] as TerminalItem[]).pop();
-    // this.bodyLayoutService.recreate();
-    // this.bodyLayoutService.layout(0, 0); // not use param
+    const drag_id = e.dataTransfer.getData('text/plain');
+
+    // find drag item
+    const find_drag = findItemById(wrapper.tree, 0, [], drag_id);
+    console.log('find_drag =', find_drag);
+    const { depth: drag_depth, index: drag_index, pos: drag_pos, item: drag_item, group: drag_group, splitItem: drag_splitItem } = find_drag;
+
+    // find splitItem by curr group ref
+    const find_curr = findSplitItemByGroup(wrapper.tree, 0, [], this.group);
+    console.log('find_curr =', find_curr);
+    const { depth: curr_depth, index: curr_index, group: curr_group, splitItem: curr_splitItem } = find_curr;
+
+    let mode: Mode = this.splitDirection === GroupDirection.UP
+      || this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
+
+    if(curr_group === drag_group) {
+      // let new_group: Group = [];
+      curr_group.splice(drag_pos, 1)[0];
+
+      let new_split: SplitItem = { mode: mode, list: []};
+      if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
+        new_split.list.push([drag_item]);
+        new_split.list.push(curr_group);
+      } else {
+        new_split.list.push(curr_group);
+        new_split.list.push([drag_item]);
+      }
+
+      // replace
+      let new_list: (SplitItem | Group)[] = [];
+      // curr_index[curr_index.length-1] : 현재 떨구려는 리스트의 인덱스
+      const curr_drop_index = curr_index[curr_index.length-1];
+      if(0 < curr_drop_index) {
+        for(let i = 0; i <= curr_drop_index-1; i++)
+          new_list.push(curr_splitItem.list[i])
+      }
+      new_list.push(new_split);
+      if(curr_drop_index < curr_splitItem.list.length-1) {
+        for(let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
+          new_list.push(curr_splitItem.list[i]);
+      }
+      curr_splitItem.list = new_list;
+
+      cleanSingleSplitItemOnce(wrapper.tree);
+    } else {
+      let new_split: SplitItem = { mode: mode, list: []};
+      if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
+        new_split.list.push([drag_item]);
+        new_split.list.push(curr_group);
+      } else {
+        new_split.list.push(curr_group);
+        new_split.list.push([drag_item]);
+      }
+
+      ///* // replace
+      let new_list: (SplitItem | Group)[] = [];
+      // curr_index[curr_index.length-1] : 현재 떨구려는 리스트의 인덱스
+      const curr_drop_index = curr_index[curr_index.length-1];
+      if(0 < curr_drop_index) {
+        for(let i = 0; i <= curr_drop_index-1; i++)
+          new_list.push(curr_splitItem.list[i])
+      }
+      new_list.push(new_split);
+      if(curr_drop_index < curr_splitItem.list.length-1) {
+        for(let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
+          new_list.push(curr_splitItem.list[i]);
+      }
+      curr_splitItem.list = new_list; //*/
+
+      // remove
+      if(drag_group.length > 1)
+        drag_group.splice(drag_pos, 1);
+      else {
+        // drag_group = null; // constant error
+        // drag_splitItem.list[drag_index[drag_index.length-1]] = null;
+        drag_splitItem.list.splice(drag_index[drag_index.length-1], 1)[0]
+      }
+
+      cleanSingleSplitItemOnce(wrapper.tree);
+    }
+
+    console.log('wrapper.tree =', wrapper.tree);
+    this.bodyLayoutService.recreate();
+    this.bodyLayoutService.layout(0, 0); // not use param
+
+    // reconnect service
+    getService(sessionPartServiceId).getServices();
   }
 
   create(): HTMLElement {
