@@ -101,87 +101,40 @@ export class SessionPart extends Part implements SessionPartService {
   createTerminal_r(v: GridView): void {
     // const v: GridView = this.gridView.splitView.viewItems[i].view as GridView;
     const viewItems = v.splitView.viewItems;
-    for(let k = 0; k < viewItems.length; k++) {
-      if(viewItems[k].view instanceof GroupView) {
-        const v: GroupView = viewItems[k].view as GroupView;
-        for(let l = 0; l < v.terms.terms.length; l++)
-          v.terms.terms[l].createTerminal();
-      } else if(viewItems[k].view instanceof GridView) {
+    for(let i = 0; i < viewItems.length; i++) {
+      if(viewItems[i].view instanceof GroupView) {
+        const v: GroupView = viewItems[i].view as GroupView;
+        for(let j = 0; j < v.terms.terms.length; j++)
+          v.terms.terms[j].createTerminal();
+      } else if(viewItems[i].view instanceof GridView) {
         // recurrence
-        this.createTerminal_r(v);
+        this.createTerminal_r(viewItems[i].view as GridView);
       }
     }
   }
 
   createTerminal(): void {
-    const viewItems = this.gridView.splitView.viewItems;
-    for(let i = 0; i < viewItems.length; i++) {
-      // console.log(this.gridView.splitView.viewItems[i].view instanceof GroupView);
-      // console.log(this.gridView.splitView.viewItems[i] instanceof SplitViewItem);
-      if(this.gridView.splitView.viewItems[i].view instanceof GroupView) {
-        const v: GroupView = this.gridView.splitView.viewItems[i].view as GroupView;
-        for(let j = 0; j < v.terms.terms.length; j++) {
-          v.terms.terms[j].createTerminal();
-        }
-      } else if(this.gridView.splitView.viewItems[i].view instanceof GridView) {
-        const v: GridView = this.gridView.splitView.viewItems[i].view as GridView;
-        const viewItems = v.splitView.viewItems;
-        for(let k = 0; k < viewItems.length; k++) {
-          if(viewItems[k].view instanceof GroupView) {
-            const v: GroupView = viewItems[k].view as GroupView;
-            for(let l = 0; l < v.terms.terms.length; l++)
-              v.terms.terms[l].createTerminal();
-          } else if(viewItems[k].view instanceof GridView) {
-            // recurrence
-            this.createTerminal_r(v);
-          }
-        }
-      }
-    }
+    this.createTerminal_r(this.gridView);
   }
 
   getServices_r(v: GridView): void {
     // const v: GridView = this.gridView.splitView.viewItems[i].view as GridView;
     const viewItems = v.splitView.viewItems;
-    for(let k = 0; k < viewItems.length; k++) {
-      if(viewItems[k].view instanceof GroupView) {
-        const v: GroupView = viewItems[k].view as GroupView;
-        for(let l = 0; l < v.tabs.tabs.length; l++)
-          v.tabs.tabs[l].getServices();
+    for(let i = 0; i < viewItems.length; i++) {
+      if(viewItems[i].view instanceof GroupView) {
+        const v: GroupView = viewItems[i].view as GroupView;
+        for(let j = 0; j < v.tabs.tabs.length; j++)
+          v.tabs.tabs[j].getServices();
         v.terms.dropOverlay.getServices();
-      } else if(viewItems[k].view instanceof GridView) {
+      } else if(viewItems[i].view instanceof GridView) {
         // recurrence
-        this.getServices_r(v);
+        this.getServices_r(viewItems[i].view as GridView);
       }
     }
   }
 
   getServices(): void {
-    const viewItems = this.gridView.splitView.viewItems;
-    for(let i = 0; i < viewItems.length; i++) {
-      // console.log(this.gridView.splitView.viewItems[i].view instanceof GroupView);
-      // console.log(this.gridView.splitView.viewItems[i] instanceof SplitViewItem);
-      if(this.gridView.splitView.viewItems[i].view instanceof GroupView) {
-        const v: GroupView = this.gridView.splitView.viewItems[i].view as GroupView;
-        for(let j = 0; j < v.tabs.tabs.length; j++)
-          v.tabs.tabs[j].getServices();
-        v.terms.dropOverlay.getServices();
-      } else if(this.gridView.splitView.viewItems[i].view instanceof GridView) {
-        const v: GridView = this.gridView.splitView.viewItems[i].view as GridView;
-        const viewItems = v.splitView.viewItems;
-        for(let k = 0; k < viewItems.length; k++) {
-          if(viewItems[k].view instanceof GroupView) {
-            const v: GroupView = viewItems[k].view as GroupView;
-            for(let l = 0; l < v.tabs.tabs.length; l++)
-              v.tabs.tabs[l].getServices();
-            v.terms.dropOverlay.getServices();
-          } else if(viewItems[k].view instanceof GridView) {
-            // recurrence
-            this.getServices_r(v);
-          }
-        }
-      }
-    }
+    this.getServices_r(this.gridView);
   }
 
   makeOverlayVisible_r(gridView: GridView, b: boolean): void {
@@ -197,15 +150,7 @@ export class SessionPart extends Part implements SessionPartService {
   }
 
   makeOverlayVisible(b: boolean): void {
-    const viewItems = this.gridView.splitView.viewItems;
-    for(let i = 0; i < viewItems.length; i++) {
-      if(viewItems[i].view instanceof GroupView) {
-        const v: GroupView = viewItems[i].view as GroupView;
-        v.terms.wrapper.style.display = b ? 'block' : 'none';
-      } else if(viewItems[i].view instanceof GridView) {
-        this.makeOverlayVisible_r(viewItems[i].view as GridView, b);
-      }
-    }
+    this.makeOverlayVisible_r(this.gridView, b);
   }
 
   controlStyle_r(
@@ -214,45 +159,9 @@ export class SessionPart extends Part implements SessionPartService {
       {curr, gridView}: {curr: number, gridView: GridView}
   ): void {
     const viewItems = gridView.splitView.viewItems;
-    if(viewItems[index[curr]].view instanceof GroupView) {
-      const v: GroupView = viewItems[index[curr]].view as GroupView;
-
-      if(selected) {
-        for(let i = 0; i < v.tabs.tabs.length; i++) {
-          v.tabs.tabs[i].element.classList.remove('selected');
-          v.terms.terms[i].element.classList.remove('selected');
-        }
-        v.tabs.tabs[pos].element.classList.add('selected');
-        v.terms.terms[pos].element.classList.add('selected');
-      } else {
-        v.tabs.tabs[pos].element.classList.remove('selected');
-        v.terms.terms[pos].element.classList.remove('selected');
-      }
-
-      if(active) {
-        v.tabs.tabs[pos].element.classList.add('active');
-        v.terms.terms[pos].element.classList.add('active');
-      } else {
-        v.tabs.tabs[pos].element.classList.remove('active');
-        v.terms.terms[pos].element.classList.remove('active');
-      }
-    } else if(viewItems[curr].view instanceof GridView) {
-      this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, gridView: viewItems[curr].view as GridView});
-    }
-  }
-
-  /**
-   * Very complex because of recurrence
-   * @param ...
-   */
-  controlStyle(
-      {depth, index, pos}: {depth: number, index: number[], pos: number},
-      {selected, active}: {selected: boolean, active: boolean}
-  ): void {
-    const viewItems = this.gridView.splitView.viewItems;
-    if(index != null && index.length > 0) {
-      if(viewItems[index[0]].view instanceof GroupView) {
-        const v: GroupView = viewItems[index[0]].view as GroupView;
+    if(depth === curr) {
+      if(viewItems[index[curr]].view instanceof GroupView) {
+        const v: GroupView = viewItems[index[curr]].view as GroupView;
 
         if(selected) {
           for(let i = 0; i < v.tabs.tabs.length; i++) {
@@ -273,10 +182,29 @@ export class SessionPart extends Part implements SessionPartService {
           v.tabs.tabs[pos].element.classList.remove('active');
           v.terms.terms[pos].element.classList.remove('active');
         }
-      } else if(viewItems[index[0]].view instanceof GridView) {
-        this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: 0+1, gridView: viewItems[index[0]].view as GridView});
+      } else if(viewItems[index[curr]].view instanceof GridView) {
+        // not enter here
+      }
+    } else {
+      for(let i = 0; i < viewItems.length; i++) {
+        if(viewItems[i].view instanceof GroupView) {
+          // not enter here
+        } else if(viewItems[i].view instanceof GridView) {
+          this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, gridView: viewItems[i].view as GridView});
+        }
       }
     }
+  }
+
+  /**
+   *
+   * @param ...
+   */
+  controlStyle(
+      {depth, index, pos}: {depth: number, index: number[], pos: number},
+      {selected, active}: {selected: boolean, active: boolean}
+  ): void {
+    this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: 0, gridView: this.gridView});
   }
 
 }
