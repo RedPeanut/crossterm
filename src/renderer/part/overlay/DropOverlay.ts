@@ -156,27 +156,35 @@ export class DropOverlay {
       } else {
         /* 예)
         {
-          mode: 'vertical',
+          mode: 'horizontal',
           list:[
             [{a1},{a2}],
             [{b1}]
           ]
         }
-        -> drop a2 to b1
+        -> drop b1 to a2
         {
-          mode: 'vertical',
+          mode: 'horizontal',
           list:[
-            [{a1}],
-            [{b1},{a2}]
+            [{a1},{a2},{b1}]
           ]
         }
         */
 
-        drag_group.splice(drag_pos, 1)[0];
-        drag_group[drag_group.length-1].selected = true;
+        if(drag_group.length > 1) {
+          drag_group.splice(drag_pos, 1);
+          drag_group[drag_group.length-1].selected = true;
+        } else
+          drag_splitItem.list.splice(drag_index[drag_index.length-1], 1);
         curr_group.push(drag_item);
       }
     } else {
+
+      if(curr_group.length === 1) {
+        // nothing do
+        return;
+      }
+
       const mode: Mode = this.splitDirection === GroupDirection.UP
         || this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
 
@@ -208,8 +216,6 @@ export class DropOverlay {
             new_list.push(curr_splitItem.list[i]);
         }
         curr_splitItem.list = new_list;
-
-        cleanSingleSplitItemOnce(wrapper.tree);
       } else {
         let new_split: SplitItem = { mode: mode, list: []};
         if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
@@ -243,11 +249,10 @@ export class DropOverlay {
           // drag_splitItem.list[drag_index[drag_index.length-1]] = null;
           drag_splitItem.list.splice(drag_index[drag_index.length-1], 1)[0]
         }
-
-        cleanSingleSplitItemOnce(wrapper.tree);
       }
     }
 
+    cleanSingleSplitItemOnce(wrapper.tree);
     console.log('wrapper.tree =', wrapper.tree);
     this.bodyLayoutService.recreate();
     this.bodyLayoutService.layout(0, 0); // not use param
