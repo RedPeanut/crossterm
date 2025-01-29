@@ -56,6 +56,25 @@ body { height: 100%; }
   height: 100%;
 }
 
+.split-view > .split-view-container > .split-view-view:not(:first-child)::before {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.09);
+}
+
+.split-view.horizontal > .split-view-container > .split-view-view:not(:first-child)::before {
+  height: 100%;
+  width: 1px;
+}
+
+.split-view.vertical > .split-view-container > .split-view-view:not(:first-child)::before {
+  height: 1px;
+  width: 100%;
+}
+
 /* Titlebar */
 .part.titlebar {
   /* padding-left: 80px; */
