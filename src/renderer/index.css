@@ -212,6 +212,7 @@ body { height: 100%; }
 .tabs .tablist {
   display: flex;
   height: 35px;
+  overflow: hidden;
 }
 
 .tabs .tab {
