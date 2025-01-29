@@ -33,6 +33,9 @@ export class Term {
   }
 
   createTerminal(): void {
+
+    if(terminals[this.uid]) return;
+
     let retVal = window.ipc.send('new', {
       // ...item,
       uid: this.uid,
