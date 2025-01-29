@@ -4,7 +4,7 @@ import { Group, isSplitItem, SplitItem } from "./Types";
 
 export function findActiveItem(curr: SplitItem, depth: number, index: number[])
 : { depth: number, index: number[], pos: number, item: TerminalItem, group: TerminalItem[], splitItem: SplitItem } | undefined {
-  if(curr.list.length > 0) {
+  if(curr.list && curr.list.length > 0) {
     for(let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
       // let _index = index.concat(i);
@@ -27,7 +27,7 @@ export function findActiveItem(curr: SplitItem, depth: number, index: number[])
 
 export function findItemById(curr: SplitItem, depth: number, index: number[], id: string)
 : { depth: number, index: number[], pos: number, item: TerminalItem, group: TerminalItem[], splitItem: SplitItem } | undefined {
-  if(curr.list.length > 0) {
+  if(curr.list && curr.list.length > 0) {
     for(let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
       // let _index = index.concat(i);
@@ -50,7 +50,7 @@ export function findItemById(curr: SplitItem, depth: number, index: number[], id
 
 export function findSplitItemByGroup(curr: SplitItem, depth: number, index: number[], group: Group)
 : { depth: number, index: number[], group: Group, splitItem: SplitItem } | undefined {
-  if(curr.list.length > 0) {
+  if(curr.list && curr.list.length > 0) {
     for(let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
       if(isSplitItem(item)) {
@@ -67,7 +67,7 @@ export function findSplitItemByGroup(curr: SplitItem, depth: number, index: numb
 }
 
 export function cleanSingleSplitItemOnce(curr: SplitItem): void {
-  if(curr.list.length > 0) {
+  if(curr.list && curr.list.length > 0) {
     for(let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
       if(isSplitItem(item)) {

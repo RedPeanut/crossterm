@@ -78,14 +78,16 @@ export class SessionPart extends Part implements SessionPartService {
 
   renderTreeRoot(container: HTMLElement, root: SplitItem, depth: number): HTMLElement[] {
     let result: HTMLElement[] = [];
-    const orientation = root.mode === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
-    const gridView = this.gridView = new GridView(null, { orientation: orientation, length: root.list.length });
-    /* const element =  */gridView.create();
-    const results: SplitViewItemView[] = this.renderTreeList(null, root, depth+1);
-    if(results.length > 0) {
-      for(let i = 0; i < results.length; i++)
-        gridView.addView(results[i]);
-      result.push(gridView.element);
+    if(root.list) {
+      const orientation = root.mode === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
+      const gridView = this.gridView = new GridView(null, { orientation: orientation, length: root.list.length });
+      /* const element =  */gridView.create();
+      const results: SplitViewItemView[] = this.renderTreeList(null, root, depth+1);
+      if(results.length > 0) {
+        for(let i = 0; i < results.length; i++)
+          gridView.addView(results[i]);
+        result.push(gridView.element);
+      }
     }
     return result;
   }
@@ -115,7 +117,7 @@ export class SessionPart extends Part implements SessionPartService {
   }
 
   createTerminal(): void {
-    this.createTerminal_r(this.gridView);
+    this.gridView && this.createTerminal_r(this.gridView);
   }
 
   getServices_r(v: GridView): void {
@@ -135,7 +137,7 @@ export class SessionPart extends Part implements SessionPartService {
   }
 
   getServices(): void {
-    this.getServices_r(this.gridView);
+    this.gridView && this.getServices_r(this.gridView);
   }
 
   makeOverlayVisible_r(gridView: GridView, b: boolean): void {
@@ -151,7 +153,7 @@ export class SessionPart extends Part implements SessionPartService {
   }
 
   makeOverlayVisible(b: boolean): void {
-    this.makeOverlayVisible_r(this.gridView, b);
+    this.gridView && this.makeOverlayVisible_r(this.gridView, b);
   }
 
   controlStyle_r(
