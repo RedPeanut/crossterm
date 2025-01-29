@@ -16,11 +16,13 @@ export class Node {
     data: ListItemElem,
     level: number = 0,
     nodeRender: (data: ListItemElem) => HTMLElement | null,
+    onDoubleClick: (id: string) => void
   ): void {
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
 
     const element = this.element = $('.wrapper');
     const node = this.node = $('.node');
+    node.ondblclick = (e) => onDoubleClick(data.id);
 
     const content = $('.content');
     const header = $('.ln-header');
@@ -39,7 +41,7 @@ export class Node {
     if(hasChildren) {
       data.children.map((e) => {
         const _node = new Node(body);
-        _node.render(e, level+1, nodeRender);
+        _node.render(e, level+1, nodeRender, onDoubleClick);
       });
     }
     append(node, content);

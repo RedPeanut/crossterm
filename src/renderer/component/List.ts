@@ -1,6 +1,13 @@
+import { TerminalItem } from "../../common/Types";
+import { wrapper } from "../../globals";
+import { BodyLayoutService } from "../layout/BodyLayout";
+import { SessionPartService } from "../part/SessionPart";
+import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../Service";
 import { $, append } from "../util/dom";
+import { findActiveItem, flatten } from "../utils";
 import { ListItem } from "./ListItem";
 import { Tree } from "./Tree";
+import { v4 as uuidv4 } from 'uuid';
 
 export type ListItemType = 'local' | 'remote' | 'group' | 'folder';
 export interface ListItemElem {
@@ -77,6 +84,44 @@ export class List {
     };
   }
 
+  onDoubleClick(id: string): void {
+    console.log('onDoubleClick() is called..., id =', id);
+    const { showList } = this.state;
+    const item: ListItemElem | undefined = flatten(showList).find((item) => item.id === id);
+
+    const new_one: TerminalItem = {
+      // type: item?.type, size: { row: 24, col: 80 },
+      type: item.type, size: item.size, url: item.url,
+      uid: uuidv4(), selected: true, active: true,
+    };
+
+    // find active item position first
+    const find_active = findActiveItem(wrapper.tree, 0, []);
+    // console.log('find_active =', find_active);
+
+    // let new_tree;
+    if(find_active) {
+      const { depth, index, pos, item: activeItem, group: activeGroup, splitItem } = find_active;
+
+      // turn off active item
+      activeItem.selected = false;
+      activeItem.active = false;
+
+      // attach backward
+      activeGroup.push(new_one);
+    } else {
+      wrapper.tree.list = [ [new_one] ];
+    }
+
+    const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
+    bodyLayoutService.recreate();
+    bodyLayoutService.layout(0, 0);
+
+    const sessionPartService: SessionPartService = getService(sessionPartServiceId);
+    sessionPartService.getServices();
+    sessionPartService.createTerminal();
+  }
+
   render(): void {
     this.element = $('.list');
     const tree = new Tree(this.element);
@@ -95,10 +140,11 @@ export class List {
           selectedIds: ids || ['0']
         };
       }, // onSelect: (ids: string[]) => void
-      (data: ListItemElem) => { 
+      (data: ListItemElem) => {
         const listItem = new ListItem(null);
         return listItem.render(data);
       }, // nodeRender: (data: ListItemElem) => HTMLElement | null
+      this.onDoubleClick.bind(this) // (id: string) => void
     );
     append(this.container, this.element);
   }

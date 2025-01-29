@@ -21,9 +21,15 @@ export class Tree {
 
   element: HTMLElement;
   tree: ListItemElem[];
+  onDoubleClick: Function;
 
   constructor(container: HTMLElement) {
     this.container = container;
+  }
+
+  onDoubleClick_(id: string): void {
+    console.log('onDoubleClick_() is called...');
+    this.onDoubleClick && this.onDoubleClick(id);
   }
 
   render(tree: ListItemElem[],
@@ -31,13 +37,15 @@ export class Tree {
     onChange: Function,
     onSelect: Function,
     nodeRender: (data: ListItemElem) => HTMLElement | null,
+    onDoubleClick: (id: string) => void
   ): void {
     this.tree = tree;
+    this.onDoubleClick = onDoubleClick;
 
     this.element = $('.tree');
     this.tree.map((e) => {
       const node = new Node(this.element);
-      node.render(e, 0, nodeRender);
+      node.render(e, 0, nodeRender, this.onDoubleClick_.bind(this));
     });
     append(this.container, this.element);
   }

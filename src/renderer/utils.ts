@@ -1,6 +1,18 @@
 import { TerminalItem } from "../common/Types";
 import { wrapper } from "../globals";
+import { ListItemElem } from "./component/List";
 import { Group, isSplitItem, SplitItem } from "./Types";
+
+export const flatten = (list: ListItemElem[]): ListItemElem[] => {
+  let new_list: ListItemElem[] = [];
+  list.map((item) => {
+    new_list.push(item);
+    if(item.children) {
+      new_list = [...new_list, ...flatten(item.children)];
+    }
+  });
+  return new_list;
+}
 
 export function findActiveItem(curr: SplitItem, depth: number, index: number[])
 : { depth: number, index: number[], pos: number, item: TerminalItem, group: TerminalItem[], splitItem: SplitItem } | undefined {
