@@ -51,6 +51,8 @@ export class Tab {
         // console.log('find_curr =', find_curr);
         this.sessionPartService.controlStyle({depth, index, pos}, {selected: true, active: true});
       }
+
+      this.sessionPartService.fit();
     }
   }
 
