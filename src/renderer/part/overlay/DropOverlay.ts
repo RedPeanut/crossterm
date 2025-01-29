@@ -190,7 +190,7 @@ export class DropOverlay {
 
       if(curr_group === drag_group) {
         // let new_group: Group = [];
-        curr_group.splice(drag_pos, 1)[0];
+        curr_group.splice(drag_pos, 1);
         curr_group[curr_group.length-1].selected = true;
 
         let new_split: SplitItem = { mode: mode, list: []};
@@ -247,7 +247,7 @@ export class DropOverlay {
         else {
           // drag_group = null; // constant error
           // drag_splitItem.list[drag_index[drag_index.length-1]] = null;
-          drag_splitItem.list.splice(drag_index[drag_index.length-1], 1)[0]
+          drag_splitItem.list.splice(drag_index[drag_index.length-1], 1);
         }
       }
     }
