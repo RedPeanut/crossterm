@@ -33,11 +33,15 @@ export class List {
   container: HTMLElement;
   element: HTMLElement;
   // showList: ListItem[];
-  state: any;
+  state: {
+    selectedIds: string[],
+    showList: ListItemElem[],
+  };
 
   constructor(container: HTMLElement) {
     this.container = container;
     this.state = {
+      selectedIds: [],
       showList: [
         {
           type: 'folder',

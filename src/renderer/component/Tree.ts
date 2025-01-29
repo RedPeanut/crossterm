@@ -21,7 +21,7 @@ export class Tree {
 
   element: HTMLElement;
   tree: ListItemElem[];
-  onDoubleClick: Function;
+  onDoubleClick: (id: string) => void;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -33,7 +33,7 @@ export class Tree {
   }
 
   render(tree: ListItemElem[],
-    selectedIds: string,
+    selectedIds: string[],
     onChange: Function,
     onSelect: Function,
     nodeRender: (data: ListItemElem) => HTMLElement | null,
