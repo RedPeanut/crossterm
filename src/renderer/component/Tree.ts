@@ -20,11 +20,19 @@ export class Tree {
   container: HTMLElement;
   element: HTMLElement;
   // tree: ListItemElem[];
+  onSelect: (id: string[]) => void;
   onDoubleClick: (id: string) => void;
   nodes: Node[];
 
   constructor(container: HTMLElement) {
     this.container = container;
+  }
+
+  onSelect_(id: string): void {
+    const onSelect = this.onSelect;
+    let new_selected_ids: string[] = [];
+    new_selected_ids = [id];
+    onSelect && onSelect(new_selected_ids);
   }
 
   onDoubleClick_(id: string): void {
@@ -35,18 +43,19 @@ export class Tree {
   create(tree: ListItemElem[],
     selectedIds: string[],
     onChange: Function,
-    onSelect: Function,
+    onSelect: (id: string[]) => void,
     nodeRender: (data: ListItemElem) => HTMLElement | null,
     onDoubleClick: (id: string) => void
   ): void {
     // this.tree = tree;
+    this.onSelect = onSelect;
     this.onDoubleClick = onDoubleClick;
 
     this.element = $('.tree');
     this.nodes = [];
     tree.map((e) => {
       const node = new Node(this.element);
-      node.create(e, 0, nodeRender, this.onDoubleClick_.bind(this));
+      node.create(e, 0, nodeRender, this.onSelect_.bind(this), this.onDoubleClick_.bind(this), selectedIds);
       this.nodes.push(node);
     });
     append(this.container, this.element);

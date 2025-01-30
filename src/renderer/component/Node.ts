@@ -19,10 +19,13 @@ export class Node {
     data: ListItemElem,
     level: number = 0,
     nodeRender: (data: ListItemElem) => HTMLElement | null,
-    onDoubleClick: (id: string) => void
+    onSelect: (id: string) => void,
+    onDoubleClick: (id: string) => void,
+    selectedIds
   ): void {
     this.id = data.id;
 
+    const isSelected = selectedIds.includes(data.id);
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
     const isCollapsed = data.isCollapsed == null || data.isCollapsed == undefined
       ? true : data.isCollapsed;
@@ -33,6 +36,7 @@ export class Node {
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
     node.onclick = (e) => {
+      onSelect(data.id);
       const bookmarkPanelService = getService(bookmarkPanelServiceId);
       bookmarkPanelService.onSelect(data.id);
     };
@@ -70,7 +74,7 @@ export class Node {
       this.children = [];
       data.children.map((e) => {
         const _node = new Node(wrapper);
-        _node.create(e, level+1, nodeRender, onDoubleClick);
+        _node.create(e, level+1, nodeRender, onSelect, onDoubleClick, selectedIds);
         this.children.push(_node);
       });
     }
