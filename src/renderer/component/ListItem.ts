@@ -14,7 +14,10 @@ export class ListItem {
 
     const title = $('.title');
     const span = $('span.icon');
-    const itemIcon = $(`a.codicon codicon-${data.type}`);
+    const codicon = data.type === 'folder' ? 'folder' :
+      data.type === 'local' ? 'note' /* 'package' */ :
+      data.type === 'remote' ? 'globe' : data.type;
+    const itemIcon = $(`a.codicon.codicon-${codicon}`);
     append(span, itemIcon);
     // console.log(span.outerHTML);
     // append(title, span);

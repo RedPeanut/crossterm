@@ -163,23 +163,27 @@ body { height: 100%; }
 .sidebar .list .tree .node .content {
   margin: 2px 0;
   display: flex;
-  /* align-items: center; */
+  align-items: center;
 }
 
-.sidebar .list .tree .node .ln_header {
+.sidebar .list .tree .node .ln-header {
   width: 20px;
 }
 
-.sidebar .list .tree .node .ln_header .arrow {
+.sidebar .list .tree .node .ln-header .arrow {
   cursor: pointer;
   transform: rotate(90deg);
 }
 
-.sidebar .list .tree .node .ln_header .arrow.collapsed {
+.sidebar .list .tree .node .ln-header .arrow.collapsed {
   transform: rotate(0);
 }
 
-.sidebar .list .tree .node .ln_body {
+.sidebar .list .tree .codicon {
+  display: flex;
+}
+
+.sidebar .list .tree .node .ln-body {
   width: 100%;
 }
 
