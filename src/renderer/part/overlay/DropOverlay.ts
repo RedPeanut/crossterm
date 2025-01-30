@@ -180,10 +180,10 @@ export class DropOverlay {
       }
     } else {
 
-      if(curr_group.length === 1) {
+      /* if(curr_group.length === 1) {
         // nothing do
         return;
-      }
+      } */
 
       const mode: Mode = this.splitDirection === GroupDirection.UP
         || this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
