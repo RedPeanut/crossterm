@@ -1,3 +1,4 @@
+import { bookmarkPanelServiceId, getService } from "../Service";
 import { $, append } from "../util/dom";
 import { ListItemElem } from "./List";
 // import { TreeNodeData } from "./Tree";
@@ -23,19 +24,25 @@ export class Node {
     this.id = data.id;
 
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
-    const isCollapsed = data.isCollapsed || true;
+    const isCollapsed = data.isCollapsed == null || data.isCollapsed == undefined
+      ? true : data.isCollapsed;
 
     const wrapper = this.element = $('.wrapper');
     const node = this.node = $('.node');
 
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
+    node.onclick = (e) => {
+      const bookmarkPanelService = getService(bookmarkPanelServiceId);
+      bookmarkPanelService.onSelect(data.id);
+    };
     node.ondblclick = (e) => onDoubleClick(data.id);
 
     const content = $('.content');
     const header = $('.ln-header');
     if(hasChildren) {
-      const arrow = $('.arrow' + (isCollapsed ? '.collapsed' : ''));
+      const arrow = $('.arrow');
+      if(isCollapsed) wrapper.classList.add('collapsed');
       arrow.onclick = (e) => {
         // onChange(data.id, { isCollapsed: !isCollapsed });
         wrapper.classList.toggle('collapsed');
