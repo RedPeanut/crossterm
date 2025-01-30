@@ -18,10 +18,10 @@ import { Node } from './Node';
 
 export class Tree {
   container: HTMLElement;
-
   element: HTMLElement;
-  tree: ListItemElem[];
+  // tree: ListItemElem[];
   onDoubleClick: (id: string) => void;
+  nodes: Node[];
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -39,13 +39,15 @@ export class Tree {
     nodeRender: (data: ListItemElem) => HTMLElement | null,
     onDoubleClick: (id: string) => void
   ): void {
-    this.tree = tree;
+    // this.tree = tree;
     this.onDoubleClick = onDoubleClick;
 
     this.element = $('.tree');
-    this.tree.map((e) => {
+    this.nodes = [];
+    tree.map((e) => {
       const node = new Node(this.element);
       node.create(e, 0, nodeRender, this.onDoubleClick_.bind(this));
+      this.nodes.push(node);
     });
     append(this.container, this.element);
   }

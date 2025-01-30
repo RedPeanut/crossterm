@@ -38,6 +38,8 @@ export class List {
     showList: ListItemElem[],
   };
 
+  tree: Tree;
+
   constructor(container: HTMLElement) {
     this.container = container;
     this.state = {
@@ -128,7 +130,7 @@ export class List {
 
   create(): void {
     this.element = $('.list');
-    const tree = new Tree(this.element);
+    const tree = this.tree = new Tree(this.element);
     tree.create(
       this.state.showList, // tree: ListItemElem[]
       this.state.selectedIds, // selectedIds: string[]

@@ -7,6 +7,8 @@ export class Node {
 
   element: HTMLElement;
   node: HTMLElement;
+  children: Node[];
+  id: string;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -18,6 +20,8 @@ export class Node {
     nodeRender: (data: ListItemElem) => HTMLElement | null,
     onDoubleClick: (id: string) => void
   ): void {
+    this.id = data.id;
+
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
     const isCollapsed = data.isCollapsed || true;
 
@@ -56,9 +60,11 @@ export class Node {
     append(wrapper, node);
 
     if(hasChildren) {
+      this.children = [];
       data.children.map((e) => {
         const _node = new Node(wrapper);
         _node.create(e, level+1, nodeRender, onDoubleClick);
+        this.children.push(_node);
       });
     }
 
