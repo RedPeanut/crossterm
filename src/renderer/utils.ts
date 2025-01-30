@@ -3,7 +3,7 @@ import { wrapper } from "../globals";
 import { ListItemElem } from "./component/List";
 import { Group, isSplitItem, SplitItem } from "./Types";
 
-export const flatten = (list: ListItemElem[]): ListItemElem[] => {
+export function flatten(list: ListItemElem[]): ListItemElem[] {
   let new_list: ListItemElem[] = [];
   list.map((item) => {
     new_list.push(item);
