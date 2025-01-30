@@ -170,13 +170,17 @@ body { height: 100%; }
   width: 20px;
 }
 
-.sidebar .list .tree .node .ln-header .arrow {
+.sidebar .list .tree .wrapper .node .ln-header .arrow {
   cursor: pointer;
   transform: rotate(90deg);
 }
 
-.sidebar .list .tree .node .ln-header .arrow.collapsed {
+.sidebar .list .tree .wrapper.collapsed .node .ln-header .arrow {
   transform: rotate(0);
+}
+
+.sidebar .list .tree .wrapper.collapsed .wrapper {
+  display: none;
 }
 
 .sidebar .list .tree .codicon {

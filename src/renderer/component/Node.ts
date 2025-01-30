@@ -19,6 +19,7 @@ export class Node {
     onDoubleClick: (id: string) => void
   ): void {
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
+    const isCollapsed = data.isCollapsed || true;
 
     const wrapper = this.element = $('.wrapper');
     const node = this.node = $('.node');
@@ -30,8 +31,18 @@ export class Node {
     const content = $('.content');
     const header = $('.ln-header');
     if(hasChildren) {
-      const arrow = $('.arrow' + data.isCollapsed ? '.collapsed' : '');
-      arrow.innerHTML = '>';
+      const arrow = $('.arrow' + (isCollapsed ? '.collapsed' : ''));
+      arrow.onclick = (e) => {
+        // onChange(data.id, { isCollapsed: !isCollapsed });
+        wrapper.classList.toggle('collapsed');
+      };
+
+      const collapseArrow = $('a.codicon.codicon-chevron-right');
+      if(collapseArrow)
+        arrow.appendChild(collapseArrow);
+      else
+        arrow.innerHTML = '>';
+
       header.append(arrow);
     }
     content.append(header);

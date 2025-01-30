@@ -66,7 +66,7 @@ export class List {
               id: '96367ed9-6fb1-434b-b45d-de9d2d21898a',
             }
           ],
-          isCollapsed: false
+          // isCollapsed: false
         },
         {
           type: 'remote',
