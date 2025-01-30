@@ -126,10 +126,10 @@ export class List {
     sessionPartService.createTerminal();
   }
 
-  render(): void {
+  create(): void {
     this.element = $('.list');
     const tree = new Tree(this.element);
-    tree.render(
+    tree.create(
       this.state.showList, // tree: ListItemElem[]
       this.state.selectedIds, // selectedIds: string[]
       (list: any) => {
@@ -146,7 +146,7 @@ export class List {
       }, // onSelect: (ids: string[]) => void
       (data: ListItemElem) => {
         const listItem = new ListItem(null);
-        return listItem.render(data);
+        return listItem.create(data);
       }, // nodeRender: (data: ListItemElem) => HTMLElement | null
       this.onDoubleClick.bind(this) // (id: string) => void
     );

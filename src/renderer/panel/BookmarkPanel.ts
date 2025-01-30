@@ -15,6 +15,6 @@ export class BookmarkPanel extends Panel {
     super.create(parent);
     this.container = dom.append(parent, dom.$('.bookmark-panel'));
     const list = new List(this.container);
-    list.render();
+    list.create();
   }
 }

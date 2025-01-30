@@ -9,7 +9,7 @@ export class ListItem {
     this.container = container;
   }
 
-  render(data: ListItemElem): HTMLElement {
+  create(data: ListItemElem): HTMLElement {
     this.element = $('.list-item');
 
     const title = $('.title');

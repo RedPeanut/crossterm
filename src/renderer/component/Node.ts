@@ -12,7 +12,7 @@ export class Node {
     this.container = container;
   }
 
-  render(
+  create(
     data: ListItemElem,
     level: number = 0,
     nodeRender: (data: ListItemElem) => HTMLElement | null,
@@ -41,7 +41,7 @@ export class Node {
     if(hasChildren) {
       data.children.map((e) => {
         const _node = new Node(body);
-        _node.render(e, level+1, nodeRender, onDoubleClick);
+        _node.create(e, level+1, nodeRender, onDoubleClick);
       });
     }
     append(node, content);

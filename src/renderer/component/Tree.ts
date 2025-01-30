@@ -32,7 +32,7 @@ export class Tree {
     this.onDoubleClick && this.onDoubleClick(id);
   }
 
-  render(tree: ListItemElem[],
+  create(tree: ListItemElem[],
     selectedIds: string[],
     onChange: Function,
     onSelect: Function,
@@ -45,7 +45,7 @@ export class Tree {
     this.element = $('.tree');
     this.tree.map((e) => {
       const node = new Node(this.element);
-      node.render(e, 0, nodeRender, this.onDoubleClick_.bind(this));
+      node.create(e, 0, nodeRender, this.onDoubleClick_.bind(this));
     });
     append(this.container, this.element);
   }
