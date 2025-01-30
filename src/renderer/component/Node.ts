@@ -20,8 +20,11 @@ export class Node {
   ): void {
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
 
-    const element = this.element = $('.wrapper');
+    const wrapper = this.element = $('.wrapper');
     const node = this.node = $('.node');
+
+    node.style.paddingLeft = `${level * 20 + 4}px`;
+
     node.ondblclick = (e) => onDoubleClick(data.id);
 
     const content = $('.content');
@@ -38,14 +41,16 @@ export class Node {
     body.append(listItem);
     content.append(body);
 
+    append(node, content);
+    append(wrapper, node);
+
     if(hasChildren) {
       data.children.map((e) => {
-        const _node = new Node(body);
+        const _node = new Node(wrapper);
         _node.create(e, level+1, nodeRender, onDoubleClick);
       });
     }
-    append(node, content);
-    append(element, node);
-    append(this.container, element);
+
+    append(this.container, wrapper);
   }
 }

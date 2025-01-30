@@ -3,7 +3,7 @@ import { isSplitItem, SplitItem } from "./renderer/Types";
 export const terminals: { [key: string]: any } = {};
 
 export const wrapper: { [key: string]: SplitItem } = {
-  /* initial case
+  ///* initial case
   'tree': {} //*/
   /* case1. single multi tab
   'tree': {
@@ -12,7 +12,7 @@ export const wrapper: { [key: string]: SplitItem } = {
       [{uid:'a1',selected:false},{uid:'a2',selected:true,active:true}]
     ]
   } //*/
-  ///* case2. single split
+  /* case2. single split
   'tree': {
     mode: 'horizontal',
     // mode: 'vertical',
