@@ -4,7 +4,7 @@ import { BodyLayoutService } from "../layout/BodyLayout";
 import { SessionPartService } from "../part/SessionPart";
 import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../Service";
 import { $, append } from "../util/dom";
-import { findActiveItem, flatten } from "../utils";
+import { findActiveItem } from "../utils";
 import { ListItem } from "./ListItem";
 import { Tree } from "./Tree";
 import { v4 as uuidv4 } from 'uuid';
@@ -90,10 +90,21 @@ export class List {
     };
   }
 
+  flatten(list: ListItemElem[]): ListItemElem[] {
+    let new_list: ListItemElem[] = [];
+    list.map((item) => {
+      new_list.push(item);
+      if(item.children) {
+        new_list = [...new_list, ...this.flatten(item.children)];
+      }
+    });
+    return new_list;
+  }
+
   onDoubleClick(id: string): void {
     console.log('onDoubleClick() is called..., id =', id);
     const { showList } = this.state;
-    const item: ListItemElem | undefined = flatten(showList).find((item) => item.id === id);
+    const item: ListItemElem | undefined = this.flatten(showList).find((item) => item.id === id);
 
     const new_one: TerminalItem = {
       // type: item?.type, size: { row: 24, col: 80 },
