@@ -85,6 +85,41 @@ body { height: 100%; }
   /* background-color: grey; */
 }
 
+.titlebar .left { display: flex; padding-left: 80px; }
+
+.titlebar .center {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.titlebar .right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.titlebar .right .codicon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  font-size: 24px;
+  /* background-color: rgba(255, 255, 255, 0.08); */
+  /* border-radius: 8px; */
+}
+
+.titlebar .right .codicon.codicon-settings-gear {
+  font-size: 16px;
+}
+
+.titlebar .right .codicon:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
 /* Activitybar */
 .part.activitybar {
   width: 48px;
