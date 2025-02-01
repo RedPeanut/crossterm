@@ -7,12 +7,12 @@ export type MainEvents =
   // terminal
   'new'
   | 'data'
-  | 'maximize'
-  | 'minimize'
-  | 'resize'
-  | 'open context menu'
-  | 'close'
-  | 'command'
+
+  // window
+  | 'window maximize'
+  | 'window minimize'
+  | 'window resize'
+  | 'window close'
 
   // config
   | 'config all'
@@ -20,6 +20,9 @@ export type MainEvents =
   | 'config set'
   | 'config update'
 
+  //
+  | 'open context menu'
+  | 'command'
 ;
 
 export type RenderEvents =

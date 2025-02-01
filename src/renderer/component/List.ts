@@ -10,6 +10,8 @@ import { Tree } from "./Tree";
 import { v4 as uuidv4 } from 'uuid';
 
 export type ListItemType = 'local' | 'remote' | 'group' | 'folder';
+export type FolderModeType = 0 | 1 | 2; // 0: 기본값; 1: 단일 선택 2: 다중 선택
+
 export interface ListItemElem {
   type?: ListItemType;
   title?: string;

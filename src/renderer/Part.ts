@@ -51,7 +51,6 @@ export abstract class Part extends Component implements SplitViewItemView {
   create(): void {
     this.titleArea = this.createTitleArea();
     this.contentArea = this.createContentArea();
-    // this.partLayout = new PartLayout(this.options, this.contentArea);
     // this.titleArea && this.parent && this.parent.appendChild(this.titleArea);
     // this.contentArea && this.parent && this.parent.appendChild(this.contentArea);
   }
