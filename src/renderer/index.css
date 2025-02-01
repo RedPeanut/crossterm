@@ -31,6 +31,67 @@ body { height: 100%; }
   pointer-events: initial;
 }
 
+.sash {
+  position: absolute;
+  z-index: 35;
+  touch-action: none;
+}
+
+.sash.disabled {
+  pointer-events: none;
+}
+
+.sash.mac.vertical { cursor: col-resize; }
+.sash.vertical.minimum { cursor: e-resize; }
+.sash.vertical.maximum { cursor: w-resize; }
+
+.sash.mac.horizontal { cursor: row-resize; }
+.sash.horizontal.minimum { cursor: s-resize; }
+.sash.horizontal.maximum { cursor: n-resize; }
+
+.sash.disabled {
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+.sash.vertical {
+  cursor: ew-resize;
+  top: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.sash.horizontal {
+  cursor: ns-resize;
+  left: 0;
+  width: 100%;
+  height: 4px;
+}
+
+.sash:before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.sash.hover:before,
+.sash.active:before {
+  background: rgb(0 120 212); /* var(--vscode-sash-hoverBorder); */
+}
+
+.sash.vertical:before {
+  width: 4px;
+  left: calc(50% - (4px / 2));
+}
+
+.sash.horizontal:before {
+  height: 4px;
+  top: calc(50% - (4px / 2));
+}
+
 .split-view .split-view-container {
   width: 100%;
   height: 100%;

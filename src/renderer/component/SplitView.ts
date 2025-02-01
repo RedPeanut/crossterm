@@ -1,5 +1,6 @@
+import { EventEmitter } from "events";
 import { append, $ } from "../util/dom";
-import { Orientation, Sash } from "./Sash";
+import { Orientation, Sash, SashEvent } from "./Sash";
 
 export type SplitViewItemSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
 
@@ -100,6 +101,10 @@ export class HorizontalViewItem<T extends SplitViewItemView> extends SplitViewIt
 
 interface SashDragState {}
 
+interface SashItem {
+  sash: Sash;
+}
+
 export interface SplitViewOptions {
   orientation?: Orientation;
 }
@@ -111,7 +116,9 @@ export class SplitView<T extends SplitViewItemView> {
   orientation: Orientation;
   viewItems: SplitViewItem<T>[] = [];
   el: HTMLElement;
+  sashItems: SashItem[] = [];
   //viewItems: ViewItem[];
+
   sashContainer: HTMLElement;
   viewContainer: HTMLElement;
   sashDragState: SashDragState | undefined;
@@ -128,6 +135,16 @@ export class SplitView<T extends SplitViewItemView> {
     this.sashContainer = append(this.el, $('.sash-container'));
     this.viewContainer = append(this.el, $('.split-view-container'));
     this.container.appendChild(this.el);
+  }
+
+  getSashPosition(sash: Sash): number {
+    let position = 0;
+    for(let i = 0; i < this.sashItems.length; i++) {
+      position += this.viewItems[i].view.size;
+      if(this.sashItems[i].sash === sash)
+        return position;
+    }
+    return 0;
   }
 
   replaceView(_old: T, _new: T) {
@@ -171,7 +188,32 @@ export class SplitView<T extends SplitViewItemView> {
 
     // add sash
     if(this.viewItems.length > 1) {
-      const sash = new Sash(this.sashContainer, null);
+      const sash = this.orientation === Orientation.VERTICAL
+        ? new Sash(this.sashContainer, { getHorizontalSashTop: s => this.getSashPosition(s), getHorizontalSashWidth: null }, { orientation: Orientation.HORIZONTAL })
+        : new Sash(this.sashContainer, { getVerticalSashLeft: s => this.getSashPosition(s), getVerticalSashHeight: null }, { orientation: Orientation.VERTICAL });
+
+      const sashEventMapper = this.orientation === Orientation.VERTICAL
+        ? (e: SashEvent) => ({ sash, start: e.startY, current: e.currentY, alt: e.altKey })
+        : (e: SashEvent) => ({ sash, start: e.startX, current: e.currentX, alt: e.altKey });
+
+      sash.on('sash start', (e) => {
+        console.log('sash start event is called.. e =', e);
+        const mappedEvent = sashEventMapper(e);
+        console.log('mappedEvent =', mappedEvent);
+      });
+      sash.on('sash change', (e) => {
+        console.log('sash change event is called.. e =', e);
+        const mappedEvent = sashEventMapper(e);
+        console.log('mappedEvent =', mappedEvent);
+      });
+      sash.on('sash end', (e) => {
+        console.log('sash end event is called.. e =', e);
+        // const mappedEvent = sashEventMapper(e);
+        // console.log('mappedEvent =', mappedEvent);
+      });
+
+      const sashItem: SashItem = { sash };
+      this.sashItems.splice(index-1, 0, sashItem);
     }
 
     // append
@@ -230,6 +272,9 @@ export class SplitView<T extends SplitViewItemView> {
       // console.log(`[${i}] ${item.size}`);
       offset += (item.view.border ? 1 : 0) + item.view.size;
     }
+
+    // Layout sashes
+    this.sashItems.forEach(item => item.sash.layout());
   }
 
   /* render() {
