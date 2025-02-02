@@ -23,9 +23,13 @@ export class GroupView implements SplitViewItemView {
   _border: boolean = false;
   get border(): boolean { return this._border; }
   set border(border: boolean) { this._border = border; }
-  
+
+  _sashEnablement: boolean = true;
+  get sashEnablement(): boolean { return this._sashEnablement; }
+  set sashEnablement(b: boolean) { this._sashEnablement = b; }
+
   layout(offset: number, size: number): void {}
-  
+
   parent: HTMLElement;
   _element: HTMLElement;
   group: TerminalItem[];

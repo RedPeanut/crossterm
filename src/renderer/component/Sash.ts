@@ -9,6 +9,13 @@ export const enum Orientation {
   HORIZONTAL
 }
 
+export const enum SashState {
+  Disabled,
+  AtMinimum,
+  AtMaximum,
+  Enabled
+}
+
 /**
  * A vertical sash layout provider provides position and height for a sash.
  */
@@ -57,6 +64,21 @@ export class Sash extends EventEmitter {
   orientation: Orientation;
   size: number = 4;
   hoverDelay: number = 300;
+
+  _state: SashState = SashState.Enabled;
+  get state(): SashState { return this._state; }
+  set state(state: SashState) {
+    if(this._state === state)
+      return;
+
+    this.el.classList.toggle('disabled', state === SashState.Disabled);
+    this.el.classList.toggle('minimum', state === SashState.AtMinimum);
+    this.el.classList.toggle('maximum', state === SashState.AtMaximum);
+
+    this._state = state;
+    // this.onDidEnablementChange.fire(state);
+    this.emit('sash state change', state);
+  }
 
   constructor(container: HTMLElement, verticalLayoutProvider: VerticalSashLayoutProvider, options: VerticalSashOptions);
   constructor(container: HTMLElement, horizontalLayoutProvider: HorizontalSashLayoutProvider, options: HorizontalSashOptions);
@@ -128,6 +150,7 @@ export class Sash extends EventEmitter {
       this.el.classList.add('vertical');
     }
 
+    this.on('sash state change', (state: SashState) => {});
   }
 
   layout(): void {

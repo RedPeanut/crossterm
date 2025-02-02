@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { append, $ } from "../util/dom";
-import { Orientation, Sash, SashEvent } from "./Sash";
+import { Orientation, Sash, SashEvent, SashState } from "./Sash";
 
 export type SplitViewItemSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
 
@@ -37,6 +37,8 @@ export interface SplitViewItemView {
   set sizeType(sizeType: SplitViewItemSizeType);
   get border(): boolean;
   set border(border: boolean);
+  get sashEnablement(): boolean;
+  set sashEnablement(b: boolean);
   layout(offset: number, size: number): void;
 }
 
@@ -191,6 +193,8 @@ export class SplitView<T extends SplitViewItemView> {
       const sash = this.orientation === Orientation.VERTICAL
         ? new Sash(this.sashContainer, { getHorizontalSashTop: s => this.getSashPosition(s), getHorizontalSashWidth: null }, { orientation: Orientation.HORIZONTAL })
         : new Sash(this.sashContainer, { getVerticalSashLeft: s => this.getSashPosition(s), getVerticalSashHeight: null }, { orientation: Orientation.VERTICAL });
+
+      sash.state = view.sashEnablement ? SashState.Enabled : SashState.Disabled;
 
       const sashEventMapper = this.orientation === Orientation.VERTICAL
         ? (e: SashEvent) => ({ sash, start: e.startY, current: e.currentY, alt: e.altKey })

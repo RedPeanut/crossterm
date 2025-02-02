@@ -10,7 +10,7 @@ export interface GridViewOptions {
 
 /**
  * TODO: serialize n deserialize ?
- * 
+ *
  */
 export class GridView implements SplitViewItemView {
 
@@ -27,6 +27,10 @@ export class GridView implements SplitViewItemView {
   _border: boolean = false;
   get border(): boolean { return this._border; }
   set border(border: boolean) { this._border = border; }
+
+  _sashEnablement: boolean = true;
+  get sashEnablement(): boolean { return this._sashEnablement; }
+  set sashEnablement(b: boolean) { this._sashEnablement = b; }
 
   layout(offset: number, size: number): void {
     // console.log('size =', size);

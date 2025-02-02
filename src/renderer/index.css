@@ -37,10 +37,6 @@ body { height: 100%; }
   touch-action: none;
 }
 
-.sash.disabled {
-  pointer-events: none;
-}
-
 .sash.mac.vertical { cursor: col-resize; }
 .sash.vertical.minimum { cursor: e-resize; }
 .sash.vertical.maximum { cursor: w-resize; }

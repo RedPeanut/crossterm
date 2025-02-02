@@ -5,6 +5,7 @@ export class StatusbarPart extends Part {
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
     this.size = STATUSBAR_HEIGHT;
+    this.sashEnablement = false;
   }
 
   /* layoutContainer(offset: number): void {

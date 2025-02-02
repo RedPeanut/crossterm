@@ -20,6 +20,7 @@ export class SidebarPart extends Part implements SidebarPartService {
     super(parent, id, role, classes, options);
     this.size = SIDEBAR_WIDTH;
     this.border = true;
+    this.sashEnablement = false;
     setService(sidebarPartServiceId, this);
   }
 
