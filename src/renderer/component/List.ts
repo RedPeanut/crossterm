@@ -104,7 +104,7 @@ export class List {
   }
 
   onDoubleClick(id: string): void {
-    console.log('onDoubleClick() is called..., id =', id);
+    // console.log('onDoubleClick() is called..., id =', id);
     const { showList } = this.state;
     const item: ListItemElem | undefined = this.flatten(showList).find((item) => item.id === id);
 

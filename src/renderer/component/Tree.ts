@@ -36,7 +36,7 @@ export class Tree {
   }
 
   onDoubleClick_(id: string): void {
-    console.log('onDoubleClick_() is called...');
+    // console.log('onDoubleClick_() is called...');
     this.onDoubleClick && this.onDoubleClick(id);
   }
 
