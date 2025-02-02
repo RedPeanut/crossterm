@@ -7,7 +7,7 @@ import { BodyLayoutService } from "../../layout/BodyLayout";
 import { SessionPartService } from "../SessionPart";
 import { wrapper } from "../../../globals";
 import { cleanSingleSplitItemOnce, findActiveItem, findItemById, findSplitItemByGroup } from "../../utils";
-import { Group, Mode, SplitItem } from "../../Types";
+import { Group, isSplitItem, Mode, SplitItem } from "../../Types";
 
 export const enum GroupDirection {
   UP, DOWN, LEFT, RIGHT
@@ -252,8 +252,14 @@ export class DropOverlay {
       }
     }
 
-    cleanSingleSplitItemOnce(wrapper.tree);
-    console.log('wrapper.tree =', wrapper.tree);
+    // console.log('wrapper.tree =', wrapper.tree);
+    if(wrapper.tree.list.length === 1) {
+      if(isSplitItem(wrapper.tree.list[0]))
+        wrapper.tree = wrapper.tree.list[0] as SplitItem;
+    } else
+      cleanSingleSplitItemOnce(wrapper.tree);
+    // console.log('wrapper.tree =', wrapper.tree);
+
     this.bodyLayoutService.recreate();
     this.bodyLayoutService.layout(0, 0); // not use param
 
