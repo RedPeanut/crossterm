@@ -59,6 +59,7 @@ export interface HorizontalSashOptions extends SashOptions {
 }
 
 export class Sash extends EventEmitter {
+  container: HTMLElement;
   el: HTMLElement;
   layoutProvider: SashLayoutProvider;
   orientation: Orientation;
@@ -86,37 +87,13 @@ export class Sash extends EventEmitter {
     super();
 
     const self = this;
+    this.container = container;
     this.el = append(container, $('.sash'));
     if(isMacintosh)
       this.el.classList.add('mac');
 
-    this.el.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      const startX = e.pageX;
-      const startY = e.pageY;
-      const altKey = e.altKey;
-
-      const onMouseMove = (e) => {
-        e.preventDefault();
-        const event: SashEvent = {
-          sash: this,
-          startX: startX, currentX: e.pageX,
-          startY: startY, currentY: e.pageY,
-          altKey
-        };
-        this.emit('sash change', event);
-      }
-
-      const onMouseUp = (e) => {
-        e.preventDefault();
-        this.emit('sash end');
-      }
-
-      this.el.addEventListener('mousemove', onMouseMove);
-      this.el.addEventListener('mouseup', onMouseUp);
-      this.emit('sash start', { sash: this, startX, startY, altKey });
-    });
-
+    this.el.addEventListener('mousedown', this.onMouseDown.bind(this));
+    // this.el.addEventListener('touchstart', this.onMouseDown.bind(this));
     this.el.addEventListener('dblclick', (e) => {});
     this.el.addEventListener('mouseenter', (e) => {
       _.throttle(() => this.el.classList.add('hover'), this.hoverDelay, {trailing:false})();
@@ -124,7 +101,6 @@ export class Sash extends EventEmitter {
     this.el.addEventListener('mouseleave', (e) => {
       this.el.classList.remove('hover');
     });
-    this.el.addEventListener('touchstart', (e) => {});
 
     let doubleTapTimeout: any = undefined;
     this.el.addEventListener('tab', (e) => {
@@ -151,6 +127,38 @@ export class Sash extends EventEmitter {
     }
 
     this.on('sash state change', (state: SashState) => {});
+  }
+
+  onMouseDown(e) {
+    // e.preventDefault();
+    const self = this;
+    const startX = e.pageX;
+    const startY = e.pageY;
+    const altKey = e.altKey;
+
+    this.el.classList.add('active');
+    this.emit('sash start', { sash: this, startX, startY, altKey });
+
+    const onMouseMove = (e) => {
+      const event: SashEvent = {
+        sash: this,
+        startX: startX, currentX: e.pageX,
+        startY: startY, currentY: e.pageY,
+        altKey
+      };
+      this.emit('sash change', event);
+    }
+
+    const onMouseUp = (e) => {
+      this.el.classList.remove('active');
+      this.emit('sash end');
+
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    }
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
   }
 
   layout(): void {

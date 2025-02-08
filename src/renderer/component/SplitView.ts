@@ -1,6 +1,36 @@
 import { EventEmitter } from "events";
 import { append, $ } from "../util/dom";
 import { Orientation, Sash, SashEvent, SashState } from "./Sash";
+import { range } from "../util/arrays";
+
+interface MappedSashEvent {
+  sash: Sash;
+  start: number;
+  current: number;
+  alt: boolean;
+}
+
+interface SashDragItemState {
+  readonly index: number;
+  readonly limitDelta: number;
+  readonly size: number;
+}
+
+interface SashDragState {
+  index: number;
+  start: number;
+  current: number;
+  sizes: number[];
+  minDelta: number;
+  maxDelta: number;
+  // alt: boolean;
+  beforeItem: SashDragItemState;
+  afterItem: SashDragItemState;
+}
+
+interface SashItem {
+  sash: Sash;
+}
 
 export type SplitViewItemSizeType = 'match_parent' | 'fill_parent' | 'wrap_content';
 
@@ -101,12 +131,6 @@ export class HorizontalViewItem<T extends SplitViewItemView> extends SplitViewIt
   }
 }
 
-interface SashDragState {}
-
-interface SashItem {
-  sash: Sash;
-}
-
 export interface SplitViewOptions {
   orientation?: Orientation;
 }
@@ -201,14 +225,16 @@ export class SplitView<T extends SplitViewItemView> {
         : (e: SashEvent) => ({ sash, start: e.startX, current: e.currentX, alt: e.altKey });
 
       sash.on('sash start', (e) => {
-        console.log('sash start event is called.. e =', e);
+        // console.log('sash start event is called.. e =', e);
         const mappedEvent = sashEventMapper(e);
-        console.log('mappedEvent =', mappedEvent);
+        // console.log('mappedEvent =', mappedEvent);
+        this.onSashStart(mappedEvent);
       });
       sash.on('sash change', (e) => {
-        console.log('sash change event is called.. e =', e);
+        // console.log('sash change event is called.. e =', e);
         const mappedEvent = sashEventMapper(e);
-        console.log('mappedEvent =', mappedEvent);
+        // console.log('mappedEvent =', mappedEvent);
+        this.onSashChange(mappedEvent);
       });
       sash.on('sash end', (e) => {
         console.log('sash end event is called.. e =', e);
@@ -222,6 +248,123 @@ export class SplitView<T extends SplitViewItemView> {
 
     // append
     container.appendChild(view.element);
+  }
+
+  findFirstIndex(indexes: number[]): number | undefined {
+    /* for(const index of indexes) {
+      const viewItem = this.viewItems[index];
+      return index;
+    } */
+    return undefined;
+  }
+
+  onSashStart({ sash, start }: MappedSashEvent): void {
+    const index = this.sashItems.findIndex(item => item.sash === sash);
+    // console.log('index =', index);
+
+    const resetSashDragState = (start: number) => {
+      const sizes = this.viewItems.map(i => i.view.size);
+      // console.log('sizes =', sizes);
+
+      let minDelta = Number.NEGATIVE_INFINITY;
+      let maxDelta = Number.POSITIVE_INFINITY;
+
+      let beforeItem: SashDragItemState | undefined;
+      let afterItem: SashDragItemState | undefined;
+
+      /* const upIndexes = range(index, -1);
+      const downIndexes = range(index + 1, this.viewItems.length);
+
+      const beforeItemIndex = this.findFirstIndex(upIndexes);
+      const afterItemIndex = this.findFirstIndex(downIndexes);
+
+      if(typeof beforeItemIndex === 'number') {
+        const viewItem = this.viewItems[beforeItemIndex];
+        beforeItem = {
+          index: beforeItemIndex,
+          limitDelta: 0, // not impl
+          size: viewItem.view.size
+        };
+      }
+
+      if(typeof afterItemIndex === 'number') {
+        const viewItem = this.viewItems[afterItemIndex];
+        afterItem = {
+          index: afterItemIndex,
+          limitDelta: 0, // not impl
+          size: viewItem.view.size
+        };
+      } */
+
+      this.sashDragState = { start, current: start, index, sizes, minDelta, maxDelta, beforeItem, afterItem };
+    };
+
+    resetSashDragState(start);
+  }
+
+  onSashChange({ current }: MappedSashEvent): void {
+    console.log('onSashChange event is called.., current =', current);
+    const { index, start, sizes, beforeItem, afterItem } = this.sashDragState;
+    // console.log('this.sashDragState =', this.sashDragState);
+    this.sashDragState.current = current;
+    const delta = current - start;
+
+    // console.log('before sizes =', this.viewItems.map(item => item.view.size));
+    const newDelta = this.resize(index, delta, sizes, beforeItem, afterItem);
+    // console.log('after sizes =', this.viewItems.map(item => item.view.size));
+    this.layoutViews();
+  }
+
+  resize(index: number,
+    delta: number,
+    sizes = this.viewItems.map(item => item.view.size),
+    beforeItem: SashDragItemState,
+    afterItem: SashDragItemState
+  ): number {
+    if(index < 0 || index >= this.viewItems.length)
+      return 0;
+
+    const upIndexes = range(index, -1);
+    const downIndexes = range(index + 1, this.viewItems.length);
+
+    const upItems = upIndexes.map(i => this.viewItems[i]);
+    const upSizes = upIndexes.map(i => sizes[i]);
+
+    const downItems = downIndexes.map(i => this.viewItems[i]);
+    const downSizes = downIndexes.map(i => sizes[i]);
+
+    /* if(beforeItem) {
+      const v = this.viewItems[beforeItem.index];
+      v.view.size = beforeItem.size;
+    }
+
+    if(afterItem) {
+      const v = this.viewItems[afterItem.index];
+      v.view.size = afterItem.size;
+    } */
+
+    upItems[0].view.size = upSizes[0] + delta;
+    downItems[0].view.size = downSizes[0] - delta;
+
+    /* for(let i = 0, deltaUp = delta; i < upItems.length; i++) {
+      const item = upItems[i];
+      const size = upSizes[i] + deltaUp;
+      const viewDelta = size - upSizes[i];
+
+      deltaUp -= viewDelta;
+      item.view.size = size;
+    }
+
+    for(let i = 0, deltaDown = delta; i < downItems.length; i++) {
+      const item = downItems[i];
+      const size = downSizes[i] - deltaDown;
+      const viewDelta = size - downSizes[i];
+
+      deltaDown += viewDelta;
+      item.view.size = size;
+    } */
+
+    return delta;
   }
 
   saveProportions() {
