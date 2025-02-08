@@ -6,7 +6,7 @@ import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../../Ser
 import { BodyLayoutService } from "../../layout/BodyLayout";
 import { SessionPartService } from "../SessionPart";
 import { wrapper } from "../../../globals";
-import { cleanSingleSplitItemOnce, findActiveItem, findItemById, findSplitItemByGroup } from "../../utils";
+import { findActiveItem, findItemById, findSplitItemByGroup } from "../../utils";
 import { Group, isSplitItem, Mode, SplitItem } from "../../Types";
 
 export const enum GroupDirection {
@@ -257,7 +257,7 @@ export class DropOverlay {
       if(isSplitItem(wrapper.tree.list[0]))
         wrapper.tree = wrapper.tree.list[0] as SplitItem;
     } else
-      cleanSingleSplitItemOnce(wrapper.tree);
+      this.cleanSingleSplitItemOnce(wrapper.tree);
     // console.log('wrapper.tree =', wrapper.tree);
 
     this.bodyLayoutService.recreate();
@@ -266,6 +266,24 @@ export class DropOverlay {
     const sessionPartService = getService(sessionPartServiceId)
     sessionPartService.getServices(); // reconnect service
     sessionPartService.fit(); // fit again
+  }
+
+  cleanSingleSplitItemOnce(curr: SplitItem): void {
+    if(curr.list && curr.list.length > 0) {
+      for(let i = 0; i < curr.list.length; i++) {
+        let item = curr.list[i];
+        if(isSplitItem(item)) {
+          const _item = item as SplitItem;
+          if(_item.list.length === 1) {
+            curr.list[i] = _item.list[0];
+          } else {
+            this.cleanSingleSplitItemOnce(_item);
+          }
+        } else {
+          item = item as Group;
+        }
+      }
+    }
   }
 
   create(): HTMLElement {

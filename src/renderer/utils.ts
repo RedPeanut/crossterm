@@ -65,7 +65,7 @@ export function findSplitItemByGroup(curr: SplitItem, depth: number, index: numb
   return undefined;
 }
 
-export function cleanSingleSplitItemOnce(curr: SplitItem): void {
+/* export function cleanSingleSplitItemOnce(curr: SplitItem): void {
   if(curr.list && curr.list.length > 0) {
     for(let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
@@ -81,4 +81,4 @@ export function cleanSingleSplitItemOnce(curr: SplitItem): void {
       }
     }
   }
-}
+} */
