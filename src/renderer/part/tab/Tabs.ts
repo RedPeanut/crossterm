@@ -4,10 +4,10 @@ import { Tab } from "./Tab";
 
 export class Tabs {
   parent: HTMLElement;
-  group: TerminalItem[];
+  group: Group;
   tabs: Tab[];
 
-  constructor(parent: HTMLElement, group: TerminalItem[]) {
+  constructor(parent: HTMLElement, group: Group) {
     this.parent = parent;
     this.group = group;
   }

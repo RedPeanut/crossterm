@@ -57,7 +57,7 @@ export class SessionPart extends Part implements SessionPartService {
         if(isSplitItem(item)) {
           // do not enter here
         } else {
-          const groupView = new GroupView(null, item as TerminalItem[], { style: {} });
+          const groupView = new GroupView(null, item as Group, { style: {} });
           const element = groupView.create();
           return groupView;
         }
@@ -78,7 +78,7 @@ export class SessionPart extends Part implements SessionPartService {
             const result: GridView | GroupView = this.renderTree(null, item, depth+1);
             gridView.addView(result);
           } else {
-            const groupView = new GroupView(null, item as TerminalItem[], { style: {} });
+            const groupView = new GroupView(null, item as Group, { style: {} });
             const element = groupView.create();
             gridView.addView(groupView);
           }

@@ -7,13 +7,13 @@ import { Term } from "./Term";
 export class Terms {
   parent: HTMLElement;
   element: HTMLElement;
-  group: TerminalItem[];
+  group: Group;
   terms: Term[];
   wrapper: HTMLElement;
   dropTarget: DropTarget;
   dropOverlay: DropOverlay;
 
-  constructor(parent: HTMLElement, group: TerminalItem[]) {
+  constructor(parent: HTMLElement, group: Group) {
     this.parent = parent;
     this.group = group;
   }

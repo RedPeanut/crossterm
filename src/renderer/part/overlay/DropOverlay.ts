@@ -19,7 +19,7 @@ export class DropOverlay {
 
   parent: HTMLElement;
   element: HTMLElement;
-  group: TerminalItem[];
+  group: Group;
   target: DropTarget;
 
   //
@@ -29,7 +29,7 @@ export class DropOverlay {
   sessionPartService: SessionPartService;
   bodyLayoutService: BodyLayoutService;
 
-  constructor(parent: HTMLElement, group: TerminalItem[], target: DropTarget) {
+  constructor(parent: HTMLElement, group: Group, target: DropTarget) {
     this.parent = parent;
     this.group = group;
     this.target = target;

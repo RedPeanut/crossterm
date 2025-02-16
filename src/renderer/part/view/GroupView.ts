@@ -32,13 +32,13 @@ export class GroupView implements SplitViewItemView {
 
   parent: HTMLElement;
   _element: HTMLElement;
-  group: TerminalItem[];
+  group: Group;
   style: {};
 
   tabs: Tabs;
   terms: Terms;
 
-  constructor(parent: HTMLElement, group: TerminalItem[], options: GroupViewOptions) {
+  constructor(parent: HTMLElement, group: Group, options: GroupViewOptions) {
     this.parent = parent;
     this.group = group;
     this.style = options.style;
