@@ -303,7 +303,7 @@ export class SplitView<T extends SplitViewItemView> {
   }
 
   onSashChange({ current }: MappedSashEvent): void {
-    console.log('onSashChange event is called.., current =', current);
+    // console.log('onSashChange event is called.., current =', current);
     const { index, start, sizes, beforeItem, afterItem } = this.sashDragState;
     // console.log('this.sashDragState =', this.sashDragState);
     this.sashDragState.current = current;
