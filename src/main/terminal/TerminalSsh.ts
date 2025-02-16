@@ -40,7 +40,9 @@ export default class TerminalSsh extends TerminalBase {
 
       }
     );
-    conn.on('handshake', async handshake => {});
+    conn.on('handshake', async (handshake) => {
+      console.log('handshake =', handshake);
+    });
     conn.on('x11', () => {});
     conn.on('ready', () => {
       // console.log('ready event is called..');
@@ -58,8 +60,11 @@ export default class TerminalSsh extends TerminalBase {
         this.stream = stream;
       });
     });
-    conn.on('error', error => {
+    conn.on('error', (error) => {
       console.log('error =', error);
+      if(error.message.includes('All configured authentication methods failed')) {
+        console.log('TODO: show popup in render');
+      }
     });
 
     // console.log('this.options =', this.options);
