@@ -3,6 +3,7 @@
 
 import { contextBridge, ipcRenderer, IpcRendererEvent, IpcRenderer } from 'electron';
 
+// renderer to main
 export type MainEvents =
   // terminal
   'new'
@@ -25,6 +26,7 @@ export type MainEvents =
   | 'command'
 ;
 
+// main to renderer
 export type RenderEvents =
   'terminal add'
   | 'terminal data'
