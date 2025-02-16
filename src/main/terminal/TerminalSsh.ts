@@ -2,9 +2,10 @@ import { Client, ClientChannel } from 'ssh2';
 import { EventEmitter } from 'events';
 import { TerminalItem } from '../../common/Types';
 import DataBatcher from './DataBatcher';
+import TerminalBase from './TerminalBase';
 // import { TerminalOptions } from 'main/Types';
 
-export default class TerminalSsh extends EventEmitter {
+export default class TerminalSsh extends TerminalBase {
 
   options: TerminalItem;
   batcher: DataBatcher | null = null;
@@ -12,8 +13,8 @@ export default class TerminalSsh extends EventEmitter {
   stream?: ClientChannel;
 
   constructor(options: TerminalItem) {
-    super();
-    this.options = options;
+    super(options);
+    // this.options = options;
     // this.start(options);
   }
 
@@ -84,14 +85,14 @@ export default class TerminalSsh extends EventEmitter {
   /* on(event: any, cb: any) {
     this.stream?.on(event, cb);
     this.stream?.stderr.on(event, cb);
-  }
+  } */
 
-  write(data: any) {
+  write(data: string) {
     try {
       this.stream?.write(data);
       // this.writeLog(data);
     } catch(e) {
       // log.error(e);
     }
-  } */
+  } //*/
 }

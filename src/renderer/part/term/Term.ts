@@ -37,11 +37,11 @@ export class Term {
     if(terminals[this.uid]) return;
 
     let retVal = window.ipc.send('new', {
-      // ...item,
+      ...this.item,
       uid: this.uid,
-      type: 'local',
-      size: { col: 80, row: 24 },
-      url: { protocol: '', user: '', resource: '', port: '' }
+      // type: 'local',
+      // size: { col: 80, row: 24 },
+      // url: { protocol: '', user: '', resource: '', port: '' }
     });
     // console.log('retVal =', retVal);
 

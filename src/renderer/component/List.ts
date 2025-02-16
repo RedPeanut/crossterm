@@ -77,6 +77,14 @@ export class List {
           title: 'remote',
           // url: 'www.remote.com',
           id: '8d65f5a3-306d-44c7-a43f-b5abc17b6a2b',
+          url: {
+            host: '192.168.200.104',
+            port: 22,
+            username: 'kimjk',
+            password: '1234',
+            // password: '1111',
+          },
+          size: { row: 24, col: 80 }
         },
         /* {
           type: 'group',
@@ -86,7 +94,8 @@ export class List {
         {
           type: 'local',
           title: 'local',
-          id: '751b26d0-5c94-4328-a0e8-23fdd85d160f'
+          id: '751b26d0-5c94-4328-a0e8-23fdd85d160f',
+          size: { row: 24, col: 80 },
         }
       ]
     };

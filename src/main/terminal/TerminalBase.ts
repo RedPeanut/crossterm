@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 import { TerminalOptions } from '../Types';
 
-export default class TerminalBase extends EventEmitter {
+export default abstract class TerminalBase extends EventEmitter {
 
   options;
 
@@ -9,4 +9,6 @@ export default class TerminalBase extends EventEmitter {
     super();
     this.options = options;
   }
+
+  abstract write(data: string);
 }

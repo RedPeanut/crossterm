@@ -5,9 +5,10 @@ import { IPty, spawn } from 'node-pty';
 import { EventEmitter } from 'events';
 import DataBatcher from './DataBatcher';
 import { TerminalItem } from '../../common/Types';
+import TerminalBase from './TerminalBase';
 // import DataBatcher from 'main/terminal/DataBatcher'; // why not
 
-export default class TerminalLocal extends EventEmitter {
+export default class TerminalLocal extends TerminalBase {
 
   pty: IPty | null = null;
   batcher: DataBatcher | null = null;
@@ -16,8 +17,8 @@ export default class TerminalLocal extends EventEmitter {
   options: TerminalItem;
 
   constructor(options: TerminalItem) {
-    super();
-    this.options = options;
+    super(options);
+    // this.options = options;
   }
 
   start() {

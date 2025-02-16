@@ -16,6 +16,8 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { TerminalItem } from '../common/Types';
 import TerminalLocal from './terminal/TerminalLocal';
+import TerminalSsh from './terminal/TerminalSsh';
+import TerminalBase from './terminal/TerminalBase';
 
 class AppUpdater {
   constructor() {
@@ -79,7 +81,7 @@ const getWindowSize = () => {
 }
 
 const installIpc = () => {
-  const terminals = new Map<string, TerminalLocal>();
+  const terminals = new Map<string, TerminalBase>();
 
   ipcMain.on('new', (event, args: any[]) => {
     // console.log('[main.ts/new] args =', args);
@@ -93,6 +95,13 @@ const installIpc = () => {
       terminal.start();
       terminals.set(arg.uid, terminal);
     } else if(arg.type === 'remote') {
+      const terminal = new TerminalSsh(arg);
+      terminal.on('data', (data: string) => {
+        // console.log('data event is called..., data =', data);
+        mainWindow?.webContents.send('terminal data', data);
+      });
+      terminal.start();
+      terminals.set(arg.uid, terminal);
     }
   });
 
