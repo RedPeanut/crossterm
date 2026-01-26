@@ -15,7 +15,7 @@ import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 // import Runtime from './Runtime';
 
-export const TITLEBAR_HEIGHT = 42;
+export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 48;
 export const SIDEBAR_WIDTH = 220;
 // export const SESSION_WIDTH = 'fill_parent';
