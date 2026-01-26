@@ -32,6 +32,9 @@ export type RenderEvents =
   'terminal add'
   | 'terminal data'
   | 'terminal exit'
+
+  // window
+  | 'window state changed'
 ;
 
 export type Channels = MainEvents | RenderEvents;

@@ -18,6 +18,11 @@ export const mainWindow = window as CodeWindow;
 
 export class Renderer {
 
+  window: {
+    isMaximized?: boolean;
+    isMinimized?: boolean;
+  } = {};
+
   process: {
     platform?: string // 'darwin', 'window', 'linux'
   } = {}
@@ -35,6 +40,8 @@ export class Renderer {
   }
 
   async loadInMain(): Promise<void> {
+    this.window.isMaximized = await window.ipc.invoke('window get', 'function', 'isMaximized');
+    this.window.isMinimized = await window.ipc.invoke('window get', 'function', 'isMinimized');
     this.process.platform = await window.ipc.invoke('process get', 'property', 'platform');
     this.path.sep = this.process.platform === 'win32' ? '\\' : '/';
   }
