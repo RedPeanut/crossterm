@@ -17,14 +17,28 @@ export type CodeWindow = Window & typeof globalThis;
 export const mainWindow = window as CodeWindow;
 
 export class Renderer {
+
+  process: {
+    platform?: string // 'darwin', 'window', 'linux'
+  } = {}
+
+  path: {
+    sep?: string;
+  } = {};
+
   constructor() {}
 
   async open() {
-    await Promise.all([domContentLoaded(mainWindow)]);
+    await Promise.all([domContentLoaded(mainWindow), this.loadInMain()]);
     const mainLayout = new MainLayout(mainWindow.document.body);
     mainLayout.startup();
   }
+
+  async loadInMain(): Promise<void> {
+    this.process.platform = await window.ipc.invoke('process get', 'property', 'platform');
+    this.path.sep = this.process.platform === 'win32' ? '\\' : '/';
+  }
 }
 
-const renderer = new Renderer();
+export const renderer = new Renderer();
 renderer.open();
