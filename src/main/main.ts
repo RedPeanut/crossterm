@@ -136,11 +136,23 @@ class MainWindow {
 
     const { x, y, width, height } = this.getWindowSize();
 
+    const MENUBAR_HEIGHT = 34;
+    const MACOS_TRAFFIC_LIGHTS_HEIGHT = 16;
+
     this.browserWindow = new BrowserWindow({
       // show: false,
       // width: 1024, height: 728,
       titleBarStyle: 'hidden',
+      titleBarOverlay: process.platform === 'darwin',
+      trafficLightPosition: {
+        x: 20,
+        y: (MENUBAR_HEIGHT - MACOS_TRAFFIC_LIGHTS_HEIGHT) / 2,
+      },
+
       x, y, width, height,
+      minWidth: 800,
+      minHeight: 600,
+
       icon: getAssetPath('icon.png'),
       webPreferences: {
         preload: app.isPackaged
@@ -148,7 +160,6 @@ class MainWindow {
           : path.join(__dirname, '../../.erb/dll/preload.js'),
       },
     });
-
     this.browserWindow.loadURL(resolveHtmlPath('index.html'));
 
     this.installIpc();
@@ -180,9 +191,8 @@ class MainWindow {
     // Remove this if your app does not use auto updates
     // eslint-disable-next-line
     new AppUpdater();
-  };
+  }
 }
-
 
 /**
  * Add event listeners...
