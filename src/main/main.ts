@@ -119,6 +119,43 @@ class MainWindow {
         terminal.write(arg.data);
       }
     });
+
+    function helper(obj: BrowserWindow | NodeJS.Process, type: string, val: string) {
+      if(obj[val]) {
+        // console.log(typeof obj[val]);
+        if(type == 'function')
+          return obj[val]();
+        else if(type == 'property')
+          return obj[val];
+      }
+      return null;
+    }
+
+    ipcMain.handle('window get', (event, args: any[]) => {
+      if(args.length > 1) {
+        const [ type, value ] = args;
+        return helper(this.browserWindow, type, value);
+      }
+      return null;
+    });
+
+    ipcMain.handle('process get', (event, args: any[]) => {
+      if(args.length > 1) {
+        const [ type, value ] = args;
+        return helper(process, type, value);
+      }
+      return null;
+    });
+
+    ipcMain.on('window fn', (event, args: any[]) => {
+      // const arg = args[0];
+      const [ who, fn ] = args;
+      // console.log(typeof this[who][fn]);
+
+      if(this[who] && this[who][fn] && typeof this[who][fn] == 'function') {
+        this[who][fn]();
+      }
+    });
   }
 
   createWindow = async () => {

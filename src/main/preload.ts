@@ -10,10 +10,11 @@ export type MainEvents =
   | 'data'
 
   // window
-  | 'window maximize'
-  | 'window minimize'
-  | 'window resize'
-  | 'window close'
+  | 'window get'
+  | 'window fn'
+
+  // process
+  | 'process get'
 
   // config
   | 'config all'
