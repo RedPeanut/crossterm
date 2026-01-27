@@ -3,6 +3,7 @@ import { $ } from "../../util/dom";
 import { SplitViewItemSizeType, SplitViewItemView } from "../../component/SplitView";
 import { Tabs } from "../tab/Tabs";
 import { Terms } from "../term/Terms";
+import { Group } from "../../Types";
 
 export interface GroupViewOptions {
   style?: {}

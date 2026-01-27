@@ -1,5 +1,5 @@
 import { Orientation } from '../component/Sash';
-import { isSplitItem, SplitItem } from '../Types';
+import { Group, isSplitItem, SplitItem } from '../Types';
 import { $, getClientArea } from '../util/dom';
 import { SplitView, SplitViewItem, SplitViewItemView } from '../component/SplitView';
 import { Part } from '../Part';

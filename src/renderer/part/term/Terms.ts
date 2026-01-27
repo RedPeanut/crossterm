@@ -3,6 +3,7 @@ import { TerminalItem } from "../../../common/Types";
 import { DropOverlay } from "../overlay/DropOverlay";
 import { DropTarget } from "../overlay/DropTarget";
 import { Term } from "./Term";
+import { Group } from "../../Types";
 
 export class Terms {
   parent: HTMLElement;

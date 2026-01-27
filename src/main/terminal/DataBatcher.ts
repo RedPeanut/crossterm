@@ -18,6 +18,7 @@ export default class DataBatcher extends EventEmitter {
   decoder: StringDecoder;
   data!: string;
   timeout!: NodeJS.Timeout | null;
+
   constructor(uid: string) {
     super();
     this.uid = uid;
