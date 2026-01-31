@@ -9,6 +9,9 @@ export type MainEvents =
   'new'
   | 'data'
 
+  // menu
+  | 'menu get'
+
   // window
   | 'window get'
   | 'window fn'

@@ -9,11 +9,13 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, screen, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './utils';
+import { SerializableMenuItem } from '../common/Types';
+import { Menubar } from './Menubar';
 import { TerminalItem } from '../common/Types';
 import TerminalLocal from './terminal/TerminalLocal';
 import TerminalSsh from './terminal/TerminalSsh';
@@ -30,6 +32,7 @@ class AppUpdater {
 class MainWindow {
   browserWindow: BrowserWindow | null = null;
   isDebug: boolean = false;
+  menubar: Menubar;
 
   constructor() {
     if(process.env.NODE_ENV === 'production') {
@@ -155,6 +158,35 @@ class MainWindow {
       if(this[who] && this[who][fn] && typeof this[who][fn] == 'function') {
         this[who][fn]();
       }
+    });
+
+    ipcMain.handle('menu get', (event, args: any[]) => {
+      // return serialized menu n install handler
+
+      function createItem(item: MenuItemConstructorOptions/* , processedItems: MenuItemConstructorOptions[] */): SerializableMenuItem {
+        const serializableItem: SerializableMenuItem = {
+          id: item.id,
+          label: item.label,
+          type: item.type,
+          accelerator: item.accelerator,
+          checked: item.checked,
+          enabled: typeof item.enabled === 'boolean' ? item.enabled : true,
+          visible: typeof item.visible === 'boolean' ? item.visible : true,
+          clickable: item.click ? true : false,
+        }
+
+        // Submenu
+        if(Array.isArray(item.submenu)) {
+          serializableItem.submenu = item.submenu.map(submenuItem => createItem(submenuItem));
+        }
+
+        return serializableItem;
+      }
+
+      const template = self.menubar.getTemplate();
+      return template
+        .filter(item => item.id !== 'application')
+        .map(item => createItem(item));
     });
   }
 
