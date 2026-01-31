@@ -1,4 +1,5 @@
 import {
+  BrowserWindow,
   Menu,
   MenuItemConstructorOptions,
 } from 'electron';
@@ -16,6 +17,9 @@ const keyBindingIdx = isWindows ? 0 : 1;
 
 export class Menubar {
   template: MenuItemConstructorOptions[];
+
+  constructor(mainWindow: BrowserWindow) {
+  }
 
   install(): void {
     const template: MenuItemConstructorOptions[] = this.template = [];

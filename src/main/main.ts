@@ -256,8 +256,11 @@ class MainWindow {
       this.browserWindow.webContents.send('window state changed', { isMaximized: false });
     });
 
-    const menuBuilder = new MenuBuilder(this.browserWindow);
-    menuBuilder.buildMenu();
+    // const menuBuilder = new MenuBuilder(this.browserWindow);
+    // menuBuilder.buildMenu();
+
+    const menubar = this.menubar = new Menubar(this.browserWindow);
+    menubar.install();
 
     // Open urls in the user's browser
     this.browserWindow.webContents.setWindowOpenHandler((edata) => {
