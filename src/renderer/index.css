@@ -163,10 +163,12 @@ body { height: 100%; }
   position: relative;
   -webkit-app-region: no-drag;
   white-space: nowrap;
+  color: rgb(204 204 204);
 }
 
 .menubar .button:hover, .menubar .button.on {
-  background-color: rgb(227,227,227);
+  /* background-color: rgb(227,227,227); */
+  background-color: rgba(255, 255, 255, 0.16);
   border-radius: 3px;
 }
 
@@ -195,8 +197,10 @@ body { height: 100%; }
   display: none;
   position: absolute;
   z-index: 5;
-  background: rgb(242,242,242);
-  border: 1px solid rgb(185,185,185);
+  /* background: rgb(242,242,242);
+  border: 1px solid rgb(185,185,185); */
+  background-color: rgb(31 31 31);
+  border: 1px solid rgb(69 69 69);
   left: 0;
   top: 100%;
 }
@@ -227,13 +231,18 @@ body { height: 100%; }
 
 .menubar .button ul li a.separator {
   border-bottom: 1px solid;
-  border-bottom-color: rgb(215,215,215);
+  /* border-bottom-color: rgb(215,215,215); */
+  border-bottom-color: rgb(69 69 69);
   margin: 5px;
   padding: 0;
   height: 0;
 }
 
-.menubar .button ul li:not(.disabled):hover > a { background-color: rgb(80,162,255); border-radius: 5px; color: white; }
+.menubar .button ul li:not(.disabled):hover > a {
+  /* background-color: rgb(80,162,255); */
+  background-color: rgb(0 120 212);
+  border-radius: 5px; color: white;
+}
 .menubar .button ul li:not(.disabled):hover > .menubox { display: block; }
 .menubar .button ul li a span {}
 
