@@ -140,41 +140,143 @@ body { height: 100%; }
   width: 100%;
   display: flex;
   /* background-color: grey; */
+  flex-direction: column;
+  user-select: none;
 }
 
-.titlebar .left { display: flex; padding-left: 80px; }
+.titlebar .menubar {
+  flex: 1;
+  position: relative;
+  -webkit-app-region: drag;
+  display: flex;
+  line-height: 22px;
+}
 
-.titlebar .center {
-  width: 100%;
-  height: 100%;
+.titlebar .menubar .left {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  outline: none;
+}
+
+.menubar .button {
+  position: relative;
+  -webkit-app-region: no-drag;
+  white-space: nowrap;
+}
+
+.menubar .button:hover, .menubar .button.on {
+  background-color: rgb(227,227,227);
+  border-radius: 3px;
+}
+
+.menubar .button.hamburger {
+  display: none;
+  width: 22px;
+  height: 22px;
+  padding: 0 8px;
   align-items: center;
   justify-content: center;
-  display: flex;
+  /* vertical-align: sub; */
 }
 
-.titlebar .right {
-  display: flex;
+/* @media (max-width:716px) {
+  .menubar .button { display: none; }
+  .menubar .button.hamburger {
+    display: flex;
+  }
+} */
+
+.menubar .button .title {
+  padding: 0px 8px;
+}
+
+.menubar .button .menubox {
+  display: none;
+  position: absolute;
+  z-index: 5;
+  background: rgb(242,242,242);
+  border: 1px solid rgb(185,185,185);
+  left: 0;
+  top: 100%;
+}
+
+.menubar .button .sub.menubox {
+  left: calc(100% + 0px);
+  top: -4px;
+}
+
+.menubar .button.on > .menubox { display: block; }
+
+.menubar .button ul { padding: 4px 0; border-radius: 5px; }
+
+.menubar .button ul li {
+  list-style: none;
+  position: relative;
   align-items: center;
-  justify-content: flex-end;
 }
 
-.titlebar .right .codicon {
+.menubar .button ul li a { display: flex;
+  margin: 0 4px;
+  padding: 0 8px;
+}
+.menubar .button ul li.disabled {
+  /* color: rgb(204 204 204); */
+  color: lightgray;
+}
+
+.menubar .button ul li a.separator {
+  border-bottom: 1px solid;
+  border-bottom-color: rgb(215,215,215);
+  margin: 5px;
+  padding: 0;
+  height: 0;
+}
+
+.menubar .button ul li:not(.disabled):hover > a { background-color: rgb(80,162,255); border-radius: 5px; color: white; }
+.menubar .button ul li:not(.disabled):hover > .menubox { display: block; }
+.menubar .button ul li a span {}
+
+.menubar .button ul li .padding { flex: 1; min-width: 20px; }
+.menubar .button ul li .keybinding {}
+.menubar .button ul li .indicator {
+  padding-top: 2px;
+}
+
+.menubar .button ul li .indicator::before {}
+
+.titlebar .menubar .middle { flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.titlebar .menubar .middle .title {
+  font-weight: bold;
+}
+
+.titlebar .menubar .right {
+}
+
+.titlebar .menubar .right .codicon {
   width: 34px;
   height: 34px;
   font-size: 20px;
-  /* background-color: rgba(255, 255, 255, 0.08); */
-  /* border-radius: 8px; */
-}
-
-.titlebar .right .codicon.codicon-settings-gear {
-  font-size: 16px;
+  -webkit-app-region: no-drag;
+  /* padding: 0 8px; */
+  margin-right: 1px;
+  line-height: 34px;
 }
 
 .titlebar .right .codicon:hover {
+  /* background-color: rgb(229, 229, 229); */
   background-color: rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+}
+
+.titlebar .menubar .right .codicon.close:hover {
+  background-color: rgb(232, 17, 35);
+  /* color: white; */
 }
 
 /* Activitybar */

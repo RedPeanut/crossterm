@@ -3,6 +3,7 @@ import { VerticalViewItem } from '../component/SplitView';
 import { TITLEBAR_HEIGHT } from '../layout/MainLayout';
 import { Part } from '../Part';
 import { $ } from '../util/dom';
+import { Menubar } from './Menubar';
 
 export class TitlebarPart extends Part {
 
@@ -27,9 +28,17 @@ export class TitlebarPart extends Part {
 
   override createContentArea(): HTMLElement {
     const container: HTMLElement = super.createContentArea();
-    const left = $('.left');
 
-    const center = $('.center');
+    const menubar = $('.menubar');
+    if(renderer.process.platform === 'darwin')
+      menubar.style.paddingLeft = '80px';
+
+    const left = $('.left');
+    const _menubar = new Menubar(left);
+    _menubar.install();
+    menubar.appendChild(left);
+
+    const middle = $('.middle');
     const handleMaxOrRes = async (e) => {
       const isMaximized = await window.ipc.invoke('window get', 'function', 'isMaximized');
       if(isMaximized)
@@ -37,15 +46,10 @@ export class TitlebarPart extends Part {
       else
         window.ipc.send('window fn', 'browserWindow', 'maximize');
     }
-    center.addEventListener('dblclick', handleMaxOrRes);
+    middle.addEventListener('dblclick', handleMaxOrRes);
+    menubar.appendChild(middle);
 
     const right = $('.right');
-    // const settingBtn = $('a.codicon.codicon-settings-gear');
-    // const settingBtn = $('a.codicon.codicon-settings');
-    // const closeBtn = $('a.codicon.codicon-close');
-    // right.appendChild(settingBtn);
-    // right.appendChild(closeBtn);
-
     const minimizeBtn = $('a.codicon.codicon-chrome-minimize');
     minimizeBtn.addEventListener('click', () => {
       window.ipc.send('window fn', 'browserWindow', 'minimize');
@@ -63,10 +67,17 @@ export class TitlebarPart extends Part {
     right.appendChild(minimizeBtn);
     right.appendChild(maxResBtn);
     right.appendChild(closeBtn);
+    menubar.appendChild(right);
 
-    container.appendChild(left);
-    container.appendChild(center);
-    container.appendChild(right);
+    if(false) { // renderer.process.platform === 'darwin') {
+      left.style.display = 'none';
+      right.style.display = 'none';
+      const title = $('.title');
+      title.innerHTML = 'crossterm';
+      middle.appendChild(title);
+    }
+
+    container.appendChild(menubar);
     return container;
   }
 

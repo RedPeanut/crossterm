@@ -2,6 +2,7 @@ export interface Service { /* marker */ }
 
 export const mainLayoutServiceId = "mainLayoutService";
 export const bodyLayoutServiceId = "bodyLayoutService";
+export const menubarServiceId = "menubarServiceId";
 export const activitybarPartServiceId = "activitybarPartService";
 export const sidebarPartServiceId = "sidebarPartService";
 export const sessionPartServiceId = "sessionPartService";
@@ -10,6 +11,7 @@ export const blarBlarServiceId = "blarBlarService";
 
 type ServiceId = typeof mainLayoutServiceId // MainLayoutService
   | typeof bodyLayoutServiceId // BodyLayoutService
+  | typeof menubarServiceId // MenubarService
   | typeof activitybarPartServiceId // ActivitybarPartService
   | typeof sidebarPartServiceId // SidebarPartService
   | typeof sessionPartServiceId // SessionPartService

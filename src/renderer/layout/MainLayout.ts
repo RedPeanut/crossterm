@@ -10,9 +10,10 @@ import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../component/SplitView';
 import { getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
-import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId } from '../Service';
+import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
+import { MenubarService } from '../part/Menubar';
 // import Runtime from './Runtime';
 
 export const TITLEBAR_HEIGHT = 34;
@@ -84,6 +85,8 @@ export class MainLayout extends Layout implements MainLayoutService {
       this.splitView.layout(dimension.width);
     else
       this.splitView.layout(dimension.height);
+
+    (getService(menubarServiceId) as MenubarService).layout(dimension);
   }
 
   bodyLayoutService: BodyLayoutService;
