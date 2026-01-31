@@ -53,7 +53,7 @@ export class Menubar {
         },
         { type: 'separator' },
         {
-          label: 'Hide crossmerge',
+          label: 'Hide yourappname',
           accelerator: 'Command+H',
           // selector: 'hide:',
           role: 'hide'
