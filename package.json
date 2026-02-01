@@ -1,7 +1,7 @@
 {
   "name": "crossterm",
   "productName": "crossterm",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "My Electron application description",
   "main": "./.erb/dll/main.bundle.dev.js",
   "keywords": ["electron", "crossplatfrom", "terminal", "typescript"],
