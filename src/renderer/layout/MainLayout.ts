@@ -17,10 +17,10 @@ import { MenubarService } from '../part/Menubar';
 // import Runtime from './Runtime';
 
 export const TITLEBAR_HEIGHT = 34;
-export const ACTIVITYBAR_WIDTH = 48;
-export const SIDEBAR_WIDTH = 220;
+export const ACTIVITYBAR_WIDTH = 39;
+export const SIDEBAR_WIDTH = 183;
 // export const SESSION_WIDTH = 'fill_parent';
-export const STATUSBAR_HEIGHT = 22;
+export const STATUSBAR_HEIGHT = 17;
 
 export const enum Parts {
   TITLEBAR_PART = 'part.titlebar',
