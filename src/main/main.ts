@@ -9,6 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+import fs from 'fs';
 import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -187,6 +188,20 @@ class MainWindow {
       return template
         .filter(item => item.id !== 'application')
         .map(item => createItem(item));
+    });
+
+    ipcMain.handle('get package json', (event, args: any[]) => {
+      const [] = args;
+      const packageJsonPath = path.join(app.getAppPath(), 'package.json');
+      try {
+        const data = fs.readFileSync(packageJsonPath, 'utf8');
+        const packageJson = JSON.parse(data);
+        console.log(packageJson.version);
+        return packageJson;
+      } catch(err) {
+        console.error("파일을 읽는 중 오류가 발생했습니다:", err);
+      }
+      return null;
     });
   }
 

@@ -31,6 +31,13 @@ export class Renderer {
     sep?: string;
   } = {};
 
+  package_json: {
+    name: string,
+    version: string,
+    author: { name: string, email: string },
+    license: string
+  };
+
   constructor() {}
 
   async open() {
@@ -44,6 +51,7 @@ export class Renderer {
     this.window.isMinimized = await window.ipc.invoke('window get', 'function', 'isMinimized');
     this.process.platform = await window.ipc.invoke('process get', 'property', 'platform');
     this.path.sep = this.process.platform === 'win32' ? '\\' : '/';
+    this.package_json = await window.ipc.invoke('get package json');
   }
 }
 

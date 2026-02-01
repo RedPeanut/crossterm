@@ -69,11 +69,11 @@ export class TitlebarPart extends Part {
     right.appendChild(closeBtn);
     menubar.appendChild(right);
 
-    if(false) { // renderer.process.platform === 'darwin') {
+    if(renderer.process.platform === 'darwin') {
       left.style.display = 'none';
       right.style.display = 'none';
       const title = $('.title');
-      title.innerHTML = 'crossterm';
+      title.innerHTML = renderer.package_json.name;
       middle.appendChild(title);
     }
 

@@ -25,6 +25,9 @@ export type MainEvents =
   | 'config set'
   | 'config update'
 
+  // action
+  | 'get package json'
+
   //
   | 'open context menu'
   | 'command'
