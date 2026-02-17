@@ -1,6 +1,6 @@
-import { $, getClientArea } from "../util/dom";
-import { Orientation } from "./Sash";
-import { SplitView, SplitViewItemSizeType, SplitViewItemView, SplitViewOptions } from "./SplitView";
+import { $, getClientArea } from "../../util/dom";
+import { Orientation } from "../../component/Sash";
+import { SplitView, SplitViewItemSizeType, SplitViewItemView, SplitViewOptions } from "../../component/SplitView";
 
 export interface GridViewOptions {
   orientation?: Orientation;
