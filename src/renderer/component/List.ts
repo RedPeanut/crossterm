@@ -2,11 +2,9 @@ import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { BodyLayoutService } from "../layout/BodyLayout";
 import { SessionPartService } from "../part/SessionPart";
-import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../Service";
+import { bodyLayoutServiceId, bookmarkPanelServiceId, sessionPartServiceId, getService, } from "../Service";
 import { $, append } from "../util/dom";
 import { findActiveItem } from "../utils";
-import { ListItem } from "./ListItem";
-import { Tree } from "./Tree";
 import { v4 as uuidv4 } from 'uuid';
 
 export type ListItemType = 'local' | 'remote' | 'group' | 'folder';
@@ -175,5 +173,159 @@ export class List {
       this.onDoubleClick.bind(this) // (id: string) => void
     );
     append(this.container, this.element);
+  }
+}
+
+export class ListItem {
+  container: HTMLElement;
+  element: HTMLElement;
+
+  constructor(container: HTMLElement) {
+    this.container = container;
+  }
+
+  create(data: ListItemElem): HTMLElement {
+    this.element = $('.list-item');
+
+    const title = $('.title');
+    const span = $('span.icon');
+    const codicon = data.type === 'folder' ? 'folder' :
+      data.type === 'local' ? 'note' /* 'package' */ :
+      data.type === 'remote' ? 'globe' : data.type;
+    const itemIcon = $(`a.codicon.codicon-${codicon}`);
+    append(span, itemIcon);
+    // console.log(span.outerHTML);
+    // append(title, span);
+    title.innerHTML = span.outerHTML + data.title;
+    append(this.element, title);
+
+    // append(this.container, this.element);
+    return this.element;
+  }
+}
+
+export class Tree {
+  container: HTMLElement;
+  element: HTMLElement;
+  // tree: ListItemElem[];
+  onSelect: (id: string[]) => void;
+  onDoubleClick: (id: string) => void;
+  nodes: Node[];
+
+  constructor(container: HTMLElement) {
+    this.container = container;
+  }
+
+  onSelect_(id: string): void {
+    const onSelect = this.onSelect;
+    let new_selected_ids: string[] = [];
+    new_selected_ids = [id];
+    onSelect && onSelect(new_selected_ids);
+  }
+
+  onDoubleClick_(id: string): void {
+    // console.log('onDoubleClick_() is called...');
+    this.onDoubleClick && this.onDoubleClick(id);
+  }
+
+  create(tree: ListItemElem[],
+    selectedIds: string[],
+    onChange: Function,
+    onSelect: (id: string[]) => void,
+    nodeRender: (data: ListItemElem) => HTMLElement | null,
+    onDoubleClick: (id: string) => void
+  ): void {
+    // this.tree = tree;
+    this.onSelect = onSelect;
+    this.onDoubleClick = onDoubleClick;
+
+    this.element = $('.tree');
+    this.nodes = [];
+    tree.map((e) => {
+      const node = new Node(this.element);
+      node.create(e, 0, nodeRender, this.onSelect_.bind(this), this.onDoubleClick_.bind(this), selectedIds);
+      this.nodes.push(node);
+    });
+    append(this.container, this.element);
+  }
+}
+
+export class Node {
+  container: HTMLElement;
+
+  element: HTMLElement;
+  node: HTMLElement;
+  children: Node[];
+  id: string;
+
+  constructor(container: HTMLElement) {
+    this.container = container;
+  }
+
+  create(
+    data: ListItemElem,
+    level: number = 0,
+    nodeRender: (data: ListItemElem) => HTMLElement | null,
+    onSelect: (id: string) => void,
+    onDoubleClick: (id: string) => void,
+    selectedIds
+  ): void {
+    this.id = data.id;
+
+    const isSelected = selectedIds.includes(data.id);
+    const hasChildren = Array.isArray(data.children) && data.children.length > 0;
+    const isCollapsed = data.isCollapsed == null || data.isCollapsed == undefined
+      ? true : data.isCollapsed;
+
+    const wrapper = this.element = $('.wrapper');
+    const node = this.node = $('.node');
+
+    node.style.paddingLeft = `${level * 20 + 4}px`;
+
+    node.onclick = (e) => {
+      onSelect(data.id);
+      const bookmarkPanelService = getService(bookmarkPanelServiceId);
+      bookmarkPanelService.onSelect(data.id);
+    };
+    node.ondblclick = (e) => onDoubleClick(data.id);
+
+    const content = $('.content');
+    const header = $('.ln-header');
+    if(hasChildren) {
+      const arrow = $('.arrow');
+      if(isCollapsed) wrapper.classList.add('collapsed');
+      arrow.onclick = (e) => {
+        // onChange(data.id, { isCollapsed: !isCollapsed });
+        wrapper.classList.toggle('collapsed');
+      };
+
+      const collapseArrow = $('a.codicon.codicon-chevron-right');
+      if(collapseArrow)
+        arrow.appendChild(collapseArrow);
+      else
+        arrow.innerHTML = '>';
+
+      header.append(arrow);
+    }
+    content.append(header);
+
+    const body = $('.ln-body');
+    const listItem = nodeRender ? nodeRender(data) : data.title || `node#${data.id}`;
+    body.append(listItem);
+    content.append(body);
+
+    append(node, content);
+    append(wrapper, node);
+
+    if(hasChildren) {
+      this.children = [];
+      data.children.map((e) => {
+        const _node = new Node(wrapper);
+        _node.create(e, level+1, nodeRender, onSelect, onDoubleClick, selectedIds);
+        this.children.push(_node);
+      });
+    }
+
+    append(this.container, wrapper);
   }
 }
