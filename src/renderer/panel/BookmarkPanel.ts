@@ -1,5 +1,5 @@
-import { List } from '../component/List';
-import { Node } from '../component/Node';
+import { List, Node } from '../component/List';
+// import { Node } from '../component/Node';
 import * as dom from '../util/dom';
 import { Panel } from "../Panel";
 import { bookmarkPanelServiceId, setService } from '../Service';

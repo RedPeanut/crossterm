@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { $, append } from "../util/dom";
-import Runtime from "../util/Runtime";
-import { isMacintosh } from "../util/platform";
+import { renderer } from '..';
 import { EventEmitter } from "events";
 
 export const enum Orientation {
@@ -89,7 +88,7 @@ export class Sash extends EventEmitter {
     const self = this;
     this.container = container;
     this.el = append(container, $('.sash'));
-    if(isMacintosh)
+    if(renderer.process.platform == 'darwin') // isMacintosh)
       this.el.classList.add('mac');
 
     this.el.addEventListener('mousedown', this.onMouseDown.bind(this));

@@ -4,7 +4,7 @@ import { $, getClientArea } from '../util/dom';
 import { SplitView, SplitViewItem, SplitViewItemView } from '../component/SplitView';
 import { Part } from '../Part';
 import { GroupView } from './view/GroupView';
-import { GridView } from '../component/GridView';
+import { GridView } from './view/GridView';
 import { Service, sessionPartServiceId, setService } from '../Service';
 import { TerminalItem } from '../../common/Types';
 import { wrapper } from '../../globals';

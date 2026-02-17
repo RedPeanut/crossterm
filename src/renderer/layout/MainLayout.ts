@@ -1,5 +1,4 @@
 import { coalesce } from '../util/arrays';
-import { isLinux, isWindows } from '../util/platform';
 import { Layout } from '../Layout';
 import { PartOptions, Part } from '../Part';
 import { TitlebarPart } from '../part/TitlebarPart';
@@ -14,7 +13,7 @@ import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setServ
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 import { MenubarService } from '../part/Menubar';
-// import Runtime from './Runtime';
+import { renderer } from '..';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -55,7 +54,18 @@ export class MainLayout extends Layout implements MainLayoutService {
     // console.log('render() is called ..');
 
     //
-    const platformClass = isWindows ? 'windows' : isLinux ? 'linux' : 'mac'; //Runtime.isWindows ? 'windows' : Runtime.isLinux ? 'linux' : 'mac';
+
+    let platformClass = '', platform = '';
+    if(renderer.process && renderer.process.platform)
+      platform = renderer.process.platform.toLowerCase();
+
+    if(platform.indexOf('window') > -1)
+      platformClass = 'windows';
+    else if(platform.indexOf('linux') > -1)
+      platformClass = 'linux';
+    else
+      platformClass = 'mac';
+
     const classes = coalesce(['main', 'layout', platformClass]);
     this.container.classList.add(...classes);
 
