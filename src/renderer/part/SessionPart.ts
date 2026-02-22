@@ -29,7 +29,6 @@ export class SessionPart extends Part implements SessionPartService {
         this.resultView.layout(offset, size);
       }
     }
-
   }
 
   /* layoutContainer(offset: number): void {

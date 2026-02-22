@@ -76,6 +76,7 @@ body { height: 100%; }
 .sash.hover:before,
 .sash.active:before {
   background: rgb(0 120 212); /* var(--vscode-sash-hoverBorder); */
+  transition: background-color 0.1s ease-out;
 }
 
 .sash.vertical:before {
