@@ -34,6 +34,14 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
   get sizeType(): SplitViewItemSizeType { return this._sizeType; }
   set sizeType(sizeType: SplitViewItemSizeType) { this._sizeType = sizeType; }
 
+  _minimumSize: number = 0;
+  get minimumSize(): number { return this._minimumSize; }
+  set minimumSize(minimumSize: number) { this._minimumSize = minimumSize; }
+
+  _maximumSize: number = Number.POSITIVE_INFINITY;
+  get maximumSize(): number { return this._maximumSize; }
+  set maximumSize(maximumSize: number) { this._maximumSize = maximumSize; }
+
   _border: boolean = false;
   get border(): boolean { return this._border; }
   set border(border: boolean) { this._border = border; }

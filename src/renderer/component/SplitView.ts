@@ -65,6 +65,10 @@ export interface SplitViewItemView {
   set size(size: number);
   get sizeType(): SplitViewItemSizeType;
   set sizeType(sizeType: SplitViewItemSizeType);
+  get minimumSize(): number;
+  set minimumSize(minimumSize: number);
+  get maximumSize(): number;
+  set maximumSize(maximumSize: number);
   get border(): boolean;
   set border(border: boolean);
   get sashEnablement(): boolean;
