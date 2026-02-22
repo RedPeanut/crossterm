@@ -74,6 +74,11 @@ export class Tab {
   onDragOver(e: any): void {}
   onDrop(e: any): void {}
 
+  onClick_closeBtn(e: any): void {
+    e.stopPropagation();
+    console.log('closeBtn is clicked...');
+  }
+
   create(): HTMLElement {
     const item = this.item;
 
@@ -97,8 +102,15 @@ export class Tab {
     const label = $('.label');
     label.innerText = '탭입니다';
     el.appendChild(label);
+
     const tabActionsContainer = $('.tab-actions');
+    const actionsContainer = $('.actions-container');
+    const closeBtn = $('a.codicon.codicon-close');
+    closeBtn.onclick = this.onClick_closeBtn.bind(this);
+    actionsContainer.appendChild(closeBtn);
+    tabActionsContainer.appendChild(actionsContainer);
     el.appendChild(tabActionsContainer);
+
     const tabBorderBottomContainer = $('.tab-border-bottom-container');
     el.appendChild(tabBorderBottomContainer);
     return el;
