@@ -1,6 +1,6 @@
 import { TerminalItem } from "../../../common/Types";
 import { $ } from "../../util/dom";
-import { SplitViewItemSizeType, SplitViewItemView } from "../../component/SplitView";
+import { MappedSashEvent, SplitViewItemSizeType, SplitViewItemView } from "../../component/SplitView";
 import { Tabs } from "../tab/Tabs";
 import { Terms } from "../term/Terms";
 import { Group } from "../../Types";
@@ -38,6 +38,7 @@ export class GroupView implements SplitViewItemView {
   set sashEnablement(b: boolean) { this._sashEnablement = b; }
 
   layout(offset: number, size: number): void {}
+  onDidChange(mappedEvent: MappedSashEvent): void {}
 
   parent: HTMLElement;
   _element: HTMLElement;

@@ -150,7 +150,14 @@ export class Sash extends EventEmitter {
 
     const onMouseUp = (e) => {
       this.el.classList.remove('active');
-      this.emit('sash end');
+
+      const event: SashEvent = {
+        sash: this,
+        startX: startX, currentX: e.pageX,
+        startY: startY, currentY: e.pageY,
+        altKey
+      };
+      this.emit('sash end', event);
 
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);

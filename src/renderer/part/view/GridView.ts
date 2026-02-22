@@ -1,6 +1,6 @@
 import { $, getClientArea } from "../../util/dom";
 import { Orientation } from "../../component/Sash";
-import { SplitView, SplitViewItemSizeType, SplitViewItemView, SplitViewOptions } from "../../component/SplitView";
+import { MappedSashEvent, SplitView, SplitViewItemSizeType, SplitViewItemView, SplitViewOptions } from "../../component/SplitView";
 
 export interface GridViewOptions {
   orientation?: Orientation;
@@ -51,6 +51,7 @@ export class GridView implements SplitViewItemView {
     else
       this.splitView.layout(dimension.height);
   }
+  onDidChange(mappedEvent: MappedSashEvent): void {}
 
   parent: HTMLElement;
   _element: HTMLElement;

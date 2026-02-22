@@ -4,7 +4,7 @@ import { Orientation, Sash, SashEvent, SashState } from "./Sash";
 import { range } from "../util/arrays";
 import { clamp } from "../util/numbers";
 
-interface MappedSashEvent {
+export interface MappedSashEvent {
   sash: Sash;
   start: number;
   current: number;
@@ -75,6 +75,7 @@ export interface SplitViewItemView {
   get sashEnablement(): boolean;
   set sashEnablement(b: boolean);
   layout(offset: number, size: number): void;
+  onDidChange(mappedEvent: MappedSashEvent): void;
 }
 
 export abstract class SplitViewItem<T extends SplitViewItemView> {
@@ -242,9 +243,10 @@ export class SplitView<T extends SplitViewItemView> {
         this.onSashChange(mappedEvent);
       });
       sash.on('sash end', (e) => {
-        console.log('sash end event is called.. e =', e);
-        // const mappedEvent = sashEventMapper(e);
+        // console.log('sash end event is called..'); // e =', e);
+        const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
+        view.onDidChange(mappedEvent);
       });
 
       const sashItem: SashItem = { sash };

@@ -1,4 +1,4 @@
-import { SplitView, SplitViewItem, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from "../component/SplitView";
+import { MappedSashEvent, SplitView, SplitViewItem, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from "../component/SplitView";
 import { Layout } from "../Layout";
 import { ActivitybarPart, ActivitybarPartService } from "../part/ActivitybarPart";
 import { SidebarPart, SidebarPartService } from "../part/SidebarPart";
@@ -61,6 +61,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     let dimension = getClientArea(this.container);
     this.splitView.layout(dimension.width);
   }
+  onDidChange(mappedEvent: MappedSashEvent): void {}
 
   activitybarPart: ActivitybarPart;
   sidebarPart: SidebarPart;

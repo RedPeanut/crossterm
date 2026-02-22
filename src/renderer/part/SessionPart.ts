@@ -31,6 +31,11 @@ export class SessionPart extends Part implements SessionPartService {
     }
   }
 
+  override onDidChange(mappedEvent: MappedSashEvent): void {
+    console.log('onDidChange is called .., mappedEvent =', mappedEvent);
+    // save sidebar size in here
+  }
+
   /* layoutContainer(offset: number): void {
     this._splitViewContainer.style.left = `${offset}px`;
     this._splitViewContainer.style.width = `${this._size}px`;

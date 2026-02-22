@@ -1,4 +1,4 @@
-import { SplitViewItem, SplitViewItemSizeType, SplitViewItemView } from "./component/SplitView";
+import { MappedSashEvent, SplitViewItem, SplitViewItemSizeType, SplitViewItemView } from "./component/SplitView";
 import { Component } from "./Component";
 
 export interface PartOptions {
@@ -34,6 +34,7 @@ export abstract class Part extends Component implements SplitViewItemView {
   set sashEnablement(b: boolean) { this._sashEnablement = b; }
 
   layout(offset: number, size: number): void {}
+  onDidChange(mappedEvent: MappedSashEvent): void {}
 
   parent: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;
