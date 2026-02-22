@@ -86,6 +86,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     sidebarPart.create();
     const sessionPart = this.sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], { sizeType: 'fill_parent' });
     sessionPart.create();
+
     const splitView = this.splitView = new SplitView(this.container, { orientation: Orientation.HORIZONTAL });
     splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);

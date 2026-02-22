@@ -384,16 +384,16 @@ export class SplitView<T extends SplitViewItemView> {
     if(this.proportions) {
       let total = 0;
       for(let i = 0; i < this.viewItems.length; i++) {
-        const item = this.viewItems[i];
-        item.view.size = totalSize * this.proportions[i];
+        const viewItem = this.viewItems[i];
+        viewItem.view.size = totalSize * this.proportions[i];
       }
       this.layoutViews();
     } else {
       let total = 0;
       for(let i = 0; i < this.viewItems.length; i++) {
-        const item = this.viewItems[i];
-        if(item.view.sizeType === 'wrap_content') {
-          let itemSize = (item.view.border ? 1 : 0) + item.view.size;
+        const viewItem = this.viewItems[i];
+        if(viewItem.view.sizeType === 'wrap_content') {
+          let itemSize = (viewItem.view.border ? 1 : 0) + viewItem.view.size;
           total += itemSize;
           totalSize -= itemSize;
         }
@@ -401,9 +401,9 @@ export class SplitView<T extends SplitViewItemView> {
 
       // fill empty space (dangling implementation)
       for(let i = 0; i < this.viewItems.length; i++) {
-        const item = this.viewItems[i];
-        if(item.view.sizeType === 'fill_parent') {
-          item.view.size = totalSize - (item.view.border ? 1 : 0);
+        const viewItem = this.viewItems[i];
+        if(viewItem.view.sizeType === 'fill_parent') {
+          viewItem.view.size = totalSize - (viewItem.view.border ? 1 : 0);
         }
       }
 
@@ -414,14 +414,14 @@ export class SplitView<T extends SplitViewItemView> {
   layoutViews(): void {
     let offset = 0;
     for(let i = 0; i < this.viewItems.length; i++) {
-      const item = this.viewItems[i];
-      item.layoutContainer((item.view.border ? 1 : 0) + offset);
+      const viewItem = this.viewItems[i];
+      viewItem.layoutContainer((viewItem.view.border ? 1 : 0) + offset);
       // console.log(`[${i}] ${item.size}`);
-      offset += (item.view.border ? 1 : 0) + item.view.size;
+      offset += (viewItem.view.border ? 1 : 0) + viewItem.view.size;
     }
 
     // Layout sashes
-    this.sashItems.forEach(item => item.sash.layout());
+    this.sashItems.forEach(sashItem => sashItem.sash.layout());
   }
 
   /* render() {
