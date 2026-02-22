@@ -42,6 +42,7 @@ export class SessionPart extends Part implements SessionPartService {
     // this.size = SESSION_WIDTH;
     this.sizeType = 'fill_parent';
     this.border = true;
+    this.minimumSize = 240;
     setService(sessionPartServiceId, this);
   }
 
