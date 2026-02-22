@@ -17,7 +17,7 @@ import { renderer } from '..';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
-export const SIDEBAR_WIDTH = 183;
+export const SIDEBAR_WIDTH = 249;
 // export const SESSION_WIDTH = 'fill_parent';
 export const STATUSBAR_HEIGHT = 17;
 
