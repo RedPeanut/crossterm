@@ -21,6 +21,8 @@ import { TerminalItem } from '../common/Types';
 import TerminalLocal from './terminal/TerminalLocal';
 import TerminalSsh from './terminal/TerminalSsh';
 import TerminalBase from './terminal/TerminalBase';
+import PotDb from 'potdb';
+import default_configs, { ConfigsType } from './configs';
 
 class AppUpdater {
   constructor() {
@@ -202,6 +204,44 @@ class MainWindow {
         console.error("파일을 읽는 중 오류가 발생했습니다:", err);
       }
       return null;
+    });
+
+    function getDb(): PotDb {
+      let dir = path.join(app.getPath('userData'), 'potdb');
+      if(!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      return new PotDb(dir);;
+    }
+
+    ipcMain.handle('config all', async (event, args: any[]) => {
+      const db = getDb();
+      const saved: ConfigsType = await db.dict.cfg.all();
+      // console.log('saved =', saved);
+      return { ...default_configs, ...saved};
+    });
+
+    ipcMain.handle('config get', (event, args: any[]) => {
+      const db = getDb();
+      const [ key ] = args;
+      return db.dict.cfg.get(key, default_configs[key]);
+    });
+
+    ipcMain.handle('config set', async (event, args: any[]) => {
+      const db = getDb();
+      const [ key, val ] = args;
+      await db.dict.cfg.set(key, val);
+    });
+
+    ipcMain.handle('config update', async (event, args: any[]) => {
+      const db = getDb();
+      const [ data ] = args;
+      const old: ConfigsType = await db.dict.cfg.all();
+      // console.log('old =', old);
+      const _new = { ...old, ...data };
+      // console.log('_new =', _new);
+      const update = await db.dict.cfg.update(_new);
+      // console.log('update =', update);
     });
   }
 
