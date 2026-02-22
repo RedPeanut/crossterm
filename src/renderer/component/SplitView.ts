@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 import { append, $ } from "../util/dom";
 import { Orientation, Sash, SashEvent, SashState } from "./Sash";
 import { range } from "../util/arrays";
+import { clamp } from "../util/numbers";
 
 interface MappedSashEvent {
   sash: Sash;
@@ -273,12 +274,21 @@ export class SplitView<T extends SplitViewItemView> {
       let minDelta = Number.NEGATIVE_INFINITY;
       let maxDelta = Number.POSITIVE_INFINITY;
 
+      const upIndexes = range(index, -1);
+      const downIndexes = range(index + 1, this.viewItems.length);
+
+      const minDeltaUp = upIndexes.reduce((r, i) => r + (this.viewItems[i].view.minimumSize - this.viewItems[i].view.size), 0);
+      const minDeltaDown = downIndexes.length === 0 ? Number.NEGATIVE_INFINITY : downIndexes.reduce((r, i) => r + (this.viewItems[i].view.size - this.viewItems[i].view.maximumSize), 0);
+      const maxDeltaUp = upIndexes.reduce((r, i) => r + (this.viewItems[i].view.maximumSize - this.viewItems[i].view.size), 0);
+      const maxDeltaDown = downIndexes.length === 0 ? Number.POSITIVE_INFINITY : downIndexes.reduce((r, i) => r + (this.viewItems[i].view.size - this.viewItems[i].view.minimumSize), 0);
+
+      minDelta = Math.max(minDeltaUp, minDeltaDown);
+      maxDelta = Math.min(maxDeltaUp, maxDeltaDown);
+
       let beforeItem: SashDragItemState | undefined;
       let afterItem: SashDragItemState | undefined;
 
-      /* const upIndexes = range(index, -1);
-      const downIndexes = range(index + 1, this.viewItems.length);
-
+      /*
       const beforeItemIndex = this.findFirstIndex(upIndexes);
       const afterItemIndex = this.findFirstIndex(downIndexes);
 
@@ -308,13 +318,13 @@ export class SplitView<T extends SplitViewItemView> {
 
   onSashChange({ current }: MappedSashEvent): void {
     // console.log('onSashChange event is called.., current =', current);
-    const { index, start, sizes, beforeItem, afterItem } = this.sashDragState;
+    const { index, start, sizes, minDelta, maxDelta, beforeItem, afterItem } = this.sashDragState;
     // console.log('this.sashDragState =', this.sashDragState);
     this.sashDragState.current = current;
     const delta = current - start;
 
     // console.log('before sizes =', this.viewItems.map(item => item.view.size));
-    const newDelta = this.resize(index, delta, sizes, beforeItem, afterItem);
+    const newDelta = this.resize(index, delta, sizes, minDelta, maxDelta, beforeItem, afterItem);
     // console.log('after sizes =', this.viewItems.map(item => item.view.size));
     this.layoutViews();
   }
@@ -322,6 +332,8 @@ export class SplitView<T extends SplitViewItemView> {
   resize(index: number,
     delta: number,
     sizes = this.viewItems.map(item => item.view.size),
+    minDelta: number = Number.NEGATIVE_INFINITY,
+    maxDelta: number = Number.POSITIVE_INFINITY,
     beforeItem: SashDragItemState,
     afterItem: SashDragItemState
   ): number {
@@ -346,6 +358,8 @@ export class SplitView<T extends SplitViewItemView> {
       const v = this.viewItems[afterItem.index];
       v.view.size = afterItem.size;
     } */
+
+    delta = clamp(delta, minDelta, maxDelta);
 
     upItems[0].view.size = upSizes[0] + delta;
     downItems[0].view.size = downSizes[0] - delta;
