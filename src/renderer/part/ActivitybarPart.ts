@@ -10,11 +10,16 @@ export interface ActivitybarPartService {
   addItem(ul:HTMLElement, item: any): void;
   updateChecked(id: string, checked: boolean): void;
   getActiveItem(): ActivitybarItem | undefined;
+  showActiveItem(id: string): void;
+  hideActiveItem(): void;
+  changeActiveItem(id: string): void;
+  restoreActiveItem(): void;
 }
 
 export class ActivitybarPart extends Part implements ActivitybarPartService {
 
   // mainLayoutService: MainLayoutService;
+  lastActiveItem: ActivitybarItem | undefined = undefined;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
@@ -95,4 +100,35 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
     return undefined;
   }
 
+  showActiveItem(id: string): void {
+    let impl = this.itemMap.get(id);
+    if(impl) {
+      impl.element.classList.add('checked');
+    }
+  }
+
+  hideActiveItem(): void {
+    const activeItem = this.getActiveItem();
+    if(activeItem) {
+      activeItem.element.classList.remove('checked');
+      this.lastActiveItem = activeItem;
+    }
+  }
+
+  changeActiveItem(id: string): void {
+    let impl = this.itemMap.get(id);
+    if(impl) {
+      const activeItem: ActivitybarItem = this.getActiveItem();
+      activeItem.element.classList.remove('checked');
+      impl.element.classList.add('checked');
+      this.lastActiveItem = activeItem;
+    }
+  }
+
+  restoreActiveItem(): void {
+    if(this.lastActiveItem) {
+      this.lastActiveItem.element.classList.add('checked');
+      this.lastActiveItem = undefined;
+    }
+  }
 }
