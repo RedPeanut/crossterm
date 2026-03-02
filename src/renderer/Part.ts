@@ -35,6 +35,7 @@ export abstract class Part extends Component implements SplitViewItemView {
 
   layout(offset: number, size: number): void {}
   onDidChange(mappedEvent: MappedSashEvent): void {}
+  doWhenVisible(visible: boolean): void {}
 
   parent: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;

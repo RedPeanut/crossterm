@@ -1,9 +1,10 @@
-import { Service, setService, sidebarPartServiceId } from '../Service';
+import { Service, setService, getService, activitybarPartServiceId, sidebarPartServiceId } from '../Service';
 import { $, hide, show } from '../util/dom';
 import { HorizontalViewItem } from '../component/SplitView';
 import { Panel } from '../Panel';
 import { SIDEBAR_WIDTH } from '../layout/MainLayout';
 import { Part } from '../Part';
+import { ActivitybarPart, ActivitybarPartService } from "./ActivitybarPart";
 
 export interface SidebarPartService extends Service {
   showPanel(panel: Panel): void;
@@ -12,6 +13,18 @@ export interface SidebarPartService extends Service {
 }
 
 export class SidebarPart extends Part implements SidebarPartService {
+
+  override doWhenVisible(visible: boolean) {
+    if(visible) {
+      const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
+      activitybarPartService.restoreActiveItem();
+      this.restoreActivePanel();
+    } else {
+      const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
+      activitybarPartService.hideActiveItem();
+      this.hideActivePanel();
+    }
+  }
 
   mapPanelToPanelContainer = new Map<string, HTMLElement>();
   activePanel: Panel | undefined;

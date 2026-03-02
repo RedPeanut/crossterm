@@ -52,6 +52,7 @@ export class GridView implements SplitViewItemView {
       this.splitView.layout(dimension.height);
   }
   onDidChange(mappedEvent: MappedSashEvent): void {}
+  doWhenVisible(visible: boolean): void {}
 
   parent: HTMLElement;
   _element: HTMLElement;

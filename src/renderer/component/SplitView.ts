@@ -76,6 +76,7 @@ export interface SplitViewItemView {
   set sashEnablement(b: boolean);
   layout(offset: number, size: number): void;
   onDidChange(mappedEvent: MappedSashEvent): void;
+  doWhenVisible(visible: boolean): void;
 }
 
 export abstract class SplitViewItem<T extends SplitViewItemView> {
@@ -102,6 +103,8 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
       this.view.size = 0;
     }
     this._container.classList.toggle('visible', visible);
+
+    this.view.doWhenVisible(visible);
   }
 
   get minimumSize(): number { return this.visible ? this.view.minimumSize : 0; }
