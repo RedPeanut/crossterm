@@ -62,6 +62,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     this.splitView.layout(dimension.width);
   }
   onDidChange(mappedEvent: MappedSashEvent): void {}
+  doWhenVisible(visible: boolean): void {}
 
   activitybarPart: ActivitybarPart;
   sidebarPart: SidebarPart;
@@ -136,13 +137,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
           const activeItem: ActivitybarItem = this.activitybarPartService.getActiveItem();
           if(activeItem) {
             if(activeItem.id === items[0].id) {
-              activeItem.element.classList.remove('checked');
+              this.activitybarPart.hideActiveItem();
             } else {
-              activeItem.element.classList.remove('checked');
-              this.activitybarPartService.updateChecked(items[0].id, true);
+              this.activitybarPart.changeActiveItem(items[0].id);
             }
-          } else
-            this.activitybarPartService.updateChecked(items[0].id, true);
+          } else {
+            this.activitybarPart.showActiveItem(items[0].id);
+          }
 
           const activePanel = this.sidebarPartService.getActivePanel();
           if(activePanel instanceof BookmarkPanel) {
@@ -164,13 +165,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
           const activeItem: ActivitybarItem = this.activitybarPartService.getActiveItem();
           if(activeItem) {
             if(activeItem.id === items[1].id) {
-              activeItem.element.classList.remove('checked');
+              this.activitybarPart.hideActiveItem();
             } else {
-              activeItem.element.classList.remove('checked');
-              this.activitybarPartService.updateChecked(items[1].id, true);
+              this.activitybarPart.changeActiveItem(items[1].id);
             }
-          } else
-            this.activitybarPartService.updateChecked(items[1].id, true);
+          } else {
+            this.activitybarPart.showActiveItem(items[1].id);
+          }
 
           const activePanel = this.sidebarPartService.getActivePanel();
           if(activePanel instanceof SamplePanel) {
