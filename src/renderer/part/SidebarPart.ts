@@ -15,6 +15,7 @@ export class SidebarPart extends Part implements SidebarPartService {
 
   mapPanelToPanelContainer = new Map<string, HTMLElement>();
   activePanel: Panel | undefined;
+  lastActivePanel: Panel | undefined = undefined;
 
   constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
     super(parent, id, role, classes, options);
@@ -62,8 +63,6 @@ export class SidebarPart extends Part implements SidebarPartService {
     }
 
     const panel = this.activePanel;
-    this.activePanel = undefined;
-
     const panelContainer = this.mapPanelToPanelContainer.get(panel.getId());
 
     // Indicate to Panel
@@ -75,7 +74,15 @@ export class SidebarPart extends Part implements SidebarPartService {
       hide(panelContainer);
     }
 
+    this.lastActivePanel = panel;
+    this.activePanel = undefined;
     return panel;
   }
 
+  restoreActivePanel(): Panel | undefined {
+    if(!this.lastActivePanel)
+      return undefined;
+
+    this.showPanel(this.lastActivePanel);
+  }
 }
