@@ -102,9 +102,9 @@ body { height: 100%; }
   /* display: flex; */
 }
 
-/* .split-view .split-view-container .split-view-view:not(.visible) {
+.split-view .split-view-container .split-view-view:not(.visible) {
   display: none;
-} */
+}
 
 .split-view.vertical > .split-view-container .split-view-view {
   width: 100%;

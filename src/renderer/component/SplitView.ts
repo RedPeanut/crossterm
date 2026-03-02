@@ -104,6 +104,12 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
     this._container.classList.toggle('visible', visible);
   }
 
+  get minimumSize(): number { return this.visible ? this.view.minimumSize : 0; }
+  get viewMinimumSize(): number { return this.view.minimumSize; }
+
+  get maximumSize(): number { return this.visible ? this.view.maximumSize : 0; }
+  get viewMaximumSize(): number { return this.view.maximumSize; }
+
   _view: T;
   get view() { return this._view; }
 
@@ -208,6 +214,7 @@ export class SplitView<T extends SplitViewItemView> {
     // add view
     const container = $('.split-view-view');
     // item.splitViewContainer = container;
+    container.classList.add('visible');
 
     if(index === this.viewItems.length)
       this.viewContainer.appendChild(container);
@@ -258,10 +265,10 @@ export class SplitView<T extends SplitViewItemView> {
   }
 
   findFirstIndex(indexes: number[]): number | undefined {
-    /* for(const index of indexes) {
+    for(const index of indexes) {
       const viewItem = this.viewItems[index];
       return index;
-    } */
+    }
     return undefined;
   }
 
@@ -279,28 +286,39 @@ export class SplitView<T extends SplitViewItemView> {
       const upIndexes = range(index, -1);
       const downIndexes = range(index + 1, this.viewItems.length);
 
-      const minDeltaUp = upIndexes.reduce((r, i) => r + (this.viewItems[i].view.minimumSize - this.viewItems[i].view.size), 0);
-      const minDeltaDown = downIndexes.length === 0 ? Number.NEGATIVE_INFINITY : downIndexes.reduce((r, i) => r + (this.viewItems[i].view.size - this.viewItems[i].view.maximumSize), 0);
-      const maxDeltaUp = upIndexes.reduce((r, i) => r + (this.viewItems[i].view.maximumSize - this.viewItems[i].view.size), 0);
-      const maxDeltaDown = downIndexes.length === 0 ? Number.POSITIVE_INFINITY : downIndexes.reduce((r, i) => r + (this.viewItems[i].view.size - this.viewItems[i].view.minimumSize), 0);
+      const minDeltaUp = upIndexes.reduce((r, i) => r + (this.viewItems[i].minimumSize - sizes[i]), 0);
+      // const minDeltaDown = downIndexes.length === 0 ? Number.NEGATIVE_INFINITY : downIndexes.reduce((r, i) => r + (sizes[i] - this.viewItems[i].viewMaximumSize), 0);
+      // const maxDeltaUp = upIndexes.reduce((r, i) => r + (this.viewItems[i].viewMaximumSize - sizes[i]), 0);
+      const maxDeltaDown = downIndexes.length === 0 ? Number.POSITIVE_INFINITY : downIndexes.reduce((r, i) => r + (sizes[i] - this.viewItems[i].minimumSize), 0);
 
-      minDelta = Math.max(minDeltaUp, minDeltaDown);
-      maxDelta = Math.min(maxDeltaUp, maxDeltaDown);
+      // minDelta = Math.max(minDeltaUp, minDeltaDown);
+      // maxDelta = Math.min(maxDeltaUp, maxDeltaDown);
+      minDelta = Math.max(minDeltaUp);
+      maxDelta = Math.min(maxDeltaDown);
+
+      console.log('minDeltaUp =', minDeltaUp);
+      // console.log('minDeltaDown =', minDeltaDown);
+      console.log('maxDeltaDown =', maxDeltaDown);
+      console.log('minDelta =', minDelta);
+      // console.log('maxDelta =', maxDelta);
 
       let beforeItem: SashDragItemState | undefined;
       let afterItem: SashDragItemState | undefined;
 
-      /*
       const beforeItemIndex = this.findFirstIndex(upIndexes);
       const afterItemIndex = this.findFirstIndex(downIndexes);
 
       if(typeof beforeItemIndex === 'number') {
         const viewItem = this.viewItems[beforeItemIndex];
+        const halfSize = Math.floor(viewItem.viewMinimumSize / 2);
+        // console.log('halfSize =', halfSize);
+
         beforeItem = {
           index: beforeItemIndex,
-          limitDelta: 0, // not impl
+          limitDelta: viewItem.visible ? minDelta - halfSize : minDelta + halfSize,
           size: viewItem.view.size
         };
+        // console.log('beforeItem =', beforeItem);
       }
 
       if(typeof afterItemIndex === 'number') {
@@ -310,7 +328,7 @@ export class SplitView<T extends SplitViewItemView> {
           limitDelta: 0, // not impl
           size: viewItem.view.size
         };
-      } */
+      }
 
       this.sashDragState = { start, current: start, index, sizes, minDelta, maxDelta, beforeItem, afterItem };
     };
@@ -351,38 +369,34 @@ export class SplitView<T extends SplitViewItemView> {
     const downItems = downIndexes.map(i => this.viewItems[i]);
     const downSizes = downIndexes.map(i => sizes[i]);
 
-    /* if(beforeItem) {
-      const v = this.viewItems[beforeItem.index];
-      v.view.size = beforeItem.size;
+    const minDeltaUp = upIndexes.reduce((r, i) => r + (this.viewItems[i].minimumSize - sizes[i]), 0);
+    const minDeltaDown = downIndexes.length === 0 ? Number.NEGATIVE_INFINITY : downIndexes.reduce((r, i) => r + (sizes[i] - this.viewItems[i].maximumSize), 0);
+    const maxDeltaUp = upIndexes.reduce((r, i) => r + (this.viewItems[i].maximumSize - sizes[i]), 0);
+    const maxDeltaDown = downIndexes.length === 0 ? Number.POSITIVE_INFINITY : downIndexes.reduce((r, i) => r + (sizes[i] - this.viewItems[i].minimumSize), 0);
+
+    let snapped = false;
+
+    if(beforeItem) {
+      const snapView = this.viewItems[beforeItem.index];
+      const visible = delta >= beforeItem.limitDelta;
+      snapped = visible !== snapView.visible;
+      snapView.setVisible(visible); //, beforeItem.size);
     }
 
-    if(afterItem) {
-      const v = this.viewItems[afterItem.index];
-      v.view.size = afterItem.size;
+    /* if(!snapped && afterItem) {
+      const snapView = this.viewItems[afterItem.index];
+      const visible = delta < afterItem.limitDelta;
+      snapped = visible !== snapView.visible;
+      snapView.setVisible(visible); //, snapAfter.size);
     } */
+
+    if(snapped)
+      return -1;
 
     delta = clamp(delta, minDelta, maxDelta);
 
-    upItems[0].view.size = upSizes[0] + delta;
-    downItems[0].view.size = downSizes[0] - delta;
-
-    /* for(let i = 0, deltaUp = delta; i < upItems.length; i++) {
-      const item = upItems[i];
-      const size = upSizes[i] + deltaUp;
-      const viewDelta = size - upSizes[i];
-
-      deltaUp -= viewDelta;
-      item.view.size = size;
-    }
-
-    for(let i = 0, deltaDown = delta; i < downItems.length; i++) {
-      const item = downItems[i];
-      const size = downSizes[i] - deltaDown;
-      const viewDelta = size - downSizes[i];
-
-      deltaDown += viewDelta;
-      item.view.size = size;
-    } */
+    upItems[0].view.size = clamp(upSizes[0] + delta, upItems[0].minimumSize, upItems[0].maximumSize);
+    downItems[0].view.size = clamp(downSizes[0] - delta, downItems[0].minimumSize, downItems[0].maximumSize);
 
     return delta;
   }
