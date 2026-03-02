@@ -55,6 +55,7 @@ export class SidebarPart extends Part implements SidebarPartService {
       panel.create(panelContainer);
       this.mapPanelToPanelContainer.set(panel.getId(), panelContainer);
     }
+
     const contentArea = this.getContentArea();
     contentArea.appendChild(panelContainer);
     show(panelContainer);
@@ -71,9 +72,8 @@ export class SidebarPart extends Part implements SidebarPartService {
   }
 
   hideActivePanel(): Panel | undefined {
-    if(!this.activePanel) {
+    if(!this.activePanel)
       return undefined; // Nothing to do
-    }
 
     const panel = this.activePanel;
     const panelContainer = this.mapPanelToPanelContainer.get(panel.getId());

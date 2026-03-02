@@ -1,7 +1,7 @@
 import { Orientation } from '../component/Sash';
 import { Group, isSplitItem, SplitItem } from '../Types';
 import { $, getClientArea } from '../util/dom';
-import { SplitView, SplitViewItem, SplitViewItemView } from '../component/SplitView';
+import { SplitView, SplitViewItem, SplitViewItemView, MappedSashEvent } from '../component/SplitView';
 import { Part } from '../Part';
 import { GroupView } from './view/GroupView';
 import { GridView } from './view/GridView';
