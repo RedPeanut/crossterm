@@ -4,7 +4,7 @@ import { $, getClientArea } from '../util/dom';
 import { SplitView, SplitViewItem, SplitViewItemView, MappedSashEvent } from '../component/SplitView';
 import { Part } from '../Part';
 import { GroupView } from './view/GroupView';
-import { GridView } from './view/GridView';
+import { OrientationView } from './view/OrientationView';
 import { Service, sessionPartServiceId, setService } from '../Service';
 import { TerminalItem } from '../../common/Types';
 import { wrapper } from '../../globals';
@@ -25,7 +25,7 @@ export class SessionPart extends Part implements SessionPartService {
     // console.log({ offset, size });
 
     if(this.resultView) {
-      if(this.resultView instanceof GridView) {
+      if(this.resultView instanceof OrientationView) {
         this.resultView.layout(offset, size);
       }
     }
@@ -51,11 +51,11 @@ export class SessionPart extends Part implements SessionPartService {
   }
 
   // splitView: SplitView<SplitViewItemView> | undefined;
-  // gridView: GridView | undefined;
+  // orientationView: OrientationView | undefined;
   // groupView: GroupView | undefined;
-  resultView: GridView | GroupView | undefined;
+  resultView: OrientationView | GroupView | undefined;
 
-  renderTree(container: HTMLElement, curr: SplitItem, depth: number): GridView | GroupView | undefined {
+  renderTree(container: HTMLElement, curr: SplitItem, depth: number): OrientationView | GroupView | undefined {
     if(curr.list && curr.list.length > 0) {
       if(curr.list.length === 1) {
         let item = curr.list[0];
@@ -72,7 +72,7 @@ export class SessionPart extends Part implements SessionPartService {
         const style = { [sizeProperty]: size };
 
         const orientation = curr.mode === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
-        const gridView = new GridView(null, { orientation: orientation, style: style, length: curr.list.length });
+        const gridView = new OrientationView(null, { orientation: orientation, style: style, length: curr.list.length });
         const element = gridView.create();
 
         for(let i = 0; i < curr.list.length; i++) {
@@ -80,7 +80,7 @@ export class SessionPart extends Part implements SessionPartService {
 
           if(isSplitItem(item)) {
             item = item as SplitItem;
-            const result: GridView | GroupView = this.renderTree(null, item, depth+1);
+            const result: OrientationView | GroupView = this.renderTree(null, item, depth+1);
             gridView.addView(result);
           } else {
             const groupView = new GroupView(null, item as Group, { style: {} });
@@ -97,23 +97,23 @@ export class SessionPart extends Part implements SessionPartService {
   override createContentArea(): HTMLElement {
     // console.log('[SessionPart] createContentArea() is called ..');
     const container: HTMLElement = super.createContentArea();
-    const resultView: GridView | GroupView | undefined = this.renderTree(null, wrapper.tree, 0);
+    const resultView: OrientationView | GroupView | undefined = this.renderTree(null, wrapper.tree, 0);
     this.resultView = resultView;
     resultView && container.appendChild(resultView.element);
 
     return container;
   }
 
-  createTerminal_r(v: GridView): void {
+  createTerminal_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
     for(let i = 0; i < viewItems.length; i++) {
       if(viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
         for(let j = 0; j < v.terms.terms.length; j++)
           v.terms.terms[j].createTerminal();
-      } else if(viewItems[i].view instanceof GridView) {
+      } else if(viewItems[i].view instanceof OrientationView) {
         // recurrence
-        this.createTerminal_r(viewItems[i].view as GridView);
+        this.createTerminal_r(viewItems[i].view as OrientationView);
       }
     }
   }
@@ -124,13 +124,13 @@ export class SessionPart extends Part implements SessionPartService {
         const v: GroupView = this.resultView as GroupView;
         for(let i = 0; i < v.terms.terms.length; i++)
           v.terms.terms[i].createTerminal();
-      } else if(this.resultView instanceof GridView) {
-        this.createTerminal_r(this.resultView as GridView);
+      } else if(this.resultView instanceof OrientationView) {
+        this.createTerminal_r(this.resultView as OrientationView);
       }
     }
   }
 
-  getServices_r(v: GridView): void {
+  getServices_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
     for(let i = 0; i < viewItems.length; i++) {
       if(viewItems[i].view instanceof GroupView) {
@@ -138,9 +138,9 @@ export class SessionPart extends Part implements SessionPartService {
         for(let j = 0; j < v.tabs.tabs.length; j++)
           v.tabs.tabs[j].getServices();
         v.terms.dropOverlay.getServices();
-      } else if(viewItems[i].view instanceof GridView) {
+      } else if(viewItems[i].view instanceof OrientationView) {
         // recurrence
-        this.getServices_r(viewItems[i].view as GridView);
+        this.getServices_r(viewItems[i].view as OrientationView);
       }
     }
   }
@@ -152,20 +152,20 @@ export class SessionPart extends Part implements SessionPartService {
         for(let i = 0; i < v.tabs.tabs.length; i++)
           v.tabs.tabs[i].getServices();
         v.terms.dropOverlay.getServices();
-      } else if(this.resultView instanceof GridView) {
-        this.getServices_r(this.resultView as GridView);
+      } else if(this.resultView instanceof OrientationView) {
+        this.getServices_r(this.resultView as OrientationView);
       }
     }
   }
 
-  makeOverlayVisible_r(v: GridView, b: boolean): void {
+  makeOverlayVisible_r(v: OrientationView, b: boolean): void {
     const viewItems = v.splitView.viewItems;
     for(let i = 0; i < viewItems.length; i++) {
       if(viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
         v.terms.wrapper.style.display = b ? 'block' : 'none';
-      } else if(viewItems[i].view instanceof GridView) {
-        this.makeOverlayVisible_r(viewItems[i].view as GridView, b);
+      } else if(viewItems[i].view instanceof OrientationView) {
+        this.makeOverlayVisible_r(viewItems[i].view as OrientationView, b);
       }
     }
   }
@@ -175,8 +175,8 @@ export class SessionPart extends Part implements SessionPartService {
       if(this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
         v.terms.wrapper.style.display = b ? 'block' : 'none';
-      } else if(this.resultView instanceof GridView) {
-        this.makeOverlayVisible_r(this.resultView as GridView, b);
+      } else if(this.resultView instanceof OrientationView) {
+        this.makeOverlayVisible_r(this.resultView as OrientationView, b);
       }
     }
   }
@@ -184,7 +184,7 @@ export class SessionPart extends Part implements SessionPartService {
   controlStyle_r(
       {depth, index, pos}: {depth: number, index: number[], pos: number},
       {selected, active}: {selected: boolean, active: boolean},
-      {curr, view}: {curr: number, view: GridView}
+      {curr, view}: {curr: number, view: OrientationView}
   ): void {
     console.log({depth, index, pos}, {selected, active});
     const viewItems = view.splitView.viewItems;
@@ -211,15 +211,15 @@ export class SessionPart extends Part implements SessionPartService {
           v.tabs.tabs[pos].element.classList.remove('active');
           v.terms.terms[pos].element.classList.remove('active');
         }
-      } else if(viewItems[index[curr]].view instanceof GridView) {
+      } else if(viewItems[index[curr]].view instanceof OrientationView) {
         // not enter here
       }
     } else {
       const v = viewItems[index[curr]].view;
       if(v instanceof GroupView) {
         // not enter here
-      } else if(v instanceof GridView) {
-        this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, view: v as GridView});
+      } else if(v instanceof OrientationView) {
+        this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, view: v as OrientationView});
       }
     }
   }
@@ -257,8 +257,8 @@ export class SessionPart extends Part implements SessionPartService {
             v.tabs.tabs[pos].element.classList.remove('active');
             v.terms.terms[pos].element.classList.remove('active');
           }
-        } else if(this.resultView instanceof GridView) {
-          const gridView: GridView = this.resultView as GridView;
+        } else if(this.resultView instanceof OrientationView) {
+          const gridView: OrientationView = this.resultView as OrientationView;
           const v = gridView.splitView.viewItems[index[curr]].view as GroupView;
 
           if(selected) {
@@ -284,28 +284,28 @@ export class SessionPart extends Part implements SessionPartService {
       } else {
         if(this.resultView instanceof GroupView) {
           // not enter here
-        } else if(this.resultView instanceof GridView) {
-          const gridView = this.resultView as GridView;
+        } else if(this.resultView instanceof OrientationView) {
+          const gridView = this.resultView as OrientationView;
           const v = gridView.splitView.viewItems[index[curr]].view;
           if(v instanceof GroupView) {
             // not enter here
-          } else if(v instanceof GridView) {
-            this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, view: v as GridView});
+          } else if(v instanceof OrientationView) {
+            this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, view: v as OrientationView});
           }
         }
       }
     }
   }
 
-  fit_r(v: GridView): void {
+  fit_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
     for(let i = 0; i < viewItems.length; i++) {
       if(viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
         for(let i = 0; i < v.terms.terms.length; i++)
           v.terms.terms[i].fit();
-      } else if(viewItems[i].view instanceof GridView) {
-        this.fit_r(viewItems[i].view as GridView);
+      } else if(viewItems[i].view instanceof OrientationView) {
+        this.fit_r(viewItems[i].view as OrientationView);
       }
     }
   }
@@ -316,8 +316,8 @@ export class SessionPart extends Part implements SessionPartService {
         const v: GroupView = this.resultView as GroupView;
         for(let i = 0; i < v.terms.terms.length; i++)
           v.terms.terms[i].fit();
-      } else if(this.resultView instanceof GridView) {
-        this.fit_r(this.resultView as GridView);
+      } else if(this.resultView instanceof OrientationView) {
+        this.fit_r(this.resultView as OrientationView);
       }
     }
   }

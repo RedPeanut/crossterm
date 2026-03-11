@@ -2,7 +2,7 @@ import { $, getClientArea } from "../../util/dom";
 import { Orientation } from "../../component/Sash";
 import { MappedSashEvent, SplitView, SplitViewItemSizeType, SplitViewItemView, SplitViewOptions } from "../../component/SplitView";
 
-export interface GridViewOptions {
+export interface OrientationViewOptions {
   orientation?: Orientation;
   style?: {};
   length: number;
@@ -12,7 +12,7 @@ export interface GridViewOptions {
  * TODO: serialize n deserialize ?
  *
  */
-export class GridView implements SplitViewItemView {
+export class OrientationView implements SplitViewItemView {
 
   get element(): HTMLElement { return this._element; }
 
@@ -57,9 +57,9 @@ export class GridView implements SplitViewItemView {
   parent: HTMLElement;
   _element: HTMLElement;
   splitView: SplitView<SplitViewItemView>;
-  options: GridViewOptions;
+  options: OrientationViewOptions;
 
-  constructor(parent: HTMLElement, options: GridViewOptions) {
+  constructor(parent: HTMLElement, options: OrientationViewOptions) {
     this.parent = parent;
     this.options = options;
   }
