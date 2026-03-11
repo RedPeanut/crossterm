@@ -72,8 +72,8 @@ export class SessionPart extends Part implements SessionPartService {
         const style = { [sizeProperty]: size };
 
         const orientation = curr.mode === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
-        const gridView = new OrientationView(null, { orientation: orientation, style: style, length: curr.list.length });
-        const element = gridView.create();
+        const orientationView = new OrientationView(null, { orientation: orientation, style: style, length: curr.list.length });
+        const element = orientationView.create();
 
         for(let i = 0; i < curr.list.length; i++) {
           let item = curr.list[i];
@@ -81,14 +81,14 @@ export class SessionPart extends Part implements SessionPartService {
           if(isSplitItem(item)) {
             item = item as SplitItem;
             const result: OrientationView | GroupView = this.renderTree(null, item, depth+1);
-            gridView.addView(result);
+            orientationView.addView(result);
           } else {
             const groupView = new GroupView(null, item as Group, { style: {} });
             const element = groupView.create();
-            gridView.addView(groupView);
+            orientationView.addView(groupView);
           }
         }
-        return gridView;
+        return orientationView;
       }
     }
     return undefined;
@@ -258,8 +258,8 @@ export class SessionPart extends Part implements SessionPartService {
             v.terms.terms[pos].element.classList.remove('active');
           }
         } else if(this.resultView instanceof OrientationView) {
-          const gridView: OrientationView = this.resultView as OrientationView;
-          const v = gridView.splitView.viewItems[index[curr]].view as GroupView;
+          const orientationView: OrientationView = this.resultView as OrientationView;
+          const v = orientationView.splitView.viewItems[index[curr]].view as GroupView;
 
           if(selected) {
             for(let i = 0; i < v.tabs.tabs.length; i++) {
@@ -285,8 +285,8 @@ export class SessionPart extends Part implements SessionPartService {
         if(this.resultView instanceof GroupView) {
           // not enter here
         } else if(this.resultView instanceof OrientationView) {
-          const gridView = this.resultView as OrientationView;
-          const v = gridView.splitView.viewItems[index[curr]].view;
+          const orientationView = this.resultView as OrientationView;
+          const v = orientationView.splitView.viewItems[index[curr]].view;
           if(v instanceof GroupView) {
             // not enter here
           } else if(v instanceof OrientationView) {
