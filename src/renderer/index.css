@@ -414,7 +414,7 @@ body { height: 100%; }
 
 /* .part.session .wrapper { height: 100%; }
 .part.session .wrapper .group-view { height: 100%; } */
-.part.session .grid-view {
+.part.session .orientation-view {
   width: 100%;
   height: 100%;
 }
