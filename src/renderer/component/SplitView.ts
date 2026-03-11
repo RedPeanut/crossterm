@@ -350,6 +350,7 @@ export class SplitView<T extends SplitViewItemView> {
     // console.log('before sizes =', this.viewItems.map(item => item.view.size));
     const newDelta = this.resize(index, delta, sizes, minDelta, maxDelta, beforeItem, afterItem);
     // console.log('after sizes =', this.viewItems.map(item => item.view.size));
+    this.distributeEmptySpace();
     this.layoutViews();
   }
 
@@ -403,6 +404,23 @@ export class SplitView<T extends SplitViewItemView> {
     downItems[0].view.size = clamp(downSizes[0] - delta, downItems[0].minimumSize, downItems[0].maximumSize);
 
     return delta;
+  }
+
+  distributeEmptySpace(): void {
+    const contentSize = this.viewItems.reduce((r, i) => r + i.view.size + (i.view.border ? 1 : 0), 0);
+    let emptyDelta = this.size - contentSize;
+    console.log(`${emptyDelta} = ${this.size} - ${contentSize}`);
+
+    const indexes = range(this.viewItems.length - 1, -1);
+
+    for (let i = 0; emptyDelta > 0 && i < indexes.length; i++) {
+      const item = this.viewItems[indexes[i]];
+      const size = clamp(item.view.size + (item.view.border ? 1 : 0) + emptyDelta, item.minimumSize, item.maximumSize);
+      const viewDelta = size - item.view.size - (item.view.border ? 1 : 0);
+
+      emptyDelta -= viewDelta;
+      item.view.size = size;
+    }
   }
 
   saveProportions() {
