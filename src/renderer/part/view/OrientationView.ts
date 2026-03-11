@@ -10,7 +10,6 @@ export interface OrientationViewOptions {
 
 /**
  * TODO: serialize n deserialize ?
- *
  */
 export class OrientationView implements SplitViewItemView {
 
