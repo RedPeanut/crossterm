@@ -4,9 +4,9 @@ import { ActivitybarPart, ActivitybarPartService } from "../part/ActivitybarPart
 import { SidebarPart, SidebarPartService } from "../part/SidebarPart";
 import { SessionPart } from "../part/SessionPart";
 import { Orientation } from "../component/Sash";
-import { Parts, MainLayoutService } from "./MainLayout";
+import { Parts, MainLayoutService, MainLayout } from "./MainLayout";
 import { getClientArea } from "../util/dom";
-import { activitybarPartServiceId, bodyLayoutServiceId, getService, Service, setService, sidebarPartServiceId } from "../Service";
+import { activitybarPartServiceId, bodyLayoutServiceId, getService, mainLayoutServiceId, Service, setService, sidebarPartServiceId } from "../Service";
 import { BookmarkPanel } from "../panel/BookmarkPanel";
 import { SamplePanel } from "../panel/SamplePanel";
 import { ActivitybarItem } from "../part/item/ActivitybarItem";
@@ -154,6 +154,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
             this.sidebarPartService.showPanel(items[0].panel);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
+          (getService(mainLayoutServiceId) as MainLayout).layout();
         }
       },
       {
@@ -182,6 +183,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
             this.sidebarPartService.showPanel(items[1].panel);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
+          (getService(mainLayoutServiceId) as MainLayout).layout();
         }
       },
     ];

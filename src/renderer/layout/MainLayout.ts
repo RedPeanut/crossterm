@@ -32,6 +32,7 @@ export const enum Parts {
 
 export interface MainLayoutService extends Service {
   toggleSidebar(): void;
+  layout(): void;
 }
 
 export class MainLayout extends Layout implements MainLayoutService {

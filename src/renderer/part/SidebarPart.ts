@@ -1,8 +1,9 @@
-import { Service, setService, getService, activitybarPartServiceId, sidebarPartServiceId } from '../Service';
+import { Service, setService, getService,
+  activitybarPartServiceId, mainLayoutServiceId, sidebarPartServiceId } from '../Service';
 import { $, hide, show } from '../util/dom';
 import { HorizontalViewItem } from '../component/SplitView';
 import { Panel } from '../Panel';
-import { SIDEBAR_WIDTH } from '../layout/MainLayout';
+import { MainLayout, SIDEBAR_WIDTH } from '../layout/MainLayout';
 import { Part } from '../Part';
 import { ActivitybarPart, ActivitybarPartService } from "./ActivitybarPart";
 
@@ -24,6 +25,7 @@ export class SidebarPart extends Part implements SidebarPartService {
       activitybarPartService.hideActiveItem();
       this.hideActivePanel();
     }
+    (getService(mainLayoutServiceId) as MainLayout).layout();
   }
 
   mapPanelToPanelContainer = new Map<string, HTMLElement>();
