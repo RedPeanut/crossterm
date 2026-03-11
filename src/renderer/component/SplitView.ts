@@ -193,6 +193,7 @@ export class SplitView<T extends SplitViewItemView> {
     for(let i = 0; i < this.viewItems.length; i++) {
       if(_old === this.viewItems[i].view) {
         const container = $('.split-view-view');
+        container.classList.add('visible');
 
         this.viewContainer.insertBefore(container, this.viewContainer.children.item(i));
         this.viewContainer.removeChild(this.viewContainer.children.item(i+1));
