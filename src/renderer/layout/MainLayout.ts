@@ -5,6 +5,8 @@ import { TitlebarPart } from '../part/TitlebarPart';
 import { ActivitybarPart } from '../part/ActivitybarPart';
 // import { BodyPart } from '../part/BodyPart';
 import { StatusbarPart } from '../part/StatusbarPart';
+import { SidebarPart } from '../part/SidebarPart';
+import { SessionPart } from '../part/SessionPart';
 import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../component/SplitView';
 import { getClientArea, position, size } from '../util/dom';
@@ -42,7 +44,10 @@ export class MainLayout extends Layout implements MainLayoutService {
   }
 
   titlebarPart: TitlebarPart;
-  bodyLayout: BodyLayout;
+  // bodyLayout: BodyLayout;
+  activitybarPart: ActivitybarPart;
+  sidebarPart: SidebarPart;
+  sessionPart: SessionPart;
   statusbarPart: StatusbarPart;
   // splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
 
@@ -124,7 +129,34 @@ export class MainLayout extends Layout implements MainLayoutService {
     });
   }
 
+  createPartContainer(id: string, role: string, classes: string[]): HTMLElement {
+    const part = document.createElement('div');
+    part.classList.add('part', ...classes);
+    part.id = id;
+    part.setAttribute('role', role);
+    return part;
+  }
+
+  createParts(): void {
+    // Create Parts
+    for (const { klass, id, role, classes, options } of [
+      { klass: TitlebarPart, id: Parts.TITLEBAR_PART, role: 'none', classes: ['titlebar'] },
+      { klass: ActivitybarPart, id: Parts.ACTIVITYBAR_PART, role: 'none', classes: ['activitybar' ] },
+      { klass: SidebarPart, id: Parts.SIDEBAR_PART, role: 'none', classes: ['sidebar' ] },
+      { klass: SessionPart, id: Parts.SESSION_PART, role: 'none', classes: ['session'], options: { sizeType: 'fill_parent' } },
+      { klass: StatusbarPart, id: Parts.STATUSBAR_PART, role: 'none', classes: ['statusbar'] }
+    ]) {
+      const container = this.createPartContainer(id, role, classes);
+      const part: Part = Reflect.construct(klass, [ container, options ]);
+      this.registerPart(part);
+      part.create();
+    }
+    // console.log('this.parts =', this.parts);
+  }
+
   startup(): void {
+    this.createParts();
+
     /* this.create();
     this.getServices();
     this.bodyLayoutService.inflate();

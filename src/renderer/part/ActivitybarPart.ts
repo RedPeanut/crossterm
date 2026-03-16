@@ -34,7 +34,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
   } */
 
   override createContentArea(): HTMLElement {
-    const part = super.createContentArea();
+    const container = this.parent; // super.createContentArea();
 
     /* const ul = document.createElement('ul');
     ul.className = 'actions-container';
@@ -68,7 +68,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
     part.appendChild(ul); */
 
-    return part;
+    return super.createContentArea();
   }
 
   itemMap = new Map<string, ActivitybarItem>();

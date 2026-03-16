@@ -95,12 +95,12 @@ export class SessionPart extends Part implements SessionPartService {
 
   override createContentArea(): HTMLElement {
     // console.log('[SessionPart] createContentArea() is called ..');
-    const container: HTMLElement = super.createContentArea();
+    const container: HTMLElement = this.parent; // super.createContentArea();
     const resultView: OrientationView | GroupView | undefined = this.renderTree(null, wrapper.tree, 0);
     this.resultView = resultView;
     resultView && container.appendChild(resultView.element);
 
-    return container;
+    return super.createContentArea();
   }
 
   createTerminal_r(v: OrientationView): void {

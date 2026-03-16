@@ -12,6 +12,7 @@ export abstract class Part {
   titleArea: HTMLElement | undefined;
   contentArea: HTMLElement | undefined;
   footerArea: HTMLElement | undefined;
+  element: HTMLElement;
 
   // options: object;
 
@@ -40,11 +41,8 @@ export abstract class Part {
   }
 
   createContentArea(): HTMLElement {
-    const part = document.createElement('div');
-    part.classList.add('part', 'content-area', ...this.classes);
-    part.id = this.getId();
-    part.setAttribute('role', this.role);
-    return part;
+    this.element = this.parent;
+    return this.element;
   }
 
   // abstract toJSON(): object;

@@ -11,7 +11,7 @@ export abstract class Layout {
   }
 
   registerPart(part: Part): void {
-    const id = part.getId();
+    const id = part.parent.id; // getId();
     this.parts.set(id, part);
   }
 

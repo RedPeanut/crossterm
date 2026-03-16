@@ -27,7 +27,7 @@ export class TitlebarPart extends Part {
   }
 
   override createContentArea(): HTMLElement {
-    const container: HTMLElement = super.createContentArea();
+    const container: HTMLElement = this.parent;
 
     const menubar = $('.menubar');
     if(renderer.process.platform === 'darwin')
@@ -78,7 +78,7 @@ export class TitlebarPart extends Part {
     }
 
     container.appendChild(menubar);
-    return container;
+    return super.createContentArea();
   }
 
 }
