@@ -15,7 +15,7 @@ export interface SidebarPartService extends Service {
 
 export class SidebarPart extends Part implements SidebarPartService {
 
-  override doWhenVisible(visible: boolean) {
+  /* override doWhenVisible(visible: boolean) {
     if(visible) {
       const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
       activitybarPartService.restoreActiveItem();
@@ -26,18 +26,18 @@ export class SidebarPart extends Part implements SidebarPartService {
       this.hideActivePanel();
     }
     (getService(mainLayoutServiceId) as MainLayout).layout();
-  }
+  } */
 
   mapPanelToPanelContainer = new Map<string, HTMLElement>();
   activePanel: Panel | undefined;
   lastActivePanel: Panel | undefined = undefined;
 
-  constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
-    super(parent, id, role, classes, options);
-    this.size = SIDEBAR_WIDTH;
-    this.minimumSize = 120;
-    this.border = true;
-    this.sashEnablement = false;
+  constructor(parent: HTMLElement, options: object) {
+    super(parent, options);
+    // this.size = SIDEBAR_WIDTH;
+    // this.minimumSize = 120;
+    // this.border = true;
+    // this.sashEnablement = false;
     setService(sidebarPartServiceId, this);
   }
 

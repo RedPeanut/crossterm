@@ -9,10 +9,10 @@ export class TitlebarPart extends Part {
 
   maxResBtn: HTMLElement;
 
-  constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
-    super(parent, id, role, classes, options);
-    this.size = TITLEBAR_HEIGHT;
-    // this.border = true;
+  constructor(parent: HTMLElement, options: object) {
+    super(parent, options);
+    // this.size = TITLEBAR_HEIGHT;
+    // // this.border = true;
 
     window.ipc.on('window state changed', (...args: any[]) => {
       // console.log('on window state changed is called ..');

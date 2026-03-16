@@ -20,7 +20,7 @@ export interface SessionPartService extends Service {
 
 export class SessionPart extends Part implements SessionPartService {
 
-  override layout(offset: number, size: number): void {
+  /* override layout(offset: number, size: number): void {
     // console.log('[SessionPart] layout() is called ..');
     // console.log({ offset, size });
 
@@ -34,19 +34,18 @@ export class SessionPart extends Part implements SessionPartService {
   override onDidChange(mappedEvent: MappedSashEvent): void {
     console.log('onDidChange is called .., mappedEvent =', mappedEvent);
     // save sidebar size in here
-  }
+  } */
 
   /* layoutContainer(offset: number): void {
     this._splitViewContainer.style.left = `${offset}px`;
     this._splitViewContainer.style.width = `${this._size}px`;
   } */
 
-  constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
-    super(parent, id, role, classes, options);
-    // this.size = SESSION_WIDTH;
-    this.sizeType = 'fill_parent';
-    this.border = true;
-    this.minimumSize = 240;
+  constructor(parent: HTMLElement, options: object) {
+    super(parent, options);
+    // this.sizeType = 'fill_parent';
+    // this.border = true;
+    // this.minimumSize = 240;
     setService(sessionPartServiceId, this);
   }
 

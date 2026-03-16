@@ -5,37 +5,7 @@ export interface PartOptions {
   // sizeType?: SplitViewItemSizeType;
 }
 
-export abstract class Part extends Component implements SplitViewItemView {
-
-  get element(): HTMLElement { return this.contentArea; }
-
-  _size: number = 0;
-  get size(): number { return this._size; }
-  set size(size: number) { this._size = size; }
-
-  _sizeType: SplitViewItemSizeType = 'wrap_content';
-  get sizeType(): SplitViewItemSizeType { return this._sizeType; }
-  set sizeType(sizeType: SplitViewItemSizeType) { this._sizeType = sizeType; }
-
-  _minimumSize: number = 0;
-  get minimumSize(): number { return this._minimumSize; }
-  set minimumSize(minimumSize: number) { this._minimumSize = minimumSize; }
-
-  _maximumSize: number = Number.POSITIVE_INFINITY;
-  get maximumSize(): number { return this._maximumSize; }
-  set maximumSize(maximumSize: number) { this._maximumSize = maximumSize; }
-
-  _border: boolean = false;
-  get border(): boolean { return this._border; }
-  set border(border: boolean) { this._border = border; }
-
-  _sashEnablement: boolean = true;
-  get sashEnablement(): boolean { return this._sashEnablement; }
-  set sashEnablement(b: boolean) { this._sashEnablement = b; }
-
-  layout(offset: number, size: number): void {}
-  onDidChange(mappedEvent: MappedSashEvent): void {}
-  doWhenVisible(visible: boolean): void {}
+export abstract class Part {
 
   parent: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;
@@ -43,15 +13,10 @@ export abstract class Part extends Component implements SplitViewItemView {
   contentArea: HTMLElement | undefined;
   footerArea: HTMLElement | undefined;
 
-  role: string;
-  classes: string[];
   // options: object;
 
-  constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: PartOptions) {
-    super(id);
+  constructor(parent: HTMLElement, options: PartOptions) {
     this.parent = parent;
-    this.role = role;
-    this.classes = classes;
     // this.options = options;
     if(options) {
       // this._sizeType = options.sizeType;

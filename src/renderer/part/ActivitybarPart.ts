@@ -21,12 +21,10 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
   // mainLayoutService: MainLayoutService;
   lastActiveItem: ActivitybarItem | undefined = undefined;
 
-  constructor(parent: HTMLElement, id: string, role: string, classes: string[], options: object) {
-    super(parent, id, role, classes, options);
-    this.size = ACTIVITYBAR_WIDTH;
-    this.minimumSize = ACTIVITYBAR_WIDTH;
-    // this.border = true;
-    // this.mainLayoutService = getService(mainLayoutServiceId);
+  constructor(parent: HTMLElement, options: object) {
+    super(parent, options);
+    // this.size = ACTIVITYBAR_WIDTH;
+    // this.minimumSize = ACTIVITYBAR_WIDTH;
     setService(activitybarPartServiceId, this);
   }
 

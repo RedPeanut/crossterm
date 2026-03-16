@@ -67,7 +67,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
   activitybarPart: ActivitybarPart;
   sidebarPart: SidebarPart;
   sessionPart: SessionPart;
-  splitView: SplitView<ActivitybarPart | SidebarPart | SessionPart>;
+  splitView: SplitView<null>; // <ActivitybarPart | SidebarPart | SessionPart>;
 
   constructor(parent: HTMLElement, options: BodyOptions) {
     super(parent);
@@ -90,7 +90,8 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
       // this.getPart(id).create(this.mainContainer, options);
       this.getPart(id).create();
     } */
-    const activitybarPart = this.activitybarPart = new ActivitybarPart(null, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
+
+    /* const activitybarPart = this.activitybarPart = new ActivitybarPart(null, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
     activitybarPart.create();
     const sidebarPart = this.sidebarPart = new SidebarPart(null, Parts.SIDEBAR_PART, 'none', ['sidebar'], null);
     sidebarPart.create();
@@ -100,7 +101,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     const splitView = this.splitView = new SplitView(this.container, { orientation: Orientation.HORIZONTAL });
     splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);
-    splitView.addView(sessionPart);
+    splitView.addView(sessionPart); */
 
     this.parent && this.parent.appendChild(this.container);
   }
@@ -211,7 +212,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
   recreate(): void {
     const _old = this.sessionPart;
-    const _new = this.sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], { sizeType: 'fill_parent' });
+    const _new = this.sessionPart = new SessionPart(null, /* Parts.SESSION_PART, 'none', ['session'], */ { sizeType: 'fill_parent' });
     _new.create();
     this.splitView.replaceView(_old, _new);
   }

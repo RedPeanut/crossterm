@@ -44,14 +44,14 @@ export class MainLayout extends Layout implements MainLayoutService {
   titlebarPart: TitlebarPart;
   bodyLayout: BodyLayout;
   statusbarPart: StatusbarPart;
-  splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
+  // splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
 
   constructor(parent: HTMLElement) {
     super(parent);
     setService(mainLayoutServiceId, this);
   }
 
-  create(): void {
+  /* create(): void {
     // console.log('render() is called ..');
 
     //
@@ -85,17 +85,17 @@ export class MainLayout extends Layout implements MainLayoutService {
     splitView.addView(statusbarPart);
 
     this.parent.appendChild(this.container);
-  }
+  } */
 
   layout(): void {
     let dimension = getClientArea(this.parent);
     // console.log('dimension =', dimension);
     position(this.container, 0, 0, 0, 0, 'relative');
     size(this.container, dimension.width, dimension.height);
-    if(this.splitView.orientation === Orientation.HORIZONTAL)
-      this.splitView.layout(dimension.width);
-    else
-      this.splitView.layout(dimension.height);
+    // if(this.splitView.orientation === Orientation.HORIZONTAL)
+    //   this.splitView.layout(dimension.width);
+    // else
+    //   this.splitView.layout(dimension.height);
 
     (getService(menubarServiceId) as MenubarService).layout(dimension);
   }
@@ -125,7 +125,7 @@ export class MainLayout extends Layout implements MainLayoutService {
   }
 
   startup(): void {
-    this.create();
+    /* this.create();
     this.getServices();
     this.bodyLayoutService.inflate();
     this.layout();
@@ -148,7 +148,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     });
 
     // create terminal after layout n ipc install
-    this.sessionPartService.createTerminal();
+    this.sessionPartService.createTerminal(); */
   }
 
   toggleSidebar(): void {
