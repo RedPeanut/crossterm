@@ -43,7 +43,7 @@ export class Renderer {
   async open() {
     await Promise.all([domContentLoaded(mainWindow), this.loadInMain()]);
     const mainLayout = new MainLayout(mainWindow.document.body);
-    mainLayout.startup();
+    await mainLayout.startup();
   }
 
   async loadInMain(): Promise<void> {

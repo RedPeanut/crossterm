@@ -16,6 +16,7 @@ import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 import { MenubarService } from '../part/Menubar';
 import { renderer } from '..';
+import { SerializableGrid, SerializableView, SerializedGrid, SerializedLeafNode, SerializedNode } from '../component/Grid';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -43,13 +44,14 @@ export class MainLayout extends Layout implements MainLayoutService {
     throw new Error('Method not implemented.');
   }
 
-  titlebarPart: TitlebarPart;
+  titlebarPart: Part;
   // bodyLayout: BodyLayout;
-  activitybarPart: ActivitybarPart;
-  sidebarPart: SidebarPart;
-  sessionPart: SessionPart;
-  statusbarPart: StatusbarPart;
+  activitybarPart: Part;
+  sidebarPart: Part;
+  sessionPart: Part;
+  statusbarPart: Part;
   // splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
+  mainGrid: SerializableGrid<SerializableView>;
 
   constructor(parent: HTMLElement) {
     super(parent);
@@ -101,8 +103,8 @@ export class MainLayout extends Layout implements MainLayoutService {
     //   this.splitView.layout(dimension.width);
     // else
     //   this.splitView.layout(dimension.height);
-
-    (getService(menubarServiceId) as MenubarService).layout(dimension);
+    this.mainGrid.layout(dimension.width, dimension.height);
+    // (getService(menubarServiceId) as MenubarService).layout(dimension);
   }
 
   bodyLayoutService: BodyLayoutService;
@@ -154,8 +156,131 @@ export class MainLayout extends Layout implements MainLayoutService {
     // console.log('this.parts =', this.parts);
   }
 
-  startup(): void {
+  async createGridDescriptor(): Promise<SerializedGrid> {
+
+    const initial_value = await window.ipc.invoke('config get', 'initial_value');
+    console.log('{ ...initial_value } =', { ...initial_value });
+    const { width, height } = initial_value.grid_size;
+    const sidebarSize = initial_value.sideBarSize;
+    const sidebarVisible = initial_value.sideBarVisible;
+
+    const activitybarNode: SerializedLeafNode = {
+      type: 'leaf',
+      data: { type: Parts.ACTIVITYBAR_PART },
+      size: ACTIVITYBAR_WIDTH
+    }
+
+    const sidebarNode: SerializedLeafNode = {
+      type: 'leaf',
+      data: { type: Parts.SIDEBAR_PART },
+      size: 0, // sidebarSize,
+      visible: true, // sidebarVisible
+      sashEnablement: true,
+    };
+
+    const sessionNode: SerializedLeafNode = {
+      type: 'leaf',
+      data: { type: Parts.SESSION_PART },
+      size: 0, // Update based on sibling sizes
+      sizeType: 'fill_parent'
+    };
+
+    const middleSection: SerializedNode[] = [
+      activitybarNode,
+      sidebarNode,
+      sessionNode
+    ];
+
+    const result: SerializedGrid = {
+      root: {
+        type: 'branch',
+        size: 0, // not use
+        data: [
+          {
+            type: 'leaf',
+            data: { type: Parts.TITLEBAR_PART },
+            size: TITLEBAR_HEIGHT,
+          },
+          {
+            type: 'branch',
+            data: middleSection,
+            size: 0, // not use
+            sizeType: 'fill_parent'
+          },
+          {
+            type: 'leaf',
+            data: { type: Parts.STATUSBAR_PART },
+            size: STATUSBAR_HEIGHT,
+          }
+        ]
+      },
+      orientation: Orientation.VERTICAL,
+      width,
+      height
+    }
+    return result;
+  }
+
+  async createLayout(): Promise<void> {
+
+    let platformClass = '', platform = '';
+    if(renderer.process && renderer.process.platform)
+      platform = renderer.process.platform.toLowerCase();
+
+    if(platform.indexOf('window') > -1)
+      platformClass = 'windows';
+    else if(platform.indexOf('linux') > -1)
+      platformClass = 'linux';
+    else
+      platformClass = 'mac';
+
+    const classes = coalesce(['main', 'layout', platformClass]);
+    this.container.classList.add(...classes);
+
+    const titlebarPart = this.titlebarPart = this.getPart(Parts.TITLEBAR_PART);
+    const activitybarPart = this.activitybarPart = this.getPart(Parts.ACTIVITYBAR_PART);
+    const sidebarPart = this.sidebarPart = this.getPart(Parts.SIDEBAR_PART);
+    const sessionPart = this.sessionPart = this.getPart(Parts.SESSION_PART);
+    const statusbarPart = this.statusbarPart = this.getPart(Parts.STATUSBAR_PART);
+
+    const viewMap = {
+      [ Parts.TITLEBAR_PART ]: titlebarPart,
+      [ Parts.ACTIVITYBAR_PART ]: activitybarPart,
+      [ Parts.SIDEBAR_PART ]: sidebarPart,
+      [ Parts.SESSION_PART ]: sessionPart,
+      [ Parts.STATUSBAR_PART ]: statusbarPart,
+    };
+
+    const fromJSON = ({ type }: { type: Parts }) => viewMap[type];
+    const mainGrid = SerializableGrid.deserialize(
+      await this.createGridDescriptor(),
+      { fromJSON }
+    );
+    this.container.prepend(mainGrid.element);
+    this.mainGrid = mainGrid;
+    this.parent.appendChild(this.container);
+  }
+
+  async startup(): Promise<void> {
     this.createParts();
+    await this.createLayout();
+    this.layout();
+
+    const resize = () => {
+      this.layout();
+    };
+
+    let resizeTimeout: NodeJS.Timeout = null;
+    let _handleResize = () => {
+      if(resizeTimeout)
+        clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resize, 100);
+    };
+
+    window.addEventListener('resize', () => {
+      // console.log('resize event is called ..');
+      _handleResize();
+    });
 
     /* this.create();
     this.getServices();

@@ -146,8 +146,18 @@ export class HorizontalViewItem<T extends SplitViewItemView> extends SplitViewIt
   }
 }
 
-export interface SplitViewOptions {
+export interface SplitViewItemDescriptor<T extends SplitViewItemView> {
+  size: number;
+  views: {
+    visible?: boolean;
+    size: number;
+    view: T;
+  }[];
+}
+
+export interface SplitViewOptions<T extends SplitViewItemView> {
   orientation?: Orientation;
+  descriptor?: SplitViewItemDescriptor<T>;
 }
 
 export class SplitView<T extends SplitViewItemView> {
@@ -165,7 +175,7 @@ export class SplitView<T extends SplitViewItemView> {
   sashDragState: SashDragState | undefined;
   proportions: (number | undefined)[] | undefined = undefined;
 
-  constructor(container: HTMLElement, options: SplitViewOptions) {
+  constructor(container: HTMLElement, options: SplitViewOptions<T>) {
     this.container = container;
     this.orientation = options.orientation != null ? options.orientation : Orientation.VERTICAL;
     // this.viewItems = [];
@@ -176,6 +186,23 @@ export class SplitView<T extends SplitViewItemView> {
     this.sashContainer = append(this.el, $('.sash-container'));
     this.viewContainer = append(this.el, $('.split-view-container'));
     this.container.appendChild(this.el);
+
+    if(options.descriptor) {
+      this.size = options.descriptor.size;
+      for(let i = 0; i < options.descriptor.views.length; i++) {
+        const viewDescriptor = options.descriptor.views[i];
+        const view = viewDescriptor.view;
+        const size = viewDescriptor.size;
+        console.log(`${i} ${{...view}} ${size}`);
+        this.addView(view, i);
+      }
+      /* options.descriptor.views.forEach((viewDescriptor, index) => {
+        const view = viewDescriptor.view;
+        const size = viewDescriptor.size;
+        console.log(`${index} ${{...view}} ${size}`);
+        this.addView(view, index);
+      }); */
+    }
   }
 
   getSashPosition(sash: Sash): number {
