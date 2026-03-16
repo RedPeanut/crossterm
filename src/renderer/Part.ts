@@ -31,8 +31,6 @@ export abstract class Part {
   create(): void {
     this.titleArea = this.createTitleArea();
     this.contentArea = this.createContentArea();
-    // this.titleArea && this.parent && this.parent.appendChild(this.titleArea);
-    // this.contentArea && this.parent && this.parent.appendChild(this.contentArea);
   }
 
   createTitleArea(): HTMLElement {

@@ -65,7 +65,7 @@ export class OrientationView implements SplitViewItemView {
 
   create(): HTMLElement {
     const el = this._element = $('.orientation-view');
-    const options: SplitViewOptions = { orientation: this.options.orientation };
+    const options: SplitViewOptions<OrientationView> = { orientation: this.options.orientation };
     this.splitView = new SplitView(el, options);
     return el;
   }
