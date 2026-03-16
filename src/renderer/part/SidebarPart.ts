@@ -25,7 +25,7 @@ export class SidebarPart extends Part implements SidebarPartService {
       activitybarPartService.hideActiveItem();
       this.hideActivePanel();
     }
-    (getService(mainLayoutServiceId) as MainLayout).layout();
+    // (getService(mainLayoutServiceId) as MainLayout).layout(); // not working properly
   } */
 
   mapPanelToPanelContainer = new Map<string, HTMLElement>();
