@@ -16,7 +16,8 @@ import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 import { MenubarService } from '../part/Menubar';
 import { renderer } from '..';
-import { SerializableGrid, SerializableView, SerializedGrid, SerializedLeafNode, SerializedNode } from '../component/Grid';
+// import { SerializableGrid, SerializableView, SerializedGrid, SerializedLeafNode, SerializedNode } from '../component/Grid';
+import { GridView, SerializedGridView, SerializedLeafNode, SerializedNode } from '../component/GridView';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -51,7 +52,8 @@ export class MainLayout extends Layout implements MainLayoutService {
   sessionPart: Part;
   statusbarPart: Part;
   // splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
-  mainGrid: SerializableGrid<SerializableView>;
+  // mainGrid: SerializableGrid<SerializableView>;
+  gridView: GridView;
 
   constructor(parent: HTMLElement) {
     super(parent);
@@ -103,8 +105,9 @@ export class MainLayout extends Layout implements MainLayoutService {
     //   this.splitView.layout(dimension.width);
     // else
     //   this.splitView.layout(dimension.height);
-    this.mainGrid.layout(dimension.width, dimension.height);
-    // (getService(menubarServiceId) as MenubarService).layout(dimension);
+    // this.mainGrid.layout(dimension.width, dimension.height);
+    this.gridView.layout(dimension.width, dimension.height);
+    (getService(menubarServiceId) as MenubarService).layout(dimension);
   }
 
   bodyLayoutService: BodyLayoutService;
@@ -156,7 +159,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     // console.log('this.parts =', this.parts);
   }
 
-  async createGridDescriptor(): Promise<SerializedGrid> {
+  async createGridDescriptor(): Promise<SerializedGridView> {
 
     const initial_value = await window.ipc.invoke('config get', 'initial_value');
     console.log('{ ...initial_value } =', { ...initial_value });
@@ -191,7 +194,7 @@ export class MainLayout extends Layout implements MainLayoutService {
       sessionNode
     ];
 
-    const result: SerializedGrid = {
+    const result: SerializedGridView = {
       root: {
         type: 'branch',
         size: 0, // not use
@@ -252,12 +255,17 @@ export class MainLayout extends Layout implements MainLayoutService {
     };
 
     const fromJSON = ({ type }: { type: Parts }) => viewMap[type];
-    const mainGrid = SerializableGrid.deserialize(
+    /* const mainGrid = SerializableGrid.deserialize(
       await this.createGridDescriptor(),
       { fromJSON }
     );
     this.container.prepend(mainGrid.element);
-    this.mainGrid = mainGrid;
+    this.mainGrid = mainGrid; */
+    const gridView: GridView = this.gridView = GridView.deserialize(
+      await this.createGridDescriptor(),
+      { fromJSON }
+    );
+    this.container.prepend(gridView.element);
     this.parent.appendChild(this.container);
   }
 
