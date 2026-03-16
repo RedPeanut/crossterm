@@ -63,15 +63,15 @@ export interface HorizontalViewItem {} */
 export interface SplitViewItemView {
   get element(): HTMLElement;
   get size(): number;
-  set size(size: number);
+  set size(n: number);
   get sizeType(): SplitViewItemSizeType;
-  set sizeType(sizeType: SplitViewItemSizeType);
+  set sizeType(ty: SplitViewItemSizeType);
   get minimumSize(): number;
-  set minimumSize(minimumSize: number);
+  set minimumSize(n: number);
   get maximumSize(): number;
-  set maximumSize(maximumSize: number);
+  set maximumSize(n: number);
   get border(): boolean;
-  set border(border: boolean);
+  set border(b: boolean);
   get sashEnablement(): boolean;
   set sashEnablement(b: boolean);
   layout(offset: number, size: number): void;

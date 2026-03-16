@@ -19,19 +19,19 @@ export class GroupView implements SplitViewItemView {
 
   _sizeType: SplitViewItemSizeType = 'wrap_content';
   get sizeType(): SplitViewItemSizeType { return this._sizeType; }
-  set sizeType(sizeType: SplitViewItemSizeType) { this._sizeType = sizeType; }
+  set sizeType(ty: SplitViewItemSizeType) { this._sizeType = ty; }
 
   _minimumSize: number = 0;
   get minimumSize(): number { return this._minimumSize; }
-  set minimumSize(minimumSize: number) { this._minimumSize = minimumSize; }
+  set minimumSize(n: number) { this._minimumSize = n; }
 
   _maximumSize: number = Number.POSITIVE_INFINITY;
   get maximumSize(): number { return this._maximumSize; }
-  set maximumSize(maximumSize: number) { this._maximumSize = maximumSize; }
+  set maximumSize(n: number) { this._maximumSize = n; }
 
   _border: boolean = false;
   get border(): boolean { return this._border; }
-  set border(border: boolean) { this._border = border; }
+  set border(b: boolean) { this._border = b; }
 
   _sashEnablement: boolean = true;
   get sashEnablement(): boolean { return this._sashEnablement; }
