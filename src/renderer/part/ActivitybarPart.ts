@@ -1,10 +1,11 @@
-import { activitybarPartServiceId, getService, setService, mainLayoutServiceId } from '../Service';
+import { activitybarPartServiceId, getService, setService, mainLayoutServiceId, sidebarPartServiceId } from '../Service';
 import { HorizontalViewItem } from '../component/SplitView';
 import { ACTIVITYBAR_WIDTH, MainLayoutService } from '../layout/MainLayout';
 import { Part } from '../Part';
 import { BookmarkPanel } from '../panel/BookmarkPanel';
 import { SamplePanel } from '../panel/SamplePanel';
 import { ActivitybarItem, ActivitybarItemImpl } from './item/ActivitybarItem';
+import { SidebarPartService } from './SidebarPart';
 
 export interface ActivitybarPartService {
   addItem(ul:HTMLElement, item: any): void;
@@ -14,6 +15,7 @@ export interface ActivitybarPartService {
   hideActiveItem(): void;
   changeActiveItem(id: string): void;
   restoreActiveItem(): void;
+  inflate(): void;
 }
 
 export class ActivitybarPart extends Part implements ActivitybarPartService {
@@ -128,5 +130,45 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
       this.lastActiveItem.element.classList.add('checked');
       this.lastActiveItem = undefined;
     }
+  }
+
+  inflate(): void {
+    const items = [
+      {
+        title: 'Bookmarks',
+        id: 'activitybar-item.bookmark',
+        panel: new BookmarkPanel(),
+        codicon: 'bookmark',
+        onClick: (e: any) => {
+        }
+      },
+      {
+        title: 'Sample',
+        id: 'activitybar-item.sample',
+        panel: new SamplePanel(),
+        codicon: 'info',
+        onClick: (e: any) => {
+        }
+      },
+    ];
+
+    // todo: get active item from disk
+    const activeItemIndex = 0;
+    const selected = items[activeItemIndex];
+
+    const contentArea = this.getContentArea();
+
+    const ul = document.createElement('ul');
+    ul.className = 'activitybar-item-container';
+
+    items.forEach((item) => {
+      this.addItem(ul, item);
+    });
+
+    contentArea.appendChild(ul);
+    this.updateChecked(selected.id, true);
+
+    const panel = selected.panel;
+    (getService(sidebarPartServiceId) as SidebarPartService).showPanel(panel);
   }
 }

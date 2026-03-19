@@ -2,7 +2,7 @@ import { coalesce } from '../util/arrays';
 import { Layout } from '../Layout';
 import { PartOptions, Part } from '../Part';
 import { TitlebarPart } from '../part/TitlebarPart';
-import { ActivitybarPart } from '../part/ActivitybarPart';
+import { ActivitybarPart, ActivitybarPartService } from '../part/ActivitybarPart';
 // import { BodyPart } from '../part/BodyPart';
 import { StatusbarPart } from '../part/StatusbarPart';
 import { SidebarPart } from '../part/SidebarPart';
@@ -11,7 +11,7 @@ import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../component/SplitView';
 import { getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
-import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId } from '../Service';
+import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 import { MenubarService } from '../part/Menubar';
@@ -170,22 +170,27 @@ export class MainLayout extends Layout implements MainLayoutService {
     const activitybarNode: SerializedLeafNode = {
       type: 'leaf',
       data: { type: Parts.ACTIVITYBAR_PART },
-      size: ACTIVITYBAR_WIDTH
+      size: ACTIVITYBAR_WIDTH,
+      // border: true,
     }
 
     const sidebarNode: SerializedLeafNode = {
       type: 'leaf',
       data: { type: Parts.SIDEBAR_PART },
-      size: 0, // sidebarSize,
-      visible: true, // sidebarVisible
-      sashEnablement: true,
+      size: SIDEBAR_WIDTH, // sidebarSize,
+      // visible: true, // sidebarVisible
+      border: true,
+      // sashEnablement: true,
+      minimumSize: 120,
     };
 
     const sessionNode: SerializedLeafNode = {
       type: 'leaf',
       data: { type: Parts.SESSION_PART },
-      size: 0, // Update based on sibling sizes
-      sizeType: 'fill_parent'
+      size: 0, // not use
+      sizeType: 'fill_parent',
+      sashEnablement: true,
+      minimumSize: 240,
     };
 
     const middleSection: SerializedNode[] = [
@@ -272,6 +277,7 @@ export class MainLayout extends Layout implements MainLayoutService {
   async startup(): Promise<void> {
     this.createParts();
     await this.createLayout();
+    (getService(activitybarPartServiceId) as ActivitybarPartService).inflate();
     this.layout();
 
     const resize = () => {

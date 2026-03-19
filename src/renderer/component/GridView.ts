@@ -103,6 +103,8 @@ export class BranchNode implements SplitViewItemView {
   set sashEnablement(b: boolean) { this._sashEnablement = b; }
 
   layout(offset: number, size: number): void {
+    // console.log(`layout() is called .., size = ${size}, orientation = ${this.orientation}`);
+    // console.trace();
     this.splitView.layout(size);
   }
   onDidChange(mappedEvent: MappedSashEvent): void {}
@@ -284,8 +286,11 @@ export class GridView {
   }
 
   layout(width: number, height: number, top: number = 0, left: number = 0): void {
+    // console.log(`width = ${width}, height = ${height}`);
+    // console.trace();
     // const [size, orthogonalSize, offset, orthogonalOffset] = this.root.orientation === Orientation.HORIZONTAL ? [height, width, top, left] : [width, height, left, top];
     const size = this.root.orientation === Orientation.HORIZONTAL ? width : height;
+    // console.log('size =', size);
     this.root.layout(0, size, /* {
       orthogonalSize,
       absoluteOffset: offset,

@@ -462,6 +462,7 @@ export class SplitView<T extends SplitViewItemView> {
    * @param totalSize Total size
    */
   layout(totalSize: number) {
+    // console.log('layout() is called .., totalSize =', totalSize);
     this.size = totalSize;
 
     if(this.proportions) {
