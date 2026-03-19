@@ -4,7 +4,7 @@ import { $, hide, show } from '../util/dom';
 import { HorizontalViewItem } from '../component/SplitView';
 import { Panel } from '../Panel';
 import { MainLayout, SIDEBAR_WIDTH } from '../layout/MainLayout';
-import { Part } from '../Part';
+import { Part, PartOptions } from '../Part';
 import { ActivitybarPart, ActivitybarPartService } from "./ActivitybarPart";
 
 export interface SidebarPartService extends Service {
@@ -13,9 +13,11 @@ export interface SidebarPartService extends Service {
   hideActivePanel(): Panel | undefined;
 }
 
+interface SidebarPartOptions extends PartOptions {}
+
 export class SidebarPart extends Part implements SidebarPartService {
 
-  /* override doWhenVisible(visible: boolean) {
+  override doWhenVisible(visible: boolean) {
     if(visible) {
       const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
       activitybarPartService.restoreActiveItem();
@@ -26,18 +28,18 @@ export class SidebarPart extends Part implements SidebarPartService {
       this.hideActivePanel();
     }
     // (getService(mainLayoutServiceId) as MainLayout).layout(); // not working properly
-  } */
+  }
 
   mapPanelToPanelContainer = new Map<string, HTMLElement>();
   activePanel: Panel | undefined;
   lastActivePanel: Panel | undefined = undefined;
 
-  constructor(parent: HTMLElement, options: object) {
+  constructor(parent: HTMLElement, options: SidebarPartOptions) {
     super(parent, options);
-    // this.size = SIDEBAR_WIDTH;
-    // this.minimumSize = 120;
-    // this.border = true;
-    // this.sashEnablement = false;
+    this.size = SIDEBAR_WIDTH;
+    this.minimumSize = 120;
+    this.border = true;
+    this.sashEnablement = false;
     setService(sidebarPartServiceId, this);
   }
 

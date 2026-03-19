@@ -1,7 +1,7 @@
 import { activitybarPartServiceId, getService, setService, mainLayoutServiceId, sidebarPartServiceId } from '../Service';
 import { HorizontalViewItem } from '../component/SplitView';
 import { ACTIVITYBAR_WIDTH, MainLayoutService } from '../layout/MainLayout';
-import { Part } from '../Part';
+import { Part, PartOptions } from '../Part';
 import { BookmarkPanel } from '../panel/BookmarkPanel';
 import { SamplePanel } from '../panel/SamplePanel';
 import { ActivitybarItem, ActivitybarItemImpl } from './item/ActivitybarItem';
@@ -15,18 +15,20 @@ export interface ActivitybarPartService {
   hideActiveItem(): void;
   changeActiveItem(id: string): void;
   restoreActiveItem(): void;
-  inflate(): void;
+  // inflate(): void;
 }
+
+interface ActivitybarPartOptions extends PartOptions {}
 
 export class ActivitybarPart extends Part implements ActivitybarPartService {
 
   // mainLayoutService: MainLayoutService;
   lastActiveItem: ActivitybarItem | undefined = undefined;
 
-  constructor(parent: HTMLElement, options: object) {
+  constructor(parent: HTMLElement, options: ActivitybarPartOptions) {
     super(parent, options);
-    // this.size = ACTIVITYBAR_WIDTH;
-    // this.minimumSize = ACTIVITYBAR_WIDTH;
+    this.size = ACTIVITYBAR_WIDTH;
+    this.minimumSize = ACTIVITYBAR_WIDTH;
     setService(activitybarPartServiceId, this);
   }
 
@@ -36,7 +38,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
   } */
 
   override createContentArea(): HTMLElement {
-    const container = this.parent; // super.createContentArea();
+    const container = super.createContentArea();
 
     /* const ul = document.createElement('ul');
     ul.className = 'actions-container';
@@ -70,7 +72,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
     part.appendChild(ul); */
 
-    return super.createContentArea();
+    return container; // super.createContentArea();
   }
 
   itemMap = new Map<string, ActivitybarItem>();
@@ -132,7 +134,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
     }
   }
 
-  inflate(): void {
+  /* inflate(): void {
     const items = [
       {
         title: 'Bookmarks',
@@ -170,5 +172,5 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
     const panel = selected.panel;
     (getService(sidebarPartServiceId) as SidebarPartService).showPanel(panel);
-  }
+  } */
 }

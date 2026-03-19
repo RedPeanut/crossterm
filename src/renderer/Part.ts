@@ -1,24 +1,59 @@
 import { MappedSashEvent, SplitViewItem, SplitViewItemSizeType, SplitViewItemView } from "./component/SplitView";
 import { Component } from "./Component";
+import { Parts } from "./layout/MainLayout";
 
-export interface PartOptions {
-  // sizeType?: SplitViewItemSizeType;
+export interface _PartOptions {
+  id: Parts;
+  role: string;
+  classes: [string];
+  // sizeType: SplitViewItemSizeType;
 }
 
-export abstract class Part {
+export type PartOptions = Partial<_PartOptions>;
 
-  parent: HTMLElement | undefined;
+export abstract class Part implements SplitViewItemView {
+
+  // _element: HTMLElement;
+  get element(): HTMLElement { return this.container; }
+
+  _size: number = 0;
+  get size(): number { return this._size; }
+  set size(size: number) { this._size = size; }
+
+  _sizeType: SplitViewItemSizeType = 'wrap_content';
+  get sizeType(): SplitViewItemSizeType { return this._sizeType; }
+  set sizeType(ty: SplitViewItemSizeType) { this._sizeType = ty; }
+
+  _minimumSize: number = 0;
+  get minimumSize(): number { return this._minimumSize; }
+  set minimumSize(n: number) { this._minimumSize = n; }
+
+  _maximumSize: number = Number.POSITIVE_INFINITY;
+  get maximumSize(): number { return this._maximumSize; }
+  set maximumSize(n: number) { this._maximumSize = n; }
+
+  _border: boolean = false;
+  get border(): boolean { return this._border; }
+  set border(b: boolean) { this._border = b; }
+
+  _sashEnablement: boolean = true;
+  get sashEnablement(): boolean { return this._sashEnablement; }
+  set sashEnablement(b: boolean) { this._sashEnablement = b; }
+
+  layout(offset: number, size: number): void {}
+  onDidChange(mappedEvent: MappedSashEvent): void {}
+  doWhenVisible(visible: boolean): void {}
+
+  container: HTMLElement | undefined;
   headerArea: HTMLElement | undefined;
   titleArea: HTMLElement | undefined;
   contentArea: HTMLElement | undefined;
   footerArea: HTMLElement | undefined;
-  element: HTMLElement;
+  options: PartOptions;
 
-  // options: object;
-
-  constructor(parent: HTMLElement, options: PartOptions) {
-    this.parent = parent;
-    // this.options = options;
+  constructor(container: HTMLElement, options: PartOptions) {
+    this.container = container;
+    this.options = options;
     if(options) {
       // this._sizeType = options.sizeType;
     }
@@ -39,8 +74,10 @@ export abstract class Part {
   }
 
   createContentArea(): HTMLElement {
-    this.element = this.parent;
-    return this.element;
+    this.container = document.createElement('div');
+    this.container.id = this.options.id;
+    this.container.classList.add(...this.options.classes);
+    return this.container;
   }
 
   // abstract toJSON(): object;

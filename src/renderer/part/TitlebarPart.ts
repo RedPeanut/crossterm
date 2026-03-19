@@ -1,18 +1,19 @@
 import { renderer } from '..';
-import { VerticalViewItem } from '../component/SplitView';
+import { MappedSashEvent, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from '../component/SplitView';
 import { TITLEBAR_HEIGHT } from '../layout/MainLayout';
-import { Part } from '../Part';
+import { Part, PartOptions } from '../Part';
 import { $ } from '../util/dom';
 import { Menubar } from './Menubar';
 
+interface TitlebarPartOptions extends PartOptions {}
 export class TitlebarPart extends Part {
 
   maxResBtn: HTMLElement;
 
-  constructor(parent: HTMLElement, options: object) {
+  constructor(parent: HTMLElement, options: TitlebarPartOptions) {
     super(parent, options);
-    // this.size = TITLEBAR_HEIGHT;
-    // // this.border = true;
+    this.size = TITLEBAR_HEIGHT;
+    // this.border = true;
 
     window.ipc.on('window state changed', (...args: any[]) => {
       // console.log('on window state changed is called ..');
@@ -27,7 +28,7 @@ export class TitlebarPart extends Part {
   }
 
   override createContentArea(): HTMLElement {
-    const container: HTMLElement = this.parent;
+    const container: HTMLElement = super.createContentArea(); // this.container;
 
     const menubar = $('.menubar');
     if(renderer.process.platform === 'darwin')
@@ -69,7 +70,7 @@ export class TitlebarPart extends Part {
     right.appendChild(closeBtn);
     menubar.appendChild(right);
 
-    if(renderer.process.platform === 'darwin') {
+    if(false) { // renderer.process.platform === 'darwin') {
       left.style.display = 'none';
       right.style.display = 'none';
       const title = $('.title');
@@ -78,7 +79,7 @@ export class TitlebarPart extends Part {
     }
 
     container.appendChild(menubar);
-    return super.createContentArea();
+    return container;
   }
 
 }

@@ -11,12 +11,10 @@ import { BookmarkPanel } from "../panel/BookmarkPanel";
 import { SamplePanel } from "../panel/SamplePanel";
 import { ActivitybarItem } from "../part/item/ActivitybarItem";
 
-export interface BodyOptions {
-  sizeType?: SplitViewItemSizeType;
-}
+export interface BodyLayoutOptions {}
 
 export interface BodyLayoutService extends Service {
-  getServices(): void;
+  // getServices(): void;
   inflate(): void;
   recreate(): void;
   layout(offset: number, size: number): void;
@@ -57,6 +55,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     console.log('dimension =', dimension);
     this.splitView.layout(dimension.width); // Orientation.HORIZONTAL
   } */
+
   layout(offset: number, size: number): void {
     let dimension = getClientArea(this.container);
     this.splitView.layout(dimension.width);
@@ -67,13 +66,11 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
   activitybarPart: ActivitybarPart;
   sidebarPart: SidebarPart;
   sessionPart: SessionPart;
-  splitView: SplitView<null>; // <ActivitybarPart | SidebarPart | SessionPart>;
+  splitView: SplitView<ActivitybarPart | SidebarPart | SessionPart>;
 
-  constructor(parent: HTMLElement, options: BodyOptions) {
+  constructor(parent: HTMLElement, options: BodyLayoutOptions) {
     super(parent);
-    if(options) {
-      this.sizeType = options.sizeType;
-    }
+    this.sizeType = 'fill_parent';
     this.border = true;
     this.sashEnablement = false;
     setService(bodyLayoutServiceId, this);
@@ -91,17 +88,17 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
       this.getPart(id).create();
     } */
 
-    /* const activitybarPart = this.activitybarPart = new ActivitybarPart(null, Parts.ACTIVITYBAR_PART, 'none', ['activitybar'], null);
+    const activitybarPart = this.activitybarPart = new ActivitybarPart(null, { id: Parts.ACTIVITYBAR_PART, role: 'none', classes: ['activitybar'], });
     activitybarPart.create();
-    const sidebarPart = this.sidebarPart = new SidebarPart(null, Parts.SIDEBAR_PART, 'none', ['sidebar'], null);
+    const sidebarPart = this.sidebarPart = new SidebarPart(null, { id: Parts.SIDEBAR_PART, role: 'none', classes: ['sidebar'] });
     sidebarPart.create();
-    const sessionPart = this.sessionPart = new SessionPart(null, Parts.SESSION_PART, 'none', ['session'], { sizeType: 'fill_parent' });
+    const sessionPart = this.sessionPart = new SessionPart(null, { id: Parts.SESSION_PART, role: 'none', classes: ['session']/* , sizeType: 'fill_parent' */ });
     sessionPart.create();
 
     const splitView = this.splitView = new SplitView(this.container, { orientation: Orientation.HORIZONTAL });
     splitView.addView(activitybarPart);
     splitView.addView(sidebarPart);
-    splitView.addView(sessionPart); */
+    splitView.addView(sessionPart);
 
     this.parent && this.parent.appendChild(this.container);
   }
@@ -127,6 +124,10 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
   }
 
   inflate(): void {
+
+    const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
+    const sidebarPartService = getService(sidebarPartServiceId) as SidebarPartService;
+
     const items = [
       {
         title: 'Bookmarks',
@@ -135,7 +136,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         codicon: 'bookmark',
         onClick: (e: any) => {
           // toggle or switch
-          const activeItem: ActivitybarItem = this.activitybarPartService.getActiveItem();
+          const activeItem: ActivitybarItem = activitybarPartService.getActiveItem();
           if(activeItem) {
             if(activeItem.id === items[0].id) {
               this.activitybarPart.hideActiveItem();
@@ -146,13 +147,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
             this.activitybarPart.showActiveItem(items[0].id);
           }
 
-          const activePanel = this.sidebarPartService.getActivePanel();
+          const activePanel = sidebarPartService.getActivePanel();
           if(activePanel instanceof BookmarkPanel) {
-            this.sidebarPartService.hideActivePanel();
+            sidebarPartService.hideActivePanel();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
-            this.sidebarPartService.hideActivePanel();
-            this.sidebarPartService.showPanel(items[0].panel);
+            sidebarPartService.hideActivePanel();
+            sidebarPartService.showPanel(items[0].panel);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
           (getService(mainLayoutServiceId) as MainLayout).layout();
@@ -164,7 +165,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         panel: new SamplePanel(),
         codicon: 'info',
         onClick: (e: any) => {
-          const activeItem: ActivitybarItem = this.activitybarPartService.getActiveItem();
+          const activeItem: ActivitybarItem = activitybarPartService.getActiveItem();
           if(activeItem) {
             if(activeItem.id === items[1].id) {
               this.activitybarPart.hideActiveItem();
@@ -175,13 +176,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
             this.activitybarPart.showActiveItem(items[1].id);
           }
 
-          const activePanel = this.sidebarPartService.getActivePanel();
+          const activePanel = sidebarPartService.getActivePanel();
           if(activePanel instanceof SamplePanel) {
-            this.sidebarPartService.hideActivePanel();
+            sidebarPartService.hideActivePanel();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
-            this.sidebarPartService.hideActivePanel();
-            this.sidebarPartService.showPanel(items[1].panel);
+            sidebarPartService.hideActivePanel();
+            sidebarPartService.showPanel(items[1].panel);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
           (getService(mainLayoutServiceId) as MainLayout).layout();
@@ -199,30 +200,30 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     ul.className = 'activitybar-item-container';
 
     items.forEach((item) => {
-      this.activitybarPartService.addItem(ul, item);
+      activitybarPartService.addItem(ul, item);
     });
 
     activitybarPartContent.appendChild(ul);
-    this.activitybarPartService.updateChecked(selected.id, true);
+    activitybarPartService.updateChecked(selected.id, true);
 
     // const sidebarPartContent = this.sidebarPart.getContentArea();
     const panel = selected.panel;
-    this.sidebarPartService.showPanel(panel);
+    sidebarPartService.showPanel(panel);
   }
 
   recreate(): void {
     const _old = this.sessionPart;
-    const _new = this.sessionPart = new SessionPart(null, /* Parts.SESSION_PART, 'none', ['session'], */ { sizeType: 'fill_parent' });
+    const _new = this.sessionPart = new SessionPart(null, { id: Parts.SESSION_PART, role: 'none', classes: ['session']/* , sizeType: 'fill_parent' */ });
     _new.create();
     this.splitView.replaceView(_old, _new);
   }
 
-  activitybarPartService: ActivitybarPartService;
+  /* activitybarPartService: ActivitybarPartService;
   sidebarPartService: SidebarPartService;
 
   getServices(): void {
     this.activitybarPartService = getService(activitybarPartServiceId);
     this.sidebarPartService = getService(sidebarPartServiceId);
-  }
+  } */
 
 }

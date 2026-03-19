@@ -46,12 +46,12 @@ export class MainLayout extends Layout implements MainLayoutService {
   }
 
   titlebarPart: Part;
-  // bodyLayout: BodyLayout;
-  activitybarPart: Part;
-  sidebarPart: Part;
-  sessionPart: Part;
+  bodyLayout: BodyLayout;
+  // activitybarPart: Part;
+  // sidebarPart: Part;
+  // sessionPart: Part;
   statusbarPart: Part;
-  // splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
+  splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
   // mainGrid: SerializableGrid<SerializableView>;
   gridView: GridView;
 
@@ -60,7 +60,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     setService(mainLayoutServiceId, this);
   }
 
-  /* create(): void {
+  create(): void {
     // console.log('render() is called ..');
 
     //
@@ -79,13 +79,13 @@ export class MainLayout extends Layout implements MainLayoutService {
     const classes = coalesce(['main', 'layout', platformClass]);
     this.container.classList.add(...classes);
 
-    const titlebarPart = this.titlebarPart = new TitlebarPart(null, Parts.TITLEBAR_PART, 'none', ['titlebar'], null);
+    const titlebarPart = this.titlebarPart = new TitlebarPart(null, { id: Parts.TITLEBAR_PART, role: 'none', classes: ['titlebar'], });
     titlebarPart.create();
 
     const bodyLayout = this.bodyLayout = new BodyLayout(null, { sizeType: 'fill_parent' });
     bodyLayout.create();
 
-    const statusbarPart = this.statusbarPart = new StatusbarPart(null, Parts.STATUSBAR_PART, 'none', ['statusbar'], null);
+    const statusbarPart = this.statusbarPart = new StatusbarPart(null, { id: Parts.STATUSBAR_PART, role: 'none', classes: ['statusbar'], });
     statusbarPart.create();
 
     const splitView = this.splitView = new SplitView(this.container, { orientation: Orientation.VERTICAL });
@@ -94,23 +94,23 @@ export class MainLayout extends Layout implements MainLayoutService {
     splitView.addView(statusbarPart);
 
     this.parent.appendChild(this.container);
-  } */
+  }
 
   layout(): void {
     let dimension = getClientArea(this.parent);
     // console.log('dimension =', dimension);
     position(this.container, 0, 0, 0, 0, 'relative');
     size(this.container, dimension.width, dimension.height);
-    // if(this.splitView.orientation === Orientation.HORIZONTAL)
-    //   this.splitView.layout(dimension.width);
-    // else
-    //   this.splitView.layout(dimension.height);
+    if(this.splitView.orientation === Orientation.HORIZONTAL)
+      this.splitView.layout(dimension.width);
+    else
+      this.splitView.layout(dimension.height);
     // this.mainGrid.layout(dimension.width, dimension.height);
-    this.gridView.layout(dimension.width, dimension.height);
+    // this.gridView.layout(dimension.width, dimension.height);
     (getService(menubarServiceId) as MenubarService).layout(dimension);
   }
 
-  bodyLayoutService: BodyLayoutService;
+  /* bodyLayoutService: BodyLayoutService;
   sessionPartService: SessionPartService;
 
   getServices(): void {
@@ -118,7 +118,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     this.bodyLayoutService.getServices();
     this.sessionPartService = getService(sessionPartServiceId);
     this.sessionPartService.getServices();
-  }
+  } */
 
   installIpc(): void {
     window.ipc.on('terminal data', (...args: any[]) => {
@@ -134,7 +134,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     });
   }
 
-  createPartContainer(id: string, role: string, classes: string[]): HTMLElement {
+  /* createPartContainer(id: string, role: string, classes: string[]): HTMLElement {
     const part = document.createElement('div');
     part.classList.add('part', ...classes);
     part.id = id;
@@ -260,45 +260,30 @@ export class MainLayout extends Layout implements MainLayoutService {
     };
 
     const fromJSON = ({ type }: { type: Parts }) => viewMap[type];
-    /* const mainGrid = SerializableGrid.deserialize(
-      await this.createGridDescriptor(),
-      { fromJSON }
-    );
-    this.container.prepend(mainGrid.element);
-    this.mainGrid = mainGrid; */
+    // const mainGrid = SerializableGrid.deserialize(
+    //   await this.createGridDescriptor(),
+    //   { fromJSON }
+    // );
+    // this.container.prepend(mainGrid.element);
+    // this.mainGrid = mainGrid;
     const gridView: GridView = this.gridView = GridView.deserialize(
       await this.createGridDescriptor(),
       { fromJSON }
     );
     this.container.prepend(gridView.element);
     this.parent.appendChild(this.container);
-  }
+  } */
 
   async startup(): Promise<void> {
-    this.createParts();
-    await this.createLayout();
-    (getService(activitybarPartServiceId) as ActivitybarPartService).inflate();
-    this.layout();
+    // this.createParts();
+    // await this.createLayout();
+    // (getService(activitybarPartServiceId) as ActivitybarPartService).inflate();
+    // this.layout();
+    // this.installIpc();
 
-    const resize = () => {
-      this.layout();
-    };
-
-    let resizeTimeout: NodeJS.Timeout = null;
-    let _handleResize = () => {
-      if(resizeTimeout)
-        clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resize, 100);
-    };
-
-    window.addEventListener('resize', () => {
-      // console.log('resize event is called ..');
-      _handleResize();
-    });
-
-    /* this.create();
-    this.getServices();
-    this.bodyLayoutService.inflate();
+    this.create();
+    // this.getServices();
+    (getService(bodyLayoutServiceId) as BodyLayoutService).inflate();
     this.layout();
     this.installIpc();
 
@@ -319,7 +304,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     });
 
     // create terminal after layout n ipc install
-    this.sessionPartService.createTerminal(); */
+    (getService(sessionPartServiceId) as SessionPartService).createTerminal();
   }
 
   toggleSidebar(): void {

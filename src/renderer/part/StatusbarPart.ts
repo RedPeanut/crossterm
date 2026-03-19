@@ -1,11 +1,13 @@
 import { STATUSBAR_HEIGHT } from '../layout/MainLayout';
-import { Part } from '../Part';
+import { Part, PartOptions } from '../Part';
+
+interface StatusbarPartOptions extends PartOptions {}
 
 export class StatusbarPart extends Part {
-  constructor(parent: HTMLElement, options: object) {
+  constructor(parent: HTMLElement, options: StatusbarPartOptions) {
     super(parent, options);
-    // this.size = STATUSBAR_HEIGHT;
-    // this.sashEnablement = false;
+    this.size = STATUSBAR_HEIGHT;
+    this.sashEnablement = false;
   }
 
   /* layoutContainer(offset: number): void {
@@ -14,6 +16,7 @@ export class StatusbarPart extends Part {
   } */
 
   override createContentArea(): HTMLElement {
-    return super.createContentArea();
+    const container = super.createContentArea();
+    return container;
   }
 }

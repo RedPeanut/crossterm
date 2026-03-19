@@ -2,7 +2,7 @@ import { Orientation } from '../component/Sash';
 import { Group, isSplitItem, SplitItem } from '../Types';
 import { $, getClientArea } from '../util/dom';
 import { SplitView, SplitViewItem, SplitViewItemView, MappedSashEvent } from '../component/SplitView';
-import { Part } from '../Part';
+import { Part, PartOptions } from '../Part';
 import { GroupView } from './view/GroupView';
 import { OrientationView } from './view/OrientationView';
 import { Service, sessionPartServiceId, setService } from '../Service';
@@ -18,9 +18,11 @@ export interface SessionPartService extends Service {
   fit(): void;
 }
 
+interface SessionPartOptions extends PartOptions {}
+
 export class SessionPart extends Part implements SessionPartService {
 
-  /* override layout(offset: number, size: number): void {
+  override layout(offset: number, size: number): void {
     // console.log('[SessionPart] layout() is called ..');
     // console.log({ offset, size });
 
@@ -34,18 +36,18 @@ export class SessionPart extends Part implements SessionPartService {
   override onDidChange(mappedEvent: MappedSashEvent): void {
     console.log('onDidChange is called .., mappedEvent =', mappedEvent);
     // save sidebar size in here
-  } */
+  }
 
   /* layoutContainer(offset: number): void {
     this._splitViewContainer.style.left = `${offset}px`;
     this._splitViewContainer.style.width = `${this._size}px`;
   } */
 
-  constructor(parent: HTMLElement, options: object) {
+  constructor(parent: HTMLElement, options: SessionPartOptions) {
     super(parent, options);
-    // this.sizeType = 'fill_parent';
-    // this.border = true;
-    // this.minimumSize = 240;
+    this.sizeType = 'fill_parent';
+    this.border = true;
+    this.minimumSize = 240;
     setService(sessionPartServiceId, this);
   }
 
@@ -95,12 +97,12 @@ export class SessionPart extends Part implements SessionPartService {
 
   override createContentArea(): HTMLElement {
     // console.log('[SessionPart] createContentArea() is called ..');
-    const container: HTMLElement = this.parent; // super.createContentArea();
+    const container: HTMLElement = super.createContentArea();
     const resultView: OrientationView | GroupView | undefined = this.renderTree(null, wrapper.tree, 0);
     this.resultView = resultView;
     resultView && container.appendChild(resultView.element);
 
-    return super.createContentArea();
+    return container; // super.createContentArea();
   }
 
   createTerminal_r(v: OrientationView): void {
