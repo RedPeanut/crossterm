@@ -78,7 +78,7 @@ class LayoutController {}
 export class BranchNode implements SplitViewItemView {
   get element(): HTMLElement { return this._element; }
 
-  _size: number = 0;
+  _size: number;
   get size(): number { return this._size; }
   set size(n: number) { this._size = n; }
 
@@ -86,7 +86,7 @@ export class BranchNode implements SplitViewItemView {
   get sizeType(): SplitViewItemSizeType { return this._sizeType; }
   set sizeType(ty: SplitViewItemSizeType) { this._sizeType = ty; }
 
-  _minimumSize: number = 0;
+  _minimumSize: number;
   get minimumSize(): number { return this._minimumSize; }
   set minimumSize(n: number) { this._minimumSize = n; }
 
@@ -94,11 +94,11 @@ export class BranchNode implements SplitViewItemView {
   get maximumSize(): number { return this._maximumSize; }
   set maximumSize(n: number) { this._maximumSize = n; }
 
-  _border: boolean = false;
+  _border: boolean;
   get border(): boolean { return this._border; }
   set border(b: boolean) { this._border = b; }
 
-  _sashEnablement: boolean = false;
+  _sashEnablement: boolean;
   get sashEnablement(): boolean { return this._sashEnablement; }
   set sashEnablement(b: boolean) { this._sashEnablement = b; }
 
@@ -126,12 +126,12 @@ export class BranchNode implements SplitViewItemView {
       childDescriptors?: NodeDescriptor[]
   ) {
     this._orientation = orientation;
-    this._size = node.size;
-    this._sizeType = node.sizeType ? node.sizeType : 'wrap_content';
+    this._size = node.size || 0;
+    this._sizeType = node.sizeType || 'wrap_content';
     // this._visible = node.visible;
-    this._sashEnablement = node.sashEnablement ? node.sashEnablement : false;
-    this._border = node.border ? node.border : false;
-    this._minimumSize = node.minimumSize ? node.minimumSize : 0;
+    this._sashEnablement = node.sashEnablement || false;
+    this._border = node.border || false;
+    this._minimumSize = node.minimumSize || 0;
 
     this._element = $('.grid-branch-node');
     if(!childDescriptors) {
@@ -155,7 +155,7 @@ export class BranchNode implements SplitViewItemView {
 class LeafNode implements SplitViewItemView {
   get element(): HTMLElement { return this._view.element; }
 
-  _size: number = 0;
+  _size: number;
   get size(): number { return this._size; }
   set size(n: number) { this._size = n; }
 
@@ -163,7 +163,7 @@ class LeafNode implements SplitViewItemView {
   get sizeType(): SplitViewItemSizeType { return this._sizeType; }
   set sizeType(ty: SplitViewItemSizeType) { this._sizeType = ty; }
 
-  _minimumSize: number = 0;
+  _minimumSize: number;
   get minimumSize(): number { return this._minimumSize; }
   set minimumSize(n: number) { this._minimumSize = n; }
 
@@ -171,11 +171,11 @@ class LeafNode implements SplitViewItemView {
   get maximumSize(): number { return this._maximumSize; }
   set maximumSize(n: number) { this._maximumSize = n; }
 
-  _border: boolean = false;
+  _border: boolean;
   get border(): boolean { return this._border; }
   set border(b: boolean) { this._border = b; }
 
-  _sashEnablement: boolean = false;
+  _sashEnablement: boolean;
   get sashEnablement(): boolean { return this._sashEnablement; }
   set sashEnablement(b: boolean) { this._sashEnablement = b; }
 
@@ -201,11 +201,11 @@ class LeafNode implements SplitViewItemView {
   ) {
     this._view = view;
     this._orientation = orientation;
-    this._size = node.size;
-    this._sizeType = node.sizeType ? node.sizeType : 'wrap_content';
-    this._sashEnablement = node.sashEnablement ? node.sashEnablement : false;
-    this._border = node.border ? node.border : false;
-    this._minimumSize = node.minimumSize ? node.minimumSize : 0;
+    this._size = node.size || 0;
+    this._sizeType = node.sizeType || 'wrap_content';
+    this._sashEnablement = node.sashEnablement || false;
+    this._border = node.border || false;
+    this._minimumSize = node.minimumSize || 0;
   }
 }
 
