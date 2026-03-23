@@ -57,7 +57,7 @@ export class SidebarPart extends Part implements SidebarPartService {
 
     let panelContainer = this.mapPanelToPanelContainer.get(panel.getId());
     if(!panelContainer) {
-      panelContainer = $('.panel');
+      panelContainer = $('.panel-container');
       panelContainer.id = panel.getId();
       panel.create(panelContainer);
       this.mapPanelToPanelContainer.set(panel.getId(), panelContainer);
