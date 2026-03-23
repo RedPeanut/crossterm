@@ -43,8 +43,8 @@ export class SessionPart extends Part implements SessionPartService {
     this._splitViewContainer.style.width = `${this._size}px`;
   } */
 
-  constructor(parent: HTMLElement, options: SessionPartOptions) {
-    super(parent, options);
+  constructor(options: SessionPartOptions) {
+    super(options);
     this.sizeType = 'fill_parent';
     this.border = true;
     this.minimumSize = 240;
@@ -95,14 +95,15 @@ export class SessionPart extends Part implements SessionPartService {
     return undefined;
   }
 
-  override createContentArea(): HTMLElement {
+  override create(): void {
     // console.log('[SessionPart] createContentArea() is called ..');
-    const container: HTMLElement = super.createContentArea();
+    super.create();
+    const container: HTMLElement = this.container; // super.createContentArea();
     const resultView: OrientationView | GroupView | undefined = this.renderTree(null, wrapper.tree, 0);
     this.resultView = resultView;
     resultView && container.appendChild(resultView.element);
 
-    return container; // super.createContentArea();
+    // return container; // super.createContentArea();
   }
 
   createTerminal_r(v: OrientationView): void {

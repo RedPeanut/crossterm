@@ -4,8 +4,8 @@ import { Part, PartOptions } from '../Part';
 interface StatusbarPartOptions extends PartOptions {}
 
 export class StatusbarPart extends Part {
-  constructor(parent: HTMLElement, options: StatusbarPartOptions) {
-    super(parent, options);
+  constructor(options: StatusbarPartOptions) {
+    super(options);
     this.size = STATUSBAR_HEIGHT;
     this.sashEnablement = false;
   }
@@ -15,8 +15,9 @@ export class StatusbarPart extends Part {
     this._splitViewContainer.style.height = `${this._size}px`;
   } */
 
-  override createContentArea(): HTMLElement {
-    const container = super.createContentArea();
+  override create(): HTMLElement {
+    super.create();
+    const container = this.container; // super.createContentArea();
     return container;
   }
 }

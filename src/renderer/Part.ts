@@ -46,40 +46,20 @@ export abstract class Part implements SplitViewItemView {
   doWhenVisible(visible: boolean): void {}
 
   container: HTMLElement | undefined;
-  headerArea: HTMLElement | undefined;
-  titleArea: HTMLElement | undefined;
-  contentArea: HTMLElement | undefined;
-  footerArea: HTMLElement | undefined;
+  // headerArea: HTMLElement | undefined;
+  // titleArea: HTMLElement | undefined;
+  // contentArea: HTMLElement | undefined;
+  // footerArea: HTMLElement | undefined;
   options: PartOptions;
 
-  constructor(container: HTMLElement, options: PartOptions) {
-    this.container = container;
+  constructor(options: PartOptions) {
     this.options = options;
-    if(options) {
-      // this._sizeType = options.sizeType;
-    }
-  }
-
-  getContentArea(): HTMLElement | undefined {
-    return this.contentArea;
   }
 
   create(): void {
-    this.titleArea = this.createTitleArea();
-    this.contentArea = this.createContentArea();
-  }
-
-  createTitleArea(): HTMLElement {
-    // Method not implemented yet
-    return null;
-  }
-
-  createContentArea(): HTMLElement {
     this.container = document.createElement('div');
     this.container.id = this.options.id;
     this.container.classList.add('part', ...this.options.classes);
-    return this.container;
   }
 
-  // abstract toJSON(): object;
 }

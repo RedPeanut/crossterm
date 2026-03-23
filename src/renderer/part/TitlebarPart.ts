@@ -10,8 +10,8 @@ export class TitlebarPart extends Part {
 
   maxResBtn: HTMLElement;
 
-  constructor(parent: HTMLElement, options: TitlebarPartOptions) {
-    super(parent, options);
+  constructor(options: TitlebarPartOptions) {
+    super(options);
     this.size = TITLEBAR_HEIGHT;
     // this.border = true;
 
@@ -27,8 +27,9 @@ export class TitlebarPart extends Part {
     });
   }
 
-  override createContentArea(): HTMLElement {
-    const container: HTMLElement = super.createContentArea(); // this.container;
+  override create(): void {
+    super.create();
+    const container: HTMLElement = this.container;
 
     const menubar = $('.menubar');
     if(renderer.process.platform === 'darwin')
@@ -79,7 +80,7 @@ export class TitlebarPart extends Part {
     }
 
     container.appendChild(menubar);
-    return container;
+    // return container;
   }
 
 }

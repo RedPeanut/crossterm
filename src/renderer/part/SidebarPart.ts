@@ -35,8 +35,8 @@ export class SidebarPart extends Part implements SidebarPartService {
   activePanel: Panel | undefined;
   lastActivePanel: Panel | undefined = undefined;
 
-  constructor(parent: HTMLElement, options: SidebarPartOptions) {
-    super(parent, options);
+  constructor(options: SidebarPartOptions) {
+    super(options);
     this.size = renderer.initial_value.sidebar_size;
     this.minimumSize = 120;
     this.border = true;
@@ -61,8 +61,8 @@ export class SidebarPart extends Part implements SidebarPartService {
       this.mapPanelToPanelContainer.set(panel.getId(), panelContainer);
     }
 
-    const contentArea = this.getContentArea();
-    contentArea.appendChild(panelContainer);
+    const container = this.container;
+    container.appendChild(panelContainer);
     show(panelContainer);
     panel.setVisible(true);
 

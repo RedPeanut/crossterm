@@ -25,8 +25,8 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
   // mainLayoutService: MainLayoutService;
   lastActiveItem: ActivitybarItem | undefined = undefined;
 
-  constructor(parent: HTMLElement, options: ActivitybarPartOptions) {
-    super(parent, options);
+  constructor(options: ActivitybarPartOptions) {
+    super(options);
     this.size = ACTIVITYBAR_WIDTH;
     this.minimumSize = ACTIVITYBAR_WIDTH;
     setService(activitybarPartServiceId, this);
@@ -37,8 +37,9 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
     this._splitViewContainer.style.width = `${this._size}px`;
   } */
 
-  override createContentArea(): HTMLElement {
-    const container = super.createContentArea();
+  override create(): void {
+    super.create();
+    const container = this.container; // super.createContentArea();
 
     /* const ul = document.createElement('ul');
     ul.className = 'actions-container';
@@ -72,7 +73,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
     part.appendChild(ul); */
 
-    return container; // super.createContentArea();
+    // return container; // super.createContentArea();
   }
 
   itemMap = new Map<string, ActivitybarItem>();

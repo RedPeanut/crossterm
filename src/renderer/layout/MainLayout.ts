@@ -79,13 +79,13 @@ export class MainLayout extends Layout implements MainLayoutService {
     const classes = coalesce(['main', 'layout', platformClass]);
     this.container.classList.add(...classes);
 
-    const titlebarPart = this.titlebarPart = new TitlebarPart(null, { id: Parts.TITLEBAR_PART, role: 'none', classes: ['titlebar'], });
+    const titlebarPart = this.titlebarPart = new TitlebarPart({ id: Parts.TITLEBAR_PART, role: 'none', classes: ['titlebar'], });
     titlebarPart.create();
 
     const bodyLayout = this.bodyLayout = new BodyLayout(null, { sizeType: 'fill_parent' });
     bodyLayout.create();
 
-    const statusbarPart = this.statusbarPart = new StatusbarPart(null, { id: Parts.STATUSBAR_PART, role: 'none', classes: ['statusbar'], });
+    const statusbarPart = this.statusbarPart = new StatusbarPart({ id: Parts.STATUSBAR_PART, role: 'none', classes: ['statusbar'], });
     statusbarPart.create();
 
     const splitView = this.splitView = new SplitView(this.container, { orientation: Orientation.VERTICAL });

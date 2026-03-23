@@ -89,11 +89,11 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
       this.getPart(id).create();
     } */
 
-    const activitybarPart = this.activitybarPart = new ActivitybarPart(null, { id: Parts.ACTIVITYBAR_PART, role: 'none', classes: ['activitybar'], });
+    const activitybarPart = this.activitybarPart = new ActivitybarPart({ id: Parts.ACTIVITYBAR_PART, role: 'none', classes: ['activitybar'], });
     activitybarPart.create();
-    const sidebarPart = this.sidebarPart = new SidebarPart(null, { id: Parts.SIDEBAR_PART, role: 'none', classes: ['sidebar'] });
+    const sidebarPart = this.sidebarPart = new SidebarPart({ id: Parts.SIDEBAR_PART, role: 'none', classes: ['sidebar'] });
     sidebarPart.create();
-    const sessionPart = this.sessionPart = new SessionPart(null, { id: Parts.SESSION_PART, role: 'none', classes: ['session']/* , sizeType: 'fill_parent' */ });
+    const sessionPart = this.sessionPart = new SessionPart({ id: Parts.SESSION_PART, role: 'none', classes: ['session']/* , sizeType: 'fill_parent' */ });
     sessionPart.create();
 
     const splitView = this.splitView = new SplitView(this.container, { orientation: Orientation.HORIZONTAL });
@@ -195,7 +195,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     const activeItemIndex = 0;
     const selected = items[activeItemIndex];
 
-    const activitybarPartContent = this.activitybarPart.getContentArea();
+    const activitybarPartContainer = this.activitybarPart.container;
 
     const ul = document.createElement('ul');
     ul.className = 'activitybar-item-container';
@@ -204,7 +204,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
       activitybarPartService.addItem(ul, item);
     });
 
-    activitybarPartContent.appendChild(ul);
+    activitybarPartContainer.appendChild(ul);
     activitybarPartService.updateChecked(selected.id, true);
 
     // const sidebarPartContent = this.sidebarPart.getContentArea();
@@ -214,7 +214,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
   recreate(): void {
     const _old = this.sessionPart;
-    const _new = this.sessionPart = new SessionPart(null, { id: Parts.SESSION_PART, role: 'none', classes: ['session']/* , sizeType: 'fill_parent' */ });
+    const _new = this.sessionPart = new SessionPart({ id: Parts.SESSION_PART, role: 'none', classes: ['session']/* , sizeType: 'fill_parent' */ });
     _new.create();
     this.splitView.replaceView(_old, _new);
   }
