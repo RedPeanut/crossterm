@@ -6,6 +6,7 @@ import { MainLayout, MainLayoutService } from './layout/MainLayout';
 import { domContentLoaded } from './util/dom';
 
 import { ElectronHandler } from '../main/preload';
+import { ConfigsInitialValueType } from '../common/configs';
 
 declare global {
   interface Window {
@@ -38,6 +39,8 @@ export class Renderer {
     license: string
   };
 
+  initial_value: ConfigsInitialValueType;
+
   constructor() {}
 
   async open() {
@@ -52,6 +55,7 @@ export class Renderer {
     this.process.platform = await window.ipc.invoke('process get', 'property', 'platform');
     this.path.sep = this.process.platform === 'win32' ? '\\' : '/';
     this.package_json = await window.ipc.invoke('get package json');
+    this.initial_value = await window.ipc.invoke('config get', 'initial_value');
   }
 }
 

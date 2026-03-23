@@ -6,6 +6,7 @@ import { Panel } from '../Panel';
 import { MainLayout, SIDEBAR_WIDTH } from '../layout/MainLayout';
 import { Part, PartOptions } from '../Part';
 import { ActivitybarPart, ActivitybarPartService } from "./ActivitybarPart";
+import { renderer } from '..';
 
 export interface SidebarPartService extends Service {
   showPanel(panel: Panel): void;
@@ -36,7 +37,7 @@ export class SidebarPart extends Part implements SidebarPartService {
 
   constructor(parent: HTMLElement, options: SidebarPartOptions) {
     super(parent, options);
-    this.size = SIDEBAR_WIDTH;
+    this.size = renderer.initial_value.sidebar_size;
     this.minimumSize = 120;
     this.border = true;
     this.sashEnablement = false;

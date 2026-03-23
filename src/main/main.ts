@@ -22,7 +22,7 @@ import TerminalLocal from './terminal/TerminalLocal';
 import TerminalSsh from './terminal/TerminalSsh';
 import TerminalBase from './terminal/TerminalBase';
 import PotDb from 'potdb';
-import default_configs, { ConfigsType } from './configs';
+import default_configs, { ConfigsType } from '../common/configs';
 
 class AppUpdater {
   constructor() {
