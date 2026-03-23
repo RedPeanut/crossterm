@@ -7,6 +7,7 @@ import { domContentLoaded } from './util/dom';
 
 import { ElectronHandler } from '../main/preload';
 import { ConfigsInitialValueType } from '../common/configs';
+import { ListItemElem } from './component/List';
 
 declare global {
   interface Window {
@@ -40,6 +41,7 @@ export class Renderer {
   };
 
   initial_value: ConfigsInitialValueType;
+  list: ListItemElem[];
 
   constructor() {}
 
@@ -56,6 +58,7 @@ export class Renderer {
     this.path.sep = this.process.platform === 'win32' ? '\\' : '/';
     this.package_json = await window.ipc.invoke('get package json');
     this.initial_value = await window.ipc.invoke('config get', 'initial_value');
+    this.list = await window.ipc.invoke('config get', 'list');
   }
 }
 

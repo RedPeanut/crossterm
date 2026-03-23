@@ -3,6 +3,7 @@ import { List, Node } from '../component/List';
 import * as dom from '../util/dom';
 import { Panel } from "../Panel";
 import { bookmarkPanelServiceId, setService } from '../Service';
+import { renderer } from '..';
 
 export interface BookmarkPanelService {
   onSelect: (id: string) => void;
@@ -22,7 +23,7 @@ export class BookmarkPanel extends Panel implements BookmarkPanelService {
   override create(parent: HTMLElement): void {
     super.create(parent);
     this.container = dom.append(parent, dom.$('.bookmark-panel'));
-    const list = this.list = new List(this.container);
+    const list = this.list = new List(this.container, renderer.list);
     list.create();
   }
 

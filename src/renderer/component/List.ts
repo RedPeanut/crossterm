@@ -40,62 +40,11 @@ export class List {
 
   tree: Tree;
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, list: ListItemElem[]) {
     this.container = container;
     this.state = {
       selectedIds: [],
-      showList: [
-        {
-          type: 'folder',
-          title: 'folder',
-          id: '52528ee3-aa4f-44a5-b763-5cf69acacf51',
-          children: [
-            {
-              id: 'e54af9c1-f003-4b1b-8db4-e796f69a9a4d',
-              title: 'xyz',
-              type: 'remote',
-              url: {
-                host: '192.168.0.25',
-                port: 22,
-                username: 'kimjk',
-                password: '1234',
-              },
-              size: { row: 24, col: 80 }
-            },
-            {
-              type: 'local',
-              title: 'local',
-              id: '96367ed9-6fb1-434b-b45d-de9d2d21898a',
-            }
-          ],
-          // isCollapsed: false
-        },
-        {
-          type: 'remote',
-          title: 'remote',
-          // url: 'www.remote.com',
-          id: '8d65f5a3-306d-44c7-a43f-b5abc17b6a2b',
-          url: {
-            host: '192.168.200.104',
-            port: 22,
-            username: 'kimjk',
-            password: '1234',
-            // password: '1111',
-          },
-          size: { row: 24, col: 80 }
-        },
-        /* {
-          type: 'group',
-          title: 'group',
-          id: 'cbf8ea19-4474-4c15-8af0-3a4bdcdff717'
-        }, */
-        {
-          type: 'local',
-          title: 'local',
-          id: '751b26d0-5c94-4328-a0e8-23fdd85d160f',
-          size: { row: 24, col: 80 },
-        }
-      ]
+      showList: list || []
     };
   }
 
