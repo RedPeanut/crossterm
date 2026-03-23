@@ -15,9 +15,9 @@ export class StatusbarPart extends Part {
     this._splitViewContainer.style.height = `${this._size}px`;
   } */
 
-  override create(): HTMLElement {
+  override create(): void {
     super.create();
     const container = this.container; // super.createContentArea();
-    return container;
+    // return container;
   }
 }

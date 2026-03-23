@@ -1,6 +1,7 @@
 import { $ } from "../../util/dom";
 import { TerminalItem } from "../../../common/Types";
 import { Tab } from "./Tab";
+import { Group } from "../../Types";
 
 export class Tabs {
   parent: HTMLElement;

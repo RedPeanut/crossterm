@@ -81,7 +81,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
   addItem(ul: HTMLElement, item: any): void {
     let activitybarItem = this.itemMap.get(item.id);
     if(!activitybarItem) {
-      let impl: ActivitybarItem = new ActivitybarItemImpl(ul, item.id, item.panel);
+      let impl: ActivitybarItem = new ActivitybarItemImpl(ul, item.id);
       impl.append(item.onClick, item.codicon);
       this.itemMap.set(item.id, impl);
     }
