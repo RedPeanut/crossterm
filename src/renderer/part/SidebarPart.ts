@@ -44,13 +44,7 @@ export class SidebarPart extends Part implements SidebarPartService {
     setService(sidebarPartServiceId, this);
   }
 
-  /* layoutContainer(offset: number): void {
-    this._splitViewContainer.style.left = `${offset}px`;
-    this._splitViewContainer.style.width = `${this._size}px`;
-  } */
-
   showPanel(panel: Panel): void {
-    // Remember Panel
     this.activePanel = panel;
 
     let panelContainer = this.mapPanelToPanelContainer.get(panel.getId());
@@ -65,11 +59,6 @@ export class SidebarPart extends Part implements SidebarPartService {
     container.appendChild(panelContainer);
     show(panelContainer);
     panel.setVisible(true);
-
-    /* // Make sure the panel is layed out
-    if(this.contentAreaSize) {
-      panel.layout(this.contentAreaSize);
-    } */
   }
 
   getActivePanel(): Panel | undefined {
