@@ -5,7 +5,7 @@ import { Parts } from "./layout/MainLayout";
 export interface _PartOptions {
   id: Parts;
   role: string;
-  classes: [string];
+  classes: string[];
   // sizeType: SplitViewItemSizeType;
 }
 
@@ -76,7 +76,7 @@ export abstract class Part implements SplitViewItemView {
   createContentArea(): HTMLElement {
     this.container = document.createElement('div');
     this.container.id = this.options.id;
-    this.container.classList.add(...this.options.classes);
+    this.container.classList.add('part', ...this.options.classes);
     return this.container;
   }
 
