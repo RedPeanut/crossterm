@@ -133,6 +133,53 @@ body { height: 100%; }
   width: 100%;
 }
 
+/* PaneView */
+.pane-view { height: 100%; }
+
+.pane-view .pane-header {
+  height: 22px;
+  font-size: 11px;
+  font-weight: bold;
+  overflow: hidden;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+}
+
+.pane-view .pane-header .title {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 11px;
+  min-width: 85px; /* 85*4/5=68px */
+}
+
+.pane-view .pane .pane-header .actions {
+  margin-left: auto;
+}
+
+.pane-view .pane.hover .pane-header ul {
+	display: flex;
+}
+
+.pane-view .pane .pane-header ul {
+	display: none;
+  /* display: flex; */
+  list-style-type: none;
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.pane-view .pane .pane-header ul li { margin-right: 4px; }
+.pane-view .pane .pane-header ul li a {
+  width: 14px; height: 14px; font-size:14px; padding: 1px;
+  /* width: 16px; height: 16px; font-size:16px; padding: 3px; */
+}
+
+.pane-view .pane.bookmark { height: 100%; }
+
 .grid-branch-node { height: 100%; }
 
 /* Titlebar */
@@ -351,8 +398,8 @@ body { height: 100%; }
 
 /* List, Tree, Node, ListItem */
 .sidebar .list {
-  padding: 5px 10px;
-  overflow: auto;
+  /* padding: 5px 10px; */
+  overflow-y: auto;
 }
 
 .sidebar .list .tree {}

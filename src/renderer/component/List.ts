@@ -284,8 +284,8 @@ export class Node {
 
     node.onclick = (e) => {
       onSelect(data.id);
-      const bookmarkPanelService = getService(bookmarkPanelServiceId);
-      bookmarkPanelService.onSelect(data.id);
+      // const bookmarkPanelService = getService(bookmarkPanelServiceId);
+      // bookmarkPanelService.onSelect(data.id);
     };
     node.ondblclick = (e) => onDoubleClick(data.id);
 

@@ -1,12 +1,13 @@
 import { Service, setService, getService,
   activitybarPartServiceId, mainLayoutServiceId, sidebarPartServiceId } from '../Service';
-import { $, hide, show } from '../util/dom';
+import { $, getClientArea, hide, show } from '../util/dom';
 import { HorizontalViewItem } from '../component/SplitView';
 import { Panel } from '../Panel';
 import { MainLayout, SIDEBAR_WIDTH } from '../layout/MainLayout';
 import { Part, PartOptions } from '../Part';
 import { ActivitybarPart, ActivitybarPartService } from "./ActivitybarPart";
 import { renderer } from '..';
+import { PaneView } from '../PaneView';
 
 export interface SidebarPartService extends Service {
   // showPanel(panel: Panel): void;
@@ -17,6 +18,13 @@ export interface SidebarPartService extends Service {
 interface SidebarPartOptions extends PartOptions {}
 
 export class SidebarPart extends Part implements SidebarPartService {
+
+  override layout(offset: number, size: number): void {
+    let dimension = getClientArea(this.container);
+    let width = dimension.width, height = dimension.height;
+    // if(this.titleArea != null) height = height - Part.TITLE_HEIGHT;
+    this.activePaneView && this.activePaneView.layout(width, height);
+  }
 
   override doWhenVisible(visible: boolean) {
     if(visible) {
@@ -92,4 +100,29 @@ export class SidebarPart extends Part implements SidebarPartService {
 
     this.showPanel(this.lastActivePanel);
   }
+
+  activePaneView: PaneView;
+  paneViewMap = new Map<string, PaneView>();
+
+  show(title: string, paneView: PaneView) {
+    this.activePaneView = paneView;
+    let _paneView = this.paneViewMap.get(paneView.id);
+    if(!_paneView) {
+      paneView.create();
+      this.paneViewMap.set(paneView.id, paneView);
+    }
+
+    const container = this.container; // getContentArea();
+    container.appendChild(paneView.element);
+
+    // this.layout();
+    (getService(mainLayoutServiceId) as MainLayout).layout();
+  }
+
+  override create(): void {
+    super.create();
+    const container = this.container;
+
+  }
+
 }

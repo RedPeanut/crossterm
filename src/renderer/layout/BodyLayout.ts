@@ -10,6 +10,8 @@ import { activitybarPartServiceId, bodyLayoutServiceId, getService, mainLayoutSe
 import { BookmarkPanel } from "../panel/BookmarkPanel";
 import { SamplePanel } from "../panel/SamplePanel";
 import { ActivitybarItem } from "../part/item/ActivitybarItem";
+import { BookmarkPaneView } from "../paneView/BookmarkPaneView";
+import { SamplePaneView } from "../paneView/SamplePaneView";
 
 export interface BodyLayoutOptions {}
 
@@ -124,7 +126,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     }
   }
 
-  inflate(): void {
+  _inflate(): void {
 
     // const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
     // const sidebarPartService = getService(sidebarPartServiceId) as SidebarPartService;
@@ -210,6 +212,44 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     // const sidebarPartContent = this.sidebarPart.getContentArea();
     const panel = selected.panel;
     this.sidebarPart.showPanel(panel);
+  }
+
+  inflate(): void {
+    const items = [
+      {
+        title: 'Bookmarks',
+        id: 'activitybar-item.bookmark',
+        paneView: new BookmarkPaneView(),
+        codicon: 'bookmark',
+        onClick: (e: any) => {
+        }
+      },
+      {
+        title: 'Sample',
+        id: 'activitybar-item.sample',
+        paneView: new SamplePaneView(),
+        codicon: 'info',
+        onClick: (e: any) => {
+        }
+      },
+    ];
+
+    const activeItemIndex = 0;
+    const selected = items[activeItemIndex];
+
+    const activitybarPartContainer = this.activitybarPart.container; // getContentArea();
+
+    const ul = document.createElement('ul');
+    ul.className = 'activitybar-item-container';
+
+    items.forEach((item) => {
+      this.activitybarPart.addItem(ul, item);
+    });
+
+    activitybarPartContainer.appendChild(ul);
+    this.activitybarPart.updateChecked(selected.id, true);
+
+    this.sidebarPart.show(selected.title, selected.paneView);
   }
 
   recreate(): void {
