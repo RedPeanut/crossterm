@@ -62,6 +62,7 @@ export interface HorizontalViewItem {} */
 
 export interface SplitViewItemView {
   get element(): HTMLElement;
+  set element(e: HTMLElement);
   get size(): number;
   set size(n: number);
   get sizeType(): SplitViewItemSizeType;

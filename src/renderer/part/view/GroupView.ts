@@ -11,7 +11,9 @@ export interface GroupViewOptions {
 
 export class GroupView implements SplitViewItemView {
 
+  _element: HTMLElement;
   get element(): HTMLElement { return this._element; }
+  set element(e: HTMLElement) { this._element = e; }
 
   _size: number = 0;
   get size(): number { return this._size; }
@@ -42,7 +44,6 @@ export class GroupView implements SplitViewItemView {
   doWhenVisible(visible: boolean): void {}
 
   parent: HTMLElement;
-  _element: HTMLElement;
   group: Group;
   style: {};
 

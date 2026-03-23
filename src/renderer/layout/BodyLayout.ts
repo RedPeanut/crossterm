@@ -23,6 +23,7 @@ export interface BodyLayoutService extends Service {
 export class BodyLayout extends Layout implements BodyLayoutService, SplitViewItemView {
 
   get element(): HTMLElement { return this.container; }
+  set element(e: HTMLElement) { this.container = e; }
 
   _size: number = 0;
   get size(): number { return this._size; }

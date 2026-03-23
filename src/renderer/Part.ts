@@ -15,6 +15,7 @@ export abstract class Part implements SplitViewItemView {
 
   // _element: HTMLElement;
   get element(): HTMLElement { return this.container; }
+  set element(e: HTMLElement) { this.container = e; }
 
   _size: number = 0;
   get size(): number { return this._size; }
