@@ -9,9 +9,9 @@ import { ActivitybarPart, ActivitybarPartService } from "./ActivitybarPart";
 import { renderer } from '..';
 
 export interface SidebarPartService extends Service {
-  showPanel(panel: Panel): void;
-  getActivePanel(): Panel | undefined;
-  hideActivePanel(): Panel | undefined;
+  // showPanel(panel: Panel): void;
+  // getActivePanel(): Panel | undefined;
+  // hideActivePanel(): Panel | undefined;
 }
 
 interface SidebarPartOptions extends PartOptions {}

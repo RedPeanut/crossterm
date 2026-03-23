@@ -8,12 +8,12 @@ import { ActivitybarItem, ActivitybarItemImpl } from './item/ActivitybarItem';
 import { SidebarPartService } from './SidebarPart';
 
 export interface ActivitybarPartService {
-  addItem(ul:HTMLElement, item: any): void;
-  updateChecked(id: string, checked: boolean): void;
-  getActiveItem(): ActivitybarItem | undefined;
-  showActiveItem(id: string): void;
+  // addItem(ul:HTMLElement, item: any): void;
+  // updateChecked(id: string, checked: boolean): void;
+  // getActiveItem(): ActivitybarItem | undefined;
+  // showActiveItem(id: string): void;
   hideActiveItem(): void;
-  changeActiveItem(id: string): void;
+  // changeActiveItem(id: string): void;
   restoreActiveItem(): void;
   // inflate(): void;
 }

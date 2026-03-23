@@ -126,8 +126,8 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
   inflate(): void {
 
-    const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
-    const sidebarPartService = getService(sidebarPartServiceId) as SidebarPartService;
+    // const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
+    // const sidebarPartService = getService(sidebarPartServiceId) as SidebarPartService;
 
     const items = [
       {
@@ -137,7 +137,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         codicon: 'bookmark',
         onClick: (e: any) => {
           // toggle or switch
-          const activeItem: ActivitybarItem = activitybarPartService.getActiveItem();
+          const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
           if(activeItem) {
             if(activeItem.id === items[0].id) {
               this.activitybarPart.hideActiveItem();
@@ -148,13 +148,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
             this.activitybarPart.showActiveItem(items[0].id);
           }
 
-          const activePanel = sidebarPartService.getActivePanel();
+          const activePanel = this.sidebarPart.getActivePanel();
           if(activePanel instanceof BookmarkPanel) {
-            sidebarPartService.hideActivePanel();
+            this.sidebarPart.hideActivePanel();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
-            sidebarPartService.hideActivePanel();
-            sidebarPartService.showPanel(items[0].panel);
+            this.sidebarPart.hideActivePanel();
+            this.sidebarPart.showPanel(items[0].panel);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
           (getService(mainLayoutServiceId) as MainLayout).layout();
@@ -166,7 +166,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         panel: new SamplePanel(),
         codicon: 'info',
         onClick: (e: any) => {
-          const activeItem: ActivitybarItem = activitybarPartService.getActiveItem();
+          const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
           if(activeItem) {
             if(activeItem.id === items[1].id) {
               this.activitybarPart.hideActiveItem();
@@ -177,13 +177,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
             this.activitybarPart.showActiveItem(items[1].id);
           }
 
-          const activePanel = sidebarPartService.getActivePanel();
+          const activePanel = this.sidebarPart.getActivePanel();
           if(activePanel instanceof SamplePanel) {
-            sidebarPartService.hideActivePanel();
+            this.sidebarPart.hideActivePanel();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
-            sidebarPartService.hideActivePanel();
-            sidebarPartService.showPanel(items[1].panel);
+            this.sidebarPart.hideActivePanel();
+            this.sidebarPart.showPanel(items[1].panel);
             this.setPartHidden(false, Parts.SIDEBAR_PART);
           }
           (getService(mainLayoutServiceId) as MainLayout).layout();
@@ -201,15 +201,15 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     ul.className = 'activitybar-item-container';
 
     items.forEach((item) => {
-      activitybarPartService.addItem(ul, item);
+      this.activitybarPart.addItem(ul, item);
     });
 
     activitybarPartContainer.appendChild(ul);
-    activitybarPartService.updateChecked(selected.id, true);
+    this.activitybarPart.updateChecked(selected.id, true);
 
     // const sidebarPartContent = this.sidebarPart.getContentArea();
     const panel = selected.panel;
-    sidebarPartService.showPanel(panel);
+    this.sidebarPart.showPanel(panel);
   }
 
   recreate(): void {
