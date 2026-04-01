@@ -22,7 +22,7 @@ export class BookmarkPane extends Pane {
 
   renderHeader(container: HTMLElement): void {
     const title = $('h3.title');
-    title.innerHTML = 'SESSIONS';
+    title.innerHTML = 'LIST';
     this.header.appendChild(title);
 
     const div = $('div.actions');

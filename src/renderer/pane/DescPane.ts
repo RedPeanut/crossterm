@@ -18,7 +18,7 @@ export class DescPane extends Pane {
     arrow.appendChild(right);
     this.header.appendChild(arrow);
     const title = $('h3.title');
-    title.innerHTML = 'DESC';
+    title.innerHTML = 'DETAIL';
     this.header.appendChild(title);
   }
 
