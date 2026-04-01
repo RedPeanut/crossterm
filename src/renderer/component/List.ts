@@ -105,41 +105,13 @@ export class List {
           selectedIds: ids || ['0']
         };
       }, // onSelect: (ids: string[]) => void
-      (data: ListItemElem) => {
-        const listItem = new ListItem(null);
-        return listItem.create(data);
-      }, // nodeRender: (data: ListItemElem) => HTMLElement | null
+      // (data: ListItemElem) => {
+      //   const listItem = new ListItem(null);
+      //   return listItem.create(data);
+      // }, // nodeRender: (data: ListItemElem) => HTMLElement | null
       this.onDoubleClick.bind(this) // (id: string) => void
     );
     append(this.container, this.element);
-  }
-}
-
-export class ListItem {
-  container: HTMLElement;
-  element: HTMLElement;
-
-  constructor(container: HTMLElement) {
-    this.container = container;
-  }
-
-  create(data: ListItemElem): HTMLElement {
-    this.element = $('.list-item');
-
-    const title = $('.title');
-    const span = $('span.icon');
-    const codicon = data.type === 'folder' ? 'folder' :
-      data.type === 'local' ? 'note' /* 'package' */ :
-      data.type === 'remote' ? 'globe' : data.type;
-    const itemIcon = $(`a.codicon.codicon-${codicon}`);
-    append(span, itemIcon);
-    // console.log(span.outerHTML);
-    // append(title, span);
-    title.innerHTML = span.outerHTML + data.title;
-    append(this.element, title);
-
-    // append(this.container, this.element);
-    return this.element;
   }
 }
 
@@ -171,7 +143,7 @@ export class Tree {
     selectedIds: string[],
     onChange: Function,
     onSelect: (id: string[]) => void,
-    nodeRender: (data: ListItemElem) => HTMLElement | null,
+    // nodeRender: (data: ListItemElem) => HTMLElement | null,
     onDoubleClick: (id: string) => void
   ): void {
     // this.tree = tree;
@@ -182,7 +154,7 @@ export class Tree {
     this.nodes = [];
     tree.map((e) => {
       const node = new Node(this.element);
-      node.create(e, 0, nodeRender, this.onSelect_.bind(this), this.onDoubleClick_.bind(this), selectedIds);
+      node.create(e, 0, /* nodeRender, */ this.onSelect_.bind(this), this.onDoubleClick_.bind(this), selectedIds);
       this.nodes.push(node);
     });
     append(this.container, this.element);
@@ -204,7 +176,7 @@ export class Node implements Children {
   create(
     data: ListItemElem,
     level: number = 0,
-    nodeRender: (data: ListItemElem) => HTMLElement | null,
+    // nodeRender: (data: ListItemElem) => HTMLElement | null,
     onSelect: (id: string) => void,
     onDoubleClick: (id: string) => void,
     selectedIds
@@ -249,8 +221,21 @@ export class Node implements Children {
     content.append(header);
 
     const body = $('.ln-body');
-    const listItem = nodeRender ? nodeRender(data) : data.title || `node#${data.id}`;
+    // const listItem = nodeRender ? nodeRender(data) : data.title || `node#${data.id}`;
+    // body.append(listItem);
+
+    const listItem = $('.list-item');
+    const title = $('.title');
+    const span = $('span.icon');
+    const codicon = data.type === 'folder' ? 'folder' :
+      data.type === 'local' ? 'note' /* 'package' */ :
+      data.type === 'remote' ? 'globe' : data.type;
+    const itemIcon = $(`a.codicon.codicon-${codicon}`);
+    append(span, itemIcon);
+    title.innerHTML = span.outerHTML + data.title;
+    append(listItem, title);
     body.append(listItem);
+
     content.append(body);
 
     append(node, content);
@@ -260,7 +245,7 @@ export class Node implements Children {
       this.children = [];
       data.children.map((e) => {
         const _node = new Node(wrapper);
-        _node.create(e, level+1, nodeRender, onSelect, onDoubleClick, selectedIds);
+        _node.create(e, level+1, /* nodeRender,  */onSelect, onDoubleClick, selectedIds);
         this.children.push(_node);
       });
     }
