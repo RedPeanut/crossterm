@@ -1,6 +1,6 @@
 import { Service, setService, getService,
   activitybarPartServiceId, mainLayoutServiceId, sidebarPartServiceId } from '../Service';
-import { $, getClientArea, hide, show } from '../util/dom';
+import { $, append, getClientArea, hide, show } from '../util/dom';
 import { HorizontalViewItem } from '../component/SplitView';
 import { Panel } from '../Panel';
 import { MainLayout, SIDEBAR_WIDTH } from '../layout/MainLayout';
@@ -19,10 +19,12 @@ interface SidebarPartOptions extends PartOptions {}
 
 export class SidebarPart extends Part implements SidebarPartService {
 
+  static TITLE_HEIGHT = 28;
+
   override layout(offset: number, size: number): void {
     let dimension = getClientArea(this.container);
     let width = dimension.width, height = dimension.height;
-    // if(this.titleArea != null) height = height - Part.TITLE_HEIGHT;
+    height = height - SidebarPart.TITLE_HEIGHT;
     this.activePaneView && this.activePaneView.layout(width, height);
   }
 
@@ -103,8 +105,14 @@ export class SidebarPart extends Part implements SidebarPartService {
 
   activePaneView: PaneView;
   paneViewMap = new Map<string, PaneView>();
+  titleArea: HTMLElement;
+  contentArea: HTMLElement;
 
   show(title: string, paneView: PaneView) {
+
+    const label = this.titleArea.querySelector('h2.label');
+    label.innerHTML = title;
+
     this.activePaneView = paneView;
     let _paneView = this.paneViewMap.get(paneView.id);
     if(!_paneView) {
@@ -112,8 +120,8 @@ export class SidebarPart extends Part implements SidebarPartService {
       this.paneViewMap.set(paneView.id, paneView);
     }
 
-    const container = this.container; // getContentArea();
-    container.appendChild(paneView.element);
+    const contentArea = this.contentArea; // container; // getContentArea();
+    contentArea.appendChild(paneView.element);
 
     // this.layout();
     (getService(mainLayoutServiceId) as MainLayout).layout();
@@ -122,7 +130,9 @@ export class SidebarPart extends Part implements SidebarPartService {
   override create(): void {
     super.create();
     const container = this.container;
-
+    const titleArea = this.titleArea = append(container, $('.title'));
+    const h2 = append(titleArea, $('h2.label'));
+    const contentArea = this.contentArea = append(container, $('.content'));
   }
 
 }
