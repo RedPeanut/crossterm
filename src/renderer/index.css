@@ -152,6 +152,7 @@ body { height: 100%; }
   overflow: hidden;
   font-size: 11px;
   min-width: 85px; /* 85*4/5=68px */
+  text-transform: uppercase;
 }
 
 .pane-view .pane .pane-header .actions {
