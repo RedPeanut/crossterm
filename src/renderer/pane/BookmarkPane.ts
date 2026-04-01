@@ -21,6 +21,12 @@ export class BookmarkPane extends Pane {
   }
 
   renderHeader(container: HTMLElement): void {
+
+    const arrow = $('.arrow');
+    const right = $('a.codicon.codicon-chevron-right');
+    arrow.appendChild(right);
+    this.header.appendChild(arrow);
+
     const title = $('h3.title');
     title.innerHTML = 'LIST';
     this.header.appendChild(title);
