@@ -11,6 +11,7 @@ body { height: 100%; }
   flex-direction: column;
   /* background-color: #252526; */
   background-color: rgb(24,24,24);
+  font-size: 13px;
 }
 
 /* SplitView */
@@ -422,8 +423,8 @@ body { height: 100%; }
 
 .sidebar .list .tree {}
 .sidebar .list .tree .node {
-  line-height: 28px;
-  font-size: 16px;
+  line-height: 22px;
+  /* font-size: 13px; */
   padding-left: 4px;
 }
 .sidebar .list .tree .node.selected {
