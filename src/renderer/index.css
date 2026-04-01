@@ -163,7 +163,7 @@ body { height: 100%; }
 }
 
 .pane-view .pane .pane-header ul {
-	display: none;
+  display: none;
   /* display: flex; */
   list-style-type: none;
   margin: 0 auto;
