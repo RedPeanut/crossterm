@@ -82,3 +82,18 @@ export function findSplitItemByGroup(curr: SplitItem, depth: number, index: numb
     }
   }
 } */
+
+export interface Children {
+  children?: Children[];
+}
+
+export function flatten<T extends Children>(list: T[]): T[] {
+  let new_list: T[] = [];
+  list.map((item) => {
+    new_list.push(item);
+    if(item.children) {
+      new_list = [ ...new_list, ...this.flatten(item.children) ];
+    }
+  });
+  return new_list;
+}

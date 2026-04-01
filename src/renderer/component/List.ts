@@ -4,13 +4,14 @@ import { BodyLayoutService } from "../layout/BodyLayout";
 import { SessionPartService } from "../part/SessionPart";
 import { bodyLayoutServiceId, bookmarkPanelServiceId, sessionPartServiceId, getService, } from "../Service";
 import { $, append } from "../util/dom";
-import { findActiveItem } from "../utils";
+import { findActiveItem, Children } from "../utils";
+import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
 
 export type ListItemType = 'local' | 'remote' | 'group' | 'folder';
 export type FolderModeType = 0 | 1 | 2; // 0: 기본값; 1: 단일 선택 2: 다중 선택
 
-export interface ListItemElem {
+export interface ListItemElem extends Children {
   type?: ListItemType;
   title?: string;
   id: string;
@@ -48,21 +49,10 @@ export class List {
     };
   }
 
-  flatten(list: ListItemElem[]): ListItemElem[] {
-    let new_list: ListItemElem[] = [];
-    list.map((item) => {
-      new_list.push(item);
-      if(item.children) {
-        new_list = [...new_list, ...this.flatten(item.children)];
-      }
-    });
-    return new_list;
-  }
-
   onDoubleClick(id: string): void {
     // console.log('onDoubleClick() is called..., id =', id);
     const { showList } = this.state;
-    const item: ListItemElem | undefined = this.flatten(showList).find((item) => item.id === id);
+    const item: ListItemElem | undefined = utils.flatten(showList).find((item) => item.id === id);
 
     const new_one: TerminalItem = {
       // type: item?.type, size: { row: 24, col: 80 },
@@ -199,7 +189,7 @@ export class Tree {
   }
 }
 
-export class Node {
+export class Node implements Children {
   container: HTMLElement;
 
   element: HTMLElement;
