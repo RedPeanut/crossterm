@@ -1,7 +1,15 @@
 import { renderer } from "..";
-import { List } from "../component/List";
+import { TerminalItem } from "../../common/Types";
+import { wrapper } from "../../globals";
+import { List, ListItemElem } from "../component/List";
+import { BodyLayoutService } from "../layout/BodyLayout";
 import { Pane, PaneOptions } from "../Pane";
+import { SessionPartService } from "../part/SessionPart";
+import { getService, bodyLayoutServiceId, sessionPartServiceId } from "../Service";
 import { $ } from "../util/dom";
+import { findActiveItem } from "../utils";
+import * as utils from "../utils";
+import { v4 as uuidv4 } from 'uuid';
 
 export class BookmarkPane extends Pane {
 
@@ -34,9 +42,9 @@ export class BookmarkPane extends Pane {
     const div = $('div.actions');
     const ul = $('ul');
     const items = [
-      { title: 'New Session...', icon: 'new-file' },
-      { title: 'New Folder...', icon: 'new-folder' },
-      { title: 'Collapse Folders in Sessions', icon: 'collapse-all' }
+      { title: 'New Session...', icon: 'new-file', click: () => {} },
+      { title: 'New Folder...', icon: 'new-folder', click: () => {} },
+      { title: 'Collapse Folders in Sessions', icon: 'collapse-all', click: () => {} }
     ];
 
     for(let i = 0; i < items.length; i++) {
@@ -54,7 +62,46 @@ export class BookmarkPane extends Pane {
 
   renderBody(container: HTMLElement): void {
     // draw list in body
-    const list = this.list = new List(this.body, renderer.list); // model: ListItemElem[], onDblClick, onSelect
+    const list = this.list = new List(this.body,
+      renderer.list, // list: ListItemElem[]
+      (id: string) => {}, // onClick
+      (id: string) => {
+        // const list = renderer.list;
+        const item: ListItemElem | undefined = utils.flatten(renderer.list).find((item) => item.id === id);
+
+        const new_one: TerminalItem = {
+          // type: item?.type, size: { row: 24, col: 80 },
+          type: item.type, size: item.size, url: item.url,
+          uid: uuidv4(), selected: true, active: true,
+        };
+
+        // find active item position first
+        const find_active = findActiveItem(wrapper.tree, 0, []);
+        // console.log('find_active =', find_active);
+
+        // let new_tree;
+        if(find_active) {
+          const { depth, index, pos, item: activeItem, group: activeGroup, splitItem } = find_active;
+
+          // turn off active item
+          activeItem.selected = false;
+          activeItem.active = false;
+
+          // attach backward
+          activeGroup.push(new_one);
+        } else {
+          wrapper.tree.list = [ [new_one] ];
+        }
+
+        const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
+        bodyLayoutService.recreate();
+        bodyLayoutService.layout(0, 0);
+
+        const sessionPartService: SessionPartService = getService(sessionPartServiceId);
+        sessionPartService.getServices();
+        sessionPartService.createTerminal();
+      } // onDblClick
+    );
     list.create();
   }
 

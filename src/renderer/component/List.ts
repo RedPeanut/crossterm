@@ -36,60 +36,40 @@ export class List {
   // showList: ListItem[];
   state: {
     selectedIds: string[],
-    showList: ListItemElem[],
+    list: ListItemElem[],
   };
 
-  tree: Tree;
+  onClick: (id: string) => void;
+  onDblClick: (id: string) => void;
 
-  constructor(container: HTMLElement, list: ListItemElem[]) {
+  // tree: Tree;
+  tree: HTMLElement;
+  nodes: Node[];
+
+  constructor(container: HTMLElement, list: ListItemElem[],
+    onClick: (id: string) => void,
+    onDblClick: (id: string) => void
+  ) {
     this.container = container;
     this.state = {
       selectedIds: [],
-      showList: list || []
+      list: list || []
     };
+    this.onClick = onClick;
+    this.onDblClick = onDblClick;
   }
 
-  onDoubleClick(id: string): void {
-    // console.log('onDoubleClick() is called..., id =', id);
-    const { showList } = this.state;
-    const item: ListItemElem | undefined = utils.flatten(showList).find((item) => item.id === id);
+  _onClick(id: string): void {
+  }
 
-    const new_one: TerminalItem = {
-      // type: item?.type, size: { row: 24, col: 80 },
-      type: item.type, size: item.size, url: item.url,
-      uid: uuidv4(), selected: true, active: true,
-    };
-
-    // find active item position first
-    const find_active = findActiveItem(wrapper.tree, 0, []);
-    // console.log('find_active =', find_active);
-
-    // let new_tree;
-    if(find_active) {
-      const { depth, index, pos, item: activeItem, group: activeGroup, splitItem } = find_active;
-
-      // turn off active item
-      activeItem.selected = false;
-      activeItem.active = false;
-
-      // attach backward
-      activeGroup.push(new_one);
-    } else {
-      wrapper.tree.list = [ [new_one] ];
-    }
-
-    const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
-    bodyLayoutService.recreate();
-    bodyLayoutService.layout(0, 0);
-
-    const sessionPartService: SessionPartService = getService(sessionPartServiceId);
-    sessionPartService.getServices();
-    sessionPartService.createTerminal();
+  _onDblClick(id: string): void {
+    // console.log('_onDblClick() is called..., id =', id);
+    this.onDblClick(id);
   }
 
   create(): void {
-    this.element = $('.list');
-    const tree = this.tree = new Tree(this.element);
+    const list = this.element = $('.list');
+    /* const tree = this.tree = new Tree(this.element);
     tree.create(
       this.state.showList, // tree: ListItemElem[]
       this.state.selectedIds, // selectedIds: string[]
@@ -110,12 +90,25 @@ export class List {
       //   return listItem.create(data);
       // }, // nodeRender: (data: ListItemElem) => HTMLElement | null
       this.onDoubleClick.bind(this) // (id: string) => void
-    );
-    append(this.container, this.element);
+    ); */
+
+    const tree = this.tree = $('.tree');
+    this.nodes = [];
+    // const list = this.state.showList;
+    this.state.list.map((e) => {
+      const node = new Node(tree);
+      node.create(e, 0,
+        // nodeRender,
+        this._onClick.bind(this), this._onDblClick.bind(this), this.state.selectedIds);
+      this.nodes.push(node);
+    });
+
+    append(list, tree);
+    append(this.container, list);
   }
 }
 
-export class Tree {
+/* export class Tree {
   container: HTMLElement;
   element: HTMLElement;
   // tree: ListItemElem[];
@@ -154,12 +147,14 @@ export class Tree {
     this.nodes = [];
     tree.map((e) => {
       const node = new Node(this.element);
-      node.create(e, 0, /* nodeRender, */ this.onSelect_.bind(this), this.onDoubleClick_.bind(this), selectedIds);
+      node.create(e, 0,
+        // nodeRender,
+        this.onSelect_.bind(this), this.onDoubleClick_.bind(this), selectedIds);
       this.nodes.push(node);
     });
     append(this.container, this.element);
   }
-}
+} */
 
 export class Node implements Children {
   container: HTMLElement;
@@ -177,9 +172,9 @@ export class Node implements Children {
     data: ListItemElem,
     level: number = 0,
     // nodeRender: (data: ListItemElem) => HTMLElement | null,
-    onSelect: (id: string) => void,
-    onDoubleClick: (id: string) => void,
-    selectedIds
+    onClick: (id: string) => void,
+    onDblClick: (id: string) => void,
+    selectedIds: string[]
   ): void {
     this.id = data.id;
 
@@ -194,11 +189,11 @@ export class Node implements Children {
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
     node.onclick = (e) => {
-      onSelect(data.id);
+      onClick(data.id);
       // const bookmarkPanelService = getService(bookmarkPanelServiceId);
       // bookmarkPanelService.onSelect(data.id);
     };
-    node.ondblclick = (e) => onDoubleClick(data.id);
+    node.ondblclick = (e) => onDblClick(data.id);
 
     const content = $('.content');
     const header = $('.ln-header');
@@ -245,7 +240,7 @@ export class Node implements Children {
       this.children = [];
       data.children.map((e) => {
         const _node = new Node(wrapper);
-        _node.create(e, level+1, /* nodeRender,  */onSelect, onDoubleClick, selectedIds);
+        _node.create(e, level+1, /* nodeRender, */onClick, onDblClick, selectedIds);
         this.children.push(_node);
       });
     }
