@@ -69,35 +69,12 @@ export class List {
 
   create(): void {
     const list = this.element = $('.list');
-    /* const tree = this.tree = new Tree(this.element);
-    tree.create(
-      this.state.showList, // tree: ListItemElem[]
-      this.state.selectedIds, // selectedIds: string[]
-      (list: any) => {
-        this.state = {
-          ...this.state,
-          showList: list
-        };
-      }, // onChange: (list: ListItemElem[]) => void
-      (ids: string[]) => {
-        this.state = {
-          ...this.state,
-          selectedIds: ids || ['0']
-        };
-      }, // onSelect: (ids: string[]) => void
-      // (data: ListItemElem) => {
-      //   const listItem = new ListItem(null);
-      //   return listItem.create(data);
-      // }, // nodeRender: (data: ListItemElem) => HTMLElement | null
-      this.onDoubleClick.bind(this) // (id: string) => void
-    ); */
-
     const tree = this.tree = $('.tree');
     this.nodes = [];
     // const list = this.state.showList;
-    this.state.list.map((e) => {
+    this.state.list.map((v: ListItemElem, i: number) => {
       const node = new Node(tree);
-      node.create(e, 0,
+      node.create(v, 0,
         // nodeRender,
         this._onClick.bind(this), this._onDblClick.bind(this), this.state.selectedIds);
       this.nodes.push(node);
@@ -107,54 +84,6 @@ export class List {
     append(this.container, list);
   }
 }
-
-/* export class Tree {
-  container: HTMLElement;
-  element: HTMLElement;
-  // tree: ListItemElem[];
-  onSelect: (id: string[]) => void;
-  onDoubleClick: (id: string) => void;
-  nodes: Node[];
-
-  constructor(container: HTMLElement) {
-    this.container = container;
-  }
-
-  onSelect_(id: string): void {
-    const onSelect = this.onSelect;
-    let new_selected_ids: string[] = [];
-    new_selected_ids = [id];
-    onSelect && onSelect(new_selected_ids);
-  }
-
-  onDoubleClick_(id: string): void {
-    // console.log('onDoubleClick_() is called...');
-    this.onDoubleClick && this.onDoubleClick(id);
-  }
-
-  create(tree: ListItemElem[],
-    selectedIds: string[],
-    onChange: Function,
-    onSelect: (id: string[]) => void,
-    // nodeRender: (data: ListItemElem) => HTMLElement | null,
-    onDoubleClick: (id: string) => void
-  ): void {
-    // this.tree = tree;
-    this.onSelect = onSelect;
-    this.onDoubleClick = onDoubleClick;
-
-    this.element = $('.tree');
-    this.nodes = [];
-    tree.map((e) => {
-      const node = new Node(this.element);
-      node.create(e, 0,
-        // nodeRender,
-        this.onSelect_.bind(this), this.onDoubleClick_.bind(this), selectedIds);
-      this.nodes.push(node);
-    });
-    append(this.container, this.element);
-  }
-} */
 
 export class Node implements Children {
   container: HTMLElement;
@@ -188,12 +117,12 @@ export class Node implements Children {
 
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
-    node.onclick = (e) => {
+    node.onclick = (e: MouseEvent) => {
       onClick(data.id);
       // const bookmarkPanelService = getService(bookmarkPanelServiceId);
       // bookmarkPanelService.onSelect(data.id);
     };
-    node.ondblclick = (e) => onDblClick(data.id);
+    node.ondblclick = (e: MouseEvent) => onDblClick(data.id);
 
     const content = $('.content');
     const header = $('.ln-header');
@@ -238,9 +167,9 @@ export class Node implements Children {
 
     if(hasChildren) {
       this.children = [];
-      data.children.map((e) => {
+      data.children.map((v: ListItemElem, i: number) => {
         const _node = new Node(wrapper);
-        _node.create(e, level+1, /* nodeRender, */onClick, onDblClick, selectedIds);
+        _node.create(v, level+1, /* nodeRender, */onClick, onDblClick, selectedIds);
         this.children.push(_node);
       });
     }
