@@ -39,16 +39,16 @@ export class List {
     list: ListItemElem[],
   };
 
-  onClick: (id: string) => void;
-  onDblClick: (id: string) => void;
+  onClick: (e: MouseEvent, id: string) => void;
+  onDblClick: (e: MouseEvent, id: string) => void;
 
   // tree: Tree;
   tree: HTMLElement;
   nodes: Node[];
 
   constructor(container: HTMLElement, list: ListItemElem[],
-    onClick: (id: string) => void,
-    onDblClick: (id: string) => void
+    onClick: (e: MouseEvent, id: string) => void,
+    onDblClick: (e: MouseEvent, id: string) => void
   ) {
     this.container = container;
     this.state = {
@@ -59,12 +59,13 @@ export class List {
     this.onDblClick = onDblClick;
   }
 
-  _onClick(id: string): void {
+  _onClick(e: MouseEvent, id: string): void {
+    this.onClick(e, id);
   }
 
-  _onDblClick(id: string): void {
+  _onDblClick(e: MouseEvent, id: string): void {
     // console.log('_onDblClick() is called..., id =', id);
-    this.onDblClick(id);
+    this.onDblClick(e, id);
   }
 
   create(): void {
@@ -101,8 +102,8 @@ export class Node implements Children {
     data: ListItemElem,
     level: number = 0,
     // nodeRender: (data: ListItemElem) => HTMLElement | null,
-    onClick: (id: string) => void,
-    onDblClick: (id: string) => void,
+    onClick: (e: MouseEvent, id: string) => void,
+    onDblClick: (e: MouseEvent, id: string) => void,
     selectedIds: string[]
   ): void {
     this.id = data.id;
@@ -118,11 +119,11 @@ export class Node implements Children {
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
     node.onclick = (e: MouseEvent) => {
-      onClick(data.id);
+      onClick(e, data.id);
       // const bookmarkPanelService = getService(bookmarkPanelServiceId);
       // bookmarkPanelService.onSelect(data.id);
     };
-    node.ondblclick = (e: MouseEvent) => onDblClick(data.id);
+    node.ondblclick = (e: MouseEvent) => onDblClick(e, data.id);
 
     const content = $('.content');
     const header = $('.ln-header');

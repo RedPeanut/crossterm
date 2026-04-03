@@ -64,8 +64,8 @@ export class BookmarkPane extends Pane {
     // draw list in body
     const list = this.list = new List(this.body,
       renderer.list, // list: ListItemElem[]
-      (id: string) => {}, // onClick
-      (id: string) => {
+      (e: MouseEvent, id: string) => {}, // onClick
+      (e: MouseEvent, id: string) => {
         // const list = renderer.list;
         const item: ListItemElem | undefined = utils.flatten(renderer.list).find((item) => item.id === id);
 
