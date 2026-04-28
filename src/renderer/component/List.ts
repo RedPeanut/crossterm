@@ -88,9 +88,9 @@ export class List {
 
 export class Node implements Children {
   container: HTMLElement;
-
-  element: HTMLElement;
+  wrapper: HTMLElement;
   node: HTMLElement;
+
   children: Node[];
   id: string;
 
@@ -113,7 +113,7 @@ export class Node implements Children {
     const isCollapsed = data.isCollapsed == null || data.isCollapsed == undefined
       ? true : data.isCollapsed;
 
-    const wrapper = this.element = $('.wrapper');
+    const wrapper = this.wrapper = $('.wrapper');
     const node = this.node = $('.node');
 
     node.style.paddingLeft = `${level * 20 + 4}px`;
