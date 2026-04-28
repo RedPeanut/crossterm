@@ -22,18 +22,14 @@ export interface ListItemElem extends Children {
   url?: { host: string, port: number, username: string, password: string };
   size?: { row: number, col: number }
 
-  // control
-  canSelect?: boolean; // 선택 가능 여부, 기본값은 true
-  canDrag?: boolean; // 드래그 가능 여부, 기본값은 true
-  canDropBefore?: boolean; // 이전 드롭이 허용되는지 여부, 기본값은 true
-  canDropIn?: boolean; // 드롭인 허용 여부, 기본값은 true
-  canDropAfter?: boolean; // 이후 드롭을 허용할지 여부, 기본값은 true
-  isCollapsed?: boolean;
 }
+
+export interface ListOptions {}
 
 export class List {
   container: HTMLElement;
   element: HTMLElement;
+
   // showList: ListItem[];
   state: {
     selectedIds: string[],
