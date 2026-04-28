@@ -3,7 +3,7 @@ import { wrapper } from "../../globals";
 import { BodyLayoutService } from "../layout/BodyLayout";
 import { SessionPartService } from "../part/SessionPart";
 import { bodyLayoutServiceId, bookmarkPanelServiceId, sessionPartServiceId, getService, } from "../Service";
-import { $, append } from "../util/dom";
+import { $ } from "../util/dom";
 import { findActiveItem, Children } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
@@ -81,8 +81,8 @@ export class List {
       this.nodes.push(node);
     });
 
-    append(list, tree);
-    append(this.container, list);
+    list.appendChild(tree);
+    this.container.appendChild(list);
   }
 }
 
@@ -141,9 +141,9 @@ export class Node implements Children {
       else
         arrow.innerHTML = '>';
 
-      header.append(arrow);
+      header.appendChild(arrow);
     }
-    content.append(header);
+    content.appendChild(header);
 
     const body = $('.ln-body');
     // const listItem = nodeRender ? nodeRender(data) : data.title || `node#${data.id}`;
@@ -156,15 +156,15 @@ export class Node implements Children {
       data.type === 'local' ? 'note' /* 'package' */ :
       data.type === 'remote' ? 'globe' : data.type;
     const itemIcon = $(`a.codicon.codicon-${codicon}`);
-    append(span, itemIcon);
+    span.appendChild(itemIcon);
     title.innerHTML = span.outerHTML + data.title;
-    append(listItem, title);
-    body.append(listItem);
+    listItem.appendChild(title);
+    body.appendChild(listItem);
 
-    content.append(body);
+    content.appendChild(body);
 
-    append(node, content);
-    append(wrapper, node);
+    node.appendChild(content);
+    wrapper.appendChild(node);
 
     if(hasChildren) {
       this.children = [];
@@ -175,6 +175,6 @@ export class Node implements Children {
       });
     }
 
-    append(this.container, wrapper);
+    this.container.appendChild(wrapper);
   }
 }
