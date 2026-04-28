@@ -173,6 +173,13 @@ export class List {
     list.appendChild(tree);
     this.container.appendChild(list);
   }
+
+  addNode(type: string) {
+  }
+
+  collapseAll() {
+  }
+
 }
 
 export class Node implements Children {

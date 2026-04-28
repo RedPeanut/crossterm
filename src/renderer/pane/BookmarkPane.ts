@@ -42,9 +42,24 @@ export class BookmarkPane extends Pane {
     const div = $('div.actions');
     const ul = $('ul');
     const items = [
-      { title: 'New Session...', icon: 'new-file', click: () => {} },
-      { title: 'New Folder...', icon: 'new-folder', click: () => {} },
-      { title: 'Collapse Folders in Sessions', icon: 'collapse-all', click: () => {} }
+      {
+        title: 'New Session...', icon: 'new-file',
+        click: () => {
+          this.list.addNode('session');
+        }
+      },
+      {
+        title: 'New Folder...', icon: 'new-folder',
+        click: () => {
+          this.list.addNode('folder');
+        }
+      },
+      {
+        title: 'Collapse Folders in Sessions', icon: 'collapse-all',
+        click: () => {
+          this.list.collapseAll();
+        }
+      }
     ];
 
     for(let i = 0; i < items.length; i++) {
@@ -52,6 +67,7 @@ export class BookmarkPane extends Pane {
       let a = $('a');
       a.title = items[i].title;
       a.classList.add('codicon', 'codicon-' + items[i].icon);
+      a.addEventListener('click', items[i].click);
       li.appendChild(a);
       ul.appendChild(li);
     }
