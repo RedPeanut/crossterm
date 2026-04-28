@@ -85,13 +85,16 @@ export function findSplitItemByGroup(curr: SplitItem, depth: number, index: numb
 
 export interface Children {
   children?: Children[];
+  isCollapsed?: boolean;
 }
 
 export function flatten<T extends Children>(list: T[]): T[] {
   let new_list: T[] = [];
   list.map((item) => {
     new_list.push(item);
-    if(item.children) {
+    if(item.children
+      && (item.isCollapsed != null && item.isCollapsed != undefined)
+      && item.isCollapsed === false) {
       new_list = [ ...new_list, ...this.flatten(item.children) ];
     }
   });

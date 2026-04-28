@@ -1,3 +1,4 @@
+import { renderer } from "..";
 import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { BodyLayoutService } from "../layout/BodyLayout";
@@ -60,7 +61,79 @@ export class List {
   }
 
   _onClick(e: MouseEvent, id: string): void {
+    // console.log('_onClick is called ..');
+
+    const { selectedIds } = this.state;
+
+    const flattened = utils.flatten(this.nodes);
+    // const find = flattened.find((v) => v.id === id);
+    let i: number, find: Node = null, findIdx: number;
+    for(i = 0; i < flattened.length; i++) {
+      if(flattened[i].shortenedId == id) {
+        find = flattened[i];
+        findIdx = i;
+        break;
+      }
+    }
+
+    const cmdOrCtrlKey = renderer.process.platform === 'darwin' ? e.metaKey : e.ctrlKey;
+    /* if(cmdOrCtrlKey && e.shiftKey) {
+      if(selectedIds.length == 0) return;
+
+    } else */
+    if(e.shiftKey) {
+      if(selectedIds.length == 0) return;
+      const lastSeletedId = selectedIds[selectedIds.length-1];
+
+      let lastIdx: number;
+      for(i = 0; i < flattened.length; i++) {
+        if(flattened[i].shortenedId == lastSeletedId) {
+          // find = flattened[i];
+          lastIdx = i;
+          break;
+        }
+      }
+
+      // from ~ to
+      let from: number = lastIdx, to: number = findIdx;
+      if(from > to) {
+        for(i = from-1; i >= to; i--) {
+          flattened[i].node.classList.add('selected');
+          selectedIds.push(id);
+        }
+      } else {
+        for(i = from+1; i <= to; i++) {
+          flattened[i].node.classList.add('selected');
+          selectedIds.push(id);
+        }
+      }
+
+    } else if(cmdOrCtrlKey) {
+      const isSelected = selectedIds.includes(id);
+      const selectedIdx = selectedIds.findIndex((v) => v == id);
+
+      if(isSelected) {
+        find.node.classList.remove('selected');
+        selectedIds.splice(selectedIdx, 1);
+      } else {
+        find.node.classList.add('selected');
+        selectedIds.push(id);
+      }
+    } else {
+      for(i = 0; i < flattened.length; i++) {
+        flattened[i].node.classList.remove('selected');
+      }
+
+      find.node.classList.add('selected');
+      // selectedIds = [ id ];
+      this.state = {
+        ...this.state,
+        selectedIds: [ id ]
+      };
+    }
+
     this.onClick(e, id);
+    e.stopPropagation();
   }
 
   _onDblClick(e: MouseEvent, id: string): void {
@@ -93,6 +166,9 @@ export class Node implements Children {
 
   children: Node[];
   id: string;
+  shortenedId: string;
+  type: string;
+  isCollapsed: boolean = false;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -107,10 +183,12 @@ export class Node implements Children {
     selectedIds: string[]
   ): void {
     this.id = data.id;
+    this.shortenedId = data.id.substring(0, 7);
+    this.type = data.type;
 
     const isSelected = selectedIds.includes(data.id);
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
-    const isCollapsed = data.isCollapsed == null || data.isCollapsed == undefined
+    const isCollapsed = this.isCollapsed = data.isCollapsed == null || data.isCollapsed == undefined
       ? true : data.isCollapsed;
 
     const wrapper = this.wrapper = $('.wrapper');
@@ -119,7 +197,7 @@ export class Node implements Children {
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
     node.onclick = (e: MouseEvent) => {
-      onClick(e, data.id);
+      onClick(e, data.id.substring(0, 7));
       // const bookmarkPanelService = getService(bookmarkPanelServiceId);
       // bookmarkPanelService.onSelect(data.id);
     };
@@ -133,6 +211,7 @@ export class Node implements Children {
       arrow.onclick = (e) => {
         // onChange(data.id, { isCollapsed: !isCollapsed });
         wrapper.classList.toggle('collapsed');
+        e.stopPropagation();
       };
 
       const collapseArrow = $('a.codicon.codicon-chevron-right');
