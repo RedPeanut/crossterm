@@ -141,16 +141,22 @@ export class List {
     this.onDblClick(e, id);
   }
 
+  _onChange(id: string): void {
+    // console.log('_onChange() is called..., id =', id);
+  }
+
   create(): void {
     const list = this.element = $('.list');
     const tree = this.tree = $('.tree');
     this.nodes = [];
     // const list = this.state.showList;
     this.state.list.map((v: ListItemElem, i: number) => {
-      const node = new Node(tree);
+      const node = new Node(tree, null);
       node.create(v, 0,
         // nodeRender,
-        this._onClick.bind(this), this._onDblClick.bind(this), this.state.selectedIds);
+        this._onClick.bind(this), this._onDblClick.bind(this), this.state.selectedIds,
+        this._onChange.bind(this)
+      );
       this.nodes.push(node);
     });
 
@@ -164,14 +170,17 @@ export class Node implements Children {
   wrapper: HTMLElement;
   node: HTMLElement;
 
+  parent: Node;
   children: Node[];
+
   id: string;
   shortenedId: string;
   type: string;
   isCollapsed: boolean = false;
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, parent: Node) {
     this.container = container;
+    this.parent = parent;
   }
 
   create(
@@ -180,7 +189,8 @@ export class Node implements Children {
     // nodeRender: (data: ListItemElem) => HTMLElement | null,
     onClick: (e: MouseEvent, id: string) => void,
     onDblClick: (e: MouseEvent, id: string) => void,
-    selectedIds: string[]
+    selectedIds: string[],
+    onChange: (id: string, data: {}) => void
   ): void {
     this.id = data.id;
     this.shortenedId = data.id.substring(0, 7);
@@ -208,9 +218,17 @@ export class Node implements Children {
     if(hasChildren) {
       const arrow = $('.arrow');
       if(isCollapsed) wrapper.classList.add('collapsed');
-      arrow.onclick = (e) => {
-        // onChange(data.id, { isCollapsed: !isCollapsed });
-        wrapper.classList.toggle('collapsed');
+      arrow.onclick = (e: MouseEvent) => {
+        const isCollapsed = wrapper.classList.contains('collapsed');
+        const toggled = !isCollapsed;
+
+        this.isCollapsed = toggled;
+        if(toggled)
+          wrapper.classList.add('collapsed');
+        else
+          wrapper.classList.remove('collapsed');
+
+        onChange(data.id, { isCollapsed: toggled });
         e.stopPropagation();
       };
 
@@ -248,8 +266,8 @@ export class Node implements Children {
     if(hasChildren) {
       this.children = [];
       data.children.map((v: ListItemElem, i: number) => {
-        const _node = new Node(wrapper);
-        _node.create(v, level+1, /* nodeRender, */onClick, onDblClick, selectedIds);
+        const _node = new Node(wrapper, this);
+        _node.create(v, level+1, /* nodeRender, */onClick, onDblClick, selectedIds, onChange);
         this.children.push(_node);
       });
     }
