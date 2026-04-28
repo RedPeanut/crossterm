@@ -147,6 +147,20 @@ export class List {
 
   create(): void {
     const list = this.element = $('.list');
+    list.addEventListener('click', (e: MouseEvent) => {
+      // console.log('click event is called ..');
+
+      // is this right clear selected in here?
+      const flattened = utils.flatten(this.nodes);
+      for(let i = 0; i < flattened.length; i++) {
+        flattened[i].node.classList.remove('selected');
+      }
+
+      this.state = {
+        ...this.state,
+        selectedIds: []
+      };
+    });
     const tree = this.tree = $('.tree');
     this.nodes = [];
     // const list = this.state.showList;

@@ -1,5 +1,5 @@
 /* Common */
-* { margin: 0; padding: 0; }
+* { margin: 0; padding: 0; user-select: none; }
 html { height: 100%; color: white; }
 body { height: 100%; }
 
@@ -179,6 +179,8 @@ body { height: 100%; }
   width: 14px; height: 14px; font-size:14px; padding: 1px;
   /* width: 16px; height: 16px; font-size:16px; padding: 3px; */
 }
+
+.pane-view .pane .pane-body { height: calc(100% - 22px); }
 
 .pane-view .pane.bookmark { height: 100%; }
 
@@ -419,6 +421,7 @@ body { height: 100%; }
 .sidebar .list {
   /* padding: 5px 10px; */
   overflow-y: auto;
+  height: 100%;
 }
 
 .sidebar .list .tree {}
@@ -429,11 +432,11 @@ body { height: 100%; }
 }
 .sidebar .list .node.selected {
   background-color: rgb(71 85 102);
-  border-radius: 4px;
+  /* border-radius: 4px; */
 }
 
 .sidebar .list .node .content {
-  margin: 2px 0;
+  /* margin: 2px 0; */
   display: flex;
   align-items: center;
 }
@@ -464,7 +467,7 @@ body { height: 100%; }
 }
 
 .sidebar .list .node .list-item .title {
-  cursor: default;
+  /* cursor: default; */
 }
 
 .sidebar .list .node .list-item span {
