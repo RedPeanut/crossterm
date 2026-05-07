@@ -2,13 +2,13 @@
   "name": "crossterm",
   "productName": "crossterm",
   "version": "0.6.0",
-  "description": "My Electron application description",
+  "description": "Crossplatform Terminal App",
   "main": "./.erb/dll/main.bundle.dev.js",
   "keywords": [
     "electron",
     "crossplatfrom",
-    "terminal",
-    "typescript"
+    "typescript",
+    "terminal"
   ],
   "author": {
     "name": "김진규",
