@@ -2,6 +2,7 @@ import { renderer } from "..";
 import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { BodyLayoutService } from "../layout/BodyLayout";
+import { Disposable } from "../Lifecycle";
 import { SessionPartService } from "../part/SessionPart";
 import { bodyLayoutServiceId, bookmarkPanelServiceId, sessionPartServiceId, getService, } from "../Service";
 import { $ } from "../util/dom";
@@ -26,7 +27,7 @@ export interface ListItemElem extends Children {
 
 export interface ListOptions {}
 
-export class List {
+export class List extends Disposable {
   container: HTMLElement;
   element: HTMLElement;
 
@@ -47,6 +48,7 @@ export class List {
     onClick: (e: MouseEvent, id: string) => void,
     onDblClick: (e: MouseEvent, id: string) => void
   ) {
+    super();
     this.container = container;
     this.state = {
       selectedIds: [],
@@ -143,7 +145,7 @@ export class List {
 
   create(): void {
     const list = this.element = $('.list');
-    list.addEventListener('click', (e: MouseEvent) => {
+    this.register(list, 'click', (e: MouseEvent) => {
       // console.log('click event is called ..');
 
       // is this right clear selected in here?
@@ -182,7 +184,7 @@ export class List {
 
 }
 
-export class Node implements Children {
+export class Node extends Disposable implements Children {
   container: HTMLElement;
   wrapper: HTMLElement;
   node: HTMLElement;
@@ -196,6 +198,7 @@ export class Node implements Children {
   isCollapsed: boolean = false;
 
   constructor(container: HTMLElement, parent: Node) {
+    super();
     this.container = container;
     this.parent = parent;
   }
@@ -223,19 +226,21 @@ export class Node implements Children {
 
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
-    node.onclick = (e: MouseEvent) => {
+    this.register(node, 'click', (e: MouseEvent) => {
       onClick(e, data.id.substring(0, 7));
       // const bookmarkPanelService = getService(bookmarkPanelServiceId);
       // bookmarkPanelService.onSelect(data.id);
-    };
-    node.ondblclick = (e: MouseEvent) => onDblClick(e, data.id);
+    });
+    this.register(node, 'dblclick', (e: MouseEvent) => {
+      onDblClick(e, data.id);
+    });
 
     const content = $('.content');
     const header = $('.ln-header');
     if(hasChildren) {
       const arrow = $('.arrow');
       if(isCollapsed) wrapper.classList.add('collapsed');
-      arrow.onclick = (e: MouseEvent) => {
+      this.register(arrow, 'click', (e: MouseEvent) => {
         const isCollapsed = wrapper.classList.contains('collapsed');
         const toggled = !isCollapsed;
 
@@ -247,7 +252,7 @@ export class Node implements Children {
 
         onChange(data.id, { isCollapsed: toggled });
         e.stopPropagation();
-      };
+      });
 
       const collapseArrow = $('a.codicon.codicon-chevron-right');
       if(collapseArrow)
