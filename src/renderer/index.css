@@ -476,6 +476,19 @@ body { height: 100%; }
   vertical-align: middle;
 }
 
+.sidebar .list *:focus {
+  outline: 1px solid rgb(0,120,212);
+}
+
+.sidebar .list input {
+  background-color: rgb(49,49,49);
+  color: rgb(204,204,204);
+  /* width: calc(100% - 1px - 17px - 4px); */
+  border: none;
+  height: 20px;
+}
+
+
 /* Session */
 .part.session {
   width: 100%;

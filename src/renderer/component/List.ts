@@ -1,3 +1,4 @@
+import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
 import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
@@ -177,6 +178,94 @@ export class List extends Disposable {
   }
 
   addNode(type: string) {
+    // add node in first folder start with selected or not
+
+    const { selectedIds } = this.state;
+    // const anySelected = selectedIds.length > 0;
+    const flattened = utils.flatten(this.nodes);
+    let targetNode: Node = null;
+
+    let depth = 0;
+
+    if(selectedIds.length > 0) {
+      // find first folder from last selected?
+      const findId = selectedIds[selectedIds.length-1];
+      const findNode = flattened.find((v) => v.shortenedId == findId);
+
+      if(findNode) {
+        // targetNode is always folder
+        if(findNode.type == 'folder') {
+          targetNode = findNode;
+
+          // find depth when folder
+          let node = targetNode.parent;
+          depth++;
+
+          for(; node != null;) {
+            node = node.parent;
+            depth++;
+          }
+        } else {
+          targetNode = findNode.parent;
+
+          // find depth when file
+          let node = targetNode;
+
+          for(; node != null;) {
+            node = node.parent;
+            depth++;
+          }
+        }
+      }
+
+      console.log('depth =', depth);
+    }
+
+    const data: ListItemElem = {
+      type: type == 'folder' ? 'folder' : 'local',
+      id: uuidv4()
+    };
+
+    const node: Node = new Node(targetNode == null ? this.tree : targetNode.wrapper, targetNode);
+    node.createEdit(data, depth,
+      ///*
+      () => { // onCancel
+        node.dispose();
+
+        // delete dom
+        if(targetNode == null) {
+          // remove from this.tree
+          this.tree.removeChild(node.wrapper);
+        } else {
+          // remove from targetNode.wrapper
+          targetNode.wrapper.removeChild(node.wrapper);
+        }
+      },
+      () => { // onFinish
+        node.input.style.display = 'none';
+        node.title.innerHTML = node.input.value;
+        node.title.style.display = 'inline-block';
+
+        node.register(node.node, 'click', (e: MouseEvent) => {
+          // onClick(e, data.id.substring(0, 7));
+          this._onClick(e, data.id.substring(0, 7));
+        });
+        node.register(node.node, 'dblclick', (e: MouseEvent) => {
+          // onDblClick(e, data.id);
+          this._onDblClick(e, data.id);
+        });
+
+        // push node to nodes
+        if(targetNode == null) {
+          // push to this.nodes
+          this.nodes.push(node);
+        } else {
+          // push to targetNode children
+          targetNode.children.push(node);
+        }
+      }
+      //*/
+    );
   }
 
   collapseAll() {
@@ -188,9 +277,11 @@ export class Node extends Disposable implements Children {
   container: HTMLElement;
   wrapper: HTMLElement;
   node: HTMLElement;
+  input: HTMLInputElement;
+  title: HTMLElement;
 
   parent: Node;
-  children: Node[];
+  children: Node[] = [];
 
   id: string;
   shortenedId: string;
@@ -269,24 +360,26 @@ export class Node extends Disposable implements Children {
     // body.append(listItem);
 
     const listItem = $('.list-item');
-    const title = $('.title');
     const span = $('span.icon');
     const codicon = data.type === 'folder' ? 'folder' :
       data.type === 'local' ? 'note' /* 'package' */ :
       data.type === 'remote' ? 'globe' : data.type;
     const itemIcon = $(`a.codicon.codicon-${codicon}`);
     span.appendChild(itemIcon);
-    title.innerHTML = span.outerHTML + data.title;
-    listItem.appendChild(title);
-    body.appendChild(listItem);
+    listItem.appendChild(span);
 
+    const title = this.title = $('span.title');
+    title.innerHTML = data.title;
+    listItem.appendChild(title);
+
+    body.appendChild(listItem);
     content.appendChild(body);
 
     node.appendChild(content);
     wrapper.appendChild(node);
 
     if(hasChildren) {
-      this.children = [];
+      // this.children = [];
       data.children.map((v: ListItemElem, i: number) => {
         const _node = new Node(wrapper, this);
         _node.create(v, level+1, /* nodeRender, */onClick, onDblClick, selectedIds, onChange);
@@ -296,4 +389,64 @@ export class Node extends Disposable implements Children {
 
     this.container.appendChild(wrapper);
   }
+
+  createEdit(data: ListItemElem, level: number = 0,
+    onCancel: () => void, onFinish: () => void
+  ): void {
+    this.id = data.id;
+    this.shortenedId = data.id.substring(0, 7);
+    this.type = data.type;
+
+    // this.isCollapsed = true;
+
+    const wrapper = this.wrapper = $('.wrapper');
+    const node = this.node = $('.node');
+
+    node.style.paddingLeft = `${level * 20 + 4}px`;
+
+    const content = $('.content');
+    const header = $('.ln-header');
+
+    if(data.type == 'folder') {
+      const arrow = $('.arrow');
+      wrapper.classList.add('collapsed');
+      const collapseArrow = $('a.codicon.codicon-chevron-right');
+      arrow.appendChild(collapseArrow);
+      header.appendChild(arrow);
+    }
+    content.appendChild(header);
+
+    const body = $('.ln-body');
+    const listItem = $('.list-item');
+
+    const span = $('span.icon');
+    const codicon = data.type === 'folder' ? 'folder' : 'note';
+    const itemIcon = $(`a.codicon.codicon-${codicon}`);
+    span.appendChild(itemIcon);
+    listItem.appendChild(span);
+
+    const input = this.input = $('input.title');
+    this.register(input, 'keydown', (e: KeyboardEvent) => {
+      if(e.key === 'Escape') {
+        onCancel();
+      } else if(e.key === 'Enter') {
+        onFinish();
+      }
+    });
+    listItem.appendChild(input);
+
+    const title = this.title = $('span.title');
+    title.style.display = 'none';
+    listItem.appendChild(title);
+
+    body.appendChild(listItem);
+    content.appendChild(body);
+
+    node.appendChild(content);
+    wrapper.appendChild(node);
+    this.container.appendChild(wrapper);
+
+    input.focus();
+  }
+
 }
