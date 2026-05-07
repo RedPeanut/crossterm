@@ -161,7 +161,7 @@ body { height: 100%; }
 }
 
 .pane-view .pane.hover .pane-header ul {
-	display: flex;
+  display: flex;
 }
 
 .pane-view .pane .pane-header ul {

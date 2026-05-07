@@ -20,12 +20,6 @@ export class BookmarkPane extends Pane {
     this.element.classList.add('bookmark');
     this.minimumSize = Pane.HEADER_SIZE;
     this.sizeType = 'fill_parent';
-    this.element.addEventListener('mouseenter', (e) => {
-      this.element.classList.add('hover');
-    });
-    this.element.addEventListener('mouseleave', (e) => {
-      this.element.classList.remove('hover');
-    });
   }
 
   renderHeader(container: HTMLElement): void {

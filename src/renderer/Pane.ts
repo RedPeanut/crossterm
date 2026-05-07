@@ -74,6 +74,14 @@ export abstract class Pane implements SplitViewItemView {
     this.parent = parent;
     this.options = options;
     this.element = $('.pane');
+
+    this.element.addEventListener('mouseenter', (e) => {
+      this.element.classList.add('hover');
+    });
+    this.element.addEventListener('mouseleave', (e) => {
+      this.element.classList.remove('hover');
+    });
+
   }
 
   render(): void {
