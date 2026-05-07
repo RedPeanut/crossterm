@@ -76,6 +76,7 @@ export interface SplitViewItemView {
   set border(b: boolean);
   get sashEnablement(): boolean;
   set sashEnablement(b: boolean);
+
   layout(offset: number, size: number): void;
   onDidChange(mappedEvent: MappedSashEvent): void;
   doWhenVisible(visible: boolean): void;

@@ -30,6 +30,9 @@ export class DetailPane extends Pane {
 
   renderBody(container: HTMLElement): void {
     // draw description in body in here
+    const p = $('p');
+    p.innerHTML = 'blarblarblar<br/>blarblarblar<br/>blarblarblar';
+    this.body.appendChild(p);
   }
 
 }
