@@ -1,11 +1,11 @@
 import { Pane, PaneOptions } from "../Pane";
 import { $ } from "../util/dom";
 
-export class DescPane extends Pane {
+export class DetailPane extends Pane {
 
   constructor(parent: HTMLElement, options: PaneOptions) {
     super(parent, options);
-    this.element.classList.add('desc');
+    this.element.classList.add('detail');
     this.minimumSize = Pane.HEADER_SIZE;
   }
 

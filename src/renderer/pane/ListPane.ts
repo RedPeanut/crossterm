@@ -11,15 +11,15 @@ import { findActiveItem } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
 
-export class BookmarkPane extends Pane {
+export class ListPane extends Pane {
 
   list: List;
 
   constructor(parent: HTMLElement, options: PaneOptions) {
     super(parent, options);
-    this.element.classList.add('bookmark');
+    this.element.classList.add('list');
     this.minimumSize = Pane.HEADER_SIZE;
-    this.sizeType = 'fill_parent';
+    // this.sizeType = 'fill_parent';
   }
 
   renderHeader(container: HTMLElement): void {

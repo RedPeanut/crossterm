@@ -1,5 +1,5 @@
-import { BookmarkPane } from "../pane/BookmarkPane";
-import { DescPane } from "../pane/DescPane";
+import { ListPane } from "../pane/ListPane";
+import { DetailPane } from "../pane/DetailPane";
 import { PaneView } from "../PaneView";
 
 export class BookmarkPaneView extends PaneView {
@@ -11,10 +11,10 @@ export class BookmarkPaneView extends PaneView {
 
   override create(): void {
     super.create();
-    const bookmarkPane = new BookmarkPane(null, null);
+    const bookmarkPane = new ListPane(null, null);
     bookmarkPane.render();
     this.addPane(bookmarkPane);
-    const descPane = new DescPane(null, null);
+    const descPane = new DetailPane(null, null);
     descPane.render();
     this.addPane(descPane);
   }
