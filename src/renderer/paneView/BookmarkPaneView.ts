@@ -1,3 +1,4 @@
+import { renderer } from "..";
 import { ListPane } from "../pane/ListPane";
 import { DetailPane } from "../pane/DetailPane";
 import { PaneView } from "../PaneView";
@@ -11,10 +12,23 @@ export class BookmarkPaneView extends PaneView {
 
   override create(): void {
     super.create();
-    const bookmarkPane = new ListPane(null, null);
+
+    const initialValue = renderer.initial_value.paneview.find((v) => v.name == 'bookmark');
+    enum IDX { LIST, DETAIL };
+
+    const bookmarkPane = new ListPane(null, {
+      collapsed: initialValue.collapsed[IDX.LIST],
+      sizeType: initialValue.sizeType[IDX.LIST],
+      size: initialValue.size[IDX.LIST]
+    });
     bookmarkPane.render();
     this.addPane(bookmarkPane);
-    const descPane = new DetailPane(null, null);
+
+    const descPane = new DetailPane(null, {
+      collapsed: initialValue.collapsed[IDX.DETAIL],
+      sizeType: initialValue.sizeType[IDX.DETAIL],
+      size: initialValue.size[IDX.DETAIL]
+    });
     descPane.render();
     this.addPane(descPane);
   }

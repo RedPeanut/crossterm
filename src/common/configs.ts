@@ -16,6 +16,11 @@ const configs = {
     // panel_size: 0,
     // panel_position: 0,
     // panel_alignment: 'center', // left | center | right
+
+    paneview: [
+      { name: 'bookmark', collapsed: [ false, false ], sizeType: [ 'fill_parent', null ], size: [ null, 200 ] },
+      { name: 'sample', collapsed: [ false ], sizeType: [ 'fill_parent' ], size: [ null ] }
+    ],
   },
   list: [
     {

@@ -1,7 +1,11 @@
 import { MappedSashEvent, SplitViewItemSizeType, SplitViewItemView } from "./component/SplitView";
 import { $, append } from "./util/dom";
 
-export interface PaneOptions {}
+export interface PaneOptions {
+  collapsed: boolean;
+  sizeType: string;
+  size: number;
+}
 
 export abstract class Pane implements SplitViewItemView {
   static HEADER_SIZE = 22;
@@ -81,6 +85,19 @@ export abstract class Pane implements SplitViewItemView {
     this.element.addEventListener('mouseleave', (e) => {
       this.element.classList.remove('hover');
     });
+
+    if(this.options) {
+      if(typeof this.options.collapsed === 'boolean')
+        this.expanded = !this.options.collapsed;
+      else
+        this.expanded = true;
+
+      if(this.options.sizeType)
+        this.sizeType = this.options.sizeType;
+
+      if(this.options.size)
+        this.size = this.options.size;
+    }
 
   }
 
