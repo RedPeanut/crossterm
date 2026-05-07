@@ -13,6 +13,7 @@ export interface SidebarPartService extends Service {
   // showPanel(panel: Panel): void;
   // getActivePanel(): Panel | undefined;
   // hideActivePanel(): Panel | undefined;
+  layout(offset: number, size: number): void;
 }
 
 interface SidebarPartOptions extends PartOptions {}

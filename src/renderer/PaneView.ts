@@ -34,8 +34,9 @@ export abstract class PaneView {
   removePane(pane: Pane): void {}
 
   layout(width: number, height: number): void {
-    this.size = this.orientation === Orientation.HORIZONTAL ? width : height;
-    this.splitView.layout(this.size);
+    // this.size = this.orientation === Orientation.HORIZONTAL ? width : height;
+    // this.splitView.layout(this.size);
+    this.splitView.layout_pane(width, height);
   }
 
 }

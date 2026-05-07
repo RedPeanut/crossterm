@@ -160,6 +160,21 @@ body { height: 100%; }
   margin-left: auto;
 }
 
+.pane-view .pane .pane-header .arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+}
+
+.pane-view .pane.expanded .pane-header .arrow {
+  transform: rotate(90deg);
+}
+
+.pane-view .pane .pane-header .arrow {
+  transform: rotate(0);
+}
+
 .pane-view .pane.hover .pane-header ul {
   display: flex;
 }

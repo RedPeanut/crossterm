@@ -1,4 +1,6 @@
 import { Pane, PaneOptions } from "../Pane";
+import { getService, sidebarPartServiceId } from "../Service";
+import { SidebarPartService } from "../part/SidebarPart";
 import { $ } from "../util/dom";
 
 export class DetailPane extends Pane {
@@ -16,6 +18,10 @@ export class DetailPane extends Pane {
     const arrow = $('.arrow');
     const right = $('a.codicon.codicon-chevron-right');
     arrow.appendChild(right);
+    arrow.addEventListener('click', (e: MouseEvent) => {
+      this.expanded = !this.expanded;
+      (getService(sidebarPartServiceId) as SidebarPartService).layout(null, null);
+    });
     this.header.appendChild(arrow);
     const title = $('h3.title');
     title.innerHTML = 'DETAIL';

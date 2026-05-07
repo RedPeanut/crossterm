@@ -3,6 +3,7 @@ import { append, $ } from "../util/dom";
 import { Orientation, Sash, SashEvent, SashState } from "./Sash";
 import { range } from "../util/arrays";
 import { clamp } from "../util/numbers";
+import { Pane } from "../Pane";
 
 export interface MappedSashEvent {
   sash: Sash;
@@ -526,4 +527,62 @@ export class SplitView<T extends SplitViewItemView> {
     this.layoutViews();
   }
 
+  layout_pane(width: number, height: number) {
+    let totalSize = this.size = this.orientation === Orientation.HORIZONTAL ? width : height;
+    // this.splitView.layout(this.size);
+
+    let total = 0;
+    for(let i = 0; i < this.viewItems.length; i++) {
+      const viewItem = this.viewItems[i];
+      if(viewItem.view instanceof Pane) {
+        const view = viewItem.view as Pane;
+        if(view.sizeType === 'wrap_content') {
+          let itemSize: number, border: number = view.border ? 1 : 0;
+          if(view.expanded) {
+            itemSize = border + view.size;
+          } else {
+            itemSize = border + view.headerSize;
+            // view.size = itemSize;
+          }
+          total += itemSize;
+          totalSize -= itemSize;
+        }
+      }
+    }
+
+    // fill empty space (dangling implementation)
+    for(let i = 0; i < this.viewItems.length; i++) {
+      const viewItem = this.viewItems[i];
+      if(viewItem.view instanceof Pane) {
+        const view = viewItem.view as Pane;
+        if(view.sizeType === 'fill_parent') {
+          let border: number = view.border ? 1 : 0;
+          if(view.expanded) {
+            view.size = totalSize - border;
+          } else {
+            view.size = view.headerSize - border;
+          }
+        }
+      }
+    }
+
+    this.layoutViews_pane();
+  }
+
+  layoutViews_pane(): void {
+    let offset = 0;
+    for(let i = 0; i < this.viewItems.length; i++) {
+      const viewItem = this.viewItems[i];
+      if(viewItem.view instanceof Pane) {
+        const view = viewItem.view as Pane;
+        const border = view.border ? 1 : 0;
+        viewItem.layoutContainer(border + offset);
+        // console.log(`[${i}] ${item.size}`);
+        offset += border + view.size;
+      }
+    }
+
+    // Layout sashes
+    this.sashItems.forEach(sashItem => sashItem.sash.layout());
+  }
 }

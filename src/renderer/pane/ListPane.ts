@@ -5,7 +5,8 @@ import { List, ListItemElem } from "../component/List";
 import { BodyLayoutService } from "../layout/BodyLayout";
 import { Pane, PaneOptions } from "../Pane";
 import { SessionPartService } from "../part/SessionPart";
-import { getService, bodyLayoutServiceId, sessionPartServiceId } from "../Service";
+import { SidebarPartService } from "../part/SidebarPart";
+import { getService, bodyLayoutServiceId, sessionPartServiceId, sidebarPartServiceId } from "../Service";
 import { $ } from "../util/dom";
 import { findActiveItem } from "../utils";
 import * as utils from "../utils";
@@ -27,6 +28,10 @@ export class ListPane extends Pane {
     const arrow = $('.arrow');
     const right = $('a.codicon.codicon-chevron-right');
     arrow.appendChild(right);
+    arrow.addEventListener('click', (e: MouseEvent) => {
+      this.expanded = !this.expanded;
+      (getService(sidebarPartServiceId) as SidebarPartService).layout(null, null);
+    });
     this.header.appendChild(arrow);
 
     const title = $('h3.title');
