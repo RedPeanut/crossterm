@@ -152,7 +152,7 @@ body { height: 100%; }
   text-overflow: ellipsis;
   overflow: hidden;
   font-size: 11px;
-  min-width: 85px; /* 85*4/5=68px */
+  /* min-width: 85px; *//* 85*4/5=68px */
   text-transform: uppercase;
 }
 
@@ -469,7 +469,7 @@ body { height: 100%; }
 }
 
 .sidebar .list .wrapper .node .ln-header .arrow {
-  cursor: pointer;
+  /* cursor: pointer; */
   transform: rotate(90deg);
 }
 
