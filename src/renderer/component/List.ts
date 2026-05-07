@@ -145,7 +145,7 @@ export class List extends Disposable {
   }
 
   create(): void {
-    const list = this.element = $('.list');
+    const list: HTMLElement = this.element = $('.list');
     this.register(list, 'click', (e: MouseEvent) => {
       // console.log('click event is called ..');
 

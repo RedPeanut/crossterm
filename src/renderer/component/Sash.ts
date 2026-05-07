@@ -169,7 +169,7 @@ export class Sash extends EventEmitter {
 
   layout(): void {
     if(this.orientation === Orientation.VERTICAL) {
-      const verticalProvider = (<VerticalSashLayoutProvider>this.layoutProvider);
+      const verticalProvider = this.layoutProvider as VerticalSashLayoutProvider;
       this.el.style.left = verticalProvider.getVerticalSashLeft(this) - (this.size / 2) + 'px';
 
       if(verticalProvider.getVerticalSashTop)
@@ -179,7 +179,7 @@ export class Sash extends EventEmitter {
         this.el.style.height = verticalProvider.getVerticalSashHeight(this) + 'px';
       }
     } else {
-      const horizontalProvider = (<HorizontalSashLayoutProvider>this.layoutProvider);
+      const horizontalProvider = this.layoutProvider as HorizontalSashLayoutProvider;
       this.el.style.top = horizontalProvider.getHorizontalSashTop(this) - (this.size / 2) + 'px';
 
       if(horizontalProvider.getHorizontalSashLeft)

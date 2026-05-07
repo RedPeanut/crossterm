@@ -109,7 +109,6 @@ export class SidebarPart extends Part implements SidebarPartService {
   contentArea: HTMLElement;
 
   show(title: string, paneView: PaneView) {
-
     const label = this.titleArea.querySelector('h2.label');
     label.innerHTML = title;
 

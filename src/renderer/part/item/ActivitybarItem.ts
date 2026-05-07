@@ -29,7 +29,7 @@ export class ActivitybarItemImpl implements ActivitybarItem {
     // this._panel = panel;
   }
 
-  append(onClick: (e: any) => {}, codicon: string): void {
+  append(onClick: (e: MouseEvent) => void, codicon: string): void {
     const li = this._element = document.createElement('li');
       li.classList.add(...'activitybar-item'.split(' '));
       li.addEventListener('click', onClick);
