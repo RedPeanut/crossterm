@@ -86,7 +86,7 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
 
   _cachedVisibleSize: number | undefined = undefined;
   get cachedVisibleSize(): number | undefined { return this._cachedVisibleSize; }
-  set cachedVisibleSize(cachedVisibleSize: number | undefined) { this._cachedVisibleSize = cachedVisibleSize; }
+  set cachedVisibleSize(sz: number | undefined) { this._cachedVisibleSize = sz; }
 
   get visible(): boolean {
     return typeof this._cachedVisibleSize === 'undefined';
@@ -111,9 +111,9 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
   }
 
   get minimumSize(): number { return this.visible ? this.view.minimumSize : 0; }
-  get viewMinimumSize(): number { return this.view.minimumSize; }
-
   get maximumSize(): number { return this.visible ? this.view.maximumSize : 0; }
+
+  get viewMinimumSize(): number { return this.view.minimumSize; }
   get viewMaximumSize(): number { return this.view.maximumSize; }
 
   _view: T;

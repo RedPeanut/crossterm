@@ -7,5 +7,8 @@ export class SamplePaneView extends PaneView {
     super({ id: SamplePaneView.ID });
   }
 
-  override create(): void {}
+  override create(): void {
+    super.create();
+    this.element.classList.add('sample');
+  }
 }

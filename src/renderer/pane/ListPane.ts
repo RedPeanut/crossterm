@@ -14,6 +14,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export class ListPane extends Pane {
 
+  override layout(offset: number, size: number) {
+    // console.log(`layout is called .., offset = ${offset}, size = ${size}`);
+  }
+
   list: List;
 
   constructor(parent: HTMLElement, options: PaneOptions) {

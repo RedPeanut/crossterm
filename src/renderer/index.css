@@ -137,7 +137,11 @@ body { height: 100%; }
 /* PaneView */
 .pane-view { height: 100%; }
 
-.pane-view .pane-header {
+.pane-view .pane {
+  height: 100%;
+}
+
+.pane-view .pane .pane-header {
   height: 22px;
   font-size: 11px;
   font-weight: bold;
@@ -147,7 +151,7 @@ body { height: 100%; }
   align-items: center;
 }
 
-.pane-view .pane-header .title {
+.pane-view .pane .pane-header .title {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -196,10 +200,6 @@ body { height: 100%; }
 }
 
 .pane-view .pane .pane-body { height: calc(100% - 22px); }
-
-.pane-view .pane {
-  height: 100%;
-}
 
 .grid-branch-node { height: 100%; }
 

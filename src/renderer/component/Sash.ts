@@ -128,7 +128,7 @@ export class Sash extends EventEmitter {
     this.on('sash state change', (state: SashState) => {});
   }
 
-  onMouseDown(e) {
+  onMouseDown(e: MouseEvent) {
     // e.preventDefault();
     const self = this;
     const startX = e.pageX;
@@ -138,7 +138,7 @@ export class Sash extends EventEmitter {
     this.el.classList.add('active');
     this.emit('sash start', { sash: this, startX, startY, altKey });
 
-    const onMouseMove = (e) => {
+    const onMouseMove = (e: MouseEvent) => {
       const event: SashEvent = {
         sash: this,
         startX: startX, currentX: e.pageX,
@@ -148,7 +148,7 @@ export class Sash extends EventEmitter {
       this.emit('sash change', event);
     }
 
-    const onMouseUp = (e) => {
+    const onMouseUp = (e: MouseEvent) => {
       this.el.classList.remove('active');
 
       const event: SashEvent = {

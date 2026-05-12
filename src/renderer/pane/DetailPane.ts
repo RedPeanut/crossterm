@@ -5,6 +5,10 @@ import { $ } from "../util/dom";
 
 export class DetailPane extends Pane {
 
+  override layout(offset: number, size: number) {
+    // console.log(`layout is called .., offset = ${offset}, size = ${size}`);
+  }
+
   constructor(parent: HTMLElement, options: PaneOptions) {
     super(parent, options);
     this.element.classList.add('detail');
@@ -13,8 +17,8 @@ export class DetailPane extends Pane {
 
   renderHeader(container: HTMLElement): void {
     // const klass: string = this.expanded ? '' : 'collapsed';
-    if(!this.expanded)
-      this.header.classList.add('collapsed');
+    // if(!this.expanded)
+    //   this.header.classList.add('collapsed');
     const arrow = $('.arrow');
     const right = $('a.codicon.codicon-chevron-right');
     arrow.appendChild(right);
