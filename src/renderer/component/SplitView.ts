@@ -549,14 +549,14 @@ export class SplitView<T extends SplitViewItemView> {
     for(let i = 0; i < this.viewItems.length; i++) {
       const viewItem = this.viewItems[i];
       if(viewItem.view instanceof Pane) {
-        const view = viewItem.view as Pane;
-        if(view.sizeType === 'wrap_content') {
-          let itemSize: number, border: number = view.border ? 1 : 0;
-          if(view.expanded) {
-            itemSize = border + view.size;
+        // const view = viewItem.view as Pane;
+        if(viewItem.view.sizeType === 'wrap_content') {
+          let itemSize: number, border: number = viewItem.view.border ? 1 : 0;
+          if(viewItem.view.expanded) {
+            itemSize = border + viewItem.view.size;
           } else {
-            itemSize = border + view.headerSize;
-            // view.size = itemSize;
+            itemSize = border + viewItem.view.headerSize;
+            // viewItem.view.size = itemSize;
           }
           total += itemSize;
           totalSize -= itemSize;
@@ -568,13 +568,14 @@ export class SplitView<T extends SplitViewItemView> {
     for(let i = 0; i < this.viewItems.length; i++) {
       const viewItem = this.viewItems[i];
       if(viewItem.view instanceof Pane) {
-        const view = viewItem.view as Pane;
-        if(view.sizeType === 'fill_parent') {
-          let border: number = view.border ? 1 : 0;
-          if(view.expanded) {
-            view.size = totalSize - border;
+        // const view = viewItem.view as Pane;
+
+        if(viewItem.view.sizeType === 'fill_parent') {
+          let border: number = viewItem.view.border ? 1 : 0;
+          if(viewItem.view.expanded) {
+            viewItem.view.size = totalSize - border;
           } else {
-            view.size = view.headerSize - border;
+            viewItem.view.size = viewItem.view.headerSize - border;
           }
         }
       }
@@ -587,12 +588,13 @@ export class SplitView<T extends SplitViewItemView> {
     let offset = 0;
     for(let i = 0; i < this.viewItems.length; i++) {
       const viewItem = this.viewItems[i];
+
       if(viewItem.view instanceof Pane) {
-        const view = viewItem.view as Pane;
-        const border = view.border ? 1 : 0;
+        // const view = viewItem.view as Pane;
+        const border = viewItem.view.border ? 1 : 0;
         viewItem.layoutContainer(border + offset);
         // console.log(`[${i}] ${item.size}`);
-        offset += border + view.size;
+        offset += border + viewItem.view.size;
       }
     }
 
