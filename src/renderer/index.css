@@ -199,7 +199,10 @@ body { height: 100%; }
   /* width: 16px; height: 16px; font-size:16px; padding: 3px; */
 }
 
-.pane-view .pane .pane-body { height: calc(100% - 22px); }
+.pane-view .pane .pane-body { height: calc(100% - 22px); display: none; }
+.pane-view .pane.expanded .pane-body { display: block; }
+
+.pane-view.bookmark .pane.detail p { padding: 8px; }
 
 .grid-branch-node { height: 100%; }
 
