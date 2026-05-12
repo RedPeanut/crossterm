@@ -23,6 +23,14 @@ export abstract class Pane implements SplitViewItemView {
   set sizeType(ty: SplitViewItemSizeType) { this._sizeType = ty; }
 
   _minimumSize: number = 0;
+  get minimumSize(): number { return this._minimumSize; }
+  set minimumSize(n: number) { this._minimumSize = n; }
+
+  _maximumSize: number = Number.POSITIVE_INFINITY;
+  get maximumSize(): number { return this._maximumSize; }
+  set maximumSize(n: number) { this._maximumSize = n; }
+
+  /* _minimumSize: number = 0;
   get minimumSize(): number {
     const headerSize = this.headerSize;
     const expanded = this.expanded;
@@ -38,7 +46,7 @@ export abstract class Pane implements SplitViewItemView {
     const maximumBodySize = expanded ? this.maximumBodySize : 0;
     return headerSize + maximumBodySize;
   }
-  set maximumSize(n: number) { this._maximumSize = n; }
+  set maximumSize(n: number) { this._maximumSize = n; } */
 
   _border: boolean = false;
   get border(): boolean { return this._border; }
