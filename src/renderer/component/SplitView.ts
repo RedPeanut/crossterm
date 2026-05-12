@@ -116,6 +116,15 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
   get viewMinimumSize(): number { return this.view.minimumSize; }
   get viewMaximumSize(): number { return this.view.maximumSize; }
 
+  _cachedSize: number | undefined = undefined;
+  get cachedSize(): number | undefined { return this._cachedSize; }
+  set cachedSize(sz: number | undefined) { this._cachedSize = sz; }
+
+  set size(sz: number) {
+    this.cachedSize = this.view.size;
+    this.view.size = sz;
+  }
+
   _view: T;
   get view() { return this._view; }
 
@@ -550,13 +559,25 @@ export class SplitView<T extends SplitViewItemView> {
       const viewItem = this.viewItems[i];
       if(viewItem.view instanceof Pane) {
         // const view = viewItem.view as Pane;
+
+        // set with cache when wrap_content
         if(viewItem.view.sizeType === 'wrap_content') {
           let itemSize: number, border: number = viewItem.view.border ? 1 : 0;
           if(viewItem.view.expanded) {
-            itemSize = border + viewItem.view.size;
+            if(viewItem.cachedSize != undefined) {
+              itemSize = viewItem.cachedSize; // get itemSize
+
+              viewItem.cachedSize = undefined; // clear cache
+              viewItem.view.size = itemSize; // restore set
+            } else {
+              itemSize = border + viewItem.view.size; // get itemSize
+              if(viewItem.view.size != border + viewItem.view.headerSize)
+                viewItem.size = itemSize; // set with cache
+            }
           } else {
             itemSize = border + viewItem.view.headerSize;
-            // viewItem.view.size = itemSize;
+            if(viewItem.view.size != border + viewItem.view.headerSize)
+              viewItem.size = itemSize; // set with cache
           }
           total += itemSize;
           totalSize -= itemSize;
@@ -570,6 +591,7 @@ export class SplitView<T extends SplitViewItemView> {
       if(viewItem.view instanceof Pane) {
         // const view = viewItem.view as Pane;
 
+        // cache is not required when fill_parent (fixed value set)
         if(viewItem.view.sizeType === 'fill_parent') {
           let border: number = viewItem.view.border ? 1 : 0;
           if(viewItem.view.expanded) {
@@ -581,10 +603,10 @@ export class SplitView<T extends SplitViewItemView> {
       }
     }
 
-    this.layoutViews_pane();
+    this.layoutViews();
   }
 
-  layoutViews_pane(): void {
+  /* layoutViews_pane(): void {
     let offset = 0;
     for(let i = 0; i < this.viewItems.length; i++) {
       const viewItem = this.viewItems[i];
@@ -593,6 +615,8 @@ export class SplitView<T extends SplitViewItemView> {
         // const view = viewItem.view as Pane;
         const border = viewItem.view.border ? 1 : 0;
         viewItem.layoutContainer(border + offset);
+
+        // view.size = view.expanded ? view.size : Pane.HEADER_SIZE;
         // console.log(`[${i}] ${item.size}`);
         offset += border + viewItem.view.size;
       }
@@ -601,5 +625,5 @@ export class SplitView<T extends SplitViewItemView> {
     // Layout sashes
     this.sashItems.forEach(sashItem => sashItem.sash.layout());
     this.updateSashEnablement();
-  }
+  } */
 }
