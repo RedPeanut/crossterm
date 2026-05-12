@@ -509,6 +509,19 @@ export class SplitView<T extends SplitViewItemView> {
 
     // Layout sashes
     this.sashItems.forEach(sashItem => sashItem.sash.layout());
+    this.updateSashEnablement();
+  }
+
+  updateSashEnablement(): void {
+    for(let i = 0; i < this.viewItems.length; i++) {
+      if(i > 0) {
+        // const viewItem = this.viewItems[i];
+        const sashState: SashState = this.viewItems[i].view.sashEnablement ? SashState.Enabled : SashState.Disabled;
+        // if(sashState != this.sashItems[i-1].sash.state) {
+          this.sashItems[i-1].sash.state = sashState;
+        // }
+      }
+    }
   }
 
   /* render() {
@@ -585,5 +598,6 @@ export class SplitView<T extends SplitViewItemView> {
 
     // Layout sashes
     this.sashItems.forEach(sashItem => sashItem.sash.layout());
+    this.updateSashEnablement();
   }
 }

@@ -53,7 +53,12 @@ export abstract class Pane implements SplitViewItemView {
   set border(b: boolean) { this._border = b; }
 
   _sashEnablement: boolean = true;
-  get sashEnablement(): boolean { return this._sashEnablement; }
+  get sashEnablement(): boolean {
+    if(!this.expanded)
+      return false;
+    else
+      return this._sashEnablement;
+  }
   set sashEnablement(b: boolean) { this._sashEnablement = b; }
 
   layout(offset: number, size: number): void {}
