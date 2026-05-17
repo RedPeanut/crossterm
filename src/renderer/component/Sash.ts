@@ -2,6 +2,7 @@ import _ from "lodash";
 import { $, append } from "../util/dom";
 import { renderer } from '..';
 import { EventEmitter } from "events";
+import { Disposable } from "../Lifecycle";
 
 export const enum Orientation {
   VERTICAL,
@@ -57,7 +58,7 @@ export interface HorizontalSashOptions extends SashOptions {
   orientation: Orientation.HORIZONTAL;
 }
 
-export class Sash extends EventEmitter {
+export class Sash extends Disposable {
   container: HTMLElement;
   el: HTMLElement;
   layoutProvider: SashLayoutProvider;

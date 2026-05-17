@@ -280,19 +280,19 @@ export class SplitView<T extends SplitViewItemView> {
         ? (e: SashEvent) => ({ sash, start: e.startY, current: e.currentY, alt: e.altKey })
         : (e: SashEvent) => ({ sash, start: e.startX, current: e.currentX, alt: e.altKey });
 
-      sash.on('sash start', (e) => {
+      sash._on('sash start', (e) => {
         // console.log('sash start event is called.. e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
         this.onSashStart(mappedEvent);
       });
-      sash.on('sash change', (e) => {
+      sash._on('sash change', (e) => {
         // console.log('sash change event is called.. e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
         this.onSashChange(mappedEvent);
       });
-      sash.on('sash end', (e) => {
+      sash._on('sash end', (e) => {
         // console.log('sash end event is called..'); // e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);

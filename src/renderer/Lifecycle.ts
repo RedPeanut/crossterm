@@ -1,11 +1,12 @@
 import { Channels, ElectronHandler } from "../main/preload";
+import { EventEmitter } from "events";
 
 // type Who;
 type Where = HTMLElement | ElectronHandler;
 // type What;
 // type Handler = (() => void) | ((...args: any[]) => void);
 
-export class Disposable {
+export class Disposable extends EventEmitter {
 
   // map: Map<string, (e: Event) => void> = new Map();
   map: Map<Where, Map<string, ((e: Event) => void)[]>> = new Map();
@@ -24,6 +25,13 @@ export class Disposable {
       }
       this.map.get(where).clear();
     }
+
+    for(const [event, handlers] of this.on_map) {
+      for(const handler of handlers) {
+        this.off(event, handler);
+      }
+    }
+    this.on_map.clear(); // = null;
   }
 
   register(where: Where, event: string, handler: (e: Event) => void) {
@@ -49,4 +57,16 @@ export class Disposable {
     }
   }
 
+  on_map: Map<string, ((e: Event) => void)[]> = new Map();
+
+  // _on(event: string, handler: (e: Event) => void) {
+  _on(event: string, handler: (...args: any[]) => void) {
+    if(this.on_map.get(event)) {
+      this.on_map.get(event).push(handler);
+      this.on(event, handler);
+    } else {
+      this.on_map.set(event, [ handler ]);
+      this.on(event, handler);
+    }
+  }
 }
