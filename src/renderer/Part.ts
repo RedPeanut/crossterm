@@ -45,6 +45,9 @@ export abstract class Part implements SplitViewItemView {
   onDidChange(mappedEvent: MappedSashEvent): void {}
   doWhenVisible(visible: boolean): void {}
 
+  preferredWidth: number = 0;
+  preferredHeight: number = 0;
+
   container: HTMLElement | undefined;
   // headerArea: HTMLElement | undefined;
   // titleArea: HTMLElement | undefined;

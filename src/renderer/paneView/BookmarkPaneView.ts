@@ -20,7 +20,9 @@ export class BookmarkPaneView extends PaneView {
     const bookmarkPane = new ListPane(null, {
       collapsed: initialValue.collapsed[IDX.LIST],
       sizeType: initialValue.sizeType[IDX.LIST],
-      size: initialValue.size[IDX.LIST]
+      size: initialValue.size[IDX.LIST],
+      // preferredWidth: initialValue.preferredWidth[IDX.LIST],
+      preferredHeight: initialValue.preferredHeight[IDX.LIST],
     });
     bookmarkPane.render();
     this.addPane(bookmarkPane);
@@ -28,7 +30,9 @@ export class BookmarkPaneView extends PaneView {
     const descPane = new DetailPane(null, {
       collapsed: initialValue.collapsed[IDX.DETAIL],
       sizeType: initialValue.sizeType[IDX.DETAIL],
-      size: initialValue.size[IDX.DETAIL]
+      size: initialValue.size[IDX.DETAIL],
+      // preferredWidth: initialValue.preferredWidth[IDX.DETAIL],
+      preferredHeight: initialValue.preferredHeight[IDX.DETAIL],
     });
     descPane.render();
     this.addPane(descPane);

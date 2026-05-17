@@ -52,6 +52,7 @@ export class SidebarPart extends Part implements SidebarPartService {
     this.minimumSize = 120;
     this.border = true;
     this.sashEnablement = false;
+    this.preferredWidth = 240;
     setService(sidebarPartServiceId, this);
   }
 

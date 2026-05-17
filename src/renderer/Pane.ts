@@ -5,6 +5,8 @@ export interface PaneOptions {
   collapsed: boolean;
   sizeType: string;
   size: number;
+  preferredWidth?: number;
+  preferredHeight?: number;
 }
 
 export abstract class Pane implements SplitViewItemView {
@@ -65,6 +67,9 @@ export abstract class Pane implements SplitViewItemView {
   onDidChange(mappedEvent: MappedSashEvent): void {}
   doWhenVisible(visible: boolean): void {}
 
+  preferredWidth?: number = 0;
+  preferredHeight?: number = 0;
+
   _expanded: boolean = true;
   get expanded(): boolean { return this._expanded; }
   set expanded(b: boolean) {
@@ -110,6 +115,12 @@ export abstract class Pane implements SplitViewItemView {
 
       if(this.options.size)
         this.size = this.options.size;
+
+      if(this.options.preferredWidth)
+        this.preferredHeight = this.options.preferredWidth;
+
+      if(this.options.preferredHeight)
+        this.preferredHeight = this.options.preferredHeight;
     }
 
   }

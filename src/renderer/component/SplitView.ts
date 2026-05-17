@@ -80,6 +80,9 @@ export interface SplitViewItemView {
   layout(offset: number, size: number): void;
   onDidChange(mappedEvent: MappedSashEvent): void;
   doWhenVisible(visible: boolean): void;
+
+  readonly preferredWidth?: number;
+  readonly preferredHeight?: number;
 }
 
 export abstract class SplitViewItem<T extends SplitViewItemView> {

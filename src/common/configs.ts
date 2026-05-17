@@ -18,7 +18,7 @@ const configs = {
     // panel_alignment: 'center', // left | center | right
 
     paneview: [
-      { name: 'bookmark', collapsed: [ false, false ], sizeType: [ 'fill_parent', null ], size: [ null, 200 ] },
+      { name: 'bookmark', collapsed: [ false, false ], sizeType: [ 'fill_parent', null ], size: [ null, 200 ], preferredHeight: [ null, 200 ] },
       { name: 'sample', collapsed: [ false ], sizeType: [ 'fill_parent' ], size: [ null ] }
     ],
   },
