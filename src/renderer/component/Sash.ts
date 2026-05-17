@@ -94,7 +94,9 @@ export class Sash extends Disposable {
 
     this.el.addEventListener('mousedown', this.onMouseDown.bind(this));
     // this.el.addEventListener('touchstart', this.onMouseDown.bind(this));
-    this.el.addEventListener('dblclick', (e) => {});
+    this.el.addEventListener('dblclick', (e) => {
+      this.emit('on did reset', {});
+    });
     this.el.addEventListener('mouseenter', (e) => {
       _.throttle(() => this.el.classList.add('hover'), this.hoverDelay, {trailing:false})();
     });

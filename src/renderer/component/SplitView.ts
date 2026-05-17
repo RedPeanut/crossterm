@@ -302,6 +302,34 @@ export class SplitView<T extends SplitViewItemView> {
         view.onDidChange(mappedEvent);
       });
 
+      sash._on('on did reset', (e) => {
+        // console.log('on did reset is called ..');
+        const index = this.sashItems.findIndex(item => item.sash === sash);
+
+        // if view is fill_parent, control size with next wrap_content view
+        // (fill_parent is only one in line)
+        if(this.viewItems[index].view.sizeType == 'fill_parent') {
+          // const nextView = this.viewItems[index+1].view;
+          let preferredSize = this.orientation == Orientation.HORIZONTAL ? this.viewItems[index+1].view.preferredWidth :this.viewItems[index+1].view.preferredHeight;
+          preferredSize = clamp(preferredSize, this.viewItems[index+1].view.minimumSize, this.viewItems[index+1].view.maximumSize);
+          const delta = preferredSize - this.viewItems[index+1].view.size;
+          // console.log('preferredSize =', preferredSize);
+          // console.log('delta =', delta);
+          this.viewItems[index+1].view.size = preferredSize;
+          this.viewItems[index].view.size = this.viewItems[index].view.size - delta;
+          this.layoutViews();
+        } else {
+          let preferredSize = this.orientation == Orientation.HORIZONTAL ? this.viewItems[index].view.preferredWidth :this.viewItems[index].view.preferredHeight;
+          preferredSize = clamp(preferredSize, this.viewItems[index].view.minimumSize, this.viewItems[index].view.maximumSize);
+          const delta = preferredSize - this.viewItems[index].view.size;
+          // console.log('preferredSize =', preferredSize);
+          // console.log('delta =', delta);
+          this.viewItems[index].view.size = preferredSize;
+          this.viewItems[index+1].view.size = this.viewItems[index+1].view.size - delta;
+          this.layoutViews();
+        }
+      })
+
       const sashItem: SashItem = { sash };
       this.sashItems.splice(index-1, 0, sashItem);
     }
