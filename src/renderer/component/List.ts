@@ -45,6 +45,10 @@ export class List extends Disposable {
   tree: HTMLElement;
   nodes: Node[];
 
+  // scrollable: HTMLElement;
+  scrollbar_v: HTMLElement;
+  slider: HTMLElement;
+
   constructor(container: HTMLElement, list: ListItemElem[],
     onClick: (e: MouseEvent, id: string) => void,
     onDblClick: (e: MouseEvent, id: string) => void
@@ -146,6 +150,35 @@ export class List extends Disposable {
 
   create(): void {
     const list: HTMLElement = this.element = $('.list');
+    list.classList.add('scrollable');
+    // const scrollable = this.scrollable = $('.scrollable');
+
+    this.register(list, 'wheel', (e: WheelEvent) => {
+      let deltaX: number, deltaY: number = e.deltaY;
+
+      // consume all event n write
+      const el = e.currentTarget as HTMLElement;
+      const {
+        scrollLeft, scrollTop, scrollWidth, scrollHeight,
+        clientLeft, clientTop, clientWidth, clientHeight,
+      } = el;
+
+      let _scrollTop, MAX_SCROLL_TOP = scrollHeight - clientHeight;
+      if(scrollTop + deltaY + clientHeight > scrollHeight) {
+        _scrollTop = MAX_SCROLL_TOP;
+      } else if(scrollTop + deltaY < 0)
+        _scrollTop = 0;
+      else
+        _scrollTop = scrollTop + deltaY;
+
+      this.element.scrollTop = _scrollTop;
+      // this.slider.style.top = (scrollTop * clientHeight / scrollHeight).toFixed(2) + 'px';
+      this.slider.style.top = Math.ceil(_scrollTop * clientHeight / scrollHeight) + 'px';
+    });
+
+    this.register(list, 'mouseover', (e: MouseEvent) => {});
+    this.register(list, 'mouseleave', (e: MouseEvent) => {});
+
     this.register(list, 'click', (e: MouseEvent) => {
       // console.log('click event is called ..');
 
@@ -173,8 +206,38 @@ export class List extends Disposable {
       this.nodes.push(node);
     });
 
+    const scrollbar_v = this.scrollbar_v = $('.scrollbar.vertical.invisible');
+    const slider = this.slider = $('.slider');
+    scrollbar_v.appendChild(slider);
+
     list.appendChild(tree);
     this.container.appendChild(list);
+    // this.container.appendChild(scrollable);
+    this.container.appendChild(scrollbar_v);
+  }
+
+  setScrollVisibility() {
+    const {
+      clientLeft, clientTop, clientWidth, clientHeight,
+      scrollLeft, scrollTop, scrollWidth, scrollHeight,
+      offsetLeft, offsetTop, offsetWidth, offsetHeight
+    } = this.element;
+
+    if(scrollHeight > clientHeight) {
+      this.scrollbar_v.classList.remove('invisible');
+      this.scrollbar_v.classList.add('visible');
+
+      setTimeout(() => {
+        const {
+          clientLeft, clientTop, clientWidth, clientHeight,
+          scrollLeft, scrollTop, scrollWidth, scrollHeight,
+          offsetLeft, offsetTop, offsetWidth, offsetHeight
+        } = this.element;
+        console.log(`clientHeight = ${clientHeight}, scrollHeight = ${scrollHeight}`);
+        console.log((clientHeight / scrollHeight * 100).toFixed(2) + '%');
+        this.slider.style.height = (clientHeight / scrollHeight * 100).toFixed(2) + '%';
+      }, 10);
+    }
   }
 
   addNode(type: string) {
