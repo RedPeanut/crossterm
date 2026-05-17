@@ -194,10 +194,13 @@ body { height: 100%; }
   align-items: center;
 }
 
-.pane-view .pane .pane-header ul li { margin-right: 4px; }
+.pane-view .pane .pane-header ul li { margin-right: 3px; }
 .pane-view .pane .pane-header ul li a {
-  width: 14px; height: 14px; font-size:14px; padding: 1px;
-  /* width: 16px; height: 16px; font-size:16px; padding: 3px; */
+  /* width: 14px; height: 14px; font-size: 14px; padding: 1px; */
+  width: 16px; height: 16px; font-size: 16px; padding: 2px;
+}
+.pane-view .pane .pane-header ul li a:hover {
+  background-color: rgb(90 93 94 / 31%);
 }
 
 .pane-view .pane .pane-body { height: calc(100% - 22px); display: none; position: relative; }
