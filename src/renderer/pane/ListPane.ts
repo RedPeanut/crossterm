@@ -17,6 +17,7 @@ export class ListPane extends Pane {
   override layout(offset: number, size: number) {
     // console.log(`layout is called .., offset = ${offset}, size = ${size}`);
     this.list.setScrollVisibility();
+    this.list.scheduleScrollHide();
   }
 
   list: List;

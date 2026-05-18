@@ -74,14 +74,23 @@ const configs = {
       size: { row: 24, col: 80 },
     },
 
-    { id: '7579abd5-6a4f-4ee3-b223-9fba37e13c45', title: 'a', type: 'local', size: { row: 24, col: 80 }, },
-    { id: '24129430-9e9a-4832-8128-15140b5e4c33', title: 'b', type: 'local', size: { row: 24, col: 80 }, },
-    { id: 'f9fc745a-ef19-428e-9604-a8e16bf7c3f2', title: 'c', type: 'local', size: { row: 24, col: 80 }, },
-    { id: '8625a1e7-3dee-4f06-a9c2-f8521cdb6872', title: 'd', type: 'local', size: { row: 24, col: 80 }, },
-    { id: 'adc96fad-694f-4957-afd2-d30dba2ad77f', title: 'e', type: 'local', size: { row: 24, col: 80 }, },
-    { id: '432fbf81-723e-463f-80a1-200773998dda', title: 'f', type: 'local', size: { row: 24, col: 80 }, },
-    { id: 'bb905633-730d-4a0c-8cc0-ba385d2a8b13', title: 'g', type: 'local', size: { row: 24, col: 80 }, },
-    { id: '07d7d5a1-0870-4d35-b760-f3897443b6d5', title: 'h', type: 'local', size: { row: 24, col: 80 }, },
+    {
+      type: 'folder',
+      title: 'a',
+      id: '97852b6c-955e-4a10-9e7a-1634892a7390',
+      children: [
+        { id: '7579abd5-6a4f-4ee3-b223-9fba37e13c45', title: 'a', type: 'local', size: { row: 24, col: 80 }, },
+        { id: '24129430-9e9a-4832-8128-15140b5e4c33', title: 'b', type: 'local', size: { row: 24, col: 80 }, },
+        { id: 'f9fc745a-ef19-428e-9604-a8e16bf7c3f2', title: 'c', type: 'local', size: { row: 24, col: 80 }, },
+        { id: '8625a1e7-3dee-4f06-a9c2-f8521cdb6872', title: 'd', type: 'local', size: { row: 24, col: 80 }, },
+        { id: 'adc96fad-694f-4957-afd2-d30dba2ad77f', title: 'e', type: 'local', size: { row: 24, col: 80 }, },
+        { id: '432fbf81-723e-463f-80a1-200773998dda', title: 'f', type: 'local', size: { row: 24, col: 80 }, },
+        { id: 'bb905633-730d-4a0c-8cc0-ba385d2a8b13', title: 'g', type: 'local', size: { row: 24, col: 80 }, },
+        { id: '07d7d5a1-0870-4d35-b760-f3897443b6d5', title: 'h', type: 'local', size: { row: 24, col: 80 }, },
+      ],
+      isCollapsed: false
+    },
+
     { id: 'a459abbd-6560-4de2-a792-9f808f3746ec', title: 'i', type: 'local', size: { row: 24, col: 80 }, },
     { id: '1761e3b9-7702-41a2-8397-c618ce8f1db8', title: 'j', type: 'local', size: { row: 24, col: 80 }, },
     { id: '36ddea07-1a8c-4d23-8d1d-ad008ea063ae', title: 'k', type: 'local', size: { row: 24, col: 80 }, },

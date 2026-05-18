@@ -2,10 +2,7 @@ import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
 import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
-import { BodyLayoutService } from "../layout/BodyLayout";
 import { Disposable } from "../Lifecycle";
-import { SessionPartService } from "../part/SessionPart";
-import { bodyLayoutServiceId, bookmarkPanelServiceId, sessionPartServiceId, getService, } from "../Service";
 import { $ } from "../util/dom";
 import { findActiveItem, Children } from "../utils";
 import * as utils from "../utils";
@@ -25,6 +22,8 @@ export interface ListItemElem extends Children {
   size?: { row: number, col: number }
 
 }
+
+const SCROLL_HIDE_TIMEOUT: number = 500;
 
 export interface ListOptions {}
 
@@ -48,6 +47,8 @@ export class List extends Disposable {
   // scrollable: HTMLElement;
   scrollbar_v: HTMLElement;
   slider: HTMLElement;
+  isDragging: boolean;
+  mouseIsOver: boolean;
 
   constructor(container: HTMLElement, list: ListItemElem[],
     onClick: (e: MouseEvent, id: string) => void,
@@ -146,6 +147,7 @@ export class List extends Disposable {
 
   _onChange(id: string): void {
     // console.log('_onChange() is called..., id =', id);
+    this.setScrollVisibility();
   }
 
   create(): void {
@@ -176,8 +178,28 @@ export class List extends Disposable {
       this.slider.style.top = Math.ceil(_scrollTop * clientHeight / scrollHeight) + 'px';
     });
 
-    this.register(list, 'mouseover', (e: MouseEvent) => {});
-    this.register(list, 'mouseleave', (e: MouseEvent) => {});
+    this.register(list, 'mouseover', (e: MouseEvent) => {
+      this.mouseIsOver = true;
+      this.setScrollVisibility();
+    });
+    this.register(list, 'mouseleave', (e: MouseEvent) => {
+      this.mouseIsOver = false;
+      if(this.scrollbar_v.classList.contains('visible')) {
+        this.scrollbar_v.classList.remove('visible');
+
+        const {
+          clientLeft, clientTop, clientWidth, clientHeight,
+          scrollLeft, scrollTop, scrollWidth, scrollHeight,
+          offsetLeft, offsetTop, offsetWidth, offsetHeight
+        } = this.element;
+
+        if(scrollHeight > clientHeight) {
+          this.scrollbar_v.classList.add('fade');
+        }
+
+        this.scrollbar_v.classList.add('invisible');
+      }
+    });
 
     this.register(list, 'click', (e: MouseEvent) => {
       // console.log('click event is called ..');
@@ -216,6 +238,24 @@ export class List extends Disposable {
     this.container.appendChild(scrollbar_v);
   }
 
+  scrollHide(): void {
+    if (!this.mouseIsOver && !this.isDragging) {
+      if(this.scrollbar_v.classList.contains('visible')) {
+        this.scrollbar_v.classList.remove('visible');
+        this.scrollbar_v.classList.add('invisible');
+      }
+    }
+  }
+
+  scheduleScrollHide(): void {
+    if(!this.mouseIsOver && !this.isDragging) {
+      let scrollHideTimeout: NodeJS.Timeout;
+      if(scrollHideTimeout)
+        clearTimeout(scrollHideTimeout);
+      scrollHideTimeout = setTimeout(this.scrollHide.bind(this), SCROLL_HIDE_TIMEOUT);
+    }
+  }
+
   setScrollVisibility() {
     const {
       clientLeft, clientTop, clientWidth, clientHeight,
@@ -233,10 +273,14 @@ export class List extends Disposable {
           scrollLeft, scrollTop, scrollWidth, scrollHeight,
           offsetLeft, offsetTop, offsetWidth, offsetHeight
         } = this.element;
-        console.log(`clientHeight = ${clientHeight}, scrollHeight = ${scrollHeight}`);
-        console.log((clientHeight / scrollHeight * 100).toFixed(2) + '%');
+        // console.log(`clientHeight = ${clientHeight}, scrollHeight = ${scrollHeight}`);
+        // console.log((clientHeight / scrollHeight * 100).toFixed(2) + '%');
         this.slider.style.height = (clientHeight / scrollHeight * 100).toFixed(2) + '%';
       }, 10);
+    } else {
+      this.scrollbar_v.classList.remove('visible');
+      this.scrollbar_v.classList.remove('fade');
+      this.scrollbar_v.classList.add('invisible');
     }
   }
 
@@ -329,9 +373,12 @@ export class List extends Disposable {
       }
       //*/
     );
+    this.setScrollVisibility();
+    // TODO: scrollTo if necessary
   }
 
   collapseAll() {
+    this.setScrollVisibility();
   }
 
 }
