@@ -106,26 +106,46 @@ export class SidebarPart extends Part implements SidebarPartService {
   }
 
   activePaneView: PaneView;
-  paneViewMap = new Map<string, PaneView>();
+  lastActivePaneView: PaneView;
+  mapPaneViewToContainer = new Map<string, HTMLElement>();
   titleArea: HTMLElement;
   contentArea: HTMLElement;
 
-  show(title: string, paneView: PaneView) {
+  showPaneView(title: string, paneView: PaneView) {
     const label = this.titleArea.querySelector('h2.label');
     label.innerHTML = title;
 
     this.activePaneView = paneView;
-    let _paneView = this.paneViewMap.get(paneView.id);
-    if(!_paneView) {
-      paneView.create();
-      this.paneViewMap.set(paneView.id, paneView);
+
+    let paneViewContainer = this.mapPaneViewToContainer.get(paneView.id);
+    if(!paneViewContainer) {
+      paneViewContainer = $('.pane-view-container');
+      paneView.create(paneViewContainer);
+      this.mapPaneViewToContainer.set(paneView.id, paneViewContainer);
     }
 
     const contentArea = this.contentArea; // container; // getContentArea();
-    contentArea.appendChild(paneView.element);
+    contentArea.appendChild(paneViewContainer);
+    show(paneViewContainer);
 
     // this.layout();
-    (getService(mainLayoutServiceId) as MainLayout).layout();
+    // (getService(mainLayoutServiceId) as MainLayout).layout();
+  }
+
+  hideActivePaneView(): PaneView | undefined {
+    if(!this.activePaneView)
+      return undefined;
+
+    const paneView = this.activePaneView;
+    const paneViewContainer = this.mapPaneViewToContainer.get(paneView.id);
+    if(paneViewContainer) {
+      paneViewContainer.remove();
+      hide(paneViewContainer);
+    }
+
+    this.lastActivePaneView = paneView;
+    this.activePaneView = undefined;
+    return paneView;
   }
 
   override create(): void {

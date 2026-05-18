@@ -222,6 +222,32 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         paneView: new BookmarkPaneView(),
         codicon: 'bookmark',
         onClick: (e: any) => {
+          // console.log('onClick is called ..');
+          // toggle or switch
+
+          // activitybar part
+          const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
+          if(activeItem) {
+            if(activeItem.id === items[0].id) {
+              this.activitybarPart.hideActiveItem();
+            } else {
+              this.activitybarPart.changeActiveItem(items[0].id);
+            }
+          } else {
+            this.activitybarPart.showActiveItem(items[0].id);
+          }
+
+          // sidebar part
+          const activePaneView = this.sidebarPart.activePaneView;
+          if(activePaneView instanceof BookmarkPaneView) {
+            this.sidebarPart.hideActivePaneView();
+            this.setPartHidden(true, Parts.SIDEBAR_PART);
+          } else {
+            this.sidebarPart.hideActivePaneView();
+            this.sidebarPart.showPaneView(items[0].title, items[0].paneView);
+            this.setPartHidden(false, Parts.SIDEBAR_PART);
+          }
+          (getService(mainLayoutServiceId) as MainLayout).layout();
         }
       },
       {
@@ -230,6 +256,31 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         paneView: new SamplePaneView(),
         codicon: 'info',
         onClick: (e: any) => {
+          // toggle or switch
+
+          // activitybar part
+          const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
+          if(activeItem) {
+            if(activeItem.id === items[1].id) {
+              this.activitybarPart.hideActiveItem();
+            } else {
+              this.activitybarPart.changeActiveItem(items[1].id);
+            }
+          } else {
+            this.activitybarPart.showActiveItem(items[1].id);
+          }
+
+          // sidebar part
+          const activePaneView = this.sidebarPart.activePaneView;
+          if(activePaneView instanceof SamplePaneView) {
+            this.sidebarPart.hideActivePaneView();
+            this.setPartHidden(true, Parts.SIDEBAR_PART);
+          } else {
+            this.sidebarPart.hideActivePaneView();
+            this.sidebarPart.showPaneView(items[1].title, items[1].paneView);
+            this.setPartHidden(false, Parts.SIDEBAR_PART);
+          }
+          (getService(mainLayoutServiceId) as MainLayout).layout();
         }
       },
     ];
@@ -249,7 +300,8 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     activitybarPartContainer.appendChild(ul);
     this.activitybarPart.updateChecked(selected.id, true);
 
-    this.sidebarPart.show(selected.title, selected.paneView);
+    this.sidebarPart.showPaneView(selected.title, selected.paneView);
+    (getService(mainLayoutServiceId) as MainLayout).layout();
   }
 
   recreate(): void {

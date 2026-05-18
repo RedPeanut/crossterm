@@ -10,6 +10,7 @@ interface PaneViewOptions {
 
 export abstract class PaneView {
 
+  parent: HTMLElement | undefined;
   element: HTMLElement;
   splitView: SplitView<Pane>;
   size: number = 0;
@@ -21,8 +22,10 @@ export abstract class PaneView {
     this.orientation = options.orientation || Orientation.VERTICAL;
   }
 
-  create(): void {
+  create(parent: HTMLElement): void {
+    this.parent = parent;
     this.element = $('.pane-view');
+    this.parent.appendChild(this.element);
     this.splitView = new SplitView<Pane>(this.element, { orientation: this.orientation });
   }
 

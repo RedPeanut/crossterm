@@ -10,8 +10,8 @@ export class BookmarkPaneView extends PaneView {
     super({ id: BookmarkPaneView.ID });
   }
 
-  override create(): void {
-    super.create();
+  override create(parent: HTMLElement): void {
+    super.create(parent);
     this.element.classList.add('bookmark');
 
     const initialValue = renderer.initial_value.paneview.find((v) => v.name == 'bookmark');
