@@ -211,7 +211,7 @@ class MainWindow {
       if(!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
-      return new PotDb(dir);;
+      return new PotDb(dir);
     }
 
     ipcMain.handle('config all', async (event, args: any[]) => {

@@ -44,10 +44,10 @@ export class Menubar {
   addApplicationMenu(options: MenuItemConstructorOptions[]) {
     options.push({
       id: 'application',
-      label: 'yourappname',
+      label: 'crossterm',
       submenu: [
         {
-          label: 'About yourappname',
+          label: 'About crossterm',
         },
         { type: 'separator' },
         {
@@ -57,7 +57,7 @@ export class Menubar {
         },
         { type: 'separator' },
         {
-          label: 'Hide yourappname',
+          label: 'Hide crossterm',
           accelerator: 'Command+H',
           // selector: 'hide:',
           role: 'hide'

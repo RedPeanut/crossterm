@@ -3,7 +3,7 @@ import path from 'path';
 import os from 'os';
 // const { NODE_ENV } = process.env;
 
-class Runtime {
+export default class Runtime {
 
   /* dir by app vs os */
 
@@ -37,5 +37,3 @@ class Runtime {
   public static defaultLang = 'en_us';
   // public static packInfo = require(this.isDev ? '../../package.json' : '../../package.json')
 }
-
-export default Runtime;

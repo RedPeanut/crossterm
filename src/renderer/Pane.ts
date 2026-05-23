@@ -1,13 +1,15 @@
 import { MappedSashEvent, SplitViewItemSizeType, SplitViewItemView } from "./component/SplitView";
 import { $, append } from "./util/dom";
 
-export interface PaneOptions {
+export interface _PaneOptions {
   collapsed: boolean;
   sizeType: string;
   size: number;
-  preferredWidth?: number;
-  preferredHeight?: number;
+  preferredWidth: number;
+  preferredHeight: number;
 }
+
+export type PaneOptions = Partial<_PaneOptions>;
 
 export abstract class Pane implements SplitViewItemView {
   static HEADER_SIZE = 22;
