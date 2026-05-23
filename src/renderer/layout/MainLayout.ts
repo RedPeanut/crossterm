@@ -132,6 +132,9 @@ export class MainLayout extends Layout implements MainLayoutService {
         term.xterm.write(data);
       }
     });
+    window.ipc.on('app close request', (...args: any[]) => {
+      window.ipc.send('app close ready', null);
+    });
   }
 
   /* createPartContainer(id: string, role: string, classes: string[]): HTMLElement {

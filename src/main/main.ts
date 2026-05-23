@@ -243,6 +243,17 @@ class MainWindow {
       const update = await db.dict.cfg.update(_new);
       // console.log('update =', update);
     });
+
+    ipcMain.on('app close ready', (event, data) => {
+      console.log('렌더러로부터 받은 최종 데이터:', data);
+
+      // 여기서 파일 저장 등 무거운 비동기 작업 처리 가능
+      // ...
+
+      // 할 일이 끝났으므로 플래그를 true로 바꾸고 앱을 진짜 종료합니다.
+      isReadyToQuit = true;
+      app.quit();
+    });
   }
 
   createWindow = async () => {
@@ -299,7 +310,17 @@ class MainWindow {
       }
     });
 
+    this.browserWindow.on('close', (event) => {
+      console.log('close event is called ..');
+
+      if(!isReadyToQuit) {
+        event.preventDefault();
+        this.browserWindow.webContents.send('app close request');
+      }
+    });
+
     this.browserWindow.on('closed', () => {
+      console.log('closed event is called ..');
       this.browserWindow = null;
     });
 
@@ -338,6 +359,25 @@ app.on('window-all-closed', () => {
   // after all windows have been closed
   if(process.platform !== 'darwin') {
     app.quit();
+  }
+});
+
+let isReadyToQuit: boolean = false;
+
+app.on('before-quit', (event) => {
+  console.log('before-quit is called ..');
+  if(!isReadyToQuit) {
+    // 1. 이미 데이터 저장이 끝난 게 아니라면, 앱 전체 종료를 일단 '취소'합니다.
+    event.preventDefault();
+
+    // 2. 렌더러에게 데이터를 정리하라고 이벤트를 보냅니다.
+    if(mainWindow && !mainWindow.browserWindow.isDestroyed()) {
+      mainWindow.browserWindow.webContents.send('app close request');
+    } else {
+      // 만약 창이 이미 없는 상태라면 바로 종료
+      isReadyToQuit = true;
+      app.quit();
+    }
   }
 });
 

@@ -31,6 +31,9 @@ export type MainEvents =
   //
   | 'open context menu'
   | 'command'
+
+  //
+  | 'app close ready'
 ;
 
 // main to renderer
@@ -41,6 +44,9 @@ export type RenderEvents =
 
   // window
   | 'window state changed'
+
+  //
+  | 'app close request'
 ;
 
 export type Channels = MainEvents | RenderEvents;
