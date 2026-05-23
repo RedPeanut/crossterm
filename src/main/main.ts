@@ -23,6 +23,7 @@ import TerminalSsh from './terminal/TerminalSsh';
 import TerminalBase from './terminal/TerminalBase';
 import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
+import { clamp } from "../common/util/numbers";
 
 class AppUpdater {
   constructor() {
@@ -72,21 +73,39 @@ class MainWindow {
     }
   }
 
-  getWindowSize = () => {
+  getWindowSize = async () => {
 
-    // todo: if dev maxmize window
-    // else if exist last state window size then use
-    // else set to default size (width: 1024, height: 728)
+    // restore last window size
+    // if dev maxmize window
 
     const {
       width: maxWidth,
       height: maxHeight
     } = this.getMaxScreenSize();
 
+    function getDb(): PotDb {
+      const dir = path.join(app.getPath('userData'), 'potdb');
+      return new PotDb(dir);
+    }
+
+    const db = getDb();
+    const [ key ] = [ 'initial_value' ];
+    const initial_value = await db.dict.cfg.get(key, default_configs[key]);
+
+    const minWidth = 800;
+    const minHeight = 600;
+    let width = clamp(initial_value.window_size.width, minWidth, maxWidth);
+    let height = clamp(initial_value.window_size.height, minHeight, maxHeight);
+
+    if(this.isDebug) {
+      width = maxWidth;
+      height = maxHeight;
+    }
+
     return {
       x: 0, y: 0,
-      width: maxWidth,
-      height: maxHeight
+      width,
+      height
     }
   }
 
@@ -207,11 +226,18 @@ class MainWindow {
     });
 
     function getDb(): PotDb {
-      let dir = path.join(app.getPath('userData'), 'potdb');
-      if(!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
+      const dir = path.join(app.getPath('userData'), 'potdb');
       return new PotDb(dir);
+    }
+
+    const dir = path.join(app.getPath('userData'), 'potdb');
+    if(!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    if(!fs.existsSync(path.join(dir, 'dict', 'cfg.json'))) {
+      const db = getDb();
+      const update = db.dict.cfg.update(default_configs);
     }
 
     ipcMain.handle('config all', async (event, args: any[]) => {
@@ -269,7 +295,9 @@ class MainWindow {
       return path.join(RESOURCES_PATH, ...paths);
     };
 
-    const { x, y, width, height } = this.getWindowSize();
+    this.installIpc();
+
+    const { x, y, width, height } = await this.getWindowSize();
 
     const MENUBAR_HEIGHT = 34;
     const MACOS_TRAFFIC_LIGHTS_HEIGHT = 16;
@@ -296,8 +324,6 @@ class MainWindow {
       },
     });
     this.browserWindow.loadURL(resolveHtmlPath('index.html'));
-
-    this.installIpc();
 
     this.browserWindow.on('ready-to-show', () => {
       if(!this.browserWindow) {

@@ -1,5 +1,6 @@
 const configs = {
   initial_value: {
+    window_size: { width: 800, height: 600 },
     // grid_size: { width: 800, height: 600 }, // not use
 
     // activitybar_visible: true, // not use

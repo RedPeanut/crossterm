@@ -132,7 +132,9 @@ export class MainLayout extends Layout implements MainLayoutService {
         term.xterm.write(data);
       }
     });
-    window.ipc.on('app close request', (...args: any[]) => {
+    window.ipc.on('app close request', async (...args: any[]) => {
+      await window.ipc.invoke('config set', 'initial_value', renderer.initial_value);
+      await window.ipc.invoke('config set', 'list', renderer.list);
       window.ipc.send('app close ready', null);
     });
   }
@@ -291,19 +293,24 @@ export class MainLayout extends Layout implements MainLayoutService {
     this.installIpc();
 
     const resize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      // console.log(`현재 창 크기: ${width}px x ${height}px`);
+      renderer.initial_value.window_size.width = width;
+      renderer.initial_value.window_size.height = height;
       this.layout();
     };
 
     let resizeTimeout: NodeJS.Timeout = null;
-    let _handleResize = () => {
+    let _handleResize = (event: UIEvent) => {
       if(resizeTimeout)
         clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(resize, 100);
     };
 
-    window.addEventListener('resize', () => {
+    window.addEventListener('resize', (event: UIEvent) => {
       // console.log('resize event is called ..');
-      _handleResize();
+      _handleResize(event);
     });
 
     // create terminal after layout n ipc install
