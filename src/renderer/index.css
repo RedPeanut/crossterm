@@ -206,7 +206,9 @@ body { height: 100%; }
 .pane-view .pane .pane-body { height: calc(100% - 22px); display: none; position: relative; }
 .pane-view .pane.expanded .pane-body { display: block; }
 
-.pane-view.bookmark .pane.detail p { padding: 8px; }
+.pane-view .pane p { padding: 8px; }
+/* .pane-view.bookmark .pane.detail p { padding: 8px; }
+.pane-view.sample .pane.sample p { padding: 8px; } */
 
 .grid-branch-node { height: 100%; }
 
