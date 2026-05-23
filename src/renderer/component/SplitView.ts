@@ -2,7 +2,7 @@ import { EventEmitter } from "events";
 import { append, $ } from "../util/dom";
 import { Orientation, Sash, SashEvent, SashState } from "./Sash";
 import { range } from "../util/arrays";
-import { clamp } from "../util/numbers";
+import { clamp } from "../../common/util/numbers";
 import { Pane } from "../Pane";
 
 export interface MappedSashEvent {
