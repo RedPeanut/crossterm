@@ -33,7 +33,7 @@ export type MainEvents =
   | 'command'
 
   //
-  | 'app close ready'
+  | 'app quit ready'
 ;
 
 // main to renderer
@@ -46,7 +46,7 @@ export type RenderEvents =
   | 'window state changed'
 
   //
-  | 'app close request'
+  | 'app quit request'
 ;
 
 export type Channels = MainEvents | RenderEvents;
