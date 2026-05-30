@@ -12,3 +12,10 @@ export interface SplitItem {
 export function isSplitItem(o: any) {
   return 'mode' in o && 'list' in o && o.list.length > 0;
 }
+
+export enum Severity {
+  Ignore,
+  Info,
+  Warning,
+  Error
+}

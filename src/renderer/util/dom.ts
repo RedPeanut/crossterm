@@ -27,6 +27,12 @@ export const {
   };
 })();
 
+export function clearNode(node: HTMLElement): void {
+  while(node.firstChild) {
+    node.firstChild.remove();
+  }
+}
+
 export function append<T extends Node>(parent: HTMLElement, child: T): T;
 export function append<T extends Node>(parent: HTMLElement, ...children: (T | string)[]): T | void {
   parent.append(...children);
@@ -172,4 +178,25 @@ export function hide(...elements: HTMLElement[]): void {
     element.style.display = 'none';
     element.setAttribute('aria-hidden', 'true');
   }
+}
+
+export interface DomNodePagePosition {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+/**
+ * Returns the position of a dom node relative to the entire page.
+ */
+export function getDomNodePagePosition(domNode: HTMLElement): DomNodePagePosition {
+  const bb = domNode.getBoundingClientRect();
+  const _window = window; // getWindow(domNode);
+  return {
+    left: bb.left + _window.scrollX,
+    top: bb.top + _window.scrollY,
+    width: bb.width,
+    height: bb.height
+  };
 }

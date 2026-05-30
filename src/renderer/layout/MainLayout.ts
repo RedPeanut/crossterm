@@ -18,6 +18,7 @@ import { MenubarService } from '../part/Menubar';
 import { renderer } from '..';
 // import { SerializableGrid, SerializableView, SerializedGrid, SerializedLeafNode, SerializedNode } from '../component/Grid';
 import { GridView, SerializedGridView, SerializedLeafNode, SerializedNode } from '../component/GridView';
+import { ContextViewServiceImpl } from '../service/ContextViewService';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -94,6 +95,8 @@ export class MainLayout extends Layout implements MainLayoutService {
     splitView.addView(statusbarPart);
 
     this.parent.appendChild(this.container);
+
+    new ContextViewServiceImpl(this.container);
   }
 
   layout(): void {

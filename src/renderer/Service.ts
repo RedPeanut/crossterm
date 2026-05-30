@@ -7,6 +7,7 @@ export const activitybarPartServiceId = "activitybarPartService";
 export const sidebarPartServiceId = "sidebarPartService";
 export const sessionPartServiceId = "sessionPartService";
 export const bookmarkPanelServiceId = "BookmarkPanelService";
+export const contextViewServiceId = "contextViewService";
 export const blarBlarServiceId = "blarBlarService";
 
 type ServiceId = typeof mainLayoutServiceId // MainLayoutService
@@ -16,6 +17,7 @@ type ServiceId = typeof mainLayoutServiceId // MainLayoutService
   | typeof sidebarPartServiceId // SidebarPartService
   | typeof sessionPartServiceId // SessionPartService
   | typeof bookmarkPanelServiceId // BookmarkPanelService
+  | typeof contextViewServiceId // contextViewService
   | typeof blarBlarServiceId // BlarBlarService
 ;
 
