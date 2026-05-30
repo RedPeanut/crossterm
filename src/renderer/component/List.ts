@@ -684,7 +684,23 @@ export class Node extends Disposable implements Children {
 
     node.appendChild(content);
     wrapper.appendChild(node);
-    this.container.appendChild(wrapper);
+
+    if(level > 0) {
+      if(data.type == 'folder') {
+        const at = Array.from(this.container.children).slice(1)[0]
+        this.container.insertBefore(wrapper, at || null);
+      } else {
+        const at = Array.from(this.container.children).slice(1).find((v) => (v as HTMLElement).dataset.type !== 'folder');
+        this.container.insertBefore(wrapper, at || null);
+      }
+    } else {
+      if(data.type == 'folder') {
+        this.container.insertBefore(wrapper, Array.from(this.container.children)[0] || null);
+      } else {
+        const at = Array.from(this.container.children).find((v) => (v as HTMLElement).dataset.type !== 'folder');
+        this.container.insertBefore(wrapper, at || null);
+      }
+    }
 
     input.focus();
   }
