@@ -362,14 +362,144 @@ export class List extends Disposable {
           this._onDblClick(e, data.id);
         });
 
-        // push node to nodes
+        // move dom n node
+
+        let nodeList: Node[];
+        let rootDom: HTMLElement;
+
         if(targetNode == null) {
-          // push to this.nodes
-          this.nodes.push(node);
+          nodeList = this.nodes;
+          rootDom = this.tree;
+
+          if(type == 'folder') {
+            let targetPos = 0, found: boolean = false, last: boolean = false;
+
+            for(let i = 0; i < nodeList.length; i++) {
+              if(nodeList[i].type == 'folder') {
+                if(nodeList[i].title.innerHTML > node.input.value) {
+                  targetPos = i; found = true;
+                  break;
+                }
+              }
+            }
+
+            if(!found) {
+              targetPos = nodeList.findIndex((v) => ['local', 'remote'].includes(v.type));
+              if(targetPos == -1) last = true;
+            }
+
+            // remove n append in dom
+            rootDom.removeChild(node.wrapper);
+            if(last)
+              rootDom.appendChild(node.wrapper);
+            else
+              rootDom.insertBefore(node.wrapper, rootDom.children[targetPos]);
+
+            // append in node list
+            if(last)
+              nodeList.push(node);
+            else
+              nodeList.splice(targetPos, 0, node);
+            // console.log('this.nodes =', this.nodes);
+          } else {
+            let targetPos = 0, found: boolean = false, last: boolean = false;
+
+            for(let i = 0; i < nodeList.length; i++) {
+              if(['local', 'remote'].includes(nodeList[i].type)) {
+                if(nodeList[i].title.innerHTML > node.input.value) {
+                  targetPos = i; found = true;
+                  break;
+                }
+              }
+            }
+
+            if(!found) {
+              // targetPos = this.nodes.length-1;
+              last = true;
+            }
+
+            // remove n append in dom
+            rootDom.removeChild(node.wrapper);
+            if(last)
+              rootDom.appendChild(node.wrapper);
+            else
+              rootDom.insertBefore(node.wrapper, rootDom.children[targetPos]);
+
+            // append in node list
+            if(last)
+              nodeList.push(node);
+            else
+              nodeList.splice(targetPos, 0, node);
+            // console.log('this.nodes =', this.nodes);
+          }
+
         } else {
-          // push to targetNode children
-          targetNode.children.push(node);
+          nodeList = targetNode.children;
+          rootDom = targetNode.wrapper;
+
+          if(type == 'folder') {
+            let targetPos = 0, found: boolean = false, last: boolean = false;
+
+            for(let i = 0; i < nodeList.length; i++) {
+              if(nodeList[i].type == 'folder') {
+                if(nodeList[i].title.innerHTML > node.input.value) {
+                  targetPos = i; found = true;
+                  break;
+                }
+              }
+            }
+
+            if(!found) {
+              targetPos = nodeList.findIndex((v) => ['local', 'remote'].includes(v.type));
+              if(targetPos == -1) last = true;
+            }
+
+            // remove n append in dom
+            rootDom.removeChild(node.wrapper);
+            if(last)
+              rootDom.appendChild(node.wrapper);
+            else
+              rootDom.insertBefore(node.wrapper, Array.from(rootDom.children).slice(1)[targetPos]);
+
+            // append in node list
+            if(last)
+              nodeList.push(node);
+            else
+              nodeList.splice(targetPos, 0, node);
+            // console.log('this.nodes =', this.nodes);
+          } else {
+            let targetPos = 0, found: boolean = false, last: boolean = false;
+
+            for(let i = 0; i < nodeList.length; i++) {
+              if(['local', 'remote'].includes(nodeList[i].type)) {
+                if(nodeList[i].title.innerHTML > node.input.value) {
+                  targetPos = i; found = true;
+                  break;
+                }
+              }
+            }
+
+            if(!found) {
+              // targetPos = this.nodes.length-1;
+              last = true;
+            }
+
+            // remove n append in dom
+            rootDom.removeChild(node.wrapper);
+            if(last)
+              rootDom.appendChild(node.wrapper);
+            else
+              rootDom.insertBefore(node.wrapper, Array.from(rootDom.children).slice(1)[targetPos]);
+
+            // append in node list
+            if(last)
+              nodeList.push(node);
+            else
+              nodeList.splice(targetPos, 0, node);
+            // console.log('this.nodes =', this.nodes);
+          }
         }
+
       }
       //*/
     );
