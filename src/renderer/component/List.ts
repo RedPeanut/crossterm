@@ -4,9 +4,13 @@ import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { Disposable } from "../Lifecycle";
 import { $ } from "../util/dom";
+import * as dom from "../util/dom";
 import { findActiveItem, Children } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
+import { contextViewServiceId, getService, mainLayoutServiceId } from "../Service";
+import { ContextViewService } from "../service/ContextViewService";
+import { Severity } from "../Types";
 
 export type ListItemType = 'local' | 'remote' | 'group' | 'folder';
 export type FolderModeType = 0 | 1 | 2; // 0: 기본값; 1: 단일 선택 2: 다중 선택
@@ -666,12 +670,115 @@ export class Node extends Disposable implements Children {
     listItem.appendChild(span);
 
     const input = this.input = $('input.title');
+
     this.register(input, 'keydown', (e: KeyboardEvent) => {
       if(e.key === 'Escape') {
         onCancel();
       } else if(e.key === 'Enter') {
         onFinish();
       }
+    });
+
+    this.register(input, 'input', (e: KeyboardEvent) => {
+
+      // console.log('input.value =', input.value);
+
+      // validate n show message box
+
+      function validate(name: string): { content: string; severity: Severity } | null {
+
+        // Name not provided
+        if(!name || name.length === 0 || /^\s+$/.test(name)) {
+          return {
+            content: 'Name must be provided.', // emptyNameError
+            severity: Severity.Error
+          };
+        }
+
+        /* // Do not allow to overwrite existing
+        return {
+          content: `**${name}** already exists at this location. Please choose a different name.`, // nameExistsError
+          severity: Severity.Error
+        }; */
+
+        // const names = coalesce(name.split(/[\\/]/));
+        // if(names.some(name => /^\s|\s$/.test(name))) {
+        if(/^\s|\s$/.test(name)) {
+          return {
+            content: `Leading or trailing whitespace detected in name.`, // nameWhitespaceWarning
+            severity: Severity.Warning
+          };
+        }
+
+        return null;
+      }
+
+      let errorMsg = validate(input.value);
+      if(errorMsg) {
+
+        input.classList.remove('idle');
+        input.classList.remove('info');
+        input.classList.remove('warning');
+        input.classList.remove('error');
+
+        function classFor(severity: Severity): string {
+          switch(severity) {
+            case Severity.Info: return 'info';
+            case Severity.Warning: return 'warning';
+            default: return 'error';
+          }
+        }
+
+        input.classList.add(classFor(errorMsg.severity));
+
+        function stylesFor(severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
+          switch(severity) {
+            // case Severity.Info: return { border: styles.inputValidationInfoBorder, background: styles.inputValidationInfoBackground, foreground: styles.inputValidationInfoForeground };
+            case Severity.Warning: return { border: 'rgb(184 149 0)', background: 'rgb(53 42 5)', foreground: 'white' };
+            default: return { border: 'rgb(190 17 0)', background: 'rgb(90 29 29)', foreground: 'white' };
+          }
+        }
+
+        let div: HTMLElement;
+
+        const layout = () => {
+          const totalWidth = input.offsetWidth
+            + window.getComputedStyle(input).getPropertyValue('margin-left');
+            + window.getComputedStyle(input).getPropertyValue('margin-right');
+          return div.style.width = totalWidth + 'px';
+        };
+
+        (getService(contextViewServiceId) as ContextViewService).show({
+          getAnchor: () => input,
+          render: (container: HTMLElement) => {
+            div = dom.append(container, $('.input-msgbox'));
+            layout();
+
+            const spanElement = document.createElement('span');
+            spanElement.textContent = errorMsg.content;
+            spanElement.classList.add(classFor(errorMsg.severity));
+
+            const styles = stylesFor(errorMsg.severity);
+            spanElement.style.backgroundColor = styles.background ?? '';
+            spanElement.style.color = styles.foreground ?? '';
+            spanElement.style.border = styles.border ? `1px solid ${styles.border}` : '';
+
+            dom.append(div, spanElement);
+          },
+          onHide: null
+        });
+      } else {
+        input.classList.remove('info');
+        input.classList.remove('warning');
+        input.classList.remove('error');
+        input.classList.add('idle');
+
+        (getService(contextViewServiceId) as ContextViewService).hide();
+      }
+
+    });
+    this.register(input, 'blur', (e: UIEvent) => {
+
     });
     listItem.appendChild(input);
 
