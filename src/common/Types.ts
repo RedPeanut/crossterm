@@ -11,7 +11,7 @@ export interface TerminalItem {
   // in main
   // properties that are describe to terminal
   // text, position, etc ...
-  type?: string;
+  type?: string; // 'folder' | 'local' | 'remote'
 
   size?: {
     row: number;

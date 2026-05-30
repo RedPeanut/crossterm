@@ -23,7 +23,7 @@ import TerminalSsh from './terminal/TerminalSsh';
 import TerminalBase from './terminal/TerminalBase';
 import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
-import { clamp } from "../common/util/numbers";
+import { clamp } from '../common/util/numbers';
 
 class AppUpdater {
   constructor() {

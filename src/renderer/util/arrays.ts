@@ -4,6 +4,7 @@
 export function coalesce<T>(array: ReadonlyArray<T | undefined | null>): T[] {
   return <T[]>array.filter(e => !!e);
 }
+
 export function range(to: number): number[];
 export function range(from: number, to: number): number[];
 export function range(arg: number, to?: number): number[] {

@@ -297,7 +297,7 @@ export class List extends Disposable {
     if(selectedIds.length > 0) {
       // find first folder from last selected?
       const findId = selectedIds[selectedIds.length-1];
-      const findNode = flattened.find((v) => v.shortenedId == findId);
+      const findNode = flattened.find((v) => v.shortenedId === findId);
 
       if(findNode) {
         // targetNode is always folder
