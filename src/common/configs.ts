@@ -49,35 +49,10 @@ const configs = {
       ],
       isCollapsed: false
     },
-    {
-      type: 'remote',
-      title: 'remote',
-      // url: 'www.remote.com',
-      id: '8d65f5a3-306d-44c7-a43f-b5abc17b6a2b',
-      url: {
-        host: '192.168.200.104',
-        port: 22,
-        username: 'kimjk',
-        password: '1234',
-        // password: '1111',
-      },
-      size: { row: 24, col: 80 }
-    },
-    /* {
-      type: 'group',
-      title: 'group',
-      id: 'cbf8ea19-4474-4c15-8af0-3a4bdcdff717'
-    }, */
-    {
-      type: 'local',
-      title: 'local',
-      id: '751b26d0-5c94-4328-a0e8-23fdd85d160f',
-      size: { row: 24, col: 80 },
-    },
 
     {
       type: 'folder',
-      title: 'a',
+      title: 'g',
       id: '97852b6c-955e-4a10-9e7a-1634892a7390',
       children: [
         { id: '7579abd5-6a4f-4ee3-b223-9fba37e13c45', title: 'a', type: 'local', size: { row: 24, col: 80 }, },
@@ -92,16 +67,41 @@ const configs = {
       isCollapsed: false
     },
 
+    /* {
+      type: 'group',
+      title: 'group',
+      id: 'cbf8ea19-4474-4c15-8af0-3a4bdcdff717'
+    }, */
     { id: 'a459abbd-6560-4de2-a792-9f808f3746ec', title: 'i', type: 'local', size: { row: 24, col: 80 }, },
     { id: '1761e3b9-7702-41a2-8397-c618ce8f1db8', title: 'j', type: 'local', size: { row: 24, col: 80 }, },
     { id: '36ddea07-1a8c-4d23-8d1d-ad008ea063ae', title: 'k', type: 'local', size: { row: 24, col: 80 }, },
     { id: 'ba11e845-1c7c-45a2-b5d0-0ef13aa12634', title: 'l', type: 'local', size: { row: 24, col: 80 }, },
+    {
+      type: 'local',
+      title: 'local',
+      id: '751b26d0-5c94-4328-a0e8-23fdd85d160f',
+      size: { row: 24, col: 80 },
+    },
     { id: '02a6e4f5-1b2f-48d0-9a55-c52a6e858a4b', title: 'm', type: 'local', size: { row: 24, col: 80 }, },
     { id: '5d1921e5-6492-42fd-ae40-ae09fc3c395e', title: 'n', type: 'local', size: { row: 24, col: 80 }, },
     { id: 'fcf78377-7b1c-4eb2-abf2-a8880c5b03e8', title: 'o', type: 'local', size: { row: 24, col: 80 }, },
     { id: '0c249d60-d2ca-49aa-b0d4-5a7ef741fe66', title: 'p', type: 'local', size: { row: 24, col: 80 }, },
     { id: '9b9c9698-ce1d-44da-82cf-bb4ea37867f1', title: 'q', type: 'local', size: { row: 24, col: 80 }, },
     { id: '49cc737a-2170-4d1b-a9bc-276b13f24d2b', title: 'r', type: 'local', size: { row: 24, col: 80 }, },
+    {
+      type: 'remote',
+      title: 'remote',
+      // url: 'www.remote.com',
+      id: '8d65f5a3-306d-44c7-a43f-b5abc17b6a2b',
+      url: {
+        host: '192.168.200.104',
+        port: 22,
+        username: 'kimjk',
+        password: '1234',
+        // password: '1111',
+      },
+      size: { row: 24, col: 80 }
+    },
     { id: '69adc5c0-e03c-4bf8-99a7-8720b2e79d47', title: 's', type: 'local', size: { row: 24, col: 80 }, },
     { id: '00164180-e076-461d-96e4-96e13adec566', title: 't', type: 'local', size: { row: 24, col: 80 }, },
     { id: 'ece6fe4c-aa5e-471d-8c15-ece06d247cb3', title: 'u', type: 'local', size: { row: 24, col: 80 }, },
