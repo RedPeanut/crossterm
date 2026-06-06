@@ -45,7 +45,9 @@ export class Term {
     });
     // console.log('retVal =', retVal);
 
-    const _xterm = new xterm({});
+    const _xterm = new xterm({
+      fontSize: 13
+    });
     // Load WebLinksAddon on terminal, this is all that's needed to get web links
     // working in the terminal.
     _xterm.loadAddon(new WebLinksAddon());
