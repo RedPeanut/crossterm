@@ -742,9 +742,7 @@ export class Node extends Disposable implements Children {
         let div: HTMLElement;
 
         const layout = () => {
-          const totalWidth = input.offsetWidth
-            + window.getComputedStyle(input).getPropertyValue('margin-left');
-            + window.getComputedStyle(input).getPropertyValue('margin-right');
+          const totalWidth = dom.getTotalWidth(input);
           return div.style.width = totalWidth + 'px';
         };
 

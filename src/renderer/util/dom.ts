@@ -200,3 +200,69 @@ export function getDomNodePagePosition(domNode: HTMLElement): DomNodePagePositio
     height: bb.height
   };
 }
+
+export function getComputedStyle(el: HTMLElement): CSSStyleDeclaration {
+  return getWindow(el).getComputedStyle(el, null);
+}
+
+class SizeUtils {
+
+  static convertToPixels(element: HTMLElement, value: string): number {
+    return parseFloat(value) || 0;
+  }
+
+  static getDimension(element: HTMLElement, cssPropertyName: string, jsPropertyName: string): number {
+    const computedStyle = getComputedStyle(element);
+    const value = computedStyle ? computedStyle.getPropertyValue(cssPropertyName) : '0';
+    return SizeUtils.convertToPixels(element, value);
+  }
+
+  static getBorderLeftWidth(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'border-left-width', 'borderLeftWidth');
+  }
+  static getBorderRightWidth(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'border-right-width', 'borderRightWidth');
+  }
+  static getBorderTopWidth(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'border-top-width', 'borderTopWidth');
+  }
+  static getBorderBottomWidth(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'border-bottom-width', 'borderBottomWidth');
+  }
+
+  static getPaddingLeft(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'padding-left', 'paddingLeft');
+  }
+  static getPaddingRight(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'padding-right', 'paddingRight');
+  }
+  static getPaddingTop(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'padding-top', 'paddingTop');
+  }
+  static getPaddingBottom(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'padding-bottom', 'paddingBottom');
+  }
+
+  static getMarginLeft(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'margin-left', 'marginLeft');
+  }
+  static getMarginTop(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'margin-top', 'marginTop');
+  }
+  static getMarginRight(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'margin-right', 'marginRight');
+  }
+  static getMarginBottom(element: HTMLElement): number {
+    return SizeUtils.getDimension(element, 'margin-bottom', 'marginBottom');
+  }
+}
+
+export function getTotalWidth(element: HTMLElement): number {
+  const margin = SizeUtils.getMarginLeft(element) + SizeUtils.getMarginRight(element);
+  return element.offsetWidth + margin;
+}
+
+export function getTotalHeight(element: HTMLElement): number {
+  const margin = SizeUtils.getMarginTop(element) + SizeUtils.getMarginBottom(element);
+  return element.offsetHeight + margin;
+}
