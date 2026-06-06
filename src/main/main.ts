@@ -97,6 +97,9 @@ class MainWindow {
     let width = clamp(initial_value.window_size.width, minWidth, maxWidth);
     let height = clamp(initial_value.window_size.height, minHeight, maxHeight);
 
+    // let width = maxWidth;
+    // let height = maxHeight;
+
     if(this.isDebug) {
       width = maxWidth;
       height = maxHeight;
@@ -109,7 +112,7 @@ class MainWindow {
     }
   }
 
-  installIpc = () => {
+  installIpc = async () => {
     const self = this;
 
     const terminals = new Map<string, TerminalBase>();
@@ -237,7 +240,7 @@ class MainWindow {
 
     if(!fs.existsSync(path.join(dir, 'dict', 'cfg.json'))) {
       const db = getDb();
-      const update = db.dict.cfg.update(default_configs);
+      const update = await db.dict.cfg.update(default_configs);
     }
 
     ipcMain.handle('config all', async (event, args: any[]) => {
@@ -295,7 +298,7 @@ class MainWindow {
       return path.join(RESOURCES_PATH, ...paths);
     };
 
-    this.installIpc();
+    await this.installIpc();
 
     const { x, y, width, height } = await this.getWindowSize();
 
