@@ -2,7 +2,7 @@ import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
 import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
-import { Disposable } from "../Lifecycle";
+import { Disposable, _addEventListener } from "../Lifecycle";
 import { $ } from "../util/dom";
 import * as dom from "../util/dom";
 import { findActiveItem, Children } from "../utils";
@@ -159,7 +159,7 @@ export class List extends Disposable {
     list.classList.add('scrollable');
     // const scrollable = this.scrollable = $('.scrollable');
 
-    this.register(list, 'wheel', (e: WheelEvent) => {
+    this._register(_addEventListener(list, 'wheel', (e: WheelEvent) => {
       let deltaX: number, deltaY: number = e.deltaY;
 
       // consume all event n write
@@ -180,13 +180,13 @@ export class List extends Disposable {
       this.element.scrollTop = _scrollTop;
       // this.slider.style.top = (scrollTop * clientHeight / scrollHeight).toFixed(2) + 'px';
       this.slider.style.top = Math.ceil(_scrollTop * clientHeight / scrollHeight) + 'px';
-    });
+    }));
 
-    this.register(list, 'mouseover', (e: MouseEvent) => {
+    this._register(_addEventListener(list, 'mouseover', (e: MouseEvent) => {
       this.mouseIsOver = true;
       this.setScrollVisibility();
-    });
-    this.register(list, 'mouseleave', (e: MouseEvent) => {
+    }));
+    this._register(_addEventListener(list, 'mouseleave', (e: MouseEvent) => {
       this.mouseIsOver = false;
       if(this.scrollbar_v.classList.contains('visible')) {
         this.scrollbar_v.classList.remove('visible');
@@ -203,9 +203,9 @@ export class List extends Disposable {
 
         this.scrollbar_v.classList.add('invisible');
       }
-    });
+    }));
 
-    this.register(list, 'click', (e: MouseEvent) => {
+    this._register(_addEventListener(list, 'click', (e: MouseEvent) => {
       // console.log('click event is called ..');
 
       // is this right clear selected in here?
@@ -218,7 +218,7 @@ export class List extends Disposable {
         ...this.state,
         selectedIds: []
       };
-    });
+    }));
     const tree = this.tree = $('.tree');
     this.nodes = [];
     // const list = this.state.showList;
@@ -357,14 +357,14 @@ export class List extends Disposable {
         node.title.innerHTML = node.input.value;
         node.title.style.display = 'inline-block';
 
-        node.register(node.node, 'click', (e: MouseEvent) => {
+        node._register(_addEventListener(node.node, 'click', (e: MouseEvent) => {
           // onClick(e, data.id.substring(0, 7));
           this._onClick(e, data.id.substring(0, 7));
-        });
-        node.register(node.node, 'dblclick', (e: MouseEvent) => {
+        }));
+        node._register(_addEventListener(node.node, 'dblclick', (e: MouseEvent) => {
           // onDblClick(e, data.id);
           this._onDblClick(e, data.id);
-        });
+        }));
 
         // move dom n node
 
@@ -561,21 +561,21 @@ export class Node extends Disposable implements Children {
 
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
-    this.register(node, 'click', (e: MouseEvent) => {
+    this._register(_addEventListener(node, 'click', (e: MouseEvent) => {
       onClick(e, data.id.substring(0, 7));
       // const bookmarkPanelService = getService(bookmarkPanelServiceId);
       // bookmarkPanelService.onSelect(data.id);
-    });
-    this.register(node, 'dblclick', (e: MouseEvent) => {
+    }));
+    this._register(_addEventListener(node, 'dblclick', (e: MouseEvent) => {
       onDblClick(e, data.id);
-    });
+    }));
 
     const content = $('.content');
     const header = $('.ln-header');
     if(hasChildren) {
       const arrow = $('.arrow');
       if(isCollapsed) wrapper.classList.add('collapsed');
-      this.register(arrow, 'click', (e: MouseEvent) => {
+      this._register(_addEventListener(arrow, 'click', (e: MouseEvent) => {
         const isCollapsed = wrapper.classList.contains('collapsed');
         const toggled = !isCollapsed;
 
@@ -587,7 +587,7 @@ export class Node extends Disposable implements Children {
 
         onChange(data.id, { isCollapsed: toggled });
         e.stopPropagation();
-      });
+      }));
 
       const collapseArrow = $('a.codicon.codicon-chevron-right');
       if(collapseArrow)
@@ -671,15 +671,15 @@ export class Node extends Disposable implements Children {
 
     const input = this.input = $('input.title');
 
-    this.register(input, 'keydown', (e: KeyboardEvent) => {
+    this._register(_addEventListener(input, 'keydown', (e: KeyboardEvent) => {
       if(e.key === 'Escape') {
         onCancel();
       } else if(e.key === 'Enter') {
         onFinish();
       }
-    });
+    }));
 
-    this.register(input, 'input', (e: KeyboardEvent) => {
+    this._register(_addEventListener(input, 'input', (e: KeyboardEvent) => {
 
       // console.log('input.value =', input.value);
 
@@ -776,10 +776,10 @@ export class Node extends Disposable implements Children {
         (getService(contextViewServiceId) as ContextViewService).hide();
       }
 
-    });
-    this.register(input, 'blur', (e: UIEvent) => {
+    }));
+    this._register(_addEventListener(input, 'blur', (e: UIEvent) => {
 
-    });
+    }));
     listItem.appendChild(input);
 
     const title = this.title = $('span.title');
