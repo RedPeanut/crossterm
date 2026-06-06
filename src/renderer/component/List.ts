@@ -739,6 +739,9 @@ export class Node extends Disposable implements Children {
           }
         }
 
+        const styles = stylesFor(errorMsg.severity);
+        input.style.border = `1px solid ${styles.border}`;
+
         let div: HTMLElement;
 
         const layout = () => {
@@ -772,6 +775,9 @@ export class Node extends Disposable implements Children {
         input.classList.add('idle');
 
         (getService(contextViewServiceId) as ContextViewService).hide();
+
+        // reset
+        input.style.border = 'transparent';
       }
 
     }));

@@ -518,6 +518,12 @@ body { height: 100%; }
   width: 100%;
 }
 
+.sidebar .list .node .list-item {
+  display: flex;
+  height: 22px;
+  align-items: center;
+}
+
 .sidebar .list .node .list-item .title {
   /* cursor: default; */
 }
@@ -535,9 +541,11 @@ body { height: 100%; }
 .sidebar .list input {
   background-color: rgb(49,49,49);
   color: rgb(204,204,204);
-  /* width: calc(100% - 1px - 17px - 4px); */
   border: none;
   height: 20px;
+  /* flex: 1; */
+  /* what is the best solve for outline clip */
+  width: calc(100% - 16px - 7px - 1px);
 }
 
 
@@ -673,4 +681,20 @@ body { height: 100%; }
   width: 100%;
   display: flex;
   background-color: purple;
+}
+
+/* ContextView */
+.context-view {}
+
+.context-view .input-msgbox span {
+  display: inline-block;
+  overflow: hidden;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  font-size: 12px;
+  line-height: 17px;
+  margin-top: -1px;
+  word-wrap: break-word;
 }
