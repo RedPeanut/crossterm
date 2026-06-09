@@ -149,9 +149,12 @@ export class List extends Disposable {
     this.onDblClick(e, id);
   }
 
-  _onChange(id: string): void {
+  _onChange(id: string, data: { isCollapsed: boolean }): void {
     // console.log('_onChange() is called..., id =', id);
     this.setScrollVisibility();
+    const flattened = utils.flatten(this.state.list);
+    const findItem = flattened.find((item) => item.id === id);
+    findItem.isCollapsed = data.isCollapsed;
   }
 
   create(): void {
@@ -545,7 +548,7 @@ export class Node extends Disposable implements Children {
     onClick: (e: MouseEvent, id: string) => void,
     onDblClick: (e: MouseEvent, id: string) => void,
     selectedIds: string[],
-    onChange: (id: string, data: {}) => void
+    onChange: (id: string, data: { isCollapsed: boolean }) => void
   ): void {
     this.id = data.id;
     this.shortenedId = data.id.substring(0, 7);
