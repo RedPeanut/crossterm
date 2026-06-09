@@ -90,26 +90,26 @@ export class Disposable extends EventEmitter implements IDisposable {
   }
 }
 
-export function _addEventListener(element: HTMLElement, event: string, handler: EventListener): IDisposable {
-  element.addEventListener(event, handler);
+export function _addEventListener(target: HTMLElement, event: string, handler: EventListener): IDisposable {
+  target.addEventListener(event, handler);
 
   return {
-    dispose: () => element.removeEventListener(event, handler)
+    dispose: () => target.removeEventListener(event, handler)
   };
 }
 
-/* export function _addListener(element: Broadcast, event: string, handler: EventListener): IDisposable {
-  element.addListener(event, handler);
+/* export function _addListener(target: Broadcast, event: string, handler: EventListener): IDisposable {
+  target.addListener(event, handler);
 
   return {
-    dispose: () => element.removeListener(event, handler)
+    dispose: () => target.removeListener(event, handler)
   };
 } */
 
-export function _on(element: ElectronHandler, event: string, handler: (...args: any[]) => void) {
-  element.on(event as Channels, handler);
+export function _on(target: ElectronHandler, event: string, handler: (...args: any[]) => void) {
+  target.on(event as Channels, handler);
 
   return {
-    dispose: () => element.off(event as Channels, handler)
+    dispose: () => target.off(event as Channels, handler)
   }
 }
