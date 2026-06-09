@@ -106,7 +106,15 @@ export function _addEventListener(target: HTMLElement, event: string, handler: E
   };
 } */
 
-export function _on(target: ElectronHandler, event: string, handler: (...args: any[]) => void) {
+export function _on_e <T extends EventEmitter> (target: T, event: string, handler: (...args: any[]) => void) {
+  target.on(event as Channels, handler);
+
+  return {
+    dispose: () => target.off(event, handler)
+  }
+}
+
+export function _on_h(target: ElectronHandler, event: string, handler: (...args: any[]) => void) {
   target.on(event as Channels, handler);
 
   return {

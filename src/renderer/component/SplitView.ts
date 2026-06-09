@@ -4,6 +4,7 @@ import { Orientation, Sash, SashEvent, SashState } from './Sash';
 import { range } from '../util/arrays';
 import { clamp } from '../../common/util/numbers';
 import { Pane } from '../Pane';
+import { _on_e } from '../util/lifecycle';
 
 export interface MappedSashEvent {
   sash: Sash;
@@ -283,26 +284,26 @@ export class SplitView<T extends SplitViewItemView> {
         ? (e: SashEvent) => ({ sash, start: e.startY, current: e.currentY, alt: e.altKey })
         : (e: SashEvent) => ({ sash, start: e.startX, current: e.currentX, alt: e.altKey });
 
-      sash._on('sash start', (e) => {
+      sash._register(_on_e(sash, 'sash start', (e) => {
         // console.log('sash start event is called.. e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
         this.onSashStart(mappedEvent);
-      });
-      sash._on('sash change', (e) => {
+      }));
+      sash._register(_on_e(sash, 'sash change', (e) => {
         // console.log('sash change event is called.. e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
         this.onSashChange(mappedEvent);
-      });
-      sash._on('sash end', (e) => {
+      }));
+      sash._register(_on_e(sash, 'sash end', (e) => {
         // console.log('sash end event is called..'); // e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
         view.onDidChange(mappedEvent);
-      });
+      }));
 
-      sash._on('on did reset', (e) => {
+      sash._register(_on_e(sash, 'on did reset', (e) => {
         // console.log('on did reset is called ..');
         const index = this.sashItems.findIndex(item => item.sash === sash);
 
@@ -328,7 +329,7 @@ export class SplitView<T extends SplitViewItemView> {
           this.viewItems[index+1].view.size = this.viewItems[index+1].view.size - delta;
           this.layoutViews();
         }
-      })
+      }));
 
       const sashItem: SashItem = { sash };
       this.sashItems.splice(index-1, 0, sashItem);
