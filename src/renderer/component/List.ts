@@ -354,8 +354,8 @@ export class List extends Disposable {
       },
       () => { // onFinish
         node.input.style.display = 'none';
-        node.title.innerHTML = node.input.value;
-        node.title.style.display = 'inline-block';
+        node.titleEl.innerHTML = node.input.value;
+        node.titleEl.style.display = 'inline-block';
 
         node._register(_addEventListener(node.node, 'click', (e: MouseEvent) => {
           // onClick(e, data.id.substring(0, 7));
@@ -380,7 +380,7 @@ export class List extends Disposable {
 
             for(let i = 0; i < nodeList.length; i++) {
               if(nodeList[i].type == 'folder') {
-                if(nodeList[i].title.innerHTML > node.input.value) {
+                if(nodeList[i].titleEl.innerHTML > node.input.value) {
                   targetPos = i; found = true;
                   break;
                 }
@@ -410,7 +410,7 @@ export class List extends Disposable {
 
             for(let i = 0; i < nodeList.length; i++) {
               if(['local', 'remote'].includes(nodeList[i].type)) {
-                if(nodeList[i].title.innerHTML > node.input.value) {
+                if(nodeList[i].titleEl.innerHTML > node.input.value) {
                   targetPos = i; found = true;
                   break;
                 }
@@ -446,7 +446,7 @@ export class List extends Disposable {
 
             for(let i = 0; i < nodeList.length; i++) {
               if(nodeList[i].type == 'folder') {
-                if(nodeList[i].title.innerHTML > node.input.value) {
+                if(nodeList[i].titleEl.innerHTML > node.input.value) {
                   targetPos = i; found = true;
                   break;
                 }
@@ -476,7 +476,7 @@ export class List extends Disposable {
 
             for(let i = 0; i < nodeList.length; i++) {
               if(['local', 'remote'].includes(nodeList[i].type)) {
-                if(nodeList[i].title.innerHTML > node.input.value) {
+                if(nodeList[i].titleEl.innerHTML > node.input.value) {
                   targetPos = i; found = true;
                   break;
                 }
@@ -522,7 +522,7 @@ export class Node extends Disposable implements Children {
   wrapper: HTMLElement;
   node: HTMLElement;
   input: HTMLInputElement;
-  title: HTMLElement;
+  titleEl: HTMLElement;
 
   parent: Node;
   children: Node[] = [];
@@ -612,7 +612,7 @@ export class Node extends Disposable implements Children {
     span.appendChild(itemIcon);
     listItem.appendChild(span);
 
-    const title = this.title = $('span.title');
+    const title = this.titleEl = $('span.title');
     title.innerHTML = data.title;
     listItem.appendChild(title);
 
@@ -786,7 +786,7 @@ export class Node extends Disposable implements Children {
     }));
     listItem.appendChild(input);
 
-    const title = this.title = $('span.title');
+    const title = this.titleEl = $('span.title');
     title.style.display = 'none';
     listItem.appendChild(title);
 
