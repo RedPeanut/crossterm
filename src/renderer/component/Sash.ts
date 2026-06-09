@@ -2,7 +2,7 @@ import _ from "lodash";
 import { $, append } from "../util/dom";
 import { renderer } from '..';
 import { EventEmitter } from "events";
-import { Disposable } from "../Lifecycle";
+import { Disposable } from "../util/lifecycle";
 
 export const enum Orientation {
   VERTICAL,

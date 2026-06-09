@@ -2,7 +2,7 @@ import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
 import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
-import { Disposable, _addEventListener } from "../Lifecycle";
+import { Disposable, _addEventListener } from "../util/lifecycle";
 import { $ } from "../util/dom";
 import * as dom from "../util/dom";
 import { findActiveItem, Children } from "../utils";
