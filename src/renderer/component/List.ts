@@ -540,6 +540,8 @@ export class Node extends Disposable implements Children {
   type: string;
   isCollapsed: boolean = false;
 
+  targetNode: Node | undefined;
+
   toggleCollapsed: (id: string, data: { isCollapsed: boolean }) => void;
 
   constructor(container: HTMLElement, parent: Node,
@@ -587,6 +589,86 @@ export class Node extends Disposable implements Children {
       // console.log('mousedown event is called...');
       onClick(e, data.id);
       // e.stopPropagation();
+    }));
+
+    node.draggable = true;
+    this._register(_addEventListener(node, 'dragstart', (e: DragEvent) => {
+      console.log('dragstart event is called...');
+
+      // const elements = get drag elements ();
+
+      const uri = data.title;
+      console.log('uri =', uri);
+      e.dataTransfer.setData('text/plain', uri);
+      e.dataTransfer.effectAllowed = 'copyMove'; // 'none' | 'copyMove'
+
+      if(e.dataTransfer.setDragImage) {
+        const dragImage = $('.drag-image');
+        let label: string | undefined = uri;
+        // label = String(elements.length);
+        dragImage.textContent = label;
+
+        const getDragImageContainer = (e: HTMLElement | null) => {
+          while(e && !(e.classList.contains('layout') && e.classList.contains('main'))) {
+            e = e.parentElement;
+          }
+          return e || node.ownerDocument;
+        };
+
+        const container = getDragImageContainer(node);
+        // console.log('container =', container);
+        container.appendChild(dragImage);
+        e.dataTransfer.setDragImage(dragImage, -10, -10);
+        setTimeout(() => container.removeChild(dragImage), 0);
+      }
+
+      node.classList.add('dragging');
+
+    }));
+    this._register(_addEventListener(node, 'dragend', (e: DragEvent) => {
+      console.log('dragend event is called...');
+      node.classList.remove('dragging');
+    }));
+    this._register(_addEventListener(node, 'dragenter', (e: DragEvent) => {
+      console.log('dragenter event is called...');
+    }));
+    this._register(_addEventListener(node, 'dragleave', (e: DragEvent) => {
+      console.log('dragleave event is called...');
+
+      if(this.targetNode) {
+        this.targetNode.wrapper.classList.remove('drop-target');
+        this.targetNode = undefined;
+      }
+    }));
+    this._register(_addEventListener(node, 'dragover', (e: DragEvent) => {
+      console.log('dragover event is called...');
+      e.preventDefault();
+
+      // find target node (first folder node, null if not exist)
+      let findNode: Node = this, targetNode: Node = null;
+
+      for(;findNode !== null && findNode.type !== 'folder';) {
+        findNode = findNode.parent;
+      }
+
+      if(findNode) {
+        this.targetNode = targetNode = findNode;
+        this.targetNode.wrapper.classList.add('drop-target');
+      }
+
+      // this.dnd.onDragOver(targetNode);
+    }));
+
+    this._register(_addEventListener(node, 'drop', (e: DragEvent) => {
+      console.log('drop event is called...');
+      e.preventDefault();
+
+      node.classList.remove('dragging');
+
+      if(this.targetNode) {
+        this.targetNode.wrapper.classList.remove('drop-target');
+        this.targetNode = undefined;
+      }
     }));
 
     const content = $('.content');
