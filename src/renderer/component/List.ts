@@ -3,6 +3,7 @@ import { renderer } from "..";
 import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { Disposable, _addEventListener } from "../util/lifecycle";
+import { IDisposable } from "../../common/util/lifecycle";
 import { $ } from "../util/dom";
 import * as dom from "../util/dom";
 import { findActiveItem, Children } from "../utils";
@@ -31,6 +32,48 @@ const SCROLL_HIDE_TIMEOUT: number = 500;
 
 export interface ListOptions {}
 
+export class ListDragAndDrop implements IDisposable {
+
+  autoExpandNode: Node | undefined;
+  // autoExpandDisposable: IDisposable = Disposable.None;
+  // disposables = new DisposableStore();
+  timer: NodeJS.Timeout;
+
+  constructor() {}
+
+  onDragStart() {}
+  onDragEnd() {}
+  onDragEnter() {}
+  onDragLeave() {}
+
+  onDragOver(targetNode: Node) {
+    // let timer;
+
+    const didChangeAutoExpandNode = this.autoExpandNode !== targetNode;
+    if(didChangeAutoExpandNode) {
+      // this.autoExpandDisposable.dispose();
+      if(this.timer) { clearTimeout(this.timer); this.timer = null; };
+      this.autoExpandNode = targetNode;
+    }
+
+    if(didChangeAutoExpandNode) {
+      this.timer = setTimeout(() => {
+        if(this.autoExpandNode?.isCollapsed) {
+          // do expand
+          this.autoExpandNode.setCollapsed(false);
+        }
+        this.autoExpandNode = undefined;
+      }, 500);
+    }
+  }
+
+  onDrop() {}
+
+  dispose() {
+    if(this.timer) { clearTimeout(this.timer); this.timer = null; };
+  }
+}
+
 export class List extends Disposable {
   container: HTMLElement;
   element: HTMLElement;
@@ -53,6 +96,7 @@ export class List extends Disposable {
   slider: HTMLElement;
   isDragging: boolean;
   mouseIsOver: boolean;
+  dnd: ListDragAndDrop;
 
   constructor(container: HTMLElement, list: ListItemElem[],
     onClick: (e: MouseEvent, id: string) => void,
@@ -66,6 +110,7 @@ export class List extends Disposable {
     };
     this.onClick = onClick;
     this.onDblClick = onDblClick;
+    this.dnd = new ListDragAndDrop();
   }
 
   _onClick(e: MouseEvent, id: string): void {
@@ -226,7 +271,7 @@ export class List extends Disposable {
     this.nodes = [];
     // const list = this.state.showList;
     this.state.list.map((v: ListItemElem, i: number) => {
-      const node = new Node(tree, null,
+      const node = new Node(tree, null, this.dnd,
         this._toggleCollapsed.bind(this));
       node.create(v, 0,
         // nodeRender,
@@ -343,7 +388,7 @@ export class List extends Disposable {
     };
 
     const containerDom = targetNode == null ? this.tree : targetNode.wrapper;
-    const node: Node = new Node(containerDom, targetNode, this._toggleCollapsed.bind(this));
+    const node: Node = new Node(containerDom, targetNode, this.dnd, this._toggleCollapsed.bind(this));
     const nodeList: Node[] = targetNode == null ? this.nodes : targetNode.children;
 
     node.createEdit(data, depth,
@@ -541,15 +586,17 @@ export class Node extends Disposable implements Children {
   isCollapsed: boolean = false;
 
   targetNode: Node | undefined;
-
+  dnd: ListDragAndDrop;
   toggleCollapsed: (id: string, data: { isCollapsed: boolean }) => void;
 
   constructor(container: HTMLElement, parent: Node,
+    dnd: ListDragAndDrop,
     toggleCollapsed: (id: string, data: { isCollapsed: boolean }) => void
   ) {
     super();
     this.container = container;
     this.parent = parent;
+    this.dnd = dnd;
     this.toggleCollapsed = toggleCollapsed;
   }
 
@@ -656,7 +703,7 @@ export class Node extends Disposable implements Children {
         this.targetNode.wrapper.classList.add('drop-target');
       }
 
-      // this.dnd.onDragOver(targetNode);
+      this.dnd.onDragOver(targetNode);
     }));
 
     this._register(_addEventListener(node, 'drop', (e: DragEvent) => {
@@ -719,7 +766,7 @@ export class Node extends Disposable implements Children {
     if(hasChildren) {
       // this.children = [];
       data.children.map((v: ListItemElem, i: number) => {
-        const _node = new Node(wrapper, this, this.toggleCollapsed);
+        const _node = new Node(wrapper, this, this.dnd, this.toggleCollapsed);
         _node.create(v, level+1, /* nodeRender, */onClick, onDblClick, selectedIds);
         this.children.push(_node);
       });
