@@ -149,7 +149,7 @@ export class List extends Disposable {
     this.onDblClick(e, id);
   }
 
-  _onChange(id: string, data: { isCollapsed: boolean }): void {
+  _toggleCollapsed(id: string, data: { isCollapsed: boolean }): void {
     // console.log('_onChange() is called..., id =', id);
     this.setScrollVisibility();
     const flattened = utils.flatten(this.state.list);
@@ -230,7 +230,7 @@ export class List extends Disposable {
       node.create(v, 0,
         // nodeRender,
         this._onClick.bind(this), this._onDblClick.bind(this), this.state.selectedIds,
-        this._onChange.bind(this)
+        this._toggleCollapsed.bind(this)
       );
       this.nodes.push(node);
     });
@@ -548,7 +548,7 @@ export class Node extends Disposable implements Children {
     onClick: (e: MouseEvent, id: string) => void,
     onDblClick: (e: MouseEvent, id: string) => void,
     selectedIds: string[],
-    onChange: (id: string, data: { isCollapsed: boolean }) => void
+    toggleCollapsed: (id: string, data: { isCollapsed: boolean }) => void
   ): void {
     this.id = data.id;
     this.shortenedId = data.id.substring(0, 7);
@@ -588,7 +588,7 @@ export class Node extends Disposable implements Children {
         else
           wrapper.classList.remove('collapsed');
 
-        onChange(data.id, { isCollapsed: toggled });
+        toggleCollapsed(data.id, { isCollapsed: toggled });
         e.stopPropagation();
       }));
 
@@ -629,7 +629,7 @@ export class Node extends Disposable implements Children {
       // this.children = [];
       data.children.map((v: ListItemElem, i: number) => {
         const _node = new Node(wrapper, this);
-        _node.create(v, level+1, /* nodeRender, */onClick, onDblClick, selectedIds, onChange);
+        _node.create(v, level+1, /* nodeRender, */onClick, onDblClick, selectedIds, toggleCollapsed);
         this.children.push(_node);
       });
     }
