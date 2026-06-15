@@ -230,7 +230,9 @@ export class List extends Disposable {
         this._toggleCollapsed.bind(this));
       node.create(v, 0,
         // nodeRender,
-        this._onClick.bind(this), this._onDblClick.bind(this), this.state.selectedIds
+        this._onClick.bind(this),
+        this._onDblClick.bind(this),
+        this.state.selectedIds
       );
       this.nodes.push(node);
     });
@@ -340,7 +342,10 @@ export class List extends Disposable {
       id: uuidv4()
     };
 
-    const node: Node = new Node(targetNode == null ? this.tree : targetNode.wrapper, targetNode, this._toggleCollapsed.bind(this));
+    const containerDom = targetNode == null ? this.tree : targetNode.wrapper;
+    const node: Node = new Node(containerDom, targetNode, this._toggleCollapsed.bind(this));
+    const nodeList: Node[] = targetNode == null ? this.nodes : targetNode.children;
+
     node.createEdit(data, depth,
       ///*
       () => { // onCancel
