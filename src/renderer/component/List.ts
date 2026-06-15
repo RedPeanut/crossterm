@@ -585,14 +585,7 @@ export class Node extends Disposable implements Children {
       this._register(_addEventListener(arrow, 'click', (e: MouseEvent) => {
         const isCollapsed = wrapper.classList.contains('collapsed');
         const toggled = !isCollapsed;
-
-        this.isCollapsed = toggled;
-        if(toggled)
-          wrapper.classList.add('collapsed');
-        else
-          wrapper.classList.remove('collapsed');
-
-        this.toggleCollapsed(data.id, { isCollapsed: toggled });
+        this.setCollapsed(toggled);
         e.stopPropagation();
       }));
 
@@ -639,6 +632,16 @@ export class Node extends Disposable implements Children {
     }
 
     this.container.appendChild(wrapper);
+  }
+
+  setCollapsed(isCollapsed: boolean) {
+    this.isCollapsed = isCollapsed;
+    if(isCollapsed)
+      this.wrapper.classList.add('collapsed');
+    else
+      this.wrapper.classList.remove('collapsed');
+
+    this.toggleCollapsed(this.id, { isCollapsed: isCollapsed });
   }
 
   createEdit(data: ListItemElem, level: number = 0,
