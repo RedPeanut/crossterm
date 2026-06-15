@@ -70,14 +70,14 @@ export class List extends Disposable {
 
   _onClick(e: MouseEvent, id: string): void {
     // console.log('_onClick is called ..');
-
+    const shortenedId = id.substring(0, 7);
     const { selectedIds } = this.state;
 
     const flattened = utils.flatten(this.nodes);
     // const find = flattened.find((v) => v.id === id);
     let i: number, find: Node = null, findIdx: number;
     for(i = 0; i < flattened.length; i++) {
-      if(flattened[i].shortenedId == id) {
+      if(flattened[i].shortenedId == shortenedId) {
         find = flattened[i];
         findIdx = i;
         break;
@@ -107,25 +107,25 @@ export class List extends Disposable {
       if(from > to) {
         for(i = from-1; i >= to; i--) {
           flattened[i].node.classList.add('selected');
-          selectedIds.push(id);
+          selectedIds.push(shortenedId);
         }
       } else {
         for(i = from+1; i <= to; i++) {
           flattened[i].node.classList.add('selected');
-          selectedIds.push(id);
+          selectedIds.push(shortenedId);
         }
       }
 
     } else if(cmdOrCtrlKey) {
-      const isSelected = selectedIds.includes(id);
-      const selectedIdx = selectedIds.findIndex((v) => v == id);
+      const isSelected = selectedIds.includes(shortenedId);
+      const selectedIdx = selectedIds.findIndex((v) => v == shortenedId);
 
       if(isSelected) {
         find.node.classList.remove('selected');
         selectedIds.splice(selectedIdx, 1);
       } else {
         find.node.classList.add('selected');
-        selectedIds.push(id);
+        selectedIds.push(shortenedId);
       }
     } else {
       for(i = 0; i < flattened.length; i++) {
@@ -136,12 +136,12 @@ export class List extends Disposable {
       // selectedIds = [ id ];
       this.state = {
         ...this.state,
-        selectedIds: [ id ]
+        selectedIds: [ shortenedId ]
       };
     }
 
     this.onClick(e, id);
-    e.stopPropagation();
+    // e.stopPropagation();
   }
 
   _onDblClick(e: MouseEvent, id: string): void {
@@ -569,12 +569,19 @@ export class Node extends Disposable implements Children {
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
     this._register(_addEventListener(node, 'click', (e: MouseEvent) => {
-      onClick(e, data.id.substring(0, 7));
+      // onClick(e, data.id);
       // const bookmarkPanelService = getService(bookmarkPanelServiceId);
       // bookmarkPanelService.onSelect(data.id);
+      e.stopPropagation();
     }));
     this._register(_addEventListener(node, 'dblclick', (e: MouseEvent) => {
       onDblClick(e, data.id);
+    }));
+
+    this._register(_addEventListener(node, 'mousedown', (e: MouseEvent) => {
+      // console.log('mousedown event is called...');
+      onClick(e, data.id);
+      // e.stopPropagation();
     }));
 
     const content = $('.content');
