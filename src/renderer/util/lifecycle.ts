@@ -2,7 +2,8 @@ import { DisposableStore, IDisposable } from "../../common/base/lifecycle";
 import { Channels, ElectronHandler } from "../../main/preload";
 import { EventEmitter } from "events";
 
-/* // type Who;
+/* 보관 (Archived)
+// type Who;
 type Where = HTMLElement | ElectronHandler;
 // type What;
 // type Handler = (() => void) | ((...args: any[]) => void);
@@ -73,17 +74,20 @@ export class Disposable extends EventEmitter {
 } */
 
 export class Disposable extends EventEmitter implements IDisposable {
+  // static None: IDisposable = { dispose() {} };
+
   readonly _store = new DisposableStore();
 
+  // return self
   protected _register<T extends IDisposable>(o: T): T {
     return this._store.add(o);
   }
 
-  _on(event: string, handler: (...args: any[]) => void) {
+  /* _on(event: string, handler: (...args: any[]) => void) {
     return {
       dispose: () => this.off(event, handler)
     }
-  }
+  } */
 
   dispose(): void {
     this._store.dispose();

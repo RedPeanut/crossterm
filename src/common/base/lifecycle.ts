@@ -6,7 +6,7 @@ export class DisposableStore implements IDisposable {
   private _toDispose = new Set<IDisposable>();
   private _isDisposed = false;
 
-  public add<T extends IDisposable>(o: T): T {
+  add<T extends IDisposable>(o: T): T {
     if (this._isDisposed) {
       o.dispose();
       return o;
@@ -15,7 +15,7 @@ export class DisposableStore implements IDisposable {
     return o;
   }
 
-  public dispose(): void {
+  dispose(): void {
     if (this._isDisposed) return;
     this._isDisposed = true;
 
@@ -23,5 +23,19 @@ export class DisposableStore implements IDisposable {
       item.dispose();
     }
     this._toDispose.clear();
+  }
+}
+
+export class Disposable implements IDisposable {
+
+  private readonly _store = new DisposableStore();
+
+  // return self
+  protected _register<T extends IDisposable>(o: T): T {
+    return this._store.add(o);
+  }
+
+  public dispose(): void {
+    this._store.dispose();
   }
 }

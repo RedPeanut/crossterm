@@ -1,7 +1,7 @@
 import { IDisposable } from "./lifecycle";
 
 /**
- * Impl Event n EventEmitter
+ * Impl Event n Emitter
  * feat by gemini: https://gemini.google.com/share/f4ebb102218e
  */
 
@@ -9,17 +9,16 @@ export interface Event<T> {
   (listener: (e: T) => any): IDisposable;
 }
 
-export class Emitter<T> {
+export class Emitter<T> implements IDisposable {
   private _listeners: Array<(e: T) => any> = [];
   private _event?: Event<T>;
 
-  // 외부에 노출할 Event 객체 (getter)
   get event(): Event<T> {
     if(!this._event) {
       this._event = (listener: (e: T) => any): IDisposable => {
         this._listeners.push(listener);
 
-        // 구독 해제(Disposable)를 반환
+        // 구독을 해제하는 함수(IDisposable)를 반환
         return {
           dispose: () => {
             this._listeners = this._listeners.filter(l => l !== listener);
