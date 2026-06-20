@@ -13,7 +13,7 @@ import { contextViewServiceId, getService, mainLayoutServiceId } from "../Servic
 import { ContextViewService } from "../service/ContextViewService";
 import { Severity } from "../Types";
 
-export type ListItemType = 'local' | 'remote' | 'group' | 'folder';
+export type ListItemType = 'local' | 'remote' | 'group' | 'folder' | 'blank';
 export type FolderModeType = 0 | 1 | 2; // 0: 기본값; 1: 단일 선택 2: 다중 선택
 
 export interface ListItemElem extends Children {
@@ -291,6 +291,13 @@ export class List extends Disposable {
       );
       this.nodes.push(node);
     });
+
+    // add blank line at last for clear selection when full
+    const node = new Node(tree, null, this.dnd,
+      this._toggleCollapsed.bind(this)
+    );
+    node.createBlank();
+    this.nodes.push(node);
 
     const scrollbar_v = this.scrollbar_v = $('.scrollbar.vertical.invisible');
     const slider = this.slider = $('.slider');
@@ -986,4 +993,22 @@ export class Node extends Disposable implements Children {
     input.focus();
   }
 
+  createBlank(): void {
+    const wrapper = this.wrapper = $('.wrapper');
+    const node = this.node = $('.node.blank');
+    const content = $('.content');
+
+    const body = $('.ln-body');
+    const listItem = $('.list-item');
+
+    // is anything to do in here?
+
+    body.appendChild(listItem);
+    content.appendChild(body);
+
+    node.appendChild(content);
+    wrapper.appendChild(node);
+
+    this.container.appendChild(wrapper);
+  }
 }

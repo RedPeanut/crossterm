@@ -482,6 +482,11 @@ body { height: 100%; }
   background-color: rgb(42 45 46);
 }
 
+.sidebar .list .node.blank:hover {
+  cursor: default;
+  background: none;
+}
+
 .sidebar .list .node.selected {
   background-color: rgb(71 85 102);
   /* border-radius: 4px; */
