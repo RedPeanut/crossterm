@@ -75,7 +75,7 @@ export class Disposable extends EventEmitter {
 export class Disposable extends EventEmitter implements IDisposable {
   readonly _store = new DisposableStore();
 
-  _register<T extends IDisposable>(o: T): T {
+  protected _register<T extends IDisposable>(o: T): T {
     return this._store.add(o);
   }
 

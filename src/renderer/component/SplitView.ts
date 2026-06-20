@@ -285,26 +285,26 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
         ? (e: SashEvent) => ({ sash, start: e.startY, current: e.currentY, alt: e.altKey })
         : (e: SashEvent) => ({ sash, start: e.startX, current: e.currentX, alt: e.altKey });
 
-      sash._register(_on_e(sash, 'sash start', (e) => {
+      this._register(_on_e(sash, 'sash start', (e) => {
         // console.log('sash start event is called.. e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
         this.onSashStart(mappedEvent);
       }));
-      sash._register(_on_e(sash, 'sash change', (e) => {
+      this._register(_on_e(sash, 'sash change', (e) => {
         // console.log('sash change event is called.. e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
         this.onSashChange(mappedEvent);
       }));
-      sash._register(_on_e(sash, 'sash end', (e) => {
+      this._register(_on_e(sash, 'sash end', (e) => {
         // console.log('sash end event is called..'); // e =', e);
         const mappedEvent = sashEventMapper(e);
         // console.log('mappedEvent =', mappedEvent);
         view.onDidChange(mappedEvent);
       }));
 
-      sash._register(_on_e(sash, 'on did reset', (e) => {
+      this._register(_on_e(sash, 'on did reset', (e) => {
         // console.log('on did reset is called ..');
         const index = this.sashItems.findIndex(item => item.sash === sash);
 
