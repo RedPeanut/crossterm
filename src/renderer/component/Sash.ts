@@ -128,7 +128,7 @@ export class Sash extends Disposable {
       this.el.classList.add('vertical');
     }
 
-    this.on('sash state change', (state: SashState) => {});
+    // this.on('sash state change', (state: SashState) => {});
   }
 
   onMouseDown(e: MouseEvent) {
