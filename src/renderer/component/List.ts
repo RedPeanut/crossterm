@@ -37,8 +37,11 @@ export class ListDragAndDrop implements IDisposable {
   // autoExpandDisposable: IDisposable = Disposable.None;
   // disposables = new DisposableStore();
   timer: NodeJS.Timeout;
+  list: List;
 
-  constructor() {}
+  constructor(list: List) {
+    this.list = list;
+  }
 
   onDragStart() {}
   onDragEnd() {}
@@ -70,6 +73,14 @@ export class ListDragAndDrop implements IDisposable {
 
   dispose() {
     if(this.timer) { clearTimeout(this.timer); this.timer = null; };
+  }
+
+  getDragElements(data: ListItemElem) {
+    const selection = this.list.state.selectedIds.map((v, i) =>
+      this.list.state.items.find(_v => _v.id.startsWith(v))
+    );
+    const elements = selection.indexOf(data) > -1 ? selection : [data];
+    return elements;
   }
 }
 
@@ -109,7 +120,7 @@ export class List extends Disposable {
     };
     this.onClick = onClick;
     this.onDblClick = onDblClick;
-    this.dnd = new ListDragAndDrop();
+    this.dnd = new ListDragAndDrop(this);
   }
 
   _onClick(e: MouseEvent, id: string): void {
@@ -410,12 +421,19 @@ export class List extends Disposable {
         node.titleEl.style.display = 'inline-block';
 
         this._register(_addEventListener(node.node, 'click', (e: MouseEvent) => {
-          // onClick(e, data.id.substring(0, 7));
-          this._onClick(e, data.id.substring(0, 7));
+          // onClick(e, data.id);
+          this._onClick(e, data.id);
+          e.stopPropagation();
         }));
         this._register(_addEventListener(node.node, 'dblclick', (e: MouseEvent) => {
           // onDblClick(e, data.id);
           this._onDblClick(e, data.id);
+        }));
+
+        this._register(_addEventListener(node.node, 'mousedown', (e: MouseEvent) => {
+          // console.log('mousedown event is called...');
+          // this._onClick(e, data.id);
+          // e.stopPropagation();
         }));
 
         // move dom n node
@@ -622,9 +640,7 @@ export class Node extends Disposable implements Children {
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
     this._register(_addEventListener(node, 'click', (e: MouseEvent) => {
-      // onClick(e, data.id);
-      // const bookmarkPanelService = getService(bookmarkPanelServiceId);
-      // bookmarkPanelService.onSelect(data.id);
+      onClick(e, data.id);
       e.stopPropagation();
     }));
     this._register(_addEventListener(node, 'dblclick', (e: MouseEvent) => {
@@ -633,7 +649,7 @@ export class Node extends Disposable implements Children {
 
     this._register(_addEventListener(node, 'mousedown', (e: MouseEvent) => {
       // console.log('mousedown event is called...');
-      onClick(e, data.id);
+      // onClick(e, data.id);
       // e.stopPropagation();
     }));
 
@@ -641,17 +657,21 @@ export class Node extends Disposable implements Children {
     this._register(_addEventListener(node, 'dragstart', (e: DragEvent) => {
       console.log('dragstart event is called...');
 
-      // const elements = get drag elements ();
-
       const uri = data.title;
       console.log('uri =', uri);
+      let label: string | undefined = uri;
+
       e.dataTransfer.setData('text/plain', uri);
-      e.dataTransfer.effectAllowed = 'copyMove'; // 'none' | 'copyMove'
+      e.dataTransfer.effectAllowed = 'copyMove';
 
       if(e.dataTransfer.setDragImage) {
         const dragImage = $('.drag-image');
-        let label: string | undefined = uri;
-        // label = String(elements.length);
+
+        const elements = this.dnd.getDragElements(data);
+        if(elements.length > 1)
+          label = String(elements.length);
+        else
+          label = uri;
         dragImage.textContent = label;
 
         const getDragImageContainer = (e: HTMLElement | null) => {
