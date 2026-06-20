@@ -9,7 +9,7 @@ export interface Event<T> {
   (listener: (e: T) => any): IDisposable;
 }
 
-export class EventEmitter<T> {
+export class Emitter<T> {
   private _listeners: Array<(e: T) => any> = [];
   private _event?: Event<T>;
 
