@@ -304,8 +304,8 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
         view.onDidChange(mappedEvent);
       }));
 
-      this._register(_on_e(sash, 'on did reset', (e) => {
-        // console.log('on did reset is called ..');
+      this._register(_on_e(sash, 'sash reset', (e) => {
+        // console.log('sash reset is called ..');
         const index = this.sashItems.findIndex(item => item.sash === sash);
 
         // if view is fill_parent, control size with next wrap_content view
