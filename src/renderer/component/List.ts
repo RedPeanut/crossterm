@@ -409,11 +409,11 @@ export class List extends Disposable {
         node.titleEl.innerHTML = node.input.value;
         node.titleEl.style.display = 'inline-block';
 
-        node._register(_addEventListener(node.node, 'click', (e: MouseEvent) => {
+        this._register(_addEventListener(node.node, 'click', (e: MouseEvent) => {
           // onClick(e, data.id.substring(0, 7));
           this._onClick(e, data.id.substring(0, 7));
         }));
-        node._register(_addEventListener(node.node, 'dblclick', (e: MouseEvent) => {
+        this._register(_addEventListener(node.node, 'dblclick', (e: MouseEvent) => {
           // onDblClick(e, data.id);
           this._onDblClick(e, data.id);
         }));
