@@ -3,7 +3,7 @@ import { renderer } from "..";
 import { TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { Disposable, _addEventListener } from "../util/lifecycle";
-import { IDisposable } from "../../common/util/lifecycle";
+import { IDisposable } from "../../common/base/lifecycle";
 import { $ } from "../util/dom";
 import * as dom from "../util/dom";
 import { findActiveItem, Children } from "../utils";

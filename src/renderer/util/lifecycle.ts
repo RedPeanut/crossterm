@@ -1,4 +1,4 @@
-import { DisposableStore, IDisposable } from "../../common/util/lifecycle";
+import { DisposableStore, IDisposable } from "../../common/base/lifecycle";
 import { Channels, ElectronHandler } from "../../main/preload";
 import { EventEmitter } from "events";
 
