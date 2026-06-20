@@ -25,7 +25,6 @@ export interface ListItemElem extends Children {
   // remote
   url?: { host: string, port: number, username: string, password: string };
   size?: { row: number, col: number }
-
 }
 
 const SCROLL_HIDE_TIMEOUT: number = 500;
@@ -81,7 +80,7 @@ export class List extends Disposable {
   // showList: ListItem[];
   state: {
     selectedIds: string[],
-    list: ListItemElem[],
+    items: ListItemElem[],
   };
 
   onClick: (e: MouseEvent, id: string) => void;
@@ -98,7 +97,7 @@ export class List extends Disposable {
   mouseIsOver: boolean;
   dnd: ListDragAndDrop;
 
-  constructor(container: HTMLElement, list: ListItemElem[],
+  constructor(container: HTMLElement, items: ListItemElem[],
     onClick: (e: MouseEvent, id: string) => void,
     onDblClick: (e: MouseEvent, id: string) => void
   ) {
@@ -106,7 +105,7 @@ export class List extends Disposable {
     this.container = container;
     this.state = {
       selectedIds: [],
-      list: list || []
+      items: items || []
     };
     this.onClick = onClick;
     this.onDblClick = onDblClick;
@@ -197,17 +196,17 @@ export class List extends Disposable {
   _toggleCollapsed(id: string, data: { isCollapsed: boolean }): void {
     // console.log('_onChange() is called..., id =', id);
     this.setScrollVisibility();
-    const flattened = utils.flatten(this.state.list);
+    const flattened = utils.flatten(this.state.items);
     const findItem = flattened.find((item) => item.id === id);
     findItem.isCollapsed = data.isCollapsed;
   }
 
   create(): void {
-    const list: HTMLElement = this.element = $('.list');
-    list.classList.add('scrollable');
+    const listEl: HTMLElement = this.element = $('.list');
+    listEl.classList.add('scrollable');
     // const scrollable = this.scrollable = $('.scrollable');
 
-    this._register(_addEventListener(list, 'wheel', (e: WheelEvent) => {
+    this._register(_addEventListener(listEl, 'wheel', (e: WheelEvent) => {
       let deltaX: number, deltaY: number = e.deltaY;
 
       // consume all event n write
@@ -230,11 +229,11 @@ export class List extends Disposable {
       this.slider.style.top = Math.ceil(_scrollTop * clientHeight / scrollHeight) + 'px';
     }));
 
-    this._register(_addEventListener(list, 'mouseover', (e: MouseEvent) => {
+    this._register(_addEventListener(listEl, 'mouseover', (e: MouseEvent) => {
       this.mouseIsOver = true;
       this.setScrollVisibility();
     }));
-    this._register(_addEventListener(list, 'mouseleave', (e: MouseEvent) => {
+    this._register(_addEventListener(listEl, 'mouseleave', (e: MouseEvent) => {
       this.mouseIsOver = false;
       if(this.scrollbar_v.classList.contains('visible')) {
         this.scrollbar_v.classList.remove('visible');
@@ -253,7 +252,7 @@ export class List extends Disposable {
       }
     }));
 
-    this._register(_addEventListener(list, 'click', (e: MouseEvent) => {
+    this._register(_addEventListener(listEl, 'click', (e: MouseEvent) => {
       // console.log('click event is called ..');
 
       // is this right clear selected in here?
@@ -270,7 +269,7 @@ export class List extends Disposable {
     const tree = this.tree = $('.tree');
     this.nodes = [];
     // const list = this.state.showList;
-    this.state.list.map((v: ListItemElem, i: number) => {
+    this.state.items.map((v: ListItemElem, i: number) => {
       const node = new Node(tree, null, this.dnd,
         this._toggleCollapsed.bind(this));
       node.create(v, 0,
@@ -286,8 +285,8 @@ export class List extends Disposable {
     const slider = this.slider = $('.slider');
     scrollbar_v.appendChild(slider);
 
-    list.appendChild(tree);
-    this.container.appendChild(list);
+    listEl.appendChild(tree);
+    this.container.appendChild(listEl);
     // this.container.appendChild(scrollable);
     this.container.appendChild(scrollbar_v);
   }
@@ -753,9 +752,9 @@ export class Node extends Disposable implements Children {
     span.appendChild(itemIcon);
     listItem.appendChild(span);
 
-    const title = this.titleEl = $('span.title');
-    title.innerHTML = data.title;
-    listItem.appendChild(title);
+    const titleEl = this.titleEl = $('span.title');
+    titleEl.innerHTML = data.title;
+    listItem.appendChild(titleEl);
 
     body.appendChild(listItem);
     content.appendChild(body);
@@ -937,9 +936,9 @@ export class Node extends Disposable implements Children {
     }));
     listItem.appendChild(input);
 
-    const title = this.titleEl = $('span.title');
-    title.style.display = 'none';
-    listItem.appendChild(title);
+    const titleEl = this.titleEl = $('span.title');
+    titleEl.style.display = 'none';
+    listItem.appendChild(titleEl);
 
     body.appendChild(listItem);
     content.appendChild(body);
