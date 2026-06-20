@@ -4,7 +4,7 @@ import { Orientation, Sash, SashEvent, SashState } from './Sash';
 import { range } from '../util/arrays';
 import { clamp } from '../../common/util/numbers';
 import { Pane } from '../Pane';
-import { _on_e } from '../util/lifecycle';
+import { Disposable, _on_e } from '../util/lifecycle';
 
 export interface MappedSashEvent {
   sash: Sash;
@@ -176,7 +176,7 @@ export interface SplitViewOptions<T extends SplitViewItemView> {
   descriptor?: SplitViewItemDescriptor<T>;
 }
 
-export class SplitView<T extends SplitViewItemView> {
+export class SplitView<T extends SplitViewItemView> extends Disposable {
 
   size: number;
   container: HTMLElement;
@@ -192,6 +192,7 @@ export class SplitView<T extends SplitViewItemView> {
   proportions: (number | undefined)[] | undefined = undefined;
 
   constructor(container: HTMLElement, options: SplitViewOptions<T>) {
+    super();
     this.container = container;
     this.orientation = options.orientation != null ? options.orientation : Orientation.VERTICAL;
     // this.viewItems = [];
