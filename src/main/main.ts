@@ -117,7 +117,7 @@ class MainWindow {
 
     const terminals = new Map<string, TerminalBase>();
 
-    ipcMain.on('new', (event, args: any[]) => {
+    ipcMain.on('terminal new', (event, args: any[]) => {
       // console.log('[main.ts/new] args =', args);
       const arg: TerminalItem = args[0] as TerminalItem;
       if(arg.type === 'local') {
@@ -139,7 +139,7 @@ class MainWindow {
       }
     });
 
-    ipcMain.on('data', (event, args: any[]) => {
+    ipcMain.on('terminal data', (event, args: any[]) => {
       // console.log('[main.ts/data] args =', args);
       const arg = args[0];
       const terminal = arg && arg.uid && terminals.get(arg.uid);
