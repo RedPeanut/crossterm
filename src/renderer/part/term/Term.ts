@@ -36,7 +36,7 @@ export class Term {
 
     if(terminals[this.uid]) return;
 
-    let retVal = window.ipc.send('new', {
+    let retVal = window.ipc.send('terminal new', {
       ...this.item,
       uid: this.uid,
       // type: 'local',
