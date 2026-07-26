@@ -48,6 +48,11 @@ export default class TerminalLocal extends TerminalBase {
     this.shell = shell;
   }
 
+  async destroy(): Promise<void> {
+    this.pty?.kill();
+    this.pty = null;
+  }
+
   write(data: string) {
     if(this.pty) {
       this.pty.write(data);

@@ -153,6 +153,12 @@ class MainWindow {
       terminals.get(uid).resize(cols, rows);
     });
 
+    ipcMain.on('terminal close', (event, args: any[]) => {
+      const { uid } = args[0] !== null && args[0] !== undefined ? args[0] : { uid: undefined };
+      const t = terminals.get(uid);
+      if (t) { t.destroy(); terminals.delete(uid); }
+    });
+
     function helper(obj: BrowserWindow | NodeJS.Process, type: string, val: string) {
       if(obj[val]) {
         // console.log(typeof obj[val]);

@@ -9,6 +9,7 @@ export type MainEvents =
   'terminal new'
   | 'terminal write'
   | 'terminal resize'
+  | 'terminal close'
 
   // menu
   | 'menu get'
