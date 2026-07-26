@@ -206,9 +206,51 @@ body { height: 100%; }
 .pane-view .pane .pane-body { height: calc(100% - 22px); display: none; position: relative; }
 .pane-view .pane.expanded .pane-body { display: block; }
 
-.pane-view .pane p { padding: 8px; }
-/* .pane-view.bookmark .pane.detail p { padding: 8px; }
-.pane-view.sample .pane.sample p { padding: 8px; } */
+/* Detail Pane */
+.pane-view .pane.detail .wrap { height: 100%; }
+
+/* Table Sash */
+.pane-view .pane.detail .table-sash {
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 10;
+  user-select: none;
+  background-color: transparent;
+  /* background-color: rgb(0, 127, 212); */
+  transition: background-color 0.1s;
+}
+
+.pane-view .pane.detail .table-sash:hover,
+.pane-view .pane.detail .table-sash.active {
+  background-color: var(--vscode-sash-hoverBorder, rgb(0, 120, 212)); /* VS Code 스타일 */
+}
+
+.pane-view .pane.detail .table-sash::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--vscode-sash-size, 4px) / 2);
+  width: 0;
+  height: 100%;
+  border-left: 1px solid transparent;
+}
+
+.pane-view .pane.detail:hover .table-sash::before {
+  border-color: rgba(204, 204, 204, 0.125);
+  transition: border-color 0.2s ease-out;
+}
+
+.pane-view .pane.detail table { width: 100%; font-size: 11px; }
+
+.pane-view .pane.detail tr[data-parity=odd]:not(.selected) {
+  background-color: rgb(204 204 204 / 4%);
+}
+
+.pane-view .pane.detail tr th {}
+.pane-view .pane.detail tr td { padding-left: 5px; }
+
 
 .grid-branch-node { height: 100%; }
 

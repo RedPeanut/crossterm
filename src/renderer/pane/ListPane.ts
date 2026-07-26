@@ -85,7 +85,10 @@ export class ListPane extends Pane {
     // draw list in body
     const list = this.list = new List(this.body,
       renderer.list, // list: ListItemElem[]
-      (e: MouseEvent, id: string) => {}, // onClick
+      (e: MouseEvent, id: string) => {
+        // TODO: send click event to detail view
+
+      }, // onClick
       (e: MouseEvent, id: string) => {
         // const list = renderer.list;
         const item: ListItemElem | undefined = utils.flatten(renderer.list).find((item) => item.id === id);
