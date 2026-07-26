@@ -27,14 +27,14 @@ export class BookmarkPaneView extends PaneView {
     bookmarkPane.render();
     this.addPane(bookmarkPane);
 
-    const descPane = new DetailPane(null, {
+    const detailPane = new DetailPane(null, {
       collapsed: initialValue.collapsed[IDX.DETAIL],
       sizeType: initialValue.sizeType[IDX.DETAIL],
       size: initialValue.size[IDX.DETAIL],
       // preferredWidth: initialValue.preferredWidth[IDX.DETAIL],
       preferredHeight: initialValue.preferredHeight[IDX.DETAIL],
     });
-    descPane.render();
-    this.addPane(descPane);
+    detailPane.render();
+    this.addPane(detailPane);
   }
 }
