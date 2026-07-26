@@ -56,4 +56,8 @@ export default class TerminalLocal extends TerminalBase {
     }
   }
 
+  resize(cols: number, rows: number): void {
+    this.pty?.resize(cols, rows);
+  }
+
 }

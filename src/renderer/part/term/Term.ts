@@ -55,6 +55,9 @@ export class Term {
     _xterm.open(document.getElementById(this.uid) as HTMLElement);
     _xterm.onKey((e) => this.onKey(e));
     _xterm.onData((e) => this.onData(e));
+    _xterm.onResize(({cols, rows}) => {
+      window.ipc.send('terminal resize', { uid: this.uid, cols, rows });
+    });
     this.fitAddon.fit();
     this.xterm = _xterm;
 

@@ -100,4 +100,12 @@ export default class TerminalSsh extends TerminalBase {
       // log.error(e);
     }
   } //*/
+
+  resize(cols: number, rows: number): void {
+    try {
+      this.stream?.setWindow(rows, cols, 0, 0);
+    } catch (e) {
+      // stream may not be ready yet
+    }
+  }
 }

@@ -11,4 +11,5 @@ export default abstract class TerminalBase extends EventEmitter {
   }
 
   abstract write(data: string);
+  abstract resize(cols: number, rows: number): void;
 }

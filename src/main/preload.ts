@@ -8,6 +8,7 @@ export type MainEvents =
   // terminal
   'terminal new'
   | 'terminal write'
+  | 'terminal resize'
 
   // menu
   | 'menu get'

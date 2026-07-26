@@ -148,6 +148,11 @@ class MainWindow {
       }
     });
 
+    ipcMain.on('terminal resize', (event, args: any[]) => {
+      const { uid, cols, rows } = args[0] !== null && args[0] !== undefined ? args[0] : { uid: undefined, cols: undefined, rows: undefined};
+      terminals.get(uid).resize(cols, rows);
+    });
+
     function helper(obj: BrowserWindow | NodeJS.Process, type: string, val: string) {
       if(obj[val]) {
         // console.log(typeof obj[val]);
