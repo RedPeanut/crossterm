@@ -10,6 +10,7 @@ export default abstract class TerminalBase extends EventEmitter {
     this.options = options;
   }
 
+  abstract start(): void;
   abstract destroy(): Promise<void>;
   abstract write(data: string);
   abstract resize(cols: number, rows: number): void;

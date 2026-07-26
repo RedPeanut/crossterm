@@ -118,25 +118,26 @@ class MainWindow {
     const terminals = new Map<string, TerminalBase>();
 
     ipcMain.on('terminal new', (event, args: any[]) => {
-      // console.log('[main.ts/new] args =', args);
+      console.log('[main.ts/new] args =', args);
       const arg: TerminalItem = args[0] as TerminalItem;
-      if(arg.type === 'local') {
-        const terminal = new TerminalLocal(arg);
-        terminal.on('data', (data: string) => {
-          // console.log('data event is called..., data =', data);
-          this.browserWindow?.webContents.send('terminal data', data);
-        });
-        terminal.start();
-        terminals.set(arg.uid, terminal);
-      } else if(arg.type === 'remote') {
-        const terminal = new TerminalSsh(arg);
-        terminal.on('data', (data: string) => {
-          // console.log('data event is called..., data =', data);
-          this.browserWindow?.webContents.send('terminal data', data);
-        });
-        terminal.start();
-        terminals.set(arg.uid, terminal);
+      const { uid, type } = arg;
+
+      let terminal: TerminalBase;
+      if(type === 'remote') {
+        terminal = new TerminalSsh(arg);
+      } else { // (arg.type === 'local')
+        terminal = new TerminalLocal(arg);
       }
+      terminal.on('data', (data: string) => {
+        // console.log('data event is called..., data =', data);
+        this.browserWindow?.webContents.send('terminal data', data);
+      });
+      terminal.on('close', () => {
+        // this.send('terminal close', uid);
+        terminals.delete(uid);
+      });
+      terminal.start();
+      terminals.set(arg.uid, terminal);
     });
 
     ipcMain.on('terminal write', (event, args: any[]) => {
