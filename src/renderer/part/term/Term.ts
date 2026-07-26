@@ -67,7 +67,7 @@ export class Term {
 
   onData(data: string) {
     // console.log('onData() is called..., e =', data);
-    window.ipc.send('data', {
+    window.ipc.send('terminal write', {
       uid: this.uid,
       data: data
     });

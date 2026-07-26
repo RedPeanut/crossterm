@@ -7,7 +7,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent, IpcRenderer } from 'elect
 export type MainEvents =
   // terminal
   'terminal new'
-  | 'terminal data'
+  | 'terminal write'
 
   // menu
   | 'menu get'

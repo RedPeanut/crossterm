@@ -139,7 +139,7 @@ class MainWindow {
       }
     });
 
-    ipcMain.on('terminal data', (event, args: any[]) => {
+    ipcMain.on('terminal write', (event, args: any[]) => {
       // console.log('[main.ts/data] args =', args);
       const arg = args[0];
       const terminal = arg && arg.uid && terminals.get(arg.uid);
