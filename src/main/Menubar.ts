@@ -3,7 +3,7 @@ import {
   Menu,
   MenuItemConstructorOptions,
 } from 'electron';
-import { isMacintosh, isWindows } from './util/platform';
+// import { isMacintosh, isWindows } from './util/platform';
 import { mainWindow } from './main';
 import {
   appPreferencesMenuId, appQuitMenuId,
@@ -13,7 +13,7 @@ import {
 import { keyBinding } from '../common/globals';
 
 // { id: [Win, Mac] }
-const keyBindingIdx = isWindows ? 0 : 1;
+const keyBindingIdx = process.platform === 'win32' ? 0 : 1;
 
 export class Menubar {
   template: MenuItemConstructorOptions[];
@@ -24,7 +24,7 @@ export class Menubar {
   install(): void {
     const template: MenuItemConstructorOptions[] = this.template = [];
 
-    if(isMacintosh) {
+    if(process.platform === 'darwin') {
       // set application menu
       this.addApplicationMenu(template);
     }
@@ -90,7 +90,7 @@ export class Menubar {
 
     fileSubmenu.push();
 
-    if(isWindows) {
+    if(process.platform === 'win32') {
       fileSubmenu.push({ type: 'separator' as const });
       fileSubmenu.push({
         id: filePreferencesMenuId,
