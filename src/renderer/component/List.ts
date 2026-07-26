@@ -646,6 +646,14 @@ export class Node extends Disposable implements Children {
 
     node.style.paddingLeft = `${level * 20 + 4}px`;
 
+    if(data.type !== 'folder' && level !== 0) {
+      const indent = $('.indent');
+      indent.style.left = `${level * 8 + 4}px`;
+      const guide = $('.guide');
+      indent.appendChild(guide);
+      node.appendChild(indent);
+    }
+
     this._register(_addEventListener(node, 'click', (e: MouseEvent) => {
       onClick(e, data.id);
       e.stopPropagation();

@@ -475,6 +475,7 @@ body { height: 100%; }
   line-height: 22px;
   /* font-size: 13px; */
   padding-left: 4px;
+  position: relative;
 }
 
 .sidebar .list .node:hover {
@@ -490,6 +491,24 @@ body { height: 100%; }
 .sidebar .list .node.selected {
   background-color: rgb(71 85 102);
   /* border-radius: 4px; */
+}
+
+.sidebar .list .indent {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
+
+.sidebar .list .indent .guide {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 100%;
+  border-left: 1px solid transparent;
+  /* opacity: 0; */
+  transition: opacity 0.1s linear;
+  opacity: 1;
+  border-color: var(--vscode-tree-indentGuidesStroke, rgb(88 88 88));
 }
 
 .sidebar .list .node .content {
