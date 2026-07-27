@@ -24,6 +24,9 @@ import TerminalBase from './terminal/TerminalBase';
 import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
 import { clamp } from '../common/util/numbers';
+import { FileService } from '../common/service/FileService';
+import { FileServiceImpl } from './service/FileService';
+import { getService, fileServiceId, setService } from './Service';
 
 class AppUpdater {
   constructor() {
@@ -298,6 +301,14 @@ class MainWindow {
       isReadyToQuit = true;
       app.quit();
     });
+
+    const fileServiceImpl: FileService = getService(fileServiceId) as FileService;
+
+    ipcMain.handle('file read', async (event, args: any[]) => { return fileServiceImpl.readFile(args[0], args[1]); });
+    ipcMain.handle('file write atomic', async (event, args: any[]) => {
+      // return fileServiceImpl.writeFile(...args);
+      return fileServiceImpl.writeFileAtomic(args[0], args[1], args[2]);
+    });
   }
 
   createWindow = async () => {
@@ -312,6 +323,9 @@ class MainWindow {
     const getAssetPath = (...paths: string[]): string => {
       return path.join(RESOURCES_PATH, ...paths);
     };
+
+    // set services
+    setService(fileServiceId, new FileServiceImpl());
 
     await this.installIpc();
 

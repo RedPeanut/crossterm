@@ -34,6 +34,10 @@ export type MainEvents =
   | 'open context menu'
   | 'command'
 
+  // file op
+  | 'file read'
+  | 'file write atomic'
+
   // app
   | 'app quit ready'
 ;
