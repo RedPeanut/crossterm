@@ -1,13 +1,16 @@
 import { $ } from "../../util/dom";
-import { TerminalItem } from "../../../common/Types";
+import { ConnStatus, TerminalItem } from "../../../common/Types";
 import { SessionPartService } from "../SessionPart";
 import { getService, sessionPartServiceId } from "../../Service";
 import { wrapper } from "../../../globals";
 import { findActiveItem, findItemById } from "../../utils";
 
 export class Tab {
+
   parent: HTMLElement;
   element: HTMLElement;
+  statusDot: HTMLElement;
+
   item: TerminalItem;
   sessionPartService: SessionPartService;
 
@@ -79,6 +82,12 @@ export class Tab {
     console.log('closeBtn is clicked...');
   }
 
+  updateStatus(status: ConnStatus): void {
+    if(!this.statusDot) return;
+    this.statusDot.className = `tab-status-dot status-${status}`;
+    this.statusDot.title = status;
+  }
+
   create(): HTMLElement {
     const item = this.item;
 
@@ -99,6 +108,18 @@ export class Tab {
 
     const tabBorderTopContainer = $('.tab-border-top-container');
     el.appendChild(tabBorderTopContainer);
+
+    // status dot (remote only)
+    if (item.type === 'remote') {
+      const dot = this.statusDot = $('span.tab-status-dot');
+      dot.className = `tab-status-dot status-${item.connStatus ?? 'connecting'}`;
+      dot.title = item.connStatus ?? 'connecting';
+      el.appendChild(dot);
+
+      // // register status callback on the item
+      // item.onConnStatusChange = (status) => this.updateStatus(status);
+    }
+
     const label = $('.label');
     label.innerText = '탭입니다';
     el.appendChild(label);
@@ -113,6 +134,7 @@ export class Tab {
 
     const tabBorderBottomContainer = $('.tab-border-bottom-container');
     el.appendChild(tabBorderBottomContainer);
+
     return el;
   }
 

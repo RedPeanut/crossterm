@@ -34,7 +34,7 @@ export type MainEvents =
   | 'open context menu'
   | 'command'
 
-  //
+  // app
   | 'app quit ready'
 ;
 
@@ -42,12 +42,15 @@ export type MainEvents =
 export type RenderEvents =
   'terminal add'
   | 'terminal data'
-  | 'terminal exit'
+  | 'terminal connected'
+  | 'terminal error'
+  | 'terminal closed'
+  // | 'terminal exit'
 
   // window
   | 'window state changed'
 
-  //
+  // app
   | 'app quit request'
 ;
 

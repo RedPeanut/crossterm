@@ -94,7 +94,7 @@ const configs = {
       // url: 'www.remote.com',
       id: '8d65f5a3-306d-44c7-a43f-b5abc17b6a2b',
       url: {
-        host: '192.168.200.104',
+        host: '192.168.200.139',
         port: 22,
         username: 'kimjk',
         password: '1234',

@@ -1,5 +1,5 @@
 import { $ } from "../../util/dom";
-import { TerminalItem } from "../../../common/Types";
+import { ConnStatus, TerminalItem } from "../../../common/Types";
 import { v4 as uuidv4 } from 'uuid';
 import 'xterm/css/xterm.css';
 import { Terminal as xterm } from 'xterm'
@@ -15,6 +15,10 @@ export class Term {
   uid: string;
   xterm: xterm | null = null;
   fitAddon: FitAddon;
+
+  onConnected: ((...args: unknown[]) => void) | null = null;
+  onError: ((...args: unknown[]) => void) | null = null;
+  onClosed: ((...args: unknown[]) => void) | null = null;
 
   constructor(parent: HTMLElement, item: TerminalItem) {
     this.parent = parent;
@@ -62,6 +66,33 @@ export class Term {
     this.xterm = _xterm;
 
     terminals[this.uid] = this;
+
+    // register SSH lifecycle listeners (remote only)
+    if (this.item.type === 'remote') {
+      this.onConnected = (...args: unknown[]) => {
+        const uid = args[1] as string;
+        if (uid !== this.uid) return;
+        this.setConnStatus('connected');
+      };
+
+      this.onError = (...args: unknown[]) => {
+        const { uid, message } = args[1] as { uid: string; message: string };
+        if (uid !== this.uid) return;
+        this.setConnStatus('error');
+        // toast.show(`SSH 연결 오류: ${message}`, 'error', 5000);
+      };
+
+      this.onClosed = (...args: unknown[]) => {
+        const uid = args[1] as string;
+        if (uid !== this.uid) return;
+        this.setConnStatus('closed');
+        this.xterm.write('\r\n\x1b[33m[연결이 종료되었습니다]\x1b[0m\r\n');
+      };
+
+      // window.ipc.on('terminal connected', this.onConnected);
+      window.ipc.on('terminal error', this.onError);
+      window.ipc.on('terminal closed', this.onClosed);
+    }
   }
 
   onKey(e: { key: string; domEvent: KeyboardEvent }) {
@@ -78,4 +109,16 @@ export class Term {
 
   fit() { this.fitAddon.fit(); }
 
+  setConnStatus(status: ConnStatus): void {
+    this.item.connStatus = status;
+    // this.item.onConnStatusChange?.(status);
+  }
+
+  destroy(): void {
+    // if(this.onConnected) window.ipc.off('terminal connected', this.onConnected);
+    if(this.onError) window.ipc.off('terminal error', this.onError);
+    if(this.onClosed) window.ipc.off('terminal closed', this.onClosed);
+    this.xterm.dispose();
+    delete terminals[this.uid];
+  }
 }

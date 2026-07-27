@@ -709,6 +709,27 @@ body { height: 100%; }
   display: block;
 }
 
+/* Tab status dot */
+.tab-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+.status-connecting { background-color: rgb(200, 200, 60); animation: pulse 1.2s infinite; }
+.status-connected { background-color: rgb(50, 200, 100); }
+.status-error { background-color: rgb(220, 60, 60); }
+.status-closed { background-color: rgb(120, 120, 120); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
 .terms {
   position: relative;
   height: calc(100% - 35px);
@@ -781,3 +802,4 @@ body { height: 100%; }
   outline: 1px solid rgb(0, 120, 212);
   outline-offset: -1px;
 }
+

@@ -125,6 +125,9 @@ class MainWindow {
       let terminal: TerminalBase;
       if(type === 'remote') {
         terminal = new TerminalSsh(arg);
+        terminal.on('error', (message: string) => {
+          this.browserWindow?.webContents.send('terminal error', uid, message);
+        });
       } else { // (arg.type === 'local')
         terminal = new TerminalLocal(arg);
       }
@@ -133,7 +136,7 @@ class MainWindow {
         this.browserWindow?.webContents.send('terminal data', data);
       });
       terminal.on('close', () => {
-        // this.send('terminal close', uid);
+        this.browserWindow?.webContents.send('terminal closed', uid);
         terminals.delete(uid);
       });
       terminal.start();

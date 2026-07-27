@@ -1,5 +1,7 @@
 import { Term } from "../renderer/part/term/Term";
 
+export type ConnStatus = 'connecting' | 'connected' | 'error' | 'closed';
+
 export interface TerminalItem {
   uid: string,
 
@@ -7,6 +9,8 @@ export interface TerminalItem {
   selected?: boolean; // default: false
   active?: boolean; // default: false
   term?: Term;
+  connStatus?: ConnStatus;
+  // onConnStatusChange?: (status: ConnStatus) => void;
 
   // in main
   // properties that are describe to terminal
