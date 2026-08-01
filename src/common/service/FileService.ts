@@ -29,4 +29,5 @@ export interface WriteFileOptions {
 export interface FileService {
   readFile(filePath: string, opts: ReadFileOptions): Promise<Buffer>;
   writeFileAtomic(filePath: string, content: string | Buffer, options: WriteFileOptions): Promise<void>;
+  // TODO: move, copy, del, etc ..
 }
