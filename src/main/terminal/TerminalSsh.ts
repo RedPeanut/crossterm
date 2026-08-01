@@ -82,9 +82,10 @@ export default class TerminalSsh extends TerminalBase {
   }
 
   async destroy(): Promise<void> {
-    this.stream && this.stream.end();
+    this.stream?.end();
     delete this.stream;
-    this.conn && this.conn.end();
+    this.conn?.end();
+    delete this.conn;
   }
 
   /* on(event: any, cb: any) {
