@@ -27,6 +27,11 @@ export type MainEvents =
   | 'config set'
   | 'config update'
 
+  // storage (sqlite)
+  | 'storage getall'
+  | 'storage set'
+  | 'storage delete'
+
   // action
   | 'get package json'
 

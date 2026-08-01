@@ -24,9 +24,10 @@ import TerminalBase from './terminal/TerminalBase';
 import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
 import { clamp } from '../common/util/numbers';
-import { FileService } from '../common/service/FileService';
-import { FileServiceImpl } from './service/FileService';
-import { getService, fileServiceId, setService } from './Service';
+import { MainFileService } from './service/MainFileService';
+import { fileServiceId, setService, storageServiceId, configurationServiceId } from './Service';
+import { MainStorageService } from './service/MainStorageService';
+import { MainConfigurationService } from './service/MainConfigurationService';
 
 class AppUpdater {
   constructor() {
@@ -302,13 +303,6 @@ class MainWindow {
       app.quit();
     });
 
-    const fileServiceImpl: FileService = getService(fileServiceId) as FileService;
-
-    ipcMain.handle('file read', async (event, args: any[]) => { return fileServiceImpl.readFile(args[0], args[1]); });
-    ipcMain.handle('file write atomic', async (event, args: any[]) => {
-      // return fileServiceImpl.writeFile(...args);
-      return fileServiceImpl.writeFileAtomic(args[0], args[1], args[2]);
-    });
   }
 
   createWindow = async () => {
@@ -325,7 +319,9 @@ class MainWindow {
     };
 
     // set services
-    setService(fileServiceId, new FileServiceImpl());
+    setService(fileServiceId, new MainFileService());
+    setService(storageServiceId, new MainStorageService());
+    setService(configurationServiceId, new MainConfigurationService());
 
     await this.installIpc();
 

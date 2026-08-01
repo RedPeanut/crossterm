@@ -8,6 +8,8 @@ import { domContentLoaded } from './util/dom';
 import { ElectronHandler } from '../main/preload';
 import { ConfigsInitialValueType } from '../common/configs';
 import { ListItemElem } from './component/List';
+import { RenderStorageService } from './service/RenderStorageService';
+import { setService, storageServiceId } from './Service';
 
 declare global {
   interface Window {
@@ -59,6 +61,8 @@ export class Renderer {
     this.package_json = await window.ipc.invoke('get package json');
     this.initial_value = await window.ipc.invoke('config get', 'initial_value');
     this.list = await window.ipc.invoke('config get', 'list');
+
+    setService(storageServiceId, new RenderStorageService());
   }
 }
 

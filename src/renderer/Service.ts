@@ -8,9 +8,11 @@ export const sidebarPartServiceId = "sidebarPartService";
 export const sessionPartServiceId = "sessionPartService";
 export const bookmarkPanelServiceId = "BookmarkPanelService";
 export const contextViewServiceId = "contextViewService";
+export const storageServiceId = "storageService";
 export const blarBlarServiceId = "blarBlarService";
 
-type ServiceId = typeof mainLayoutServiceId // MainLayoutService
+type ServiceId =
+  typeof mainLayoutServiceId // MainLayoutService
   | typeof bodyLayoutServiceId // BodyLayoutService
   | typeof menubarServiceId // MenubarService
   | typeof activitybarPartServiceId // ActivitybarPartService
@@ -18,6 +20,7 @@ type ServiceId = typeof mainLayoutServiceId // MainLayoutService
   | typeof sessionPartServiceId // SessionPartService
   | typeof bookmarkPanelServiceId // BookmarkPanelService
   | typeof contextViewServiceId // contextViewService
+  | typeof storageServiceId // storageService
   | typeof blarBlarServiceId // BlarBlarService
 ;
 
