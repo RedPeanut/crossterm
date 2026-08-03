@@ -14,7 +14,7 @@ import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions 
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './utils';
+import * as utils from './utils';
 import { SerializableMenuItem } from '../common/Types';
 import { Menubar } from './Menubar';
 import { TerminalItem } from '../common/Types';
@@ -310,14 +310,6 @@ class MainWindow {
       await this.installExtensions();
     }
 
-    const RESOURCES_PATH = app.isPackaged
-      ? path.join(process.resourcesPath, 'assets')
-      : path.join(__dirname, '../../assets');
-
-    const getAssetPath = (...paths: string[]): string => {
-      return path.join(RESOURCES_PATH, ...paths);
-    };
-
     // set services
     setService(fileServiceId, new MainFileService());
     setService(storageServiceId, new MainStorageService());
@@ -344,14 +336,14 @@ class MainWindow {
       minWidth: 800,
       minHeight: 600,
 
-      icon: getAssetPath('icon.png'),
+      icon: utils.getAssetPath('icon.png'),
       webPreferences: {
         preload: app.isPackaged
           ? path.join(__dirname, 'preload.js')
           : path.join(__dirname, '../../.erb/dll/preload.js'),
       },
     });
-    this.browserWindow.loadURL(resolveHtmlPath('index.html'));
+    this.browserWindow.loadURL(utils.resolveHtmlPath('index.html'));
 
     this.browserWindow.on('ready-to-show', () => {
       if(!this.browserWindow) {
