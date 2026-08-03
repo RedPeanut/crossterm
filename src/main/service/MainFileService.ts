@@ -1,4 +1,4 @@
-import fs, { promises } from 'fs';
+import fs from 'fs';
 import path from 'path';
 import { ipcMain } from 'electron';
 import { FileService, ReadFileOptions, Stat, WriteFileOptions, FileType } from '../../common/service/FileService';
@@ -10,25 +10,25 @@ export class MainFileService implements FileService {
     this.registerIpcHandlers();
   }
 
-  async readFile(filePath: string, opts: ReadFileOptions): Promise<Buffer> {
-    return await promises.readFile(filePath);
+  async readFile(filePath: string, opts: ReadFileOptions = {}): Promise<Buffer> {
+    return await fs.promises.readFile(filePath);
   }
 
   async writeFileAtomic(filePath: string, content: string | Buffer, options: WriteFileOptions = {}): Promise<void> {
     const targetDir = path.dirname(filePath);
 
-    await promises.mkdir(targetDir, { recursive: true });
+    await fs.promises.mkdir(targetDir, { recursive: true });
 
     // 1. 동일한 디렉토리 내에 유니크한 임시 파일명 생성
     // (동일 디렉토리에 두어야 OS 레벨에서 원자적 이동(Rename)이 보장됩니다)
     const tempFileName = `.tmp-${path.basename(filePath)}-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
     const tempFilePath = path.join(targetDir, tempFileName);
 
-    let fileHandle: promises.FileHandle | null = null;
+    let fileHandle: fs.promises.FileHandle | null = null;
 
     try {
       // 2. 임시 파일 생성 및 쓰기 권한 오픈
-      fileHandle = await promises.open(tempFilePath, 'w', options.mode);
+      fileHandle = await fs.promises.open(tempFilePath, 'w', options.mode);
 
       // 3. 데이터 쓰기
       const data = typeof content === 'string' ? Buffer.from(content, options.encoding || 'utf8') : content;
@@ -43,14 +43,14 @@ export class MainFileService implements FileService {
 
       // 5. 원자적 대체 (Atomic Replace)
       // POSIX 환경에서는 원자적으로 작동하며, Windows에서도 같은 드라이브 내라면 순식간에 교체됩니다.
-      await promises.rename(tempFilePath, filePath);
+      await fs.promises.rename(tempFilePath, filePath);
 
     } catch (error) {
       // 오류 발생 시 열려있는 핸들 닫기 및 임시 파일 정리
       if (fileHandle) {
         try { await fileHandle.close(); } catch {}
       }
-      try { await promises.unlink(tempFilePath); } catch {}
+      try { await fs.promises.unlink(tempFilePath); } catch {}
 
       throw error;
     }
