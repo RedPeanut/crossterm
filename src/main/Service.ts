@@ -3,12 +3,14 @@ export interface Service { /* marker */ }
 export const fileServiceId = 'fileService';
 export const storageServiceId = 'storageService';
 export const configurationServiceId = 'configurationService';
+export const appServiceId = 'appService';
 export const blarBlarServiceId = 'blarBlarService';
 
 type ServiceId =
 typeof fileServiceId
 | typeof storageServiceId
 | typeof configurationServiceId
+| typeof appServiceId
 | typeof blarBlarServiceId
 ;
 

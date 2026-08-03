@@ -25,9 +25,10 @@ import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
 import { clamp } from '../common/util/numbers';
 import { MainFileService } from './service/MainFileService';
-import { fileServiceId, setService, storageServiceId, configurationServiceId } from './Service';
+import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId } from './Service';
 import { MainStorageService } from './service/MainStorageService';
 import { MainConfigurationService } from './service/MainConfigurationService';
+import { AppService } from './service/AppService';
 
 class AppUpdater {
   constructor() {
@@ -314,6 +315,7 @@ class MainWindow {
     setService(fileServiceId, new MainFileService());
     setService(storageServiceId, new MainStorageService());
     setService(configurationServiceId, new MainConfigurationService());
+    setService(appServiceId, new AppService());
 
     await this.installIpc();
 
