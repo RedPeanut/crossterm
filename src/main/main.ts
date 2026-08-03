@@ -31,6 +31,12 @@ import { MainConfigurationService } from './service/MainConfigurationService';
 import { AppService } from './service/AppService';
 import { FileService } from '../common/service/FileService';
 import { EnvironmentService } from './service/EnvironmentService';
+import { registerIpcChannel } from './IpcChannel';
+import { AppServiceChannel } from './ipc/AppServiceChannel';
+import { FileServiceChannel } from './ipc/FileServiceChannel';
+import { StorageServiceChannel } from './ipc/StorageServiceChannel';
+import { DisposableStore } from '../common/base/lifecycle';
+import { ConfigurationServiceChannel } from './ipc/ConfigurationServiceChannel';
 
 class AppUpdater {
   constructor() {
@@ -44,6 +50,7 @@ class MainWindow {
   browserWindow: BrowserWindow | null = null;
   isDebug: boolean = false;
   menubar: Menubar;
+  ipcDisposables = new DisposableStore();
 
   constructor() {
     if(process.env.NODE_ENV === 'production') {
@@ -300,6 +307,7 @@ class MainWindow {
 
       // 여기서 파일 저장 등 무거운 비동기 작업 처리 가능
       // 예: fs.writeFileSync('config.json', JSON.stringify(data));
+      this.ipcDisposables.dispose();
 
       // 4. 할 일이 끝났으므로 플래그를 true로 바꾸고 앱을 진짜 종료합니다.
       isReadyToQuit = true;
@@ -319,9 +327,23 @@ class MainWindow {
     setService(environmentServiceId, environmentService);
     setService(fileServiceId, fileService);
 
-    setService(storageServiceId, new MainStorageService(environmentService, fileService));
-    setService(configurationServiceId, new MainConfigurationService(environmentService, fileService));
-    setService(appServiceId, new AppService(environmentService, fileService));
+    const storageService = new MainStorageService(environmentService, fileService);
+    const configurationService = new MainConfigurationService(environmentService, fileService);
+    const appService = new AppService(environmentService, fileService);
+
+    setService(storageServiceId, storageService);
+    setService(configurationServiceId, configurationService);
+    setService(appServiceId, appService);
+
+    // expose services to the renderer
+    for(const channel of [
+      new FileServiceChannel(fileService),
+      new StorageServiceChannel(storageService),
+      new ConfigurationServiceChannel(configurationService),
+      new AppServiceChannel(appService),
+    ]) {
+      this.ipcDisposables.add(registerIpcChannel(channel));
+    }
 
     await this.installIpc();
 

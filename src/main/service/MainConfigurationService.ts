@@ -2,8 +2,6 @@ import { Disposable } from '../../common/base/lifecycle';
 import { Emitter, Event } from '../../common/base/event';
 import { FileService } from '../../common/service/FileService';
 import { ConfigurationService, ConfigurationChangeEvent } from '../../common/service/ConfigurationService';
-import { fileServiceId, getService } from '../Service';
-import { app } from 'electron';
 import path from 'path';
 import { EnvironmentService } from './EnvironmentService';
 

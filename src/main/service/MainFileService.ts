@@ -8,7 +8,7 @@ export class MainFileService implements FileService {
 
   constructor() {
     // this.init();
-    this.registerIpcHandlers();
+    // this.registerIpcHandlers();
   }
 
   async readFile(filePath: string, opts: ReadFileOptions = {}): Promise<Buffer> {
@@ -105,11 +105,11 @@ export class MainFileService implements FileService {
     return result;
   }
 
-  registerIpcHandlers() {
+  /* registerIpcHandlers() {
     ipcMain.handle('file read', async (event, args: any[]) => { return this.readFile(args[0], args[1]); });
     ipcMain.handle('file write atomic', async (event, args: any[]) => {
       // return fileServiceImpl.writeFile(...args);
       return this.writeFileAtomic(args[0], args[1], args[2]);
     });
-  }
+  } */
 }

@@ -1,21 +1,15 @@
-import { app, ipcMain } from 'electron';
-import path, { sep } from 'path';
-import fs, { Dirent } from 'fs';
-import * as utils from '../utils';
+import path from 'path';
+import fs from 'fs';
 import { FileService } from '../../common/service/FileService';
-import { getService, fileServiceId } from '../Service';
 import { DirentExt } from '../../common/Types';
 import { EnvironmentService } from './EnvironmentService';
-
 
 export class AppService {
 
   constructor(
     private readonly environmentService: EnvironmentService,
     private readonly fileService: FileService
-  ) {
-    this.registerIpcHandlers();
-  }
+  ) {}
 
   async readdir(_path: string, depth: number, parent: DirentExt) {
 
@@ -65,7 +59,7 @@ export class AppService {
     return resultList;
   }
 
-  async readSessionsDir(): Promise<[]> {
+  async readSessionsDir(): Promise<DirentExt[]> {
 
     /*
     - mkdir -p user/sessions
@@ -100,7 +94,7 @@ export class AppService {
     }
     */
 
-    const userDataPath = app.getPath('userData'); // this.environmentService.userDataPath;
+    const userDataPath = this.environmentService.userDataPath;
     const sessionsDir = userDataPath + path.sep + 'user' + path.sep + 'sessions';
 
     let exists = await this.fileService.exists(sessionsDir);
@@ -113,17 +107,7 @@ export class AppService {
     if(!exists) {
       await fs.promises.copyFile(utils.getAssetPath('default.json'), defaultJsonFilePath);
     } */
-
-    await this.readdir(sessionsDir, 0, null);
-    return null;
-  }
-
-  registerIpcHandlers(): void {
-    ipcMain.handle('read sessions dir', async (event, args: any[]) => {
-      // read session dir recursively including attributes
-      // return to list
-      return this.readSessionsDir();
-    });
+    return await this.readdir(sessionsDir, 0, null);
   }
 
 }
