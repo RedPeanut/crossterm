@@ -25,10 +25,12 @@ import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
 import { clamp } from '../common/util/numbers';
 import { MainFileService } from './service/MainFileService';
-import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId } from './Service';
+import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId, environmentServiceId } from './Service';
 import { MainStorageService } from './service/MainStorageService';
 import { MainConfigurationService } from './service/MainConfigurationService';
 import { AppService } from './service/AppService';
+import { FileService } from '../common/service/FileService';
+import { EnvironmentService } from './service/EnvironmentService';
 
 class AppUpdater {
   constructor() {
@@ -303,7 +305,6 @@ class MainWindow {
       isReadyToQuit = true;
       app.quit();
     });
-
   }
 
   createWindow = async () => {
@@ -312,7 +313,12 @@ class MainWindow {
     }
 
     // set services
-    setService(fileServiceId, new MainFileService());
+    const environmentService = new EnvironmentService();
+    const fileService = new MainFileService();
+
+    setService(environmentServiceId, environmentService);
+    setService(fileServiceId, fileService);
+
     setService(storageServiceId, new MainStorageService());
     setService(configurationServiceId, new MainConfigurationService());
     setService(appServiceId, new AppService());

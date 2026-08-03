@@ -4,6 +4,7 @@ export const fileServiceId = 'fileService';
 export const storageServiceId = 'storageService';
 export const configurationServiceId = 'configurationService';
 export const appServiceId = 'appService';
+export const environmentServiceId = 'environmentService';
 export const blarBlarServiceId = 'blarBlarService';
 
 type ServiceId =
@@ -11,6 +12,7 @@ type ServiceId =
   | typeof storageServiceId
   | typeof configurationServiceId
   | typeof appServiceId
+  | typeof environmentServiceId
   | typeof blarBlarServiceId
 ;
 
