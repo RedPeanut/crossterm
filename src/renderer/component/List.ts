@@ -1,12 +1,12 @@
 import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
-import { TerminalItem } from "../../common/Types";
+import { Children, TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { Disposable, _addEventListener } from "../util/lifecycle";
 import { IDisposable } from "../../common/base/lifecycle";
 import { $ } from "../util/dom";
 import * as dom from "../util/dom";
-import { findActiveItem, Children } from "../utils";
+import { findActiveItem } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
 import { contextViewServiceId, getService, mainLayoutServiceId } from "../Service";
@@ -16,11 +16,12 @@ import { Severity } from "../Types";
 export type ListItemType = 'local' | 'remote' | 'group' | 'folder' | 'blank';
 export type FolderModeType = 0 | 1 | 2; // 0: 기본값; 1: 단일 선택 2: 다중 선택
 
-export interface ListItemElem extends Children {
+export interface ListItemElem extends Children<ListItemElem> {
   type?: ListItemType;
   title?: string;
   id: string;
-  children?: ListItemElem[];
+  // children?: ListItemElem[];
+  // isCollapsed?: boolean;
 
   // remote
   url?: { host: string, port: number, username: string, password: string };
@@ -594,7 +595,7 @@ export class List extends Disposable {
 
 }
 
-export class Node extends Disposable implements Children {
+export class Node extends Disposable implements Children<Node> {
   container: HTMLElement;
   wrapper: HTMLElement;
   node: HTMLElement;
@@ -603,11 +604,11 @@ export class Node extends Disposable implements Children {
 
   parent: Node;
   children: Node[] = [];
+  isCollapsed: boolean = false;
 
   id: string;
   shortenedId: string;
   type: string;
-  isCollapsed: boolean = false;
 
   targetNode: Node | undefined;
   dnd: ListDragAndDrop;

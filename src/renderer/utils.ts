@@ -1,4 +1,4 @@
-import { TerminalItem } from "../common/Types";
+import { Children, TerminalItem } from "../common/Types";
 import { Group, isSplitItem, SplitItem } from "./Types";
 
 export function findActiveItem(curr: SplitItem, depth: number, index: number[])
@@ -83,19 +83,13 @@ export function findSplitItemByGroup(curr: SplitItem, depth: number, index: numb
   }
 } */
 
-export interface Children {
-  children?: Children[];
-  isCollapsed?: boolean;
-}
-
-export function flatten<T extends Children>(list: T[]): T[] {
+export function flatten<T extends Children<T>>(list: T[]): T[] {
   let new_list: T[] = [];
   list.map((item) => {
     new_list.push(item);
     if(item.children
-      && (item.isCollapsed != null && item.isCollapsed != undefined)
       && item.isCollapsed === false) {
-      new_list = [ ...new_list, ...this.flatten(item.children) ];
+      new_list = [ ...new_list, ...flatten(item.children) ];
     }
   });
   return new_list;

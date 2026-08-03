@@ -68,3 +68,8 @@ export const editSelectAllMenuId = 'edit.selectAll';
 
 export interface MenubarEnableElem { id: string, enable: boolean }
 export interface MenubarEnable { [id: string]: MenubarEnableElem[] }
+
+export interface Children<T> {
+  children?: T[];
+  isCollapsed?: boolean;
+}
