@@ -7,11 +7,11 @@ export const appServiceId = 'appService';
 export const blarBlarServiceId = 'blarBlarService';
 
 type ServiceId =
-typeof fileServiceId
-| typeof storageServiceId
-| typeof configurationServiceId
-| typeof appServiceId
-| typeof blarBlarServiceId
+  typeof fileServiceId
+  | typeof storageServiceId
+  | typeof configurationServiceId
+  | typeof appServiceId
+  | typeof blarBlarServiceId
 ;
 
 const _services = new Map<string, any>();
