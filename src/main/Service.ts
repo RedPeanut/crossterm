@@ -1,15 +1,15 @@
 export interface Service { /* marker */ }
 
-export const configurationServiceId = 'configurationService';
-export const storageServiceId = 'storageService';
 export const fileServiceId = 'fileService';
+export const storageServiceId = 'storageService';
+export const configurationServiceId = 'configurationService';
 export const blarBlarServiceId = 'blarBlarService';
 
 type ServiceId =
-typeof fileServiceId // FileService
-| typeof storageServiceId // storageService
-| typeof configurationServiceId // configurationService
-| typeof blarBlarServiceId // BlarBlarService
+typeof fileServiceId
+| typeof storageServiceId
+| typeof configurationServiceId
+| typeof blarBlarServiceId
 ;
 
 const _services = new Map<string, any>();

@@ -12,16 +12,16 @@ export const storageServiceId = "storageService";
 export const blarBlarServiceId = "blarBlarService";
 
 type ServiceId =
-  typeof mainLayoutServiceId // MainLayoutService
-  | typeof bodyLayoutServiceId // BodyLayoutService
-  | typeof menubarServiceId // MenubarService
-  | typeof activitybarPartServiceId // ActivitybarPartService
-  | typeof sidebarPartServiceId // SidebarPartService
-  | typeof sessionPartServiceId // SessionPartService
-  | typeof bookmarkPanelServiceId // BookmarkPanelService
-  | typeof contextViewServiceId // contextViewService
-  | typeof storageServiceId // storageService
-  | typeof blarBlarServiceId // BlarBlarService
+  typeof mainLayoutServiceId
+  | typeof bodyLayoutServiceId
+  | typeof menubarServiceId
+  | typeof activitybarPartServiceId
+  | typeof sidebarPartServiceId
+  | typeof sessionPartServiceId
+  | typeof bookmarkPanelServiceId
+  | typeof contextViewServiceId
+  | typeof storageServiceId
+  | typeof blarBlarServiceId
 ;
 
 const _services = new Map<string, any>();
