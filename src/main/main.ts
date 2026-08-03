@@ -319,9 +319,9 @@ class MainWindow {
     setService(environmentServiceId, environmentService);
     setService(fileServiceId, fileService);
 
-    setService(storageServiceId, new MainStorageService());
-    setService(configurationServiceId, new MainConfigurationService());
-    setService(appServiceId, new AppService());
+    setService(storageServiceId, new MainStorageService(environmentService, fileService));
+    setService(configurationServiceId, new MainConfigurationService(environmentService, fileService));
+    setService(appServiceId, new AppService(environmentService, fileService));
 
     await this.installIpc();
 

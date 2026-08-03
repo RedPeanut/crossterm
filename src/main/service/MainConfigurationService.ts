@@ -5,6 +5,7 @@ import { ConfigurationService, ConfigurationChangeEvent } from '../../common/ser
 import { fileServiceId, getService } from '../Service';
 import { app } from 'electron';
 import path from 'path';
+import { EnvironmentService } from './EnvironmentService';
 
 /**
  * 앞선 작업이 끝나야 다음 작업이 시작되도록 Promise를 직렬화하는 최소 큐.
@@ -36,19 +37,15 @@ export class MainConfigurationService extends Disposable implements Configuratio
   private configuration: Record<string, unknown> = {};
 
   private settingsPath: string;
-  private fileService: FileService;
 
   constructor(
-    // private readonly settingsPath: string,
-    // private readonly fileService: FileService,
+    private readonly environmentService: EnvironmentService,
+    private readonly fileService: FileService,
     /** 코드에 정의된 기본값 (VSCode의 DefaultConfiguration 역할) */
     private readonly defaults: Record<string, unknown> = {},
   ) {
     super();
-
-    const userDataDir = app.getPath('userData');
-    this.settingsPath = path.join(userDataDir, 'settings.json');
-    this.fileService = getService(fileServiceId);
+    this.settingsPath = path.join(this.environmentService.userDataPath, 'settings.json');
     this.configuration = deepMerge(this.defaults, this.userConfiguration);
   }
 

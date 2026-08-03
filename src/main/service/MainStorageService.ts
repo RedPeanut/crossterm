@@ -7,20 +7,34 @@ export class StorageServiceImpl implements StorageService {
 
 import { app, ipcMain } from 'electron';
 import path from 'path';
+import fs, { Dirent } from 'fs';
 import sqlite3 from 'sqlite3';
+import { fileServiceId, getService } from '../Service';
+import { FileService } from '../../common/service/FileService';
+import { EnvironmentService } from './EnvironmentService';
 
 export class MainStorageService {
   private db: sqlite3.Database;
 
-  constructor() { // dbPath: string) {
-    const userDataDir = app.getPath('userData');
-    const dbPath = path.join(userDataDir, 'database.db'); // state.ctdb
-    this.db = new sqlite3.Database(dbPath);
+  constructor(
+    private readonly environmentService: EnvironmentService,
+    private readonly fileService: FileService
+  ) {
     this.init();
     this.registerIpcHandlers();
   }
 
-  private init(): void {
+  private async init(): Promise<void> {
+    const userDir = this.environmentService.userDataPath + path.sep + 'user';
+
+    let exists = await this.fileService.exists(userDir);
+    if(!exists) {
+      await fs.promises.mkdir(userDir, { recursive: true });
+    }
+
+    const dbPath = path.join(userDir, 'state.sqldb');
+    this.db = new sqlite3.Database(dbPath);
+
     this.db.run(`
       CREATE TABLE IF NOT EXISTS ItemTable (
         key TEXT PRIMARY KEY,

@@ -5,14 +5,15 @@ import * as utils from '../utils';
 import { FileService } from '../../common/service/FileService';
 import { getService, fileServiceId } from '../Service';
 import { DirentExt } from '../../common/Types';
+import { EnvironmentService } from './EnvironmentService';
 
 
 export class AppService {
 
-  fileService: FileService;
-
-  constructor() {
-    this.fileService = getService(fileServiceId);
+  constructor(
+    private readonly environmentService: EnvironmentService,
+    private readonly fileService: FileService
+  ) {
     this.registerIpcHandlers();
   }
 
