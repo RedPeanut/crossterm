@@ -19,7 +19,7 @@ export interface ConfigurationChangeEvent {
 export interface ConfigurationService {
   readonly onDidChangeConfiguration: Event<ConfigurationChangeEvent>;
   init(): Promise<void>;
-  // getValue<T>(): T;
+  // getValue<T>(): T; // ?
   getValue<T>(section?: string): T;
   updateValue(key: string, value: unknown): Promise<void>;
   keys(): string[];
