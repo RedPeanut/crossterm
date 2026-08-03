@@ -35,18 +35,18 @@ export class RenderStorageService implements StorageService {
   }
 
   // Asynchronous Set (캐시 반영 + IPC 전송)
-  public async set(key: string, value: any): Promise<void> {
+  public async set(key: string, value: any): Promise<boolean> {
     const stringValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
 
     // 1. 메모리 캐시 즉시 업데이트 (UI 반영용)
     this.cache.set(key, stringValue);
 
     // 2. Main Process IPC 통신을 통해 SQLite3에 비동기 저장
-    await window.ipc.invoke('storage set', [key, stringValue]);
+    return await window.ipc.invoke('storage set', [key, stringValue]);
   }
 
-  public async delete(key: string): Promise<void> {
+  public async delete(key: string): Promise<boolean> {
     this.cache.delete(key);
-    await window.ipc.invoke('storage delete', [key]);
+    return await window.ipc.invoke('storage delete', [key]);
   }
 }

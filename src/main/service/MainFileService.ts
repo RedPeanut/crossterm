@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { ipcMain } from 'electron';
 import { FileService, ReadFileOptions, Stat, WriteFileOptions, FileType } from '../../common/service/FileService';
 import { DirentExt } from '../../common/Types';
 
