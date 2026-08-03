@@ -10,7 +10,7 @@ npm run start
 ```
 
 ## Reference
-- https://github.com/microsoft/vscode (1.89.1)
+- https://github.com/microsoft/vscode (1.89.1, 1.124.2)
 
 ## License
 MIT
