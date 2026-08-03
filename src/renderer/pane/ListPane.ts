@@ -95,7 +95,7 @@ export class ListPane extends Pane {
 
         const new_one: TerminalItem = {
           // type: item?.type, size: { row: 24, col: 80 },
-          type: item.type, size: item.size, url: item.url,
+          type: item.type, /* size: item.size, */url: item.url,
           uid: uuidv4(), selected: true, active: true,
         };
 

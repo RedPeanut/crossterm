@@ -25,7 +25,7 @@ export interface ListItemElem extends Children<ListItemElem> {
 
   // remote
   url?: { host: string, port: number, username: string, password: string };
-  size?: { row: number, col: number }
+  // size?: { row: number, col: number }
 }
 
 const SCROLL_HIDE_TIMEOUT: number = 500;

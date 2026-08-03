@@ -17,10 +17,10 @@ export interface TerminalItem {
   // text, position, etc ...
   type?: string; // 'folder' | 'local' | 'remote'
 
-  size?: {
+  /* size?: {
     row: number;
     col: number;
-  }
+  } */
 
   url?: {
     host: string;
