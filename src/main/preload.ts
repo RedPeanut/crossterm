@@ -39,9 +39,11 @@ export type MainEvents =
   | 'open context menu'
   | 'command'
 
-  // file op
+  // file or folder op
   | 'file read'
   | 'file write atomic'
+  // | 'file exists'
+  // | 'folder readdir with stat'
 
   // app
   | 'app quit ready'

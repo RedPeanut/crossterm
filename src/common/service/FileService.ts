@@ -1,3 +1,5 @@
+import { DirentExt } from "../Types";
+
 export enum FileType {
   Unknown = 0,
   File = 1,
@@ -29,5 +31,7 @@ export interface WriteFileOptions {
 export interface FileService {
   readFile(filePath: string, opts: ReadFileOptions): Promise<Buffer>;
   writeFileAtomic(filePath: string, content: string | Buffer, options: WriteFileOptions): Promise<void>;
+  exists(path: string): Promise<boolean>;
+  readdirWithStat(path: string): Promise<DirentExt[]>;
   // TODO: move, copy, del, etc ..
 }

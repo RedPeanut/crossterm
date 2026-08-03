@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { ipcMain } from 'electron';
 import { FileService, ReadFileOptions, Stat, WriteFileOptions, FileType } from '../../common/service/FileService';
+import { DirentExt } from '../../common/Types';
 
 export class MainFileService implements FileService {
 
@@ -54,6 +55,54 @@ export class MainFileService implements FileService {
 
       throw error;
     }
+  }
+
+  async exists(path: string): Promise<boolean> {
+    try {
+      await fs.promises.access(path);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async readdirWithStat(path_: string): Promise<DirentExt[]> {
+    const result: DirentExt[] = [];
+    const reads: fs.Dirent[] = await fs.promises.readdir(path_, { withFileTypes: true });
+    for(let i = 0; i < reads.length; i++) {
+      const read: fs.Dirent = reads[i];
+      const _path = read.path ? read.path : (read.isDirectory() ? (path_ + '/' + read.name) : path_);
+
+      let isFile = false;
+      let isDirectory = false;
+      let isSymbolicLink = false;
+      let mtime: Date = null;
+      let size: number = 0;
+
+      try {
+        const lstat = await fs.promises.lstat(path.join(path_, read.name));
+
+        isFile = lstat.isFile();
+        isDirectory = lstat.isDirectory();
+        isSymbolicLink = lstat.isSymbolicLink();
+        mtime = lstat.mtime;
+        size = lstat.size;
+      } catch(error) {}
+
+      result.push({
+        // side: side,
+        name: read.name,
+        path: _path,
+
+        isFile: isFile,
+        isDirectory: isDirectory,
+        isSymbolicLink: isSymbolicLink,
+
+        mtime,
+        size,
+      });
+    }
+    return result;
   }
 
   registerIpcHandlers() {
