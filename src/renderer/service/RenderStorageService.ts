@@ -42,11 +42,11 @@ export class RenderStorageService implements StorageService {
     this.cache.set(key, stringValue);
 
     // 2. Main Process IPC 통신을 통해 SQLite3에 비동기 저장
-    await window.ipc.invoke('storage set', key, stringValue);
+    await window.ipc.invoke('storage set', [key, stringValue]);
   }
 
   public async delete(key: string): Promise<void> {
     this.cache.delete(key);
-    await window.ipc.invoke('storage delete', key);
+    await window.ipc.invoke('storage delete', [key]);
   }
 }
