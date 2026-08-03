@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { FileService } from '../../common/service/FileService';
 import { DirentExt } from '../../common/Types';
-import { EnvironmentService } from './EnvironmentService';
+import { EnvironmentService } from '../../common/service/EnvironmentService';
 
 export class AppService {
 

@@ -3,7 +3,7 @@ import { Emitter, Event } from '../../common/base/event';
 import { FileService } from '../../common/service/FileService';
 import { ConfigurationService, ConfigurationChangeEvent } from '../../common/service/ConfigurationService';
 import path from 'path';
-import { EnvironmentService } from './EnvironmentService';
+import { EnvironmentService } from '../../common/service/EnvironmentService';
 
 /**
  * 앞선 작업이 끝나야 다음 작업이 시작되도록 Promise를 직렬화하는 최소 큐.

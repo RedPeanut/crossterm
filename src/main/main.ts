@@ -30,7 +30,7 @@ import { MainStorageService } from './service/MainStorageService';
 import { MainConfigurationService } from './service/MainConfigurationService';
 import { AppService } from './service/AppService';
 import { FileService } from '../common/service/FileService';
-import { EnvironmentService } from './service/EnvironmentService';
+import { MainEnvironmentService } from './service/MainEnvironmentService';
 import { registerIpcChannel } from './IpcChannel';
 import { AppServiceChannel } from './ipc/AppServiceChannel';
 import { FileServiceChannel } from './ipc/FileServiceChannel';
@@ -321,7 +321,7 @@ class MainWindow {
     }
 
     // set services
-    const environmentService = new EnvironmentService();
+    const environmentService = new MainEnvironmentService();
     const fileService = new MainFileService();
 
     setService(environmentServiceId, environmentService);
