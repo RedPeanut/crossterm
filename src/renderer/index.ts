@@ -7,9 +7,10 @@ import { domContentLoaded } from './util/dom';
 
 import { ElectronHandler } from '../main/preload';
 import { ConfigsInitialValueType } from '../common/configs';
-import { ListItemElem } from './component/List';
+// import { ListItemElem } from './component/List';
 import { RenderStorageService } from './service/RenderStorageService';
 import { setService, storageServiceId } from './Service';
+import { ListItemElem } from '../common/Types';
 
 declare global {
   interface Window {

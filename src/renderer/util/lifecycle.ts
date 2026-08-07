@@ -1,5 +1,6 @@
 import { DisposableStore, IDisposable } from "../../common/base/lifecycle";
-import { Channels, ElectronHandler } from "../../main/preload";
+import { Channels } from "../../common/ipc";
+import { ElectronHandler } from "../../main/preload";
 import { EventEmitter } from "events";
 
 /* 보관 (Archived)
