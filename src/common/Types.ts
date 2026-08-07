@@ -74,7 +74,20 @@ export interface Children<T> {
   isCollapsed?: boolean;
 }
 
-export interface DirentExt extends Children<DirentExt> {
+export interface DirentExtWithC extends Children<DirentExtWithC> {
+  name: string;
+  path: string;
+
+  isFile: boolean;
+  isDirectory: boolean;
+  isSymbolicLink: boolean;
+
+  // stat
+  mtime: Date;
+  size: number;
+}
+
+export interface DirentExt {
   name: string;
   path: string;
 
