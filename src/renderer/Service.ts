@@ -32,8 +32,9 @@ const _services = new Map<string, any>();
  * @param id
  * @param service
  */
-export function setService(id: ServiceId, service: any): void {
+export function setService(id: ServiceId, service: any): any {
   _services.set(id, service);
+  return service;
 }
 
 /**
