@@ -22,6 +22,10 @@ export class RenderStorageService implements StorageService {
     return this.isReady;
   }
 
+  async getall(): Promise<unknown[]> {
+    throw new Error('not use in render');
+  }
+
   // Synchronous 처럼 사용하는 Get (캐시 사용)
   public get<T>(key: string, fallbackValue?: T): T | undefined {
     const rawValue = this.cache.get(key);

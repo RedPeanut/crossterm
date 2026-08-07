@@ -50,6 +50,10 @@ export class MainStorageService implements StorageService {
     });
   }
 
+  get<T>(key: string, fallbackValue?: T): T {
+    throw new Error('not use in main');
+  }
+
   set(key: string, value: any): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const query = `
