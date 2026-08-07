@@ -99,3 +99,18 @@ export interface DirentExt {
   mtime: Date;
   size: number;
 }
+
+export type ListItemType = 'local' | 'remote' | 'folder'; // | 'group' | 'blank';
+// export type FolderModeType = 0 | 1 | 2; // 0: 기본값; 1: 단일 선택 2: 다중 선택
+
+export interface ListItemElem extends Partial<DirentExt>, Children<ListItemElem> {
+  type?: ListItemType;
+  title?: string;
+  id: string;
+  // children?: ListItemElem[];
+  // isCollapsed?: boolean;
+
+  // only remote
+  url?: { host: string, port: number, username: string, password: string };
+  // size?: { row: number, col: number }
+}

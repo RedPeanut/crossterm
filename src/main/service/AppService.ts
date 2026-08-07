@@ -1,39 +1,58 @@
 import path from 'path';
 import fs from 'fs';
 import { FileService } from '../../common/service/FileService';
-import { DirentExt } from '../../common/Types';
+import { DirentExt, ListItemElem } from '../../common/Types';
 import { EnvironmentService } from '../../common/service/EnvironmentService';
+import { v4 as uuidv4 } from 'uuid';
 
 export class AppService {
+
+  ignoreFileFolder: string = '.git,.DS_Store,node_modules,package-lock.json,dll,dist,build';
 
   constructor(
     private readonly environmentService: EnvironmentService,
     private readonly fileService: FileService
   ) {}
 
-  async readdir(_path: string, depth: number, parent: DirentExt) {
+  async readdir(_path: string, depth: number, parent: ListItemElem) {
 
-    const resultList: DirentExt[] = [];
+    const resultList: ListItemElem[] = [];
     const items: DirentExt[] = await this.fileService.readdirWithStat(_path);;
 
     // folder first
-    let folders: DirentExt[] = [], files: DirentExt[] = [];
+    let folders: ListItemElem[] = [], files: ListItemElem[] = [];
+    const filters: string[] = this.ignoreFileFolder.split(',');
 
     for(let i = 0; i < items.length; i++) {
       const item: DirentExt = items[i];
-      if(item.isDirectory) folders.push({ ...item, children: [], isCollapsed: false });
+
+      if(filters.includes(item.name))
+        continue;
+
+      if(item.isDirectory) folders.push({
+        ...item,
+        children: [], isCollapsed: false,
+        type: 'folder',
+        id: uuidv4(),
+      });
       else {
-        const reads = this.fileService.readFile(item.path + path.sep + item.name);
-        // console.log('reads =', typeof reads);
-        files.push({ ...item });
+        const reads = await this.fileService.readFile(path.join(item.path, item.name));
+        console.log('reads =', reads.toString('utf8'));
+        const parsed = JSON.parse(reads.toString('utf8'));
+
+        files.push({
+          ...item,
+          ...parsed,
+          id: uuidv4()
+        });
       }
     }
 
-    folders.sort((a: DirentExt, b: DirentExt) => {
+    folders.sort((a: ListItemElem, b: ListItemElem) => {
       return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
     });
 
-    files.sort((a: DirentExt, b: DirentExt) => {
+    files.sort((a: ListItemElem, b: ListItemElem) => {
       return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
     });
 
@@ -45,7 +64,7 @@ export class AppService {
     }
 
     for(let i = 0; i < folders.length; i++) {
-      const elem: DirentExt = folders[i];
+      const elem: ListItemElem = folders[i];
       const __path = _path + path.sep + elem.name;
       const children = await this.readdir(__path, depth+1, elem);
       elem.children.push(...children);
@@ -59,7 +78,7 @@ export class AppService {
     return resultList;
   }
 
-  async readSessionsDir(): Promise<DirentExt[]> {
+  async readSessionsDir(): Promise<ListItemElem[]> {
 
     /*
     - mkdir -p user/sessions
