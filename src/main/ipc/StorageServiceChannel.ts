@@ -8,7 +8,7 @@ export class StorageServiceChannel implements IpcChannel {
 
   constructor(private readonly storageService: StorageService) {
     this.handlers = new Map<MainEvents, IpcHandler>([
-      ['storage getall', () =>
+      ['storage getall', (_) =>
         this.storageService.getall()],
       ['storage set', (_, key: string, value: string) =>
         this.storageService.set(key, value)],
