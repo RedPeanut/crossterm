@@ -16,6 +16,8 @@ describe('#AppService', function() {
 
   it('default ', async function() {
     const fileService = new MainFileService();
-    fileService.readFile(path.join(userDataPath, 'user/sessions/h'));
+    const reads = await fileService.readFile(path.join(userDataPath, 'user/sessions/remote'));
+    console.log('reads =', reads.toString('utf8'));
+    console.log('parsed =', JSON.parse(reads.toString('utf8')));
   });
 });
