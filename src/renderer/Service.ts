@@ -6,7 +6,6 @@ export const menubarServiceId = "menubarServiceId";
 export const activitybarPartServiceId = "activitybarPartService";
 export const sidebarPartServiceId = "sidebarPartService";
 export const sessionPartServiceId = "sessionPartService";
-export const bookmarkPanelServiceId = "BookmarkPanelService";
 export const contextViewServiceId = "contextViewService";
 export const storageServiceId = "storageService";
 export const blarBlarServiceId = "blarBlarService";
@@ -18,7 +17,6 @@ type ServiceId =
   | typeof activitybarPartServiceId
   | typeof sidebarPartServiceId
   | typeof sessionPartServiceId
-  | typeof bookmarkPanelServiceId
   | typeof contextViewServiceId
   | typeof storageServiceId
   | typeof blarBlarServiceId

@@ -7,8 +7,6 @@ import { Orientation } from "../component/Sash";
 import { Parts, MainLayoutService, MainLayout } from "./MainLayout";
 import { getClientArea } from "../util/dom";
 import { activitybarPartServiceId, bodyLayoutServiceId, getService, mainLayoutServiceId, Service, setService, sidebarPartServiceId } from "../Service";
-import { BookmarkPanel } from "../panel/BookmarkPanel";
-import { SamplePanel } from "../panel/SamplePanel";
 import { ActivitybarItem } from "../part/item/ActivitybarItem";
 import { BookmarkPaneView } from "../paneView/BookmarkPaneView";
 import { SamplePaneView } from "../paneView/SamplePaneView";
@@ -126,7 +124,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     }
   }
 
-  _inflate(): void {
+  /* _inflate(): void {
 
     // const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
     // const sidebarPartService = getService(sidebarPartServiceId) as SidebarPartService;
@@ -212,7 +210,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     // const sidebarPartContent = this.sidebarPart.getContentArea();
     const panel = selected.panel;
     this.sidebarPart.showPanel(panel);
-  }
+  } */
 
   inflate(): void {
     const items = [

@@ -2,8 +2,6 @@ import { activitybarPartServiceId, getService, setService, mainLayoutServiceId, 
 import { HorizontalViewItem } from '../component/SplitView';
 import { ACTIVITYBAR_WIDTH, MainLayoutService } from '../layout/MainLayout';
 import { Part, PartOptions } from '../Part';
-import { BookmarkPanel } from '../panel/BookmarkPanel';
-import { SamplePanel } from '../panel/SamplePanel';
 import { ActivitybarItem, ActivitybarItemImpl } from './item/ActivitybarItem';
 import { SidebarPartService } from './SidebarPart';
 
