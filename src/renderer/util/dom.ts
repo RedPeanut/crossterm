@@ -1,6 +1,7 @@
 //# region Multi-Window Support Utilities
 
 import { mainWindow, CodeWindow } from "..";
+import { IDisposable } from "../../common/base/lifecycle";
 
 export const {
   getWindow,
@@ -265,4 +266,12 @@ export function getTotalWidth(element: HTMLElement): number {
 export function getTotalHeight(element: HTMLElement): number {
   const margin = SizeUtils.getMarginTop(element) + SizeUtils.getMarginBottom(element);
   return element.offsetHeight + margin;
+}
+
+export function _addEventListener(target: HTMLElement, event: string, handler: EventListener): IDisposable {
+  target.addEventListener(event, handler);
+
+  return {
+    dispose: () => target.removeEventListener(event, handler)
+  };
 }

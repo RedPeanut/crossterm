@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { $, append } from "../util/dom";
 import { renderer } from '..';
-import { EventEmitter } from "events";
-import { Disposable } from "../util/lifecycle";
+import { Disposable } from "../../common/base/lifecycle";
+import { Emitter } from "../../common/base/event";
 
 export const enum Orientation {
   VERTICAL,
@@ -78,8 +78,18 @@ export class Sash extends Disposable {
 
     this._state = state;
     // this.onDidEnablementChange.fire(state);
-    this.emit('sash state change', state);
+    // this.emit('sash state change', state);
   }
+
+  private onSashReset = this._register(new Emitter<{}>());
+  private onSashStart = this._register(new Emitter<SashEvent>());
+  private onSashChange = this._register(new Emitter<SashEvent>());
+  private onSashEnd = this._register(new Emitter<SashEvent>());
+
+  public _onSashReset = this.onSashReset.event;
+  public _onSashStart = this.onSashStart.event;
+  public _onSashChange = this.onSashChange.event;
+  public _onSashEnd = this.onSashEnd.event;
 
   constructor(container: HTMLElement, verticalLayoutProvider: VerticalSashLayoutProvider, options: VerticalSashOptions);
   constructor(container: HTMLElement, horizontalLayoutProvider: HorizontalSashLayoutProvider, options: HorizontalSashOptions);
@@ -95,7 +105,8 @@ export class Sash extends Disposable {
     this.el.addEventListener('mousedown', this.onMouseDown.bind(this));
     // this.el.addEventListener('touchstart', this.onMouseDown.bind(this));
     this.el.addEventListener('dblclick', (e) => {
-      this.emit('sash reset', {});
+      // this.emit('sash reset', {});
+      this.onSashReset.fire({});
     });
     this.el.addEventListener('mouseenter', (e) => {
       _.throttle(() => this.el.classList.add('hover'), this.hoverDelay, {trailing:false})();
@@ -139,7 +150,8 @@ export class Sash extends Disposable {
     const altKey = e.altKey;
 
     this.el.classList.add('active');
-    this.emit('sash start', { sash: this, startX, startY, altKey });
+    // this.emit('sash start', { sash: this, startX, startY, altKey });
+    this.onSashStart.fire({ sash: this, startX, startY, altKey, currentX: undefined, currentY: undefined });
 
     const onMouseMove = (e: MouseEvent) => {
       const event: SashEvent = {
@@ -148,7 +160,8 @@ export class Sash extends Disposable {
         startY: startY, currentY: e.pageY,
         altKey
       };
-      this.emit('sash change', event);
+      // this.emit('sash change', event);
+      this.onSashChange.fire(event);
     }
 
     const onMouseUp = (e: MouseEvent) => {
@@ -160,7 +173,8 @@ export class Sash extends Disposable {
         startY: startY, currentY: e.pageY,
         altKey
       };
-      this.emit('sash end', event);
+      // this.emit('sash end', event);
+      this.onSashEnd.fire(event);
 
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
