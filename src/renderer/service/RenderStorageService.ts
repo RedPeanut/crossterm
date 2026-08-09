@@ -17,17 +17,19 @@ export class RenderStorageService implements StorageService {
     });
   }
 
-  // 초기화 완료 대기 (앱 시작 시 1회)
+  /* // 초기화 완료 대기 (앱 시작 시 1회)
   public whenReady(): Promise<void> {
     return this.isReady;
-  }
+  } */
 
   async getall(): Promise<unknown[]> {
-    throw new Error('not use in render');
+    throw new Error('not used in render');
   }
 
   // Synchronous 처럼 사용하는 Get (캐시 사용)
-  public get<T>(key: string, fallbackValue?: T): T | undefined {
+  async get<T>(key: string, fallbackValue?: T): Promise<T | undefined> {
+    await this.isReady;
+
     const rawValue = this.cache.get(key);
     if(rawValue === undefined) return fallbackValue;
 
@@ -40,6 +42,8 @@ export class RenderStorageService implements StorageService {
 
   // Asynchronous Set (캐시 반영 + IPC 전송)
   public async set(key: string, value: any): Promise<boolean> {
+    await this.isReady;
+
     const stringValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
 
     // 1. 메모리 캐시 즉시 업데이트 (UI 반영용)
@@ -50,6 +54,8 @@ export class RenderStorageService implements StorageService {
   }
 
   public async delete(key: string): Promise<boolean> {
+    await this.isReady;
+
     this.cache.delete(key);
     return await window.ipc.invoke('storage delete', [key]);
   }

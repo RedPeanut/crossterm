@@ -14,13 +14,13 @@ import { StorageService } from '../../common/service/StorageService';
 
 export class MainStorageService implements StorageService {
   private db: sqlite3.Database;
-  private readonly initPromise: Promise<void>;
+  private readonly inited: Promise<void>;
 
   constructor(
     private readonly environmentService: EnvironmentService,
     private readonly fileService: FileService
   ) {
-    this.initPromise = this.init();
+    this.inited = this.init();
   }
 
   private async init(): Promise<void> {
@@ -43,7 +43,7 @@ export class MainStorageService implements StorageService {
   }
 
   async getall(): Promise<unknown[]> {
-    await this.initPromise;
+    await this.inited;
 
     return new Promise((resolve, reject) => {
       this.db.all('SELECT key, value FROM ItemTable', (err, rows) => {
@@ -53,12 +53,19 @@ export class MainStorageService implements StorageService {
     });
   }
 
-  get<T>(key: string, fallbackValue?: T): T {
-    throw new Error('not use in main');
+  async get<T>(key: string, fallbackValue?: T): Promise<T | undefined> {
+    await this.inited;
+
+    return new Promise((resolve, reject) => {
+      this.db.get('SELECT value FROM ItemTable WHERE key = ?', [key], (err, row: { value: string } | undefined) => {
+        if(err) reject(err);
+        else resolve(row ? (row.value as unknown as T) : fallbackValue);
+      });
+    });
   }
 
   async set(key: string, value: any): Promise<boolean> {
-    await this.initPromise;
+    await this.inited;
 
     return new Promise((resolve, reject) => {
       const query = `
@@ -73,7 +80,7 @@ export class MainStorageService implements StorageService {
   }
 
   async delete(key: string): Promise<boolean> {
-    await this.initPromise;
+    await this.inited;
 
     return new Promise((resolve, reject) => {
       this.db.run('DELETE FROM ItemTable WHERE key = ?', [key], (err) => {
