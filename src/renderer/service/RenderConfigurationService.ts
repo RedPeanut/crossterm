@@ -1,25 +1,38 @@
-import { Event } from "../../common/base/event";
+import { Disposable } from "../../common/base/lifecycle";
+import { Emitter, Event } from "../../common/base/event";
 import { ConfigurationChangeEvent, ConfigurationService } from "../../common/service/ConfigurationService";
 
-export class RenderConfigurationService implements ConfigurationService {
+export class RenderConfigurationService extends Disposable implements ConfigurationService {
 
-  onDidChangeConfiguration: Event<ConfigurationChangeEvent>;
+  private readonly _onDidChangeConfiguration = new Emitter<ConfigurationChangeEvent>();
+  readonly onDidChangeConfiguration: Event<ConfigurationChangeEvent> = this._onDidChangeConfiguration.event;
+
+  constructor() {
+    super();
+    window.ipc.on('configuration changed', (_event: unknown, change: ConfigurationChangeEvent) => {
+      this._onDidChangeConfiguration.fire(change);
+    });
+  }
 
   init(): Promise<void> {
     throw new Error("Method not implemented.");
   }
 
   // getValue<T>(): T;
-  getValue<T>(section?: string): T {
-    throw new Error("Method not implemented.");
+  // getValue<T>(section: string): T {
+  async getValue<T>(section?: string): Promise<T> {
+    // throw new Error("Method not implemented.");
+    return await window.ipc.invoke('configuration get value', [section]);
   }
 
-  updateValue(key: string, value: unknown): Promise<void> {
-    throw new Error("Method not implemented.");
+  async updateValue(key: string, value: unknown): Promise<void> {
+    // throw new Error("Method not implemented.");
+    await window.ipc.invoke('configuration update value', [key, value]);
   }
 
-  keys(): string[] {
-    throw new Error("Method not implemented.");
+  async keys(): Promise<string[]> {
+    // throw new Error("Method not implemented.");
+    return await window.ipc.invoke('configuration keys', []);
   }
 
 }

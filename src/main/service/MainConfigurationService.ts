@@ -36,6 +36,8 @@ export class MainConfigurationService extends Disposable implements Configuratio
 
   private settingsPath: string;
 
+  private readonly inited: Promise<void>;
+
   constructor(
     private readonly environmentService: EnvironmentService,
     private readonly fileService: FileService,
@@ -44,7 +46,8 @@ export class MainConfigurationService extends Disposable implements Configuratio
   ) {
     super();
     this.settingsPath = path.join(this.environmentService.userDataPath, 'settings.json');
-    this.configuration = deepMerge(this.defaults, this.userConfiguration);
+    // this.configuration = deepMerge(this.defaults, this.userConfiguration);
+    this.inited = this.init();
   }
 
   async init(): Promise<void> {
@@ -52,7 +55,11 @@ export class MainConfigurationService extends Disposable implements Configuratio
     this.configuration = deepMerge(this.defaults, this.userConfiguration);
   }
 
-  getValue<T>(section?: string): T {
+  // getValue<T>(): T;
+  // getValue<T>(section: string): T {
+  async getValue<T>(section?: string): Promise<T> {
+    await this.inited;
+
     if (!section) {
       return this.configuration as unknown as T;
     }
@@ -60,6 +67,8 @@ export class MainConfigurationService extends Disposable implements Configuratio
   }
 
   async updateValue(key: string, value: unknown): Promise<void> {
+    await this.inited;
+
     // 기본값과 같으면 사용자 설정에서 제거한다. (VSCode와 동일한 동작)
     if (deepEquals(value, getPath(this.defaults, key))) {
       value = undefined;
@@ -70,8 +79,12 @@ export class MainConfigurationService extends Disposable implements Configuratio
     await this.reload();
   }
 
-  keys(): string[] {
-    return Object.keys(this.configuration);
+  async keys(): Promise<string[]> {
+    await this.inited;
+
+    return new Promise<string[]>((resolve, reject) => {
+      resolve(Object.keys(this.configuration));
+    });
   }
 
   // --- 내부 구현 -------------------------------------------------------------
@@ -92,7 +105,7 @@ export class MainConfigurationService extends Disposable implements Configuratio
     );
   }
 
-  private async reload(): Promise<void> {
+  /* private */ async reload(): Promise<void> {
     const previous = this.configuration;
     this.userConfiguration = await this.loadUserConfiguration();
     this.configuration = deepMerge(this.defaults, this.userConfiguration);
@@ -185,7 +198,7 @@ function deepMerge(base: Record<string, unknown>, override: Record<string, unkno
 }
 
 /** 두 설정 트리를 평탄화 후 비교하여 값이 달라진 점 표기 키들을 반환한다. */
-function diffKeys(a: Record<string, unknown>, b: Record<string, unknown>): Set<string> {
+export function diffKeys(a: Record<string, unknown>, b: Record<string, unknown>): Set<string> {
   const flatA = flatten(a);
   const flatB = flatten(b);
   const changed = new Set<string>();
@@ -198,7 +211,7 @@ function diffKeys(a: Record<string, unknown>, b: Record<string, unknown>): Set<s
 }
 
 /** 중첩 객체를 `a.b.c` -> value 형태로 평탄화한다. */
-function flatten(obj: Record<string, unknown>, prefix = ''): Record<string, unknown> {
+export function flatten(obj: Record<string, unknown>, prefix = ''): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const key of Object.keys(obj)) {
     const path = prefix ? `${prefix}.${key}` : key;
@@ -216,6 +229,6 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function deepEquals(a: unknown, b: unknown): boolean {
+export function deepEquals(a: unknown, b: unknown): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }
