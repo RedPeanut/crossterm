@@ -1,7 +1,7 @@
 import { renderer } from "..";
-import { TerminalItem } from "../../common/Types";
+import { TerminalItem, ListItemElem } from "../../common/Types";
 import { wrapper } from "../../globals";
-import { List, ListItemElem } from "../component/List";
+import { List } from "../component/List";
 import { BodyLayoutService } from "../layout/BodyLayout";
 import { Pane, PaneOptions } from "../Pane";
 import { SessionPartService } from "../part/SessionPart";
