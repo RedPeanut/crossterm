@@ -35,7 +35,7 @@ import { registerIpcChannel } from './IpcChannel';
 import { AppServiceChannel } from './ipc/AppServiceChannel';
 import { FileServiceChannel } from './ipc/FileServiceChannel';
 import { StorageServiceChannel } from './ipc/StorageServiceChannel';
-import { DisposableStore } from '../common/base/lifecycle';
+import { DisposableStore, Disposable } from '../common/base/lifecycle';
 import { ConfigurationServiceChannel } from './ipc/ConfigurationServiceChannel';
 
 class AppUpdater {
@@ -46,13 +46,14 @@ class AppUpdater {
   }
 }
 
-class MainWindow {
+class MainWindow extends Disposable {
   browserWindow: BrowserWindow | null = null;
   isDebug: boolean = false;
   menubar: Menubar;
   ipcDisposables = new DisposableStore();
 
   constructor() {
+    super();
     if(process.env.NODE_ENV === 'production') {
       const sourceMapSupport = require('source-map-support');
       sourceMapSupport.install();
@@ -329,6 +330,11 @@ class MainWindow {
 
     const storageService = new MainStorageService(environmentService, fileService);
     const configurationService = new MainConfigurationService(environmentService, fileService);
+    this._register(configurationService.onDidChangeConfiguration(change => {
+      if(this.browserWindow) {
+        this.browserWindow.webContents.send('configuration changed', change);
+      }
+    }));
     const appService = new AppService(environmentService, fileService);
 
     setService(storageServiceId, storageService);

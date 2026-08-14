@@ -64,6 +64,9 @@ export type RenderEvents =
 
   // app
   | 'app quit request'
+
+  // configuration
+  | 'configuration changed'
 ;
 
 export type Channels = MainEvents | RenderEvents;
