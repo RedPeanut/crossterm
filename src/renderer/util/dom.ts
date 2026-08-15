@@ -181,6 +181,12 @@ export function hide(...elements: HTMLElement[]): void {
   }
 }
 
+export function clearContainer(container: HTMLElement) {
+  while(container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+}
+
 export interface DomNodePagePosition {
   left: number;
   top: number;
