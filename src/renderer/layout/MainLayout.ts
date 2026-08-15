@@ -19,6 +19,9 @@ import { renderer } from '..';
 // import { SerializableGrid, SerializableView, SerializedGrid, SerializedLeafNode, SerializedNode } from '../component/Grid';
 import { GridView, SerializedGridView, SerializedLeafNode, SerializedNode } from '../component/GridView';
 import { ContextViewServiceImpl } from '../service/ContextViewService';
+import { Popup } from '../Popup';
+import { SamplePopup } from '../popup/SamplePopup';
+import { PropertiesPopup } from '../popup/PropertiesPopup';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -38,6 +41,7 @@ export const enum Parts {
 export interface MainLayoutService extends Service {
   toggleSidebar(): void;
   layout(): void;
+  showPopup(which: string): void;
 }
 
 export class MainLayout extends Layout implements MainLayoutService {
@@ -324,4 +328,17 @@ export class MainLayout extends Layout implements MainLayoutService {
     throw new Error('Method not implemented.');
   }
 
+  showPopup(which: string): void {
+    // throw new Error('Method not implemented.');
+    // const popup = this.popup = new SamplePopup(this.container);
+    // popup.show();
+
+    let popup;
+    switch(which) {
+      case 'properties': popup = new PropertiesPopup(this.container); break;
+      case 'sample': popup = new SamplePopup(this.container); break;
+      default: throw new Error(); break;
+    }
+    popup.show();
+  }
 }

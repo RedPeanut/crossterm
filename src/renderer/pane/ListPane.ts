@@ -3,10 +3,11 @@ import { TerminalItem, ListItemElem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { List } from "../component/List";
 import { BodyLayoutService } from "../layout/BodyLayout";
+import { MainLayoutService } from "../layout/MainLayout";
 import { Pane, PaneOptions } from "../Pane";
 import { SessionPartService } from "../part/SessionPart";
 import { SidebarPartService } from "../part/SidebarPart";
-import { getService, bodyLayoutServiceId, sessionPartServiceId, sidebarPartServiceId } from "../Service";
+import { getService, bodyLayoutServiceId, sessionPartServiceId, sidebarPartServiceId, mainLayoutServiceId } from "../Service";
 import { $ } from "../util/dom";
 import { findActiveItem } from "../utils";
 import * as utils from "../utils";
@@ -62,7 +63,10 @@ export class ListPane extends Pane {
       {
         title: 'Collapse Folders in Sessions', icon: 'collapse-all',
         click: () => {
-          this.list.collapseAll();
+          // this.list.collapseAll();
+          // (getService(propertiesDialogId) as PropertiesDialog).show();
+          // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('sample');
+          (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties');
         }
       }
     ];
