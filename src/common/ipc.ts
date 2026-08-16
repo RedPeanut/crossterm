@@ -39,6 +39,7 @@ export type MainEvents =
   //
   | 'open context menu'
   | 'command'
+  | 'contextmenu'
 
   // file or folder op
   | 'file read'

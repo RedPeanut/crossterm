@@ -45,6 +45,24 @@ export interface SerializableMenuItem extends CommonMenuItem {
   submenu?: SerializableMenuItem[];
 }
 
+export interface ContextMenuItem extends CommonMenuItem {
+  click?: (args: any[]) => void;
+  submenu?: ContextMenuItem[];
+}
+
+export interface ContextMenuEvent {
+  shiftKey?: boolean;
+  ctrlKey?: boolean;
+  altKey?: boolean;
+  metaKey?: boolean;
+}
+
+export interface PopupOptions {
+  x?: number;
+  y?: number;
+  // positioningItem?: number;
+}
+
 // app
 export const appPreferencesMenuId = 'app.preferences';
 export const appQuitMenuId = 'app.quit';

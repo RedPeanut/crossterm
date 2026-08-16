@@ -10,7 +10,7 @@
  */
 import path from 'path';
 import fs from 'fs';
-import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions } from 'electron';
+import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions, IpcMainEvent, Menu, MenuItem } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -213,6 +213,63 @@ class MainWindow extends Disposable {
       if(this[who] && this[who][fn] && typeof this[who][fn] == 'function') {
         this[who][fn]();
       }
+    });
+
+    function createMenu(event: IpcMainEvent, onClick: string, items): Menu {
+      const menu = new Menu();
+
+      items.forEach(item => {
+        let menuitem: MenuItem;
+
+        // Separator
+        if(item.type === 'separator') {
+          menuitem = new MenuItem({
+            type: item.type,
+          });
+        }
+
+        // Sub Menu
+        else if(Array.isArray(item.submenu)) {
+          menuitem = new MenuItem({
+            submenu: createMenu(event, onClick, item.submenu),
+            label: item.label
+          });
+        }
+
+        // Normal Menu Item
+        else {
+          menuitem = new MenuItem({
+            label: item.label,
+            type: item.type,
+            accelerator: item.accelerator,
+            checked: item.checked,
+            enabled: item.enabled,
+            visible: item.visible,
+            click: (menuItem, win, contextmenuEvent) => event.sender.send(onClick, item.id, contextmenuEvent)
+          });
+        }
+
+        menu.append(menuitem);
+      });
+
+      return menu;
+    }
+
+    ipcMain.on('contextmenu', (event, args: any[]) => {
+      // (event, contextMenuId, items, onClick, options) => {
+      const [ contextMenuId, items, onClick, options ] = args;
+
+      const menu = createMenu(event, onClick, items);
+      menu.popup({
+        x: options ? options.x : undefined,
+        y: options ? options.y : undefined,
+        callback: () => {
+          // console.log('menu popup callback is called ..');
+          if(menu) {
+            event.sender.send('contextmenu close', contextMenuId);
+          }
+        }
+      });
     });
 
     ipcMain.handle('menu get', (event, args: any[]) => {
