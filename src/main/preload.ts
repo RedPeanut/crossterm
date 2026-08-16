@@ -11,8 +11,20 @@ const electronHandler = {
   invoke(channel: Channels, ...args: any[]) {
     return ipcRenderer.invoke(channel, args);
   },
-  on: (channel: Channels, cb: (...args: unknown[]) => void) => {
-    ipcRenderer.on(channel, cb)
+  /**
+   * off is not working directly, because parameters are copied when they are sent over the bridge
+   * ref) https://github.com/electron/electron/issues/45224
+   *      https://www.electronjs.org/docs/latest/api/context-bridge#parameter--error--return-type-support
+   */
+  on: (channel: Channels, cb: (...args: unknown[]) => void): any => {
+    const listener = (event: IpcRendererEvent, ...args: unknown[]) => cb(event, ...args);
+    ipcRenderer.on(channel, listener);
+    return () => ipcRenderer.off(channel, listener);
+  },
+  once: (channel: string, cb: (...args: unknown[]) => void): any => {
+    const listener = (event: IpcRendererEvent, ...args: unknown[]) => cb(event, ...args);
+    ipcRenderer.once(channel, listener);
+    return () => ipcRenderer.off(channel, listener);
   },
   off: (channel: Channels, cb: (...args: unknown[]) => void) => {
     ipcRenderer.removeListener(channel, cb)
