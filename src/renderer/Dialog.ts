@@ -46,15 +46,26 @@ export class Dialog extends Disposable {
     const titlebar = this.titlebar = $('.titlebar');
     const _title = this.title = $('span.title');
     titlebar.appendChild(_title);
-    titlebar.addEventListener('mousedown', this.onDragStart.bind(this));
-    document.addEventListener('mousemove', this.onDragMove.bind(this));
-    document.addEventListener('mouseup', this.onDragEnd.bind(this));
+
+    // titlebar.addEventListener('mousedown', this.onDragStart.bind(this));
+    // document.addEventListener('mousemove', this.onDragMove.bind(this));
+    // document.addEventListener('mouseup', this.onDragEnd.bind(this));
+
+    const onDragStart = (e: MouseEvent) => this.onDragStart(e);
+    const onDragMove = (e: MouseEvent) => this.onDragMove(e);
+    const onDragEnd = (e: MouseEvent) => this.onDragEnd(e);
+
+    this._register(_addEventListener(titlebar, 'mousedown', onDragStart));
+    this._register(_addEventListener(document, 'mousemove', onDragMove));
+    this._register(_addEventListener(document, 'mouseup', onDragEnd));
+
     const closeBtn = $('a.codicon.codicon-chrome-close.close');
     closeBtn.addEventListener('click', async () => {
-      dom.clearContainer(this.buttons);
-      this.dispose();
+      // dom.clearContainer(this.buttons);
+      // this.dispose();
       this.close();
     });
+
     titlebar.appendChild(closeBtn);
     dialog.appendChild(titlebar);
 
@@ -102,7 +113,10 @@ export class Dialog extends Disposable {
   }
 
   close(): void {
-    this.container.style.display = 'none';
+    // this.container.style.display = 'none';
+    this.container?.remove();
+    this.container = null;
+    this.dispose();
   }
 
   open(
@@ -125,14 +139,14 @@ export class Dialog extends Disposable {
       button.textContent = buttons[i].label;
       if(buttons[i].click) {
 
-        function clickWrapper() {
-          dom.clearContainer(this.buttons);
-          this.dispose();
+        const clickWrapper = () => {
+          // dom.clearContainer(this.buttons);
+          // this.dispose();
           this.close();
           buttons[i].click();
         }
 
-        this._register(_addEventListener(button, 'click', clickWrapper.bind(this))); // button, 'click', clickWrapper.bind(this));
+        this._register(_addEventListener(button, 'click', clickWrapper)); // button, 'click', clickWrapper.bind(this));
       }
       this.buttons.appendChild(button);
     }

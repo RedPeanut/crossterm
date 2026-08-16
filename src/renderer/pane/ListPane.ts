@@ -66,7 +66,8 @@ export class ListPane extends Pane {
           // this.list.collapseAll();
           // (getService(propertiesDialogId) as PropertiesDialog).show();
           // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('sample');
-          (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties');
+          // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties');
+          (getService(mainLayoutServiceId) as MainLayoutService).showDialog();
         }
       }
     ];

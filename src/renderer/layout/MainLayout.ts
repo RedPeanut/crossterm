@@ -23,6 +23,7 @@ import { Popup } from '../Popup';
 import { SamplePopup } from '../popup/SamplePopup';
 import { PropertiesPopup } from '../popup/PropertiesPopup';
 import { ListItemElem } from '../../common/Types';
+import { Dialog } from '../Dialog';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -43,6 +44,7 @@ export interface MainLayoutService extends Service {
   toggleSidebar(): void;
   layout(): void;
   showPopup(which: string, ...args: unknown[]): void;
+  showDialog(): void;
 }
 
 export class MainLayout extends Layout implements MainLayoutService {
@@ -339,5 +341,11 @@ export class MainLayout extends Layout implements MainLayoutService {
       default: throw new Error(); break;
     }
     popup.show();
+  }
+
+  showDialog(): void {
+    let dialog;
+    dialog = new Dialog(this.container);
+    dialog.open();
   }
 }
