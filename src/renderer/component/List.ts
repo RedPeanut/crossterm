@@ -1,6 +1,6 @@
 import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
-import { Children, DirentExt, ListItemElem, TerminalItem } from "../../common/Types";
+import { Children, DirentExt, ListItemElem, ContextMenuItem, TerminalItem } from "../../common/Types";
 import { wrapper } from "../../globals";
 import { IDisposable, Disposable } from "../../common/base/lifecycle";
 import { $, _addEventListener } from "../util/dom";
@@ -11,6 +11,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { contextViewServiceId, getService, mainLayoutServiceId } from "../Service";
 import { ContextViewService } from "../service/ContextViewService";
 import { Severity } from "../Types";
+import { popup } from "../util/contextmenu";
+import { MainLayoutService } from "../layout/MainLayout";
 
 const SCROLL_HIDE_TIMEOUT: number = 500;
 
@@ -738,6 +740,21 @@ export class Node extends Disposable implements Children<Node> {
     }));
 
     const content = $('.content');
+
+    const onProperties = () => {
+      (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', data);
+    }; // this.properties();
+
+    this._register(_addEventListener(content, 'contextmenu', (e: PointerEvent) => {
+      const items: ContextMenuItem[] = [];
+      items.push({
+        accelerator: 'P',
+        label: 'Properties',
+        click: onProperties
+      });
+      popup(items);
+    }));
+
     const header = $('.ln-header');
     if(hasChildren) {
       const arrow = $('.arrow');
