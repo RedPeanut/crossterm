@@ -1,18 +1,33 @@
 /* Common */
-.popup-container { position: absolute;
+.popup-container *:focus {
+  outline: none;
+}
+
+.popup-container {
+  position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 5;
-  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 40; /* over sash(35) */
+  background-color: rgba(0,0,0,0.16);
 }
 
 .popup {
   background-color: rgb(31, 31, 31);
   border: 1px solid rgb(112,112,112);
+
+  border: 1px solid rgb(69, 69, 69);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  color: rgb(204, 204, 204);
+  /* font-size: 13px; */
+
+  display: flex;
+  flex-direction: column;
+
   /* position: fixed;
   top: 50%;
   left: 50%;
@@ -20,25 +35,27 @@
   transform: translate(-50%, -50%); */
 }
 
-.popup button {
+/* .popup button {
   width: 86px; height: 28px;
   background: rgb(225,225,225);
   border-width: 1px; border-style: solid;
   border-color: rgb(173,173,173);
-  /* margin-right: 8px; */
+  //margin-right: 8px;
   margin: 0 8px 8px 0;
 }
 .popup button:last-child { margin: 0; }
 
 .popup button.disabled { background: rgb(204,204,204); border-color: rgb(191,191,191); }
 .popup button:focus:not(.disabled) { border-color: rgb(0,120,215); border-width: 2px; }
-.popup button:hover:not(.disabled) { background: rgb(229,241,251); border-color: rgb(0,120,215); }
+.popup button:hover:not(.disabled) { background: rgb(229,241,251); border-color: rgb(0,120,215); } */
 
 .popup .title-area {
   /* background-color: white; */
   line-height: 19px;
+  /* height: 34px; */
   padding: 4px 8px;
   position: relative;
+  border-bottom: 1px solid rgb(43, 43, 43);
 }
 .popup .title-area:hover { cursor: move; }
 
@@ -63,175 +80,9 @@
 
 .popup .content-area {
   /* background-color: rgb(240,240,240); */
-  padding: 12px;
-}
-
-/* List
-.popup .list-view { border: 1px solid rgb(112,112,112); background-color: white; }
-.popup .list-view table { width: 100%; }
-.popup .list-view th {
-  background: #f9f9f9;
-  border-bottom: 1px solid #dcdcdc;
-  border-right: 1px solid #dcdcdc;
-  padding: 3px 6px 0 6px;
-  font-weight: normal;
-}
-.popup .list-view td {
-  border-bottom: 1px solid #dcdcdc;
-  padding: 3px 6px 0 6px;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-.popup .list-view td input { padding-top: 2px; }
-.popup .list-view td label { margin-left: 5px; } */
-
-
-/* Properties Popup */
-/* .popup.properties { width: 840px; }
-.popup.properties .body { height: 420px; }
-
-.popup-container {
-  position: fixed;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2600;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.popup {
-  background-color: rgb(31, 31, 31);
-  border: 1px solid rgb(69, 69, 69);
-  border-radius: 6px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  color: rgb(204, 204, 204);
-  font-size: 13px;
-  display: flex;
-  flex-direction: column;
-}
-
-.popup .title-area {
-  display: flex;
-  align-items: center;
-  height: 34px;
-  padding-left: 12px;
-  border-bottom: 1px solid rgb(43, 43, 43);
-  cursor: default;
-}
-
-.popup .title-area .title {
+  padding: 8px;
   flex: 1;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.popup .title-area .actions { display: flex; }
-
-.popup .title-area .actions .codicon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px; height: 34px;
-  font-size: 16px;
-  cursor: pointer;
-  color: rgb(204, 204, 204);
-}
-
-.popup .title-area .actions .codicon:hover {
-  background-color: rgba(255, 255, 255, 0.16);
-}
-
-.popup .title-area .actions .codicon-close:hover {
-  background-color: rgb(232, 17, 35);
-  color: white;
-}
-
-.popup .body {
-  display: flex;
-  padding: 14px;
-  gap: 12px;
-}
-
-// 좌측 범주 트리 영역
-.popup .categories {
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  flex-shrink: 0;
-}
-
-.popup .categories > label {
-  height: 19px;
-  line-height: 19px;
-  margin-bottom: 6px;
-}
-
-.popup .categories .tree {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  padding: 4px 0;
-  background-color: rgb(24, 24, 24);
-  border: 1px solid rgb(43, 43, 43);
-  border-radius: 4px;
-}
-
-.popup .content {
-  flex: 1;
-  min-width: 0;
-  overflow: auto;
-  // .categories 의 label(19px + 6px) 만큼 내려서 트리 상단과 맞춘다.
-  margin-top: 25px;
-}
-
-.popup .content .breadcrumb {
-  background-color: rgb(24, 24, 24);
-  border: 1px solid rgb(43, 43, 43);
-  border-radius: 4px;
-  padding: 6px 10px;
-  color: rgb(160, 160, 160);
-}
-
-.popup .content .description {
-  padding: 12px 2px 18px;
-  line-height: 19px;
-  color: rgb(180, 180, 180);
-}
-
-.popup .content .description p + p { margin-top: 8px; }
-
-.popup .content .form-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.popup .content .form-row label {
-  width: 110px;
-  flex-shrink: 0;
-}
-
-.popup .content .form-row input {
-  flex: 1;
-  min-width: 0;
-  height: 24px;
-  padding: 0 6px;
-  background-color: rgb(49, 49, 49);
-  color: rgb(204, 204, 204);
-  border: 1px solid rgb(69, 69, 69);
-  border-radius: 3px;
-  font-size: 13px;
-  font-family: inherit;
-  user-select: text;
-}
-
-.popup .content .form-row input:focus {
-  outline: none;
-  border-color: rgb(0, 120, 212);
 }
 
 .popup .buttons {
@@ -240,7 +91,7 @@
   gap: 8px;
   width: 96px;
   flex-shrink: 0;
-  margin-top: 25px;
+  margin-top: 15.5px;
 }
 
 .popup .buttons button {
@@ -267,4 +118,123 @@
 .popup .buttons button.primary:hover {
   background-color: rgb(20, 138, 228);
 }
-*/
+
+
+/* Properties Popup */
+.properties .popup {
+  width: 600px;
+  height: 420px;
+}
+
+.popup .categories {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 140px;
+}
+
+.popup .categories label {
+  /* height: 19px;
+  line-height: 19px;
+  margin-bottom: 6px; */
+}
+
+.popup .categories .tree {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 0;
+  background-color: rgb(24, 24, 24);
+  border: 1px solid rgb(43, 43, 43);
+  border-radius: 4px;
+}
+
+/* Tree */
+.popup .node {
+  width: 100%;
+  font-size: 14px;
+  /* border: 1px solid black; */
+}
+
+.popup .node .content {
+  display: flex; align-items: center;
+  min-height: 23px;
+  position: relative;
+}
+
+.popup .node .content .ln-header { width: 12px; height: 22px; display: flex; flex-direction: column; }
+.popup .node .content .ln-header .up { height: 50%;
+  border-left: 1px dotted;
+  border-bottom: 1px dotted;
+  /* margin-top: 1px; */
+}
+.popup .node .content .ln-header .down { height: 50%;
+  border-left: 1px dotted;
+  margin-top: 1px;
+}
+
+.popup .node .content .ln-body {
+  padding: 2px 4px;
+  margin-left: 3px;
+  /* width: 100%; */
+}
+
+.popup .node > .content.selected .ln-body {
+  background-color: rgb(0,119,214);
+  color: white;
+  border: 1px dotted;
+}
+
+
+/* Right area */
+.properties .popup .right {
+  flex: 1;
+  margin-top: 15.5px;
+  padding: 0 8px;
+}
+
+.properties .popup .right .breadcrumb {
+  background-color: rgb(24, 24, 24);
+  border: 1px solid rgb(43, 43, 43);
+  border-radius: 4px;
+  padding: 3px 5px;
+  color: rgb(160, 160, 160);
+}
+
+.properties .popup .right .desc {
+  padding: 12px 2px 18px;
+  line-height: 19px;
+  color: rgb(180, 180, 180);
+}
+
+.properties .popup .right .desc p + p { margin-top: 8px; }
+
+.properties .popup .right .row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.properties .popup .right .row label {
+  width: 110px;
+  flex-shrink: 0;
+}
+
+.properties .popup .right .row input {
+  flex: 1;
+  min-width: 0;
+  height: 24px;
+  padding: 0 6px;
+  background-color: rgb(49, 49, 49);
+  color: rgb(204, 204, 204);
+  border: 1px solid rgb(69, 69, 69);
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: inherit;
+  user-select: text;
+}
+
+.properties .popup .right .row input:focus {
+  /* outline: none; */
+  border-color: rgb(0, 120, 212);
+}
