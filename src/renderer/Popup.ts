@@ -1,3 +1,4 @@
+import { Emitter, Event } from "../common/base/event";
 import { Disposable } from "../common/base/lifecycle";
 import { $, _addEventListener } from "./util/dom";
 import * as dom from "./util/dom";
@@ -22,7 +23,7 @@ export abstract class Popup extends Disposable {
   dragOffsetY = 0;
 
   // private readonly _onDidXxx = this._register(new Emitter<XxxEvent>());
-  // readonly onDidXxx: Event<Xxx> = _onDidXxx.event;
+  // public onDidXxx/* : Event<XxxEvent> */ = this._onDidXxx.event;
 
   constructor(parent: HTMLElement, options: PopupOptions = {}) {
     super();
@@ -84,8 +85,6 @@ export abstract class Popup extends Disposable {
   }
 
   show(): void {
-    // if(this.container)
-    //   return;
     this.container.style.display = 'flex';
     this.popup.focus();
   }
