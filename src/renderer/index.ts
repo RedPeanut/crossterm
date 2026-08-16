@@ -46,7 +46,8 @@ export class Renderer {
   };
 
   initial_value: ConfigsInitialValueType;
-  list: ListItemElem[];
+  // list: ListItemElem[];
+  sessions: ListItemElem[];
 
   constructor() {}
 
@@ -63,7 +64,8 @@ export class Renderer {
     this.path.sep = this.process.platform === 'win32' ? '\\' : '/';
     this.package_json = await window.ipc.invoke('get package json');
     this.initial_value = await window.ipc.invoke('config get', 'initial_value');
-    this.list = await window.ipc.invoke('config get', 'list');
+    // this.list = await window.ipc.invoke('config get', 'list');
+    this.sessions = await window.ipc.invoke('read sessions dir');
 
     setService(storageServiceId, new RenderStorageService());
   }

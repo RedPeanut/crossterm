@@ -141,7 +141,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     });
     window.ipc.on('app quit request', async (...args: any[]) => {
       await window.ipc.invoke('config set', 'initial_value', renderer.initial_value);
-      await window.ipc.invoke('config set', 'list', renderer.list);
+      // await window.ipc.invoke('config set', 'list', renderer.list);
       window.ipc.send('app quit ready', null);
     });
   }

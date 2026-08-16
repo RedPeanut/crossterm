@@ -29,21 +29,24 @@ export class AppService {
       if(filters.includes(item.name))
         continue;
 
-      if(item.isDirectory) folders.push({
-        ...item,
-        children: [], isCollapsed: false,
-        type: 'folder',
-        id: uuidv4(),
-      });
-      else {
+      if(item.isDirectory) {
+        folders.push({
+          ...item,
+          children: [], isCollapsed: false,
+          type: 'folder',
+          id: uuidv4(),
+          title: item.name
+        });
+      } else {
         const reads = await this.fileService.readFile(path.join(item.path, item.name));
-        console.log('reads =', reads.toString('utf8'));
+        // console.log('reads =', reads.toString('utf8'));
         const parsed = JSON.parse(reads.toString('utf8'));
 
         files.push({
           ...item,
           ...parsed,
-          id: uuidv4()
+          id: uuidv4(),
+          title: item.name
         });
       }
     }

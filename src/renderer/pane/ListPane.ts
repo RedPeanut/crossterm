@@ -88,14 +88,14 @@ export class ListPane extends Pane {
   renderBody(container: HTMLElement): void {
     // draw list in body
     const list = this.list = new List(this.body,
-      renderer.list, // list: ListItemElem[]
+      renderer.sessions, // list: ListItemElem[]
       (e: MouseEvent, id: string) => {
         // TODO: send click event to detail view
 
       }, // onClick
       (e: MouseEvent, id: string) => {
         // const list = renderer.list;
-        const item: ListItemElem | undefined = utils.flatten(renderer.list).find((item) => item.id === id);
+        const item: ListItemElem | undefined = utils.flatten(renderer.sessions).find((item) => item.id === id);
 
         const new_one: TerminalItem = {
           // type: item?.type, size: { row: 24, col: 80 },
