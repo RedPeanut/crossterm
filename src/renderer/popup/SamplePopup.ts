@@ -2,12 +2,11 @@ import { Popup } from "../Popup";
 import { $ } from "../util/dom";
 import * as dom from "../util/dom";
 
-export interface SamplePopupOptions {
-}
+export interface SamplePopupOptions {}
 
 export class SamplePopup extends Popup {
-  constructor(parent?: HTMLElement) {
-    super(parent);
+  constructor(parent: HTMLElement, options: SamplePopupOptions = {}) {
+    super(parent, { classList: ['sample'], ...options });
 
     // custom title in here
     this.title.innerHTML = 'Sample Popup';
