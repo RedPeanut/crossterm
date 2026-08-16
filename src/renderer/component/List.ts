@@ -631,7 +631,7 @@ export class Node extends Disposable implements Children<Node> {
     const wrapper = this.wrapper = $('.wrapper');
     const node = this.node = $('.node');
 
-    node.style.paddingLeft = `${level * 20 + 4}px`;
+    node.style.paddingLeft = `${level * 16 + 4}px`;
 
     if(data.type !== 'folder' && level !== 0) {
       const indent = $('.indent');
@@ -756,7 +756,7 @@ export class Node extends Disposable implements Children<Node> {
     }));
 
     const header = $('.ln-header');
-    if(hasChildren) {
+    if(data.isDirectory) {
       const arrow = $('.arrow');
       if(isCollapsed) wrapper.classList.add('collapsed');
       this._register(_addEventListener(arrow, 'click', (e: MouseEvent) => {
@@ -835,7 +835,7 @@ export class Node extends Disposable implements Children<Node> {
     const wrapper = this.wrapper = $('.wrapper');
     const node = this.node = $('.node');
 
-    node.style.paddingLeft = `${level * 20 + 4}px`;
+    node.style.paddingLeft = `${level * 16 + 4}px`;
 
     const content = $('.content');
     const header = $('.ln-header');

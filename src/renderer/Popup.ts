@@ -48,8 +48,8 @@ export abstract class Popup extends Disposable {
 
     this._register(_addEventListener(popup, 'keydown', (e: KeyboardEvent) => {
 
-      e.stopPropagation();
-      e.preventDefault();
+      // e.stopPropagation();
+      // e.preventDefault();
 
       if(e.key === 'Escape') {
         this.cancel();
