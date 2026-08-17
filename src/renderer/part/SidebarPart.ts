@@ -48,7 +48,8 @@ export class SidebarPart extends Part implements SidebarPartService {
 
   constructor(options: SidebarPartOptions) {
     super(options);
-    this.size = renderer.initial_value.sidebar_size;
+    // this.size = renderer.initial_value.sidebar_size;
+    this.size = renderer.layoutState.sidebar_size;
     this.minimumSize = 120;
     this.border = true;
     this.sashEnablement = false;

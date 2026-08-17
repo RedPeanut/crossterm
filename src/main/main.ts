@@ -25,7 +25,7 @@ import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
 import { clamp } from '../common/util/numbers';
 import { MainFileService } from './service/MainFileService';
-import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId, environmentServiceId } from './Service';
+import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId, environmentServiceId, getService } from './Service';
 import { MainStorageService } from './service/MainStorageService';
 import { MainConfigurationService } from './service/MainConfigurationService';
 import { AppService } from './service/AppService';
@@ -37,6 +37,7 @@ import { FileServiceChannel } from './ipc/FileServiceChannel';
 import { StorageServiceChannel } from './ipc/StorageServiceChannel';
 import { DisposableStore, Disposable } from '../common/base/lifecycle';
 import { ConfigurationServiceChannel } from './ipc/ConfigurationServiceChannel';
+import { StorageService } from '../common/service/StorageService';
 
 class AppUpdater {
   constructor() {
@@ -98,19 +99,22 @@ class MainWindow extends Disposable {
       height: maxHeight
     } = this.getMaxScreenSize();
 
-    function getDb(): PotDb {
+    /* function getDb(): PotDb {
       const dir = path.join(app.getPath('userData'), 'potdb');
       return new PotDb(dir);
-    }
+    } */
 
-    const db = getDb();
-    const [ key ] = [ 'initial_value' ];
-    const initial_value = await db.dict.cfg.get(key, default_configs[key]);
+    // const db = getDb();
+    // const [ key ] = [ 'initial_value' ];
+    // const initial_value = await db.dict.cfg.get(key, default_configs[key]);
+
+    const storageService = getService(storageServiceId) as StorageService;
+    const layoutState = JSON.parse(await storageService.get<string>('layoutState'));
 
     const minWidth = 800;
     const minHeight = 600;
-    let width = clamp(initial_value.window_size.width, minWidth, maxWidth);
-    let height = clamp(initial_value.window_size.height, minHeight, maxHeight);
+    let width = clamp(layoutState.window_size.width, minWidth, maxWidth);
+    let height = clamp(layoutState.window_size.height, minHeight, maxHeight);
 
     // let width = maxWidth;
     // let height = maxHeight;

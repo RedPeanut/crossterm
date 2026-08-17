@@ -14,7 +14,8 @@ export class BookmarkPaneView extends PaneView {
     super.create(parent);
     this.element.classList.add('bookmark');
 
-    const initialValue = renderer.initial_value.paneview.find((v) => v.name == 'bookmark');
+    // const initialValue = renderer.initial_value.paneview.find((v) => v.name == 'bookmark');
+    const initialValue = renderer.layoutState.paneview.find((v) => v.name == 'bookmark');
     enum IDX { LIST, DETAIL };
 
     const bookmarkPane = new ListPane(null, {

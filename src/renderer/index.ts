@@ -13,6 +13,7 @@ import { ConfigsInitialValueType } from '../common/configs';
 import { RenderStorageService } from './service/RenderStorageService';
 import { setService, storageServiceId } from './Service';
 import { ListItemElem } from '../common/Types';
+import { LayoutStateType, StorageService } from '../common/service/StorageService';
 
 declare global {
   interface Window {
@@ -45,9 +46,10 @@ export class Renderer {
     license: string
   };
 
-  initial_value: ConfigsInitialValueType;
+  // initial_value: ConfigsInitialValueType;
   // list: ListItemElem[];
   sessions: ListItemElem[];
+  layoutState: LayoutStateType;
 
   constructor() {}
 
@@ -63,11 +65,13 @@ export class Renderer {
     this.process.platform = await window.ipc.invoke('process get', 'property', 'platform');
     this.path.sep = this.process.platform === 'win32' ? '\\' : '/';
     this.package_json = await window.ipc.invoke('get package json');
-    this.initial_value = await window.ipc.invoke('config get', 'initial_value');
+    // this.initial_value = await window.ipc.invoke('config get', 'initial_value');
     // this.list = await window.ipc.invoke('config get', 'list');
     this.sessions = await window.ipc.invoke('read sessions dir');
 
-    setService(storageServiceId, new RenderStorageService());
+    const storageService = setService(storageServiceId, new RenderStorageService()) as StorageService;
+    // console.log(await storageService.get<string>('layoutState'));
+    this.layoutState = JSON.parse(await storageService.get<string>('layoutState'));
   }
 }
 

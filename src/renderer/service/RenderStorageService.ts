@@ -34,7 +34,7 @@ export class RenderStorageService implements StorageService {
     if(rawValue === undefined) return fallbackValue;
 
     try {
-      return JSON.parse(rawValue) as T;
+      return rawValue as T;
     } catch {
       return rawValue as unknown as T;
     }

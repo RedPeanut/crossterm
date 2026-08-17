@@ -11,7 +11,7 @@ import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../component/SplitView';
 import { getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
-import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId } from '../Service';
+import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 import { MenubarService } from '../part/Menubar';
@@ -24,6 +24,7 @@ import { SamplePopup } from '../popup/SamplePopup';
 import { PropertiesPopup } from '../popup/PropertiesPopup';
 import { ListItemElem } from '../../common/Types';
 import { Dialog } from '../Dialog';
+import { StorageService } from '../../common/service/StorageService';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -143,7 +144,7 @@ export class MainLayout extends Layout implements MainLayoutService {
       }
     });
     window.ipc.on('app quit request', async (...args: any[]) => {
-      await window.ipc.invoke('config set', 'initial_value', renderer.initial_value);
+      // await window.ipc.invoke('config set', 'initial_value', renderer.initial_value);
       // await window.ipc.invoke('config set', 'list', renderer.list);
       window.ipc.send('app quit ready', null);
     });
@@ -302,12 +303,15 @@ export class MainLayout extends Layout implements MainLayoutService {
     this.layout();
     this.installIpc();
 
-    const resize = () => {
+    const resize = async () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
       // console.log(`현재 창 크기: ${width}px x ${height}px`);
-      renderer.initial_value.window_size.width = width;
-      renderer.initial_value.window_size.height = height;
+      // renderer.initial_value.window_size.width = width;
+      // renderer.initial_value.window_size.height = height;
+      renderer.layoutState.window_size.width = width;
+      renderer.layoutState.window_size.height = height;
+      await (getService(storageServiceId) as StorageService).set('layoutState', JSON.stringify(renderer.layoutState));
       this.layout();
     };
 
