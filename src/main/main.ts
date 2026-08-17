@@ -402,7 +402,7 @@ class MainWindow extends Disposable {
     setService(configurationServiceId, configurationService);
     setService(appServiceId, appService);
 
-    // expose services to the renderer
+    // expose services to render
     for(const channel of [
       new FileServiceChannel(fileService),
       new StorageServiceChannel(storageService),
