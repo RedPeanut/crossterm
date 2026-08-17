@@ -5,16 +5,23 @@ import { contextBridge, ipcRenderer, IpcRendererEvent, IpcRenderer } from 'elect
 import { Channels } from '../common/ipc';
 
 const electronHandler = {
+  // render to main
+  // window.ipc.send - ipcMain.on
   send(channel: Channels, ...args: any[]) {
     ipcRenderer.send(channel, args);
   },
+  // window.ipc.invoke - ipcMain.handle
   invoke(channel: Channels, ...args: any[]) {
     return ipcRenderer.invoke(channel, args);
   },
+
+  // main to render
+  // webContents.send - window.ipc.on
+
   /**
    * off is not working directly, because parameters are copied when they are sent over the bridge
    * ref) https://github.com/electron/electron/issues/45224
-   *      https://www.electronjs.org/docs/latest/api/context-bridge#parameter--error--return-type-support
+   * https://www.electronjs.org/docs/latest/api/context-bridge#parameter--error--return-type-support
    */
   on: (channel: Channels, cb: (...args: unknown[]) => void): any => {
     const listener = (event: IpcRendererEvent, ...args: unknown[]) => cb(event, ...args);
