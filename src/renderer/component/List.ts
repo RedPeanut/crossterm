@@ -631,14 +631,20 @@ export class Node extends Disposable implements Children<Node> {
     const wrapper = this.wrapper = $('.wrapper');
     const node = this.node = $('.node');
 
-    node.style.paddingLeft = `${level * 16 + 4}px`;
+    node.style.paddingLeft = `${4+level*16}px`;
 
-    if(data.type !== 'folder' && level !== 0) {
-      const indent = $('.indent');
-      indent.style.left = `${level * 8 + 4}px`;
-      const guide = $('.guide');
-      indent.appendChild(guide);
-      node.appendChild(indent);
+    if(
+      // data.type !== 'folder' &&
+      level !== 0
+    ) {
+      for(let i = 0; i < level; i++) {
+        const indent = $('.indent');
+        // 마지막에만 8이고 그전은 16으로
+        indent.style.left = `${4+i*16+8}px`;
+        const guide = $('.guide');
+        indent.appendChild(guide);
+        node.appendChild(indent);
+      }
     }
 
     this._register(_addEventListener(node, 'click', (e: MouseEvent) => {
@@ -835,7 +841,7 @@ export class Node extends Disposable implements Children<Node> {
     const wrapper = this.wrapper = $('.wrapper');
     const node = this.node = $('.node');
 
-    node.style.paddingLeft = `${level * 16 + 4}px`;
+    node.style.paddingLeft = `${4+level*16}px`;
 
     const content = $('.content');
     const header = $('.ln-header');
