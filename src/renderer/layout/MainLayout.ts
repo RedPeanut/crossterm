@@ -11,7 +11,7 @@ import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../component/SplitView';
 import { getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
-import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId } from '../Service';
+import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId, contextViewServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 import { MenubarService } from '../part/Menubar';
@@ -104,7 +104,7 @@ export class MainLayout extends Layout implements MainLayoutService {
 
     this.parent.appendChild(this.container);
 
-    new ContextViewServiceImpl(this.container);
+    setService(contextViewServiceId, new ContextViewServiceImpl(this.container));
   }
 
   layout(): void {

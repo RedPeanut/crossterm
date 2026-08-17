@@ -1,4 +1,4 @@
-import { contextViewServiceId, setService } from "../Service";
+// import { contextViewServiceId, setService } from "../Service";
 import { $ } from '../util/dom';
 import * as dom from '../util/dom';
 
@@ -42,7 +42,6 @@ export class ContextViewServiceImpl implements ContextViewService {
 
   constructor(container: HTMLElement) {
     this.container = container;
-    setService(contextViewServiceId, this);
     const contextView = this.contextView = $('.context-view');
     this.container.appendChild(contextView);
   }
