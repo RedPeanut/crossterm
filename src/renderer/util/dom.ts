@@ -274,7 +274,7 @@ export function getTotalHeight(element: HTMLElement): number {
   return element.offsetHeight + margin;
 }
 
-export function _addEventListener(target: EventTarget, event: string, handler: EventListener): IDisposable {
+export function _addEventListener(target: EventTarget, event: string, handler: (event: any) => void): IDisposable {
   target.addEventListener(event, handler);
 
   return {
