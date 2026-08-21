@@ -383,20 +383,17 @@ class MainWindow extends Disposable {
     }
 
     // set services
-    const environmentService = new MainEnvironmentService();
-    const fileService = new MainFileService();
+    const environmentService = setService(environmentServiceId, new MainEnvironmentService());
+    const fileService = setService(fileServiceId, new MainFileService());
 
-    setService(environmentServiceId, environmentService);
-    setService(fileServiceId, fileService);
-
-    const storageService = new MainStorageService(environmentService, fileService);
-    const configurationService = new MainConfigurationService(environmentService, fileService);
+    const storageService = setService(storageServiceId, new MainStorageService(environmentService, fileService));
+    const configurationService = setService(configurationServiceId, new MainConfigurationService(environmentService, fileService));
     this._register(configurationService.onDidChangeConfiguration(change => {
       if(this.browserWindow) {
         this.browserWindow.webContents.send('configuration changed', change);
       }
     }));
-    const appService = new AppService(environmentService, fileService);
+    const appService = setService(appServiceId, new AppService(environmentService, fileService));
 
     setService(storageServiceId, storageService);
     setService(configurationServiceId, configurationService);
