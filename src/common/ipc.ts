@@ -49,6 +49,9 @@ export type MainEvents =
 
   // app
   | 'app quit ready'
+
+  // dialog
+  | 'dialog show messagebox'
 ;
 
 // main to renderer

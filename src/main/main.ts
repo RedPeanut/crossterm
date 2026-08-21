@@ -25,7 +25,7 @@ import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
 import { clamp } from '../common/util/numbers';
 import { MainFileService } from './service/MainFileService';
-import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId, environmentServiceId, getService } from './Service';
+import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId, environmentServiceId, getService, dialogServiceId } from './Service';
 import { MainStorageService } from './service/MainStorageService';
 import { MainConfigurationService } from './service/MainConfigurationService';
 import { AppService } from './service/AppService';
@@ -38,6 +38,8 @@ import { StorageServiceChannel } from './ipc/StorageServiceChannel';
 import { DisposableStore, Disposable } from '../common/base/lifecycle';
 import { ConfigurationServiceChannel } from './ipc/ConfigurationServiceChannel';
 import { StorageService } from '../common/service/StorageService';
+import { MainDialogService } from './service/MainDialogService';
+import { DialogServiceChannel } from './ipc/DialogServiceChannel';
 
 class AppUpdater {
   constructor() {
@@ -394,10 +396,7 @@ class MainWindow extends Disposable {
       }
     }));
     const appService = setService(appServiceId, new AppService(environmentService, fileService));
-
-    setService(storageServiceId, storageService);
-    setService(configurationServiceId, configurationService);
-    setService(appServiceId, appService);
+    const dialogService = setService(dialogServiceId, new MainDialogService());
 
     // expose services to render
     for(const channel of [
@@ -405,6 +404,7 @@ class MainWindow extends Disposable {
       new StorageServiceChannel(storageService),
       new ConfigurationServiceChannel(configurationService),
       new AppServiceChannel(appService),
+      new DialogServiceChannel(dialogService),
     ]) {
       this.ipcDisposables.add(registerIpcChannel(channel));
     }
