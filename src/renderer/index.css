@@ -318,7 +318,7 @@ body { height: 100%; }
 .menubar .button .menubox {
   display: none;
   position: absolute;
-  z-index: 5;
+  z-index: 40; /* over sash(35) */
   /* background: rgb(242,242,242);
   border: 1px solid rgb(185,185,185); */
   background-color: rgb(31 31 31);
