@@ -1,7 +1,7 @@
 {
   "name": "crossterm",
   "productName": "crossterm",
-  "version": "0.6.13",
+  "version": "0.6.26",
   "description": "Crossplatform Terminal App",
   "main": "./.erb/dll/main.bundle.dev.js",
   "keywords": [
