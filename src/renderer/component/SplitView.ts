@@ -99,11 +99,11 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
 
   setVisible(visible: boolean): void {
 
-    if(visible === this.visible) {
+    if (visible === this.visible) {
       return;
     }
 
-    if(visible) {
+    if (visible) {
       this.view.size = this.cachedVisibleSize;
       this.cachedVisibleSize = undefined;
     } else {
@@ -205,9 +205,9 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
     this.viewContainer = append(this.el, $('.split-view-container'));
     this.container.appendChild(this.el);
 
-    if(options.descriptor) {
+    if (options.descriptor) {
       this.size = options.descriptor.size;
-      for(let i = 0; i < options.descriptor.views.length; i++) {
+      for (let i = 0; i < options.descriptor.views.length; i++) {
         const viewDescriptor = options.descriptor.views[i];
         const view = viewDescriptor.view;
         const size = viewDescriptor.size;
@@ -225,9 +225,9 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
 
   getSashPosition(sash: Sash): number {
     let position = 0;
-    for(let i = 0; i < this.sashItems.length; i++) {
+    for (let i = 0; i < this.sashItems.length; i++) {
       position += this.viewItems[i].view.size;
-      if(this.sashItems[i].sash === sash)
+      if (this.sashItems[i].sash === sash)
         return position;
     }
     return 0;
@@ -235,8 +235,8 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
 
   replaceView(_old: T, _new: T) {
     // remove n add
-    for(let i = 0; i < this.viewItems.length; i++) {
-      if(_old === this.viewItems[i].view) {
+    for (let i = 0; i < this.viewItems.length; i++) {
+      if (_old === this.viewItems[i].view) {
         const container = $('.split-view-view');
         container.classList.add('visible');
 
@@ -265,7 +265,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
     // item.splitViewContainer = container;
     container.classList.add('visible');
 
-    if(index === this.viewItems.length)
+    if (index === this.viewItems.length)
       this.viewContainer.appendChild(container);
     else
       this.viewContainer.insertBefore(container, this.viewContainer.children.item(index));
@@ -275,7 +275,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
     this.viewItems.splice(index, 0, item);
 
     // add sash
-    if(this.viewItems.length > 1) {
+    if (this.viewItems.length > 1) {
       const sash = this.orientation === Orientation.VERTICAL
         ? new Sash(this.sashContainer, { getHorizontalSashTop: s => this.getSashPosition(s), getHorizontalSashWidth: null }, { orientation: Orientation.HORIZONTAL })
         : new Sash(this.sashContainer, { getVerticalSashLeft: s => this.getSashPosition(s), getVerticalSashHeight: null }, { orientation: Orientation.VERTICAL });
@@ -315,7 +315,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
 
         // if view is fill_parent, control size with next wrap_content view
         // (fill_parent is only one in line)
-        if(this.viewItems[index].view.sizeType == 'fill_parent') {
+        if (this.viewItems[index].view.sizeType == 'fill_parent') {
           // const nextView = this.viewItems[index+1].view;
           let preferredSize = this.orientation == Orientation.HORIZONTAL ? this.viewItems[index+1].view.preferredWidth :this.viewItems[index+1].view.preferredHeight;
           preferredSize = clamp(preferredSize, this.viewItems[index+1].view.minimumSize, this.viewItems[index+1].view.maximumSize);
@@ -346,7 +346,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
   }
 
   findFirstIndex(indexes: number[]): number | undefined {
-    for(const index of indexes) {
+    for (const index of indexes) {
       const viewItem = this.viewItems[index];
       return index;
     }
@@ -389,7 +389,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
       const beforeItemIndex = this.findFirstIndex(upIndexes);
       const afterItemIndex = this.findFirstIndex(downIndexes);
 
-      if(typeof beforeItemIndex === 'number') {
+      if (typeof beforeItemIndex === 'number') {
         const viewItem = this.viewItems[beforeItemIndex];
         const halfSize = Math.floor(viewItem.viewMinimumSize / 2);
         // console.log('halfSize =', halfSize);
@@ -402,7 +402,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
         // console.log('beforeItem =', beforeItem);
       }
 
-      if(typeof afterItemIndex === 'number') {
+      if (typeof afterItemIndex === 'number') {
         const viewItem = this.viewItems[afterItemIndex];
         afterItem = {
           index: afterItemIndex,
@@ -439,7 +439,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
     beforeItem: SashDragItemState,
     afterItem: SashDragItemState
   ): number {
-    if(index < 0 || index >= this.viewItems.length)
+    if (index < 0 || index >= this.viewItems.length)
       return 0;
 
     const upIndexes = range(index, -1);
@@ -458,21 +458,21 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
 
     let snapped = false;
 
-    if(beforeItem) {
+    if (beforeItem) {
       const snapView = this.viewItems[beforeItem.index];
       const visible = delta >= beforeItem.limitDelta;
       snapped = visible !== snapView.visible;
       snapView.setVisible(visible); //, beforeItem.size);
     }
 
-    /* if(!snapped && afterItem) {
+    /* if (!snapped && afterItem) {
       const snapView = this.viewItems[afterItem.index];
       const visible = delta < afterItem.limitDelta;
       snapped = visible !== snapView.visible;
       snapView.setVisible(visible); //, snapAfter.size);
     } */
 
-    if(snapped)
+    if (snapped)
       return -1;
 
     delta = clamp(delta, minDelta, maxDelta);
@@ -502,7 +502,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
 
   saveProportions() {
     this.proportions = [this.viewItems.length];
-    for(let i = 0; i < this.viewItems.length; i++)
+    for (let i = 0; i < this.viewItems.length; i++)
       this.proportions[i] = 1 / this.viewItems.length;
     // console.log('this.proportions =', this.proportions);
   }
@@ -515,18 +515,18 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
     // console.log('layout() is called .., totalSize =', totalSize);
     this.size = totalSize;
 
-    if(this.proportions) {
+    if (this.proportions) {
       let total = 0;
-      for(let i = 0; i < this.viewItems.length; i++) {
+      for (let i = 0; i < this.viewItems.length; i++) {
         const viewItem = this.viewItems[i];
         viewItem.view.size = totalSize * this.proportions[i];
       }
       this.layoutViews();
     } else {
       let total = 0;
-      for(let i = 0; i < this.viewItems.length; i++) {
+      for (let i = 0; i < this.viewItems.length; i++) {
         const viewItem = this.viewItems[i];
-        if(viewItem.view.sizeType === 'wrap_content') {
+        if (viewItem.view.sizeType === 'wrap_content') {
           let itemSize = (viewItem.view.border ? 1 : 0) + viewItem.view.size;
           total += itemSize;
           totalSize -= itemSize;
@@ -534,9 +534,9 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
       }
 
       // fill empty space (dangling implementation)
-      for(let i = 0; i < this.viewItems.length; i++) {
+      for (let i = 0; i < this.viewItems.length; i++) {
         const viewItem = this.viewItems[i];
-        if(viewItem.view.sizeType === 'fill_parent') {
+        if (viewItem.view.sizeType === 'fill_parent') {
           viewItem.view.size = totalSize - (viewItem.view.border ? 1 : 0);
         }
       }
@@ -547,7 +547,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
 
   layoutViews(): void {
     let offset = 0;
-    for(let i = 0; i < this.viewItems.length; i++) {
+    for (let i = 0; i < this.viewItems.length; i++) {
       const viewItem = this.viewItems[i];
       viewItem.layoutContainer((viewItem.view.border ? 1 : 0) + offset);
       // console.log(`[${i}] ${item.size}`);
@@ -560,11 +560,11 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
   }
 
   updateSashEnablement(): void {
-    for(let i = 0; i < this.viewItems.length; i++) {
-      if(i > 0) {
+    for (let i = 0; i < this.viewItems.length; i++) {
+      if (i > 0) {
         // const viewItem = this.viewItems[i];
         const sashState: SashState = this.viewItems[i].view.sashEnablement ? SashState.Enabled : SashState.Disabled;
-        // if(sashState != this.sashItems[i-1].sash.state) {
+        // if (sashState != this.sashItems[i-1].sash.state) {
           this.sashItems[i-1].sash.state = sashState;
         // }
       }
@@ -578,7 +578,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
   } */
 
   setViewVisible(index: number, visible: boolean): void {
-    if(index < 0 || index >= this.viewItems.length) {
+    if (index < 0 || index >= this.viewItems.length) {
       throw new Error('Index out of bounds');
     }
 
@@ -593,28 +593,28 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
     // this.splitView.layout(this.size);
 
     let total = 0;
-    for(let i = 0; i < this.viewItems.length; i++) {
+    for (let i = 0; i < this.viewItems.length; i++) {
       const viewItem = this.viewItems[i];
-      if(viewItem.view instanceof Pane) {
+      if (viewItem.view instanceof Pane) {
         // const view = viewItem.view as Pane;
 
         // set with cache when wrap_content
-        if(viewItem.view.sizeType === 'wrap_content') {
+        if (viewItem.view.sizeType === 'wrap_content') {
           let itemSize: number, border: number = viewItem.view.border ? 1 : 0;
-          if(viewItem.view.expanded) {
-            if(viewItem.cachedSize != undefined) {
+          if (viewItem.view.expanded) {
+            if (viewItem.cachedSize != undefined) {
               itemSize = viewItem.cachedSize; // get itemSize
 
               viewItem.cachedSize = undefined; // clear cache
               viewItem.view.size = itemSize; // restore set
             } else {
               itemSize = border + viewItem.view.size; // get itemSize
-              if(viewItem.view.size != border + viewItem.view.headerSize)
+              if (viewItem.view.size != border + viewItem.view.headerSize)
                 viewItem.size = itemSize; // set with cache
             }
           } else {
             itemSize = border + viewItem.view.headerSize;
-            if(viewItem.view.size != border + viewItem.view.headerSize)
+            if (viewItem.view.size != border + viewItem.view.headerSize)
               viewItem.size = itemSize; // set with cache
           }
           total += itemSize;
@@ -624,15 +624,15 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
     }
 
     // fill empty space (dangling implementation)
-    for(let i = 0; i < this.viewItems.length; i++) {
+    for (let i = 0; i < this.viewItems.length; i++) {
       const viewItem = this.viewItems[i];
-      if(viewItem.view instanceof Pane) {
+      if (viewItem.view instanceof Pane) {
         // const view = viewItem.view as Pane;
 
         // cache is not required when fill_parent (fixed value set)
-        if(viewItem.view.sizeType === 'fill_parent') {
+        if (viewItem.view.sizeType === 'fill_parent') {
           let border: number = viewItem.view.border ? 1 : 0;
-          if(viewItem.view.expanded) {
+          if (viewItem.view.expanded) {
             viewItem.view.size = totalSize - border;
           } else {
             viewItem.view.size = viewItem.view.headerSize - border;
@@ -646,10 +646,10 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
 
   /* layoutViews_pane(): void {
     let offset = 0;
-    for(let i = 0; i < this.viewItems.length; i++) {
+    for (let i = 0; i < this.viewItems.length; i++) {
       const viewItem = this.viewItems[i];
 
-      if(viewItem.view instanceof Pane) {
+      if (viewItem.view instanceof Pane) {
         // const view = viewItem.view as Pane;
         const border = viewItem.view.border ? 1 : 0;
         viewItem.layoutContainer(border + offset);

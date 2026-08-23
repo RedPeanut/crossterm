@@ -29,12 +29,12 @@ export class Terms {
       this.terms[i] = term;
     }); */
 
-    for(let i = 0; i < this.group.length; i++) {
+    for (let i = 0; i < this.group.length; i++) {
       let item: TerminalItem = this.group[i];
-      if(item.term) {
+      if (item.term) {
         const term: Term = item.term;
-        if(item.selected) term.element.classList.add('selected');
-        if(item.active) term.element.classList.add('active');
+        if (item.selected) term.element.classList.add('selected');
+        if (item.active) term.element.classList.add('active');
         el.appendChild(term.element);
         this.terms[i] = term;
       } else {

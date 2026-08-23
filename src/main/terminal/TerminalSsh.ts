@@ -49,7 +49,7 @@ export default class TerminalSsh extends TerminalBase {
       connected = true;
       // open shell channel
       conn.shell({ term: 'xterm-256color' }, {}, (err, stream) => {
-        if(err) throw err;
+        if (err) throw err;
         stream.on('close', () => {
           console.log('Stream :: close');
           conn.end();
@@ -62,13 +62,13 @@ export default class TerminalSsh extends TerminalBase {
     });
     conn.on('error', (error) => {
       console.log('error =', error);
-      if(error.message.includes('All configured authentication methods failed')) {
+      if (error.message.includes('All configured authentication methods failed')) {
         console.log('TODO: show popup in render');
       }
     });
 
     // console.log('this.options =', this.options);
-    if(this.options.url) {
+    if (this.options.url) {
       conn.connect({
         host: this.options.url.host,
         port: this.options.url.port,
@@ -97,7 +97,7 @@ export default class TerminalSsh extends TerminalBase {
     try {
       this.stream?.write(data);
       // this.writeLog(data);
-    } catch(e) {
+    } catch (e) {
       // log.error(e);
     }
   } //*/

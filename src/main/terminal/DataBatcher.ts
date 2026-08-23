@@ -32,9 +32,9 @@ export default class DataBatcher extends EventEmitter {
   }
 
   write(chunk: Buffer | string) {
-    if(this.data.length + chunk.length >= BATCH_MAX_SIZE) {
+    if (this.data.length + chunk.length >= BATCH_MAX_SIZE) {
       // We've reached the max batch size. Flush it and start another one
-      if(this.timeout) {
+      if (this.timeout) {
         clearTimeout(this.timeout);
         this.timeout = null;
       }
@@ -43,7 +43,7 @@ export default class DataBatcher extends EventEmitter {
 
     this.data += typeof chunk === 'string' ? chunk : this.decoder.write(chunk);
 
-    if(!this.timeout) {
+    if (!this.timeout) {
       this.timeout = setTimeout(() => this.flush(), BATCH_DURATION_MS);
     }
   }

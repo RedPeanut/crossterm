@@ -22,7 +22,7 @@ export function popup(items: ContextMenuItem[], options?: PopupOptions, onHide?:
     console.log('once contextmenu close is called ..');
     // console.log('closedContextMenuId =', closedContextMenuId);
 
-    if(closedContextMenuId !== contextMenuId)
+    if (closedContextMenuId !== contextMenuId)
       return;
 
     // window.ipc.off(onClickChannel, onClickChannelHandler);
@@ -49,7 +49,7 @@ function createItem(item: ContextMenuItem, processedItems: ContextMenuItem[]): S
   processedItems.push(item);
 
   // Submenu
-  if(Array.isArray(item.submenu)) {
+  if (Array.isArray(item.submenu)) {
     serializableItem.submenu = item.submenu.map(submenuItem => createItem(submenuItem, processedItems));
   }
 

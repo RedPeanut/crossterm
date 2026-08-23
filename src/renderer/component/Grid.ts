@@ -11,7 +11,7 @@ export class Grid<T extends View = View> {
   get element(): HTMLElement { return this.gridView.element; }
 
   constructor(view: T | GridView) {
-    if(view instanceof GridView) {
+    if (view instanceof GridView) {
       this.gridView = view;
       // this.gridView.getViewMap(this.views);
     }

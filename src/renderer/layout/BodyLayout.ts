@@ -79,7 +79,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
   create(): void {
     this.container.classList.add(...['body', 'layout']);
-    /* for(const { klass, id, role, classes, options } of [
+    /* for (const { klass, id, role, classes, options } of [
       { klass: SidebarPart, id: Parts.SIDEBAR_PART, role: 'none', classes: ['sidebar', this.getSideBarPosition() === Position.LEFT ? 'left' : 'right'] },
       { klass: SessionPart, id: Parts.SESSION_PART, role: 'main', classes: ['editor'], options: { restorePreviousState: this.willRestoreEditors() } },
     ]) {
@@ -106,14 +106,14 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
   setSidebarHidden(hidden: boolean): void {
     let found = false, i = 0;
-    for(; i < this.splitView.viewItems.length; i++) {
-      if(this.splitView.viewItems[i].view === this.sidebarPart) {
+    for (; i < this.splitView.viewItems.length; i++) {
+      if (this.splitView.viewItems[i].view === this.sidebarPart) {
         found = true;
         break;
       }
     }
 
-    if(found)
+    if (found)
       this.splitView.setViewVisible(i, !hidden);
   }
 
@@ -138,8 +138,8 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         onClick: (e: any) => {
           // toggle or switch
           const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
-          if(activeItem) {
-            if(activeItem.id === items[0].id) {
+          if (activeItem) {
+            if (activeItem.id === items[0].id) {
               this.activitybarPart.hideActiveItem();
             } else {
               this.activitybarPart.changeActiveItem(items[0].id);
@@ -149,7 +149,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
           }
 
           const activePanel = this.sidebarPart.getActivePanel();
-          if(activePanel instanceof BookmarkPanel) {
+          if (activePanel instanceof BookmarkPanel) {
             this.sidebarPart.hideActivePanel();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
@@ -167,8 +167,8 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         codicon: 'info',
         onClick: (e: any) => {
           const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
-          if(activeItem) {
-            if(activeItem.id === items[1].id) {
+          if (activeItem) {
+            if (activeItem.id === items[1].id) {
               this.activitybarPart.hideActiveItem();
             } else {
               this.activitybarPart.changeActiveItem(items[1].id);
@@ -178,7 +178,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
           }
 
           const activePanel = this.sidebarPart.getActivePanel();
-          if(activePanel instanceof SamplePanel) {
+          if (activePanel instanceof SamplePanel) {
             this.sidebarPart.hideActivePanel();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
@@ -225,8 +225,8 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
           // activitybar part
           const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
-          if(activeItem) {
-            if(activeItem.id === items[0].id) {
+          if (activeItem) {
+            if (activeItem.id === items[0].id) {
               this.activitybarPart.hideActiveItem();
             } else {
               this.activitybarPart.changeActiveItem(items[0].id);
@@ -237,7 +237,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
           // sidebar part
           const activePaneView = this.sidebarPart.activePaneView;
-          if(activePaneView instanceof BookmarkPaneView) {
+          if (activePaneView instanceof BookmarkPaneView) {
             this.sidebarPart.hideActivePaneView();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {
@@ -258,8 +258,8 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
           // activitybar part
           const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
-          if(activeItem) {
-            if(activeItem.id === items[1].id) {
+          if (activeItem) {
+            if (activeItem.id === items[1].id) {
               this.activitybarPart.hideActiveItem();
             } else {
               this.activitybarPart.changeActiveItem(items[1].id);
@@ -270,7 +270,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
 
           // sidebar part
           const activePaneView = this.sidebarPart.activePaneView;
-          if(activePaneView instanceof SamplePaneView) {
+          if (activePaneView instanceof SamplePaneView) {
             this.sidebarPart.hideActivePaneView();
             this.setPartHidden(true, Parts.SIDEBAR_PART);
           } else {

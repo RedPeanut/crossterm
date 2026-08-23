@@ -20,7 +20,7 @@ export class TitlebarPart extends Part {
       // console.log('args =', args);
       const arg = args[1];
       this.maxResBtn.classList.remove('codicon-chrome-restore', 'codicon-chrome-maximize');
-      if(arg.isMaximized)
+      if (arg.isMaximized)
         this.maxResBtn.classList.add('codicon-chrome-restore');
       else
       this.maxResBtn.classList.add('codicon-chrome-maximize');
@@ -32,7 +32,7 @@ export class TitlebarPart extends Part {
     const container: HTMLElement = this.container;
 
     const menubar = $('.menubar');
-    if(renderer.process.platform === 'darwin')
+    if (renderer.process.platform === 'darwin')
       menubar.style.paddingLeft = '80px';
 
     const left = $('.left');
@@ -43,7 +43,7 @@ export class TitlebarPart extends Part {
     const middle = $('.middle');
     const handleMaxOrRes = async (e) => {
       const isMaximized = await window.ipc.invoke('window get', 'function', 'isMaximized');
-      if(isMaximized)
+      if (isMaximized)
         window.ipc.send('window fn', 'browserWindow', 'unmaximize');
       else
         window.ipc.send('window fn', 'browserWindow', 'maximize');
@@ -71,7 +71,7 @@ export class TitlebarPart extends Part {
     right.appendChild(closeBtn);
     menubar.appendChild(right);
 
-    if(false) { // renderer.process.platform === 'darwin') {
+    if (false) { // renderer.process.platform === 'darwin') {
       left.style.display = 'none';
       right.style.display = 'none';
       const title = $('.title');
