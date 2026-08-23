@@ -72,7 +72,7 @@ export class ListPane extends Pane {
       }
     ];
 
-    for (let i = 0; i < items.length; i++) {
+    for(let i = 0; i < items.length; i++) {
       let li = $('li');
       let a = $('a');
       a.title = items[i].title;
@@ -109,7 +109,7 @@ export class ListPane extends Pane {
         // console.log('find_active =', find_active);
 
         // let new_tree;
-        if (find_active) {
+        if(find_active) {
           const { depth, index, pos, item: activeItem, group: activeGroup, splitItem } = find_active;
 
           // turn off active item

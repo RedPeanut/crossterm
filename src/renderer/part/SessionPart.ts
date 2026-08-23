@@ -26,8 +26,8 @@ export class SessionPart extends Part implements SessionPartService {
     // console.log('[SessionPart] layout() is called ..');
     // console.log({ offset, size });
 
-    if (this.resultView) {
-      if (this.resultView instanceof OrientationView) {
+    if(this.resultView) {
+      if(this.resultView instanceof OrientationView) {
         this.resultView.layout(offset, size);
       }
     }
@@ -57,10 +57,10 @@ export class SessionPart extends Part implements SessionPartService {
   resultView: OrientationView | GroupView | undefined;
 
   renderTree(container: HTMLElement, curr: SplitItem, depth: number): OrientationView | GroupView | undefined {
-    if (curr.list && curr.list.length > 0) {
-      if (curr.list.length === 1) {
+    if(curr.list && curr.list.length > 0) {
+      if(curr.list.length === 1) {
         let item = curr.list[0];
-        if (isSplitItem(item)) {
+        if(isSplitItem(item)) {
           // do not enter here
         } else {
           const groupView = new GroupView(null, item as Group, { style: {} });
@@ -76,10 +76,10 @@ export class SessionPart extends Part implements SessionPartService {
         const orientationView = new OrientationView(null, { orientation: orientation, style: style, length: curr.list.length });
         const element = orientationView.create();
 
-        for (let i = 0; i < curr.list.length; i++) {
+        for(let i = 0; i < curr.list.length; i++) {
           let item = curr.list[i];
 
-          if (isSplitItem(item)) {
+          if(isSplitItem(item)) {
             item = item as SplitItem;
             const result: OrientationView | GroupView = this.renderTree(null, item, depth+1);
             orientationView.addView(result);
@@ -108,12 +108,12 @@ export class SessionPart extends Part implements SessionPartService {
 
   createTerminal_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
-    for (let i = 0; i < viewItems.length; i++) {
-      if (viewItems[i].view instanceof GroupView) {
+    for(let i = 0; i < viewItems.length; i++) {
+      if(viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        for (let j = 0; j < v.terms.terms.length; j++)
+        for(let j = 0; j < v.terms.terms.length; j++)
           v.terms.terms[j].createTerminal();
-      } else if (viewItems[i].view instanceof OrientationView) {
+      } else if(viewItems[i].view instanceof OrientationView) {
         // recurrence
         this.createTerminal_r(viewItems[i].view as OrientationView);
       }
@@ -121,12 +121,12 @@ export class SessionPart extends Part implements SessionPartService {
   }
 
   createTerminal(): void {
-    if (this.resultView) {
-      if (this.resultView instanceof GroupView) {
+    if(this.resultView) {
+      if(this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        for (let i = 0; i < v.terms.terms.length; i++)
+        for(let i = 0; i < v.terms.terms.length; i++)
           v.terms.terms[i].createTerminal();
-      } else if (this.resultView instanceof OrientationView) {
+      } else if(this.resultView instanceof OrientationView) {
         this.createTerminal_r(this.resultView as OrientationView);
       }
     }
@@ -134,13 +134,13 @@ export class SessionPart extends Part implements SessionPartService {
 
   getServices_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
-    for (let i = 0; i < viewItems.length; i++) {
-      if (viewItems[i].view instanceof GroupView) {
+    for(let i = 0; i < viewItems.length; i++) {
+      if(viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        for (let j = 0; j < v.tabs.tabs.length; j++)
+        for(let j = 0; j < v.tabs.tabs.length; j++)
           v.tabs.tabs[j].getServices();
         v.terms.dropOverlay.getServices();
-      } else if (viewItems[i].view instanceof OrientationView) {
+      } else if(viewItems[i].view instanceof OrientationView) {
         // recurrence
         this.getServices_r(viewItems[i].view as OrientationView);
       }
@@ -148,13 +148,13 @@ export class SessionPart extends Part implements SessionPartService {
   }
 
   getServices(): void {
-    if (this.resultView) {
-      if (this.resultView instanceof GroupView) {
+    if(this.resultView) {
+      if(this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        for (let i = 0; i < v.tabs.tabs.length; i++)
+        for(let i = 0; i < v.tabs.tabs.length; i++)
           v.tabs.tabs[i].getServices();
         v.terms.dropOverlay.getServices();
-      } else if (this.resultView instanceof OrientationView) {
+      } else if(this.resultView instanceof OrientationView) {
         this.getServices_r(this.resultView as OrientationView);
       }
     }
@@ -162,22 +162,22 @@ export class SessionPart extends Part implements SessionPartService {
 
   makeOverlayVisible_r(v: OrientationView, b: boolean): void {
     const viewItems = v.splitView.viewItems;
-    for (let i = 0; i < viewItems.length; i++) {
-      if (viewItems[i].view instanceof GroupView) {
+    for(let i = 0; i < viewItems.length; i++) {
+      if(viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
         v.terms.wrapper.style.display = b ? 'block' : 'none';
-      } else if (viewItems[i].view instanceof OrientationView) {
+      } else if(viewItems[i].view instanceof OrientationView) {
         this.makeOverlayVisible_r(viewItems[i].view as OrientationView, b);
       }
     }
   }
 
   makeOverlayVisible(b: boolean): void {
-    if (this.resultView) {
-      if (this.resultView instanceof GroupView) {
+    if(this.resultView) {
+      if(this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
         v.terms.wrapper.style.display = b ? 'block' : 'none';
-      } else if (this.resultView instanceof OrientationView) {
+      } else if(this.resultView instanceof OrientationView) {
         this.makeOverlayVisible_r(this.resultView as OrientationView, b);
       }
     }
@@ -190,12 +190,12 @@ export class SessionPart extends Part implements SessionPartService {
   ): void {
     console.log({depth, index, pos}, {selected, active});
     const viewItems = view.splitView.viewItems;
-    if (depth === curr) {
-      if (viewItems[index[curr]].view instanceof GroupView) {
+    if(depth === curr) {
+      if(viewItems[index[curr]].view instanceof GroupView) {
         const v: GroupView = viewItems[index[curr]].view as GroupView;
 
-        if (selected) {
-          for (let i = 0; i < v.tabs.tabs.length; i++) {
+        if(selected) {
+          for(let i = 0; i < v.tabs.tabs.length; i++) {
             v.tabs.tabs[i].element.classList.remove('selected');
             v.terms.terms[i].element.classList.remove('selected');
           }
@@ -206,21 +206,21 @@ export class SessionPart extends Part implements SessionPartService {
           v.terms.terms[pos].element.classList.remove('selected');
         }
 
-        if (active) {
+        if(active) {
           v.tabs.tabs[pos].element.classList.add('active');
           v.terms.terms[pos].element.classList.add('active');
         } else {
           v.tabs.tabs[pos].element.classList.remove('active');
           v.terms.terms[pos].element.classList.remove('active');
         }
-      } else if (viewItems[index[curr]].view instanceof OrientationView) {
+      } else if(viewItems[index[curr]].view instanceof OrientationView) {
         // not enter here
       }
     } else {
       const v = viewItems[index[curr]].view;
-      if (v instanceof GroupView) {
+      if(v instanceof GroupView) {
         // not enter here
-      } else if (v instanceof OrientationView) {
+      } else if(v instanceof OrientationView) {
         this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, view: v as OrientationView});
       }
     }
@@ -235,13 +235,13 @@ export class SessionPart extends Part implements SessionPartService {
       {selected, active}: {selected: boolean, active: boolean}
   ): void {
     const curr = 0;
-    if (this.resultView) {
-      if (depth === curr) {
-        if (this.resultView instanceof GroupView) {
+    if(this.resultView) {
+      if(depth === curr) {
+        if(this.resultView instanceof GroupView) {
           const v: GroupView = this.resultView as GroupView;
 
-          if (selected) {
-            for (let i = 0; i < v.tabs.tabs.length; i++) {
+          if(selected) {
+            for(let i = 0; i < v.tabs.tabs.length; i++) {
               v.tabs.tabs[i].element.classList.remove('selected');
               v.terms.terms[i].element.classList.remove('selected');
             }
@@ -252,19 +252,19 @@ export class SessionPart extends Part implements SessionPartService {
             v.terms.terms[pos].element.classList.remove('selected');
           }
 
-          if (active) {
+          if(active) {
             v.tabs.tabs[pos].element.classList.add('active');
             v.terms.terms[pos].element.classList.add('active');
           } else {
             v.tabs.tabs[pos].element.classList.remove('active');
             v.terms.terms[pos].element.classList.remove('active');
           }
-        } else if (this.resultView instanceof OrientationView) {
+        } else if(this.resultView instanceof OrientationView) {
           const orientationView: OrientationView = this.resultView as OrientationView;
           const v = orientationView.splitView.viewItems[index[curr]].view as GroupView;
 
-          if (selected) {
-            for (let i = 0; i < v.tabs.tabs.length; i++) {
+          if(selected) {
+            for(let i = 0; i < v.tabs.tabs.length; i++) {
               v.tabs.tabs[i].element.classList.remove('selected');
               v.terms.terms[i].element.classList.remove('selected');
             }
@@ -275,7 +275,7 @@ export class SessionPart extends Part implements SessionPartService {
             v.terms.terms[pos].element.classList.remove('selected');
           }
 
-          if (active) {
+          if(active) {
             v.tabs.tabs[pos].element.classList.add('active');
             v.terms.terms[pos].element.classList.add('active');
           } else {
@@ -284,14 +284,14 @@ export class SessionPart extends Part implements SessionPartService {
           }
         }
       } else {
-        if (this.resultView instanceof GroupView) {
+        if(this.resultView instanceof GroupView) {
           // not enter here
-        } else if (this.resultView instanceof OrientationView) {
+        } else if(this.resultView instanceof OrientationView) {
           const orientationView = this.resultView as OrientationView;
           const v = orientationView.splitView.viewItems[index[curr]].view;
-          if (v instanceof GroupView) {
+          if(v instanceof GroupView) {
             // not enter here
-          } else if (v instanceof OrientationView) {
+          } else if(v instanceof OrientationView) {
             this.controlStyle_r({depth, index, pos}, {selected, active}, {curr: curr+1, view: v as OrientationView});
           }
         }
@@ -301,24 +301,24 @@ export class SessionPart extends Part implements SessionPartService {
 
   fit_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
-    for (let i = 0; i < viewItems.length; i++) {
-      if (viewItems[i].view instanceof GroupView) {
+    for(let i = 0; i < viewItems.length; i++) {
+      if(viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        for (let i = 0; i < v.terms.terms.length; i++)
+        for(let i = 0; i < v.terms.terms.length; i++)
           v.terms.terms[i].fit();
-      } else if (viewItems[i].view instanceof OrientationView) {
+      } else if(viewItems[i].view instanceof OrientationView) {
         this.fit_r(viewItems[i].view as OrientationView);
       }
     }
   }
 
   fit(): void {
-    if (this.resultView) {
-      if (this.resultView instanceof GroupView) {
+    if(this.resultView) {
+      if(this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        for (let i = 0; i < v.terms.terms.length; i++)
+        for(let i = 0; i < v.terms.terms.length; i++)
           v.terms.terms[i].fit();
-      } else if (this.resultView instanceof OrientationView) {
+      } else if(this.resultView instanceof OrientationView) {
         this.fit_r(this.resultView as OrientationView);
       }
     }

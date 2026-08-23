@@ -24,7 +24,7 @@ export class Menubar {
   install(): void {
     const template: MenuItemConstructorOptions[] = this.template = [];
 
-    if (process.platform === 'darwin') {
+    if(process.platform === 'darwin') {
       // set application menu
       this.addApplicationMenu(template);
     }
@@ -97,7 +97,7 @@ export class Menubar {
         label: 'Preferences...',
         accelerator: keyBinding[filePreferencesMenuId][keyBindingIdx],
         click: null, // mainWindow.preferenceClickHandler.bind(mainWindow),
-    if ();
+      });
 
       options.push({
       label: '&File',

@@ -30,7 +30,7 @@ export class SidebarPart extends Part implements SidebarPartService {
   }
 
   override doWhenVisible(visible: boolean) {
-    if (visible) {
+    if(visible) {
       const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
       activitybarPartService.restoreActiveItem();
       this.restoreActivePanel();
@@ -61,7 +61,7 @@ export class SidebarPart extends Part implements SidebarPartService {
     this.activePanel = panel;
 
     let panelContainer = this.mapPanelToPanelContainer.get(panel.getId());
-    if (!panelContainer) {
+    if(!panelContainer) {
       panelContainer = $('.panel-container');
       panelContainer.id = panel.getId();
       panel.create(panelContainer);
@@ -79,7 +79,7 @@ export class SidebarPart extends Part implements SidebarPartService {
   }
 
   hideActivePanel(): Panel | undefined {
-    if (!this.activePanel)
+    if(!this.activePanel)
       return undefined; // Nothing to do
 
     const panel = this.activePanel;
@@ -89,7 +89,7 @@ export class SidebarPart extends Part implements SidebarPartService {
     panel.setVisible(false);
 
     // Take Container Off-DOM and hide
-    if (panelContainer) {
+    if(panelContainer) {
       panelContainer.remove();
       hide(panelContainer);
     }
@@ -100,7 +100,7 @@ export class SidebarPart extends Part implements SidebarPartService {
   }
 
   restoreActivePanel(): Panel | undefined {
-    if (!this.lastActivePanel)
+    if(!this.lastActivePanel)
       return undefined;
 
     this.showPanel(this.lastActivePanel);
@@ -119,7 +119,7 @@ export class SidebarPart extends Part implements SidebarPartService {
     this.activePaneView = paneView;
 
     let paneViewContainer = this.mapPaneViewToContainer.get(paneView.id);
-    if (!paneViewContainer) {
+    if(!paneViewContainer) {
       paneViewContainer = $('.pane-view-container');
       paneView.create(paneViewContainer);
       this.mapPaneViewToContainer.set(paneView.id, paneViewContainer);
@@ -134,12 +134,12 @@ export class SidebarPart extends Part implements SidebarPartService {
   }
 
   hideActivePaneView(): PaneView | undefined {
-    if (!this.activePaneView)
+    if(!this.activePaneView)
       return undefined;
 
     const paneView = this.activePaneView;
     const paneViewContainer = this.mapPaneViewToContainer.get(paneView.id);
-    if (paneViewContainer) {
+    if(paneViewContainer) {
       paneViewContainer.remove();
       hide(paneViewContainer);
     }

@@ -75,12 +75,12 @@ export class MainLayout extends Layout implements MainLayoutService {
     //
 
     let platformClass = '', platform = '';
-    if (renderer.process && renderer.process.platform)
+    if(renderer.process && renderer.process.platform)
       platform = renderer.process.platform.toLowerCase();
 
-    if (platform.indexOf('window') > -1)
+    if(platform.indexOf('window') > -1)
       platformClass = 'windows';
-    else if (platform.indexOf('linux') > -1)
+    else if(platform.indexOf('linux') > -1)
       platformClass = 'linux';
     else
       platformClass = 'mac';
@@ -112,7 +112,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     // console.log('dimension =', dimension);
     position(this.container, 0, 0, 0, 0, 'relative');
     size(this.container, dimension.width, dimension.height);
-    if (this.splitView.orientation === Orientation.HORIZONTAL)
+    if(this.splitView.orientation === Orientation.HORIZONTAL)
       this.splitView.layout(dimension.width);
     else
       this.splitView.layout(dimension.height);
@@ -139,7 +139,7 @@ export class MainLayout extends Layout implements MainLayoutService {
       const uid = raw.slice(0, 36);
       const data = raw.slice(36);
       const term = terminals[uid];
-      if (term) {
+      if(term) {
         term.xterm.write(data);
       }
     });
@@ -248,12 +248,12 @@ export class MainLayout extends Layout implements MainLayoutService {
   async createLayout(): Promise<void> {
 
     let platformClass = '', platform = '';
-    if (renderer.process && renderer.process.platform)
+    if(renderer.process && renderer.process.platform)
       platform = renderer.process.platform.toLowerCase();
 
-    if (platform.indexOf('window') > -1)
+    if(platform.indexOf('window') > -1)
       platformClass = 'windows';
-    else if (platform.indexOf('linux') > -1)
+    else if(platform.indexOf('linux') > -1)
       platformClass = 'linux';
     else
       platformClass = 'mac';
@@ -317,7 +317,7 @@ export class MainLayout extends Layout implements MainLayoutService {
 
     let resizeTimeout: NodeJS.Timeout = null;
     let _handleResize = (event: UIEvent) => {
-      if (resizeTimeout)
+      if(resizeTimeout)
         clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(resize, 100);
     };

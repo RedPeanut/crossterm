@@ -35,10 +35,10 @@ export class Menubar implements MenubarService {
     }); */
     container.addEventListener('focusout', (e: FocusEvent) => {
       // console.log('focusout is called ..');
-      if (this.menubarType === MenubarType.Hamburger) {
+      if(this.menubarType === MenubarType.Hamburger) {
         this.hamburgerButton.classList.remove('on');
       } else {
-        for (let i = 0; i < this.normalButtons.length; i++) {
+        for(let i = 0; i < this.normalButtons.length; i++) {
           this.normalButtons[i].classList.remove('on')
         }
       }
@@ -52,9 +52,9 @@ export class Menubar implements MenubarService {
 
   layout(dimension: Dimension): void {
     // console.log('dimension =', dimension);
-    if (dimension.width <= 716) {
+    if(dimension.width <= 716) {
       this.hamburgerButton.style.display = 'flex';
-      for (let i = 0; i < this.normalButtons.length; i++) {
+      for(let i = 0; i < this.normalButtons.length; i++) {
         this.normalButtons[i].classList.remove('on');
         this.normalButtons[i].style.display = 'none';
       }
@@ -62,7 +62,7 @@ export class Menubar implements MenubarService {
     } else {
       this.hamburgerButton.classList.remove('on');
       this.hamburgerButton.style.display = 'none';
-      for (let i = 0; i < this.normalButtons.length; i++) {
+      for(let i = 0; i < this.normalButtons.length; i++) {
         // this.buttons[i].classList.remove('on')
         this.normalButtons[i].style.display = 'block';
       }
@@ -77,7 +77,7 @@ export class Menubar implements MenubarService {
   }
 
   symbolizeShrtcut(name: string): string {
-    if (renderer.process.platform !== 'darwin')
+    if(renderer.process.platform !== 'darwin')
       return name;
 
     name = name.replace('Left', '◀');
@@ -100,7 +100,7 @@ export class Menubar implements MenubarService {
     let parts = name.split(/\+(?!$)/);
     name = parts[parts.length - 1];
     let alt, ctrl, shift, cmd;
-    for (let i = 0; i < parts.length - 1; i++) {
+    for(let i = 0; i < parts.length - 1; i++) {
       let mod = parts[i];
       if (/^(cmd|meta|m)$/i.test(mod)) cmd = true;
       else if (/^a(lt)?$/i.test(mod)) alt = true;
@@ -108,31 +108,31 @@ export class Menubar implements MenubarService {
       else if (/^s(hift)?$/i.test(mod)) shift = true;
       else throw new Error("Unrecognized modifier name: " + mod);
     }
-    if (cmd) name = "Cmd+" + name;
-    if (shift) name = "Shift+" + name;
-    if (alt) name = "Alt+" + name;
-    if (ctrl) name = "Ctrl+" + name;
+    if(cmd) name = "Cmd+" + name;
+    if(shift) name = "Shift+" + name;
+    if(alt) name = "Alt+" + name;
+    if(ctrl) name = "Ctrl+" + name;
     return name
   }
 
   createMenu_r(type: string, container: HTMLElement, menuItem: SerializableMenuItem, level: number): void {
     const menubox = $('ul.menubox');
-    if (level > 0) menubox.classList.add('sub');
+    if(level > 0) menubox.classList.add('sub');
 
-    for (let i = 0; i < menuItem.submenu.length; i++) {
+    for(let i = 0; i < menuItem.submenu.length; i++) {
       const submenuItem = menuItem.submenu[i];
       const li = $('li.item');
-      if (submenuItem.id) {
-        if (type === 'hamburger')
+      if(submenuItem.id) {
+        if(type === 'hamburger')
           li.id = `h_${(submenuItem.id as string).replace(/\./g, '_')}`;
-        else // if (type === 'normal')
+        else // if(type === 'normal')
           li.id = `n_${(submenuItem.id as string).replace(/\./g, '_')}`;
       }
 
-      if (!submenuItem.enabled)
+      if(!submenuItem.enabled)
         li.classList.add('disabled');
 
-      if (submenuItem.type === 'separator') {
+      if(submenuItem.type === 'separator') {
         const a = $('a');
         a.classList.add('separator');
         li.appendChild(a);
@@ -143,7 +143,7 @@ export class Menubar implements MenubarService {
 
         const a = $('a');
 
-        if (submenuItem.enabled && submenuItem.clickable && submenuItem.id) {
+        if(submenuItem.enabled && submenuItem.clickable && submenuItem.id) {
           a.addEventListener('click', () => {
             // broadcast.emit('menu click', null, submenuItem.id);
           });
@@ -157,13 +157,13 @@ export class Menubar implements MenubarService {
         const padding = $('span.padding');
         a.appendChild(padding);
 
-        if (submenuItem.accelerator) {
+        if(submenuItem.accelerator) {
           const keybiding = $('span.keybinding');
           keybiding.innerHTML = this.symbolizeShrtcut(this.normalizeShortcut(submenuItem.accelerator));
           a.appendChild(keybiding);
         }
 
-        if (submenuItem.submenu && submenuItem.submenu.length > 0) {
+        if(submenuItem.submenu && submenuItem.submenu.length > 0) {
           const indicator = $('span.indicator.codicon.codicon-chevron-right');
           a.appendChild(indicator);
           this.createMenu_r(type, li, submenuItem, level+1);
@@ -188,12 +188,12 @@ export class Menubar implements MenubarService {
     const menu = await window.ipc.invoke('menu get');
 
     const menubox = $('ul.menubox');
-    for (let i = 0; i < menu.length; i++) {
+    for(let i = 0; i < menu.length; i++) {
       const menuItem = menu[i];
       const li = $('li.item');
-      if (menuItem.id) li.id = `h_${(menuItem.id as string).replace(/\./g, '_')}`;
+      if(menuItem.id) li.id = `h_${(menuItem.id as string).replace(/\./g, '_')}`;
 
-      if (menuItem.type === 'separator') {
+      if(menuItem.type === 'separator') {
         const a = $('a');
         a.classList.add('separator');
         li.appendChild(a);
@@ -212,7 +212,7 @@ export class Menubar implements MenubarService {
         const padding = $('span.padding');
         a.appendChild(padding);
 
-        if (menuItem.submenu && menuItem.submenu.length > 0) {
+        if(menuItem.submenu && menuItem.submenu.length > 0) {
           const indicator = $('span.indicator.codicon.codicon-chevron-right');
           a.appendChild(indicator);
           this.createMenu_r('hamburger', li, menuItem, 1);
@@ -226,7 +226,7 @@ export class Menubar implements MenubarService {
 
   async createNormalMenu(container: HTMLElement) {
     const menu = await window.ipc.invoke('menu get');
-    for (let i = 0; i < menu.length; i++) {
+    for(let i = 0; i < menu.length; i++) {
       const menuItem = menu[i];
       // console.log('['+index+']', menuItem);
       const button = $('.button');
@@ -241,13 +241,13 @@ export class Menubar implements MenubarService {
       button.addEventListener('mouseover', (e) => {
         // if there is any menu on-ed (clicked) → change on
         let i, b = false;
-        for (i = 0; i < this.normalButtons.length; i++) {
-          if (this.normalButtons[i].classList.contains('on')) {
+        for(i = 0; i < this.normalButtons.length; i++) {
+          if(this.normalButtons[i].classList.contains('on')) {
             b = true; break;
           }
         }
 
-        if (b) {
+        if(b) {
           this.normalButtons[i].classList.remove('on');
           (e.currentTarget as HTMLElement).classList.toggle('on');
         }
@@ -265,25 +265,25 @@ export class Menubar implements MenubarService {
   }
 
   enable(list: MenubarEnableElem[]): void {
-    for (let i = 0; i < list.length; i++) {
+    for(let i = 0; i < list.length; i++) {
       const item = list[i];
       const quired = this.hamburgerButton.querySelector(`#h_${item.id.replace(/\./g, '_')}`);
-      if (quired) {
+      if(quired) {
         // console.log('find!!');
-        if (!item.enable)
+        if(!item.enable)
           quired.classList.add('disabled');
         else
           quired.classList.remove('disabled');
       }
     }
 
-    for (let i = 0; i < list.length; i++) {
+    for(let i = 0; i < list.length; i++) {
       const item = list[i];
-      for (let j = 0; j < this.normalButtons.length; j++) {
+      for(let j = 0; j < this.normalButtons.length; j++) {
         let quired = this.normalButtons[j].querySelector(`#n_${item.id.replace(/\./g, '_')}`);
-        if (quired) {
+        if(quired) {
           // console.log('find!!');
-          if (!item.enable)
+          if(!item.enable)
             quired.classList.add('disabled');
           else
             quired.classList.remove('disabled');

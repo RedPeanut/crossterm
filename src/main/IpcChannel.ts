@@ -22,7 +22,7 @@ export interface IpcChannel {
 export function registerIpcChannel(channel: IpcChannel): IDisposable {
   const registered: MainEvents[] = [];
 
-  for (const [name, handler] of channel.handlers) {
+  for(const [name, handler] of channel.handlers) {
     // preload wraps every invoke argument list into a single array
     ipcMain.handle(name, (_event, args: unknown[] = []) => handler(...args));
     registered.push(name);

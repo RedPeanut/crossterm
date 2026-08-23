@@ -78,7 +78,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
   addItem(ul: HTMLElement, item: any): void {
     let activitybarItem = this.itemMap.get(item.id);
-    if (!activitybarItem) {
+    if(!activitybarItem) {
       let impl: ActivitybarItem = new ActivitybarItemImpl(ul, item.id);
       impl.append(item.onClick, item.codicon);
       this.itemMap.set(item.id, impl);
@@ -87,15 +87,15 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
   updateChecked(id: string, checked: boolean): void {
     let impl = this.itemMap.get(id);
-    if (impl) {
+    if(impl) {
       impl.updateChecked(checked);
     }
   }
 
   getActiveItem(): ActivitybarItem | undefined {
-    for (let entry of this.itemMap.entries()) {
+    for(let entry of this.itemMap.entries()) {
       // console.log(entry);
-      if (entry[1].element.classList.contains('checked'))
+      if(entry[1].element.classList.contains('checked'))
         return entry[1];
     }
     return undefined;
@@ -103,14 +103,14 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
   showActiveItem(id: string): void {
     let impl = this.itemMap.get(id);
-    if (impl) {
+    if(impl) {
       impl.element.classList.add('checked');
     }
   }
 
   hideActiveItem(): void {
     const activeItem = this.getActiveItem();
-    if (activeItem) {
+    if(activeItem) {
       activeItem.element.classList.remove('checked');
       this.lastActiveItem = activeItem;
     }
@@ -118,7 +118,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
 
   changeActiveItem(id: string): void {
     let impl = this.itemMap.get(id);
-    if (impl) {
+    if(impl) {
       const activeItem: ActivitybarItem = this.getActiveItem();
       activeItem.element.classList.remove('checked');
       impl.element.classList.add('checked');
@@ -127,7 +127,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
   }
 
   restoreActiveItem(): void {
-    if (this.lastActiveItem) {
+    if(this.lastActiveItem) {
       this.lastActiveItem.element.classList.add('checked');
       this.lastActiveItem = undefined;
     }

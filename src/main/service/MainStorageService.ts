@@ -27,7 +27,7 @@ export class MainStorageService implements StorageService {
     const userDir = this.environmentService.userDataPath + path.sep + 'user';
 
     let exists = await this.fileService.exists(userDir);
-    if (!exists) {
+    if(!exists) {
       await fs.promises.mkdir(userDir, { recursive: true });
     }
 
@@ -47,7 +47,7 @@ export class MainStorageService implements StorageService {
 
     return new Promise((resolve, reject) => {
       this.db.all('SELECT key, value FROM ItemTable', (err, rows) => {
-        if (err) reject(err);
+        if(err) reject(err);
         else resolve(rows); // [{ key, value }, ...]
       });
     });
@@ -58,7 +58,7 @@ export class MainStorageService implements StorageService {
 
     return new Promise((resolve, reject) => {
       this.db.get('SELECT value FROM ItemTable WHERE key = ?', [key], (err, row: { value: string } | undefined) => {
-        if (err) reject(err);
+        if(err) reject(err);
         else resolve(row ? (row.value as unknown as T) : fallbackValue);
       });
     });
@@ -73,7 +73,7 @@ export class MainStorageService implements StorageService {
         ON CONFLICT(key) DO UPDATE SET value = excluded.value
       `;
       this.db.run(query, [key, value], (err) => {
-        if (err) reject(err);
+        if(err) reject(err);
         else resolve(true);
       });
     });
@@ -84,7 +84,7 @@ export class MainStorageService implements StorageService {
 
     return new Promise((resolve, reject) => {
       this.db.run('DELETE FROM ItemTable WHERE key = ?', [key], (err) => {
-        if (err) reject(err);
+        if(err) reject(err);
         else resolve(true);
       });
     });

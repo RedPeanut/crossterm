@@ -23,13 +23,13 @@ export class AppService {
     let folders: ListItemElem[] = [], files: ListItemElem[] = [];
     const filters: string[] = this.ignoreFileFolder.split(',');
 
-    for (let i = 0; i < items.length; i++) {
+    for(let i = 0; i < items.length; i++) {
       const item: DirentExt = items[i];
 
-      if (filters.includes(item.name))
+      if(filters.includes(item.name))
         continue;
 
-      if (item.isDirectory) {
+      if(item.isDirectory) {
         folders.push({
           ...item,
           children: [], isCollapsed: false,
@@ -63,17 +63,17 @@ export class AppService {
     const length_array = [];
     length_array.length = folders.length;
 
-    for (let i = 0; i < folders.length; i++) {
+    for(let i = 0; i < folders.length; i++) {
     }
 
-    for (let i = 0; i < folders.length; i++) {
+    for(let i = 0; i < folders.length; i++) {
       const elem: ListItemElem = folders[i];
       const __path = _path + path.sep + elem.name;
       const children = await this.readdir(__path, depth+1, elem);
       elem.children.push(...children);
     }
 
-    for (let i = 0; i < files.length; i++) {
+    for(let i = 0; i < files.length; i++) {
     }
 
     resultList.push(...folders);
@@ -120,13 +120,13 @@ export class AppService {
     const sessionsDir = userDataPath + path.sep + 'user' + path.sep + 'sessions';
 
     let exists = await this.fileService.exists(sessionsDir);
-    if (!exists) {
+    if(!exists) {
       await fs.promises.mkdir(sessionsDir, { recursive: true });
     }
 
     /* const defaultJsonFilePath = userDataPath + path.sep + 'user' + path.sep + 'default.json'
     exists = await this.fileService.exists(defaultJsonFilePath);
-    if (!exists) {
+    if(!exists) {
       await fs.promises.copyFile(utils.getAssetPath('default.json'), defaultJsonFilePath);
     } */
     return await this.readdir(sessionsDir, 0, null);

@@ -68,7 +68,7 @@ export class MainFileService implements FileService {
   async readdirWithStat(path_: string): Promise<DirentExt[]> {
     const result: DirentExt[] = [];
     const reads: fs.Dirent[] = await fs.promises.readdir(path_, { withFileTypes: true });
-    for (let i = 0; i < reads.length; i++) {
+    for(let i = 0; i < reads.length; i++) {
       const read: fs.Dirent = reads[i];
       const _path = read.path ? read.path : (read.isDirectory() ? (path_ + '/' + read.name) : path_);
 
@@ -86,7 +86,7 @@ export class MainFileService implements FileService {
         isSymbolicLink = lstat.isSymbolicLink();
         mtime = lstat.mtime;
         size = lstat.size;
-      } catch (error) {}
+      } catch(error) {}
 
       result.push({
         // side: side,

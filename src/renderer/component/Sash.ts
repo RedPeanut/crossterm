@@ -69,7 +69,7 @@ export class Sash extends Disposable {
   _state: SashState = SashState.Enabled;
   get state(): SashState { return this._state; }
   set state(state: SashState) {
-    if (this._state === state)
+    if(this._state === state)
       return;
 
     this.el.classList.toggle('disabled', state === SashState.Disabled);
@@ -99,7 +99,7 @@ export class Sash extends Disposable {
     const self = this;
     this.container = container;
     this.el = append(container, $('.sash'));
-    if (renderer.process.platform == 'darwin') // isMacintosh)
+    if(renderer.process.platform == 'darwin') // isMacintosh)
       this.el.classList.add('mac');
 
     this.el.addEventListener('mousedown', this.onMouseDown.bind(this));
@@ -117,7 +117,7 @@ export class Sash extends Disposable {
 
     let doubleTapTimeout: any = undefined;
     this.el.addEventListener('tab', (e) => {
-      if (doubleTapTimeout) {
+      if(doubleTapTimeout) {
         clearTimeout(doubleTapTimeout);
         doubleTapTimeout = undefined;
         // this.onPointerDoublePress(event);
@@ -131,7 +131,7 @@ export class Sash extends Disposable {
     this.layoutProvider = layoutProvider;
     this.orientation = options.orientation || Orientation.VERTICAL;
 
-    if (this.orientation === Orientation.HORIZONTAL) {
+    if(this.orientation === Orientation.HORIZONTAL) {
       this.el.classList.add('horizontal');
       this.el.classList.remove('vertical');
     } else {
@@ -185,24 +185,24 @@ export class Sash extends Disposable {
   }
 
   layout(): void {
-    if (this.orientation === Orientation.VERTICAL) {
+    if(this.orientation === Orientation.VERTICAL) {
       const verticalProvider = this.layoutProvider as VerticalSashLayoutProvider;
       this.el.style.left = verticalProvider.getVerticalSashLeft(this) - (this.size / 2) + 'px';
 
-      if (verticalProvider.getVerticalSashTop)
+      if(verticalProvider.getVerticalSashTop)
         this.el.style.top = verticalProvider.getVerticalSashTop(this) + 'px';
 
-      if (verticalProvider.getVerticalSashHeight) {
+      if(verticalProvider.getVerticalSashHeight) {
         this.el.style.height = verticalProvider.getVerticalSashHeight(this) + 'px';
       }
     } else {
       const horizontalProvider = this.layoutProvider as HorizontalSashLayoutProvider;
       this.el.style.top = horizontalProvider.getHorizontalSashTop(this) - (this.size / 2) + 'px';
 
-      if (horizontalProvider.getHorizontalSashLeft)
+      if(horizontalProvider.getHorizontalSashLeft)
         this.el.style.left = horizontalProvider.getHorizontalSashLeft(this) + 'px';
 
-      if (horizontalProvider.getHorizontalSashWidth)
+      if(horizontalProvider.getHorizontalSashWidth)
         this.el.style.width = horizontalProvider.getHorizontalSashWidth(this) + 'px';
     }
   }

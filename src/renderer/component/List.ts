@@ -39,15 +39,15 @@ export class ListDragAndDrop implements IDisposable {
     // let timer;
 
     const didChangeAutoExpandNode = this.autoExpandNode !== targetNode;
-    if (didChangeAutoExpandNode) {
+    if(didChangeAutoExpandNode) {
       // this.autoExpandDisposable.dispose();
-      if (this.timer) { clearTimeout(this.timer); this.timer = null; };
+      if(this.timer) { clearTimeout(this.timer); this.timer = null; };
       this.autoExpandNode = targetNode;
     }
 
-    if (didChangeAutoExpandNode) {
+    if(didChangeAutoExpandNode) {
       this.timer = setTimeout(() => {
-        if (this.autoExpandNode?.isCollapsed) {
+        if(this.autoExpandNode?.isCollapsed) {
           // do expand
           this.autoExpandNode.setCollapsed(false);
         }
@@ -59,7 +59,7 @@ export class ListDragAndDrop implements IDisposable {
   onDrop() {}
 
   dispose() {
-    if (this.timer) { clearTimeout(this.timer); this.timer = null; };
+    if(this.timer) { clearTimeout(this.timer); this.timer = null; };
   }
 
   getDragElements(data: ListItemElem) {
@@ -118,8 +118,8 @@ export class List extends Disposable {
     const flattened = utils.flatten(this.nodes);
     // const find = flattened.find((v) => v.id === id);
     let i: number, find: Node = null, findIdx: number;
-    for (i = 0; i < flattened.length; i++) {
-      if (flattened[i].shortenedId == shortenedId) {
+    for(i = 0; i < flattened.length; i++) {
+      if(flattened[i].shortenedId == shortenedId) {
         find = flattened[i];
         findIdx = i;
         break;
@@ -127,17 +127,17 @@ export class List extends Disposable {
     }
 
     const cmdOrCtrlKey = renderer.process.platform === 'darwin' ? e.metaKey : e.ctrlKey;
-    /* if (cmdOrCtrlKey && e.shiftKey) {
-      if (selectedIds.length == 0) return;
+    /* if(cmdOrCtrlKey && e.shiftKey) {
+      if(selectedIds.length == 0) return;
 
     } else */
-    if (e.shiftKey) {
-      if (selectedIds.length == 0) return;
+    if(e.shiftKey) {
+      if(selectedIds.length == 0) return;
       const lastSeletedId = selectedIds[selectedIds.length-1];
 
       let lastIdx: number;
-      for (i = 0; i < flattened.length; i++) {
-        if (flattened[i].shortenedId == lastSeletedId) {
+      for(i = 0; i < flattened.length; i++) {
+        if(flattened[i].shortenedId == lastSeletedId) {
           // find = flattened[i];
           lastIdx = i;
           break;
@@ -146,23 +146,23 @@ export class List extends Disposable {
 
       // from ~ to
       let from: number = lastIdx, to: number = findIdx;
-      if (from > to) {
-        for (i = from-1; i >= to; i--) {
+      if(from > to) {
+        for(i = from-1; i >= to; i--) {
           flattened[i].node.classList.add('selected');
           selectedIds.push(shortenedId);
         }
       } else {
-        for (i = from+1; i <= to; i++) {
+        for(i = from+1; i <= to; i++) {
           flattened[i].node.classList.add('selected');
           selectedIds.push(shortenedId);
         }
       }
 
-    } else if (cmdOrCtrlKey) {
+    } else if(cmdOrCtrlKey) {
       const isSelected = selectedIds.includes(shortenedId);
       const selectedIdx = selectedIds.findIndex((v) => v == shortenedId);
 
-      if (isSelected) {
+      if(isSelected) {
         find.node.classList.remove('selected');
         selectedIds.splice(selectedIdx, 1);
       } else {
@@ -170,7 +170,7 @@ export class List extends Disposable {
         selectedIds.push(shortenedId);
       }
     } else {
-      for (i = 0; i < flattened.length; i++) {
+      for(i = 0; i < flattened.length; i++) {
         flattened[i].node.classList.remove('selected');
       }
 
@@ -215,9 +215,9 @@ export class List extends Disposable {
       } = el;
 
       let _scrollTop, MAX_SCROLL_TOP = scrollHeight - clientHeight;
-      if (scrollTop + deltaY + clientHeight > scrollHeight) {
+      if(scrollTop + deltaY + clientHeight > scrollHeight) {
         _scrollTop = MAX_SCROLL_TOP;
-      } else if (scrollTop + deltaY < 0)
+      } else if(scrollTop + deltaY < 0)
         _scrollTop = 0;
       else
         _scrollTop = scrollTop + deltaY;
@@ -233,7 +233,7 @@ export class List extends Disposable {
     }));
     this._register(_addEventListener(listEl, 'mouseleave', (e: MouseEvent) => {
       this.mouseIsOver = false;
-      if (this.scrollbar_v.classList.contains('visible')) {
+      if(this.scrollbar_v.classList.contains('visible')) {
         this.scrollbar_v.classList.remove('visible');
 
         const {
@@ -242,7 +242,7 @@ export class List extends Disposable {
           offsetLeft, offsetTop, offsetWidth, offsetHeight
         } = this.element;
 
-        if (scrollHeight > clientHeight) {
+        if(scrollHeight > clientHeight) {
           this.scrollbar_v.classList.add('fade');
         }
 
@@ -255,7 +255,7 @@ export class List extends Disposable {
 
       // is this right clear selected in here?
       const flattened = utils.flatten(this.nodes);
-      for (let i = 0; i < flattened.length; i++) {
+      for(let i = 0; i < flattened.length; i++) {
         flattened[i].node.classList.remove('selected');
       }
 
@@ -298,7 +298,7 @@ export class List extends Disposable {
 
   scrollHide(): void {
     if (!this.mouseIsOver && !this.isDragging) {
-      if (this.scrollbar_v.classList.contains('visible')) {
+      if(this.scrollbar_v.classList.contains('visible')) {
         this.scrollbar_v.classList.remove('visible');
         this.scrollbar_v.classList.add('invisible');
       }
@@ -306,9 +306,9 @@ export class List extends Disposable {
   }
 
   scheduleScrollHide(): void {
-    if (!this.mouseIsOver && !this.isDragging) {
+    if(!this.mouseIsOver && !this.isDragging) {
       let scrollHideTimeout: NodeJS.Timeout;
-      if (scrollHideTimeout)
+      if(scrollHideTimeout)
         clearTimeout(scrollHideTimeout);
       scrollHideTimeout = setTimeout(this.scrollHide.bind(this), SCROLL_HIDE_TIMEOUT);
     }
@@ -321,7 +321,7 @@ export class List extends Disposable {
       offsetLeft, offsetTop, offsetWidth, offsetHeight
     } = this.element;
 
-    if (scrollHeight > clientHeight) {
+    if(scrollHeight > clientHeight) {
       this.scrollbar_v.classList.remove('invisible');
       this.scrollbar_v.classList.add('visible');
 
@@ -352,21 +352,21 @@ export class List extends Disposable {
 
     let depth = 0;
 
-    if (selectedIds.length > 0) {
+    if(selectedIds.length > 0) {
       // find first folder from last selected?
       const findId = selectedIds[selectedIds.length-1];
       const findNode = flattened.find((v) => v.shortenedId === findId);
 
-      if (findNode) {
+      if(findNode) {
         // targetNode is always folder
-        if (findNode.type == 'folder') {
+        if(findNode.type == 'folder') {
           targetNode = findNode;
 
           // find depth when folder
           let node = targetNode.parent;
           depth++;
 
-          for (; node != null;) {
+          for(; node != null;) {
             node = node.parent;
             depth++;
           }
@@ -376,7 +376,7 @@ export class List extends Disposable {
           // find depth when file
           let node = targetNode;
 
-          for (; node != null;) {
+          for(; node != null;) {
             node = node.parent;
             depth++;
           }
@@ -401,7 +401,7 @@ export class List extends Disposable {
         node.dispose();
 
         // delete dom
-        if (targetNode == null) {
+        if(targetNode == null) {
           // remove from this.tree
           this.tree.removeChild(node.wrapper);
         } else {
@@ -435,36 +435,36 @@ export class List extends Disposable {
         let nodeList: Node[];
         let rootDom: HTMLElement;
 
-        if (targetNode == null) {
+        if(targetNode == null) {
           nodeList = this.nodes;
           rootDom = this.tree;
 
-          if (type == 'folder') {
+          if(type == 'folder') {
             let targetPos = 0, found: boolean = false, last: boolean = false;
 
-            for (let i = 0; i < nodeList.length; i++) {
-              if (nodeList[i].type == 'folder') {
-                if (nodeList[i].titleEl.innerHTML > node.input.value) {
+            for(let i = 0; i < nodeList.length; i++) {
+              if(nodeList[i].type == 'folder') {
+                if(nodeList[i].titleEl.innerHTML > node.input.value) {
                   targetPos = i; found = true;
                   break;
                 }
               }
             }
 
-            if (!found) {
+            if(!found) {
               targetPos = nodeList.findIndex((v) => ['local', 'remote'].includes(v.type));
-              if (targetPos == -1) last = true;
+              if(targetPos == -1) last = true;
             }
 
             // remove n append in dom
             rootDom.removeChild(node.wrapper);
-            if (last)
+            if(last)
               rootDom.appendChild(node.wrapper);
             else
               rootDom.insertBefore(node.wrapper, rootDom.children[targetPos]);
 
             // append in node list
-            if (last)
+            if(last)
               nodeList.push(node);
             else
               nodeList.splice(targetPos, 0, node);
@@ -472,29 +472,29 @@ export class List extends Disposable {
           } else {
             let targetPos = 0, found: boolean = false, last: boolean = false;
 
-            for (let i = 0; i < nodeList.length; i++) {
-              if (['local', 'remote'].includes(nodeList[i].type)) {
-                if (nodeList[i].titleEl.innerHTML > node.input.value) {
+            for(let i = 0; i < nodeList.length; i++) {
+              if(['local', 'remote'].includes(nodeList[i].type)) {
+                if(nodeList[i].titleEl.innerHTML > node.input.value) {
                   targetPos = i; found = true;
                   break;
                 }
               }
             }
 
-            if (!found) {
+            if(!found) {
               // targetPos = this.nodes.length-1;
               last = true;
             }
 
             // remove n append in dom
             rootDom.removeChild(node.wrapper);
-            if (last)
+            if(last)
               rootDom.appendChild(node.wrapper);
             else
               rootDom.insertBefore(node.wrapper, rootDom.children[targetPos]);
 
             // append in node list
-            if (last)
+            if(last)
               nodeList.push(node);
             else
               nodeList.splice(targetPos, 0, node);
@@ -505,32 +505,32 @@ export class List extends Disposable {
           nodeList = targetNode.children;
           rootDom = targetNode.wrapper;
 
-          if (type == 'folder') {
+          if(type == 'folder') {
             let targetPos = 0, found: boolean = false, last: boolean = false;
 
-            for (let i = 0; i < nodeList.length; i++) {
-              if (nodeList[i].type == 'folder') {
-                if (nodeList[i].titleEl.innerHTML > node.input.value) {
+            for(let i = 0; i < nodeList.length; i++) {
+              if(nodeList[i].type == 'folder') {
+                if(nodeList[i].titleEl.innerHTML > node.input.value) {
                   targetPos = i; found = true;
                   break;
                 }
               }
             }
 
-            if (!found) {
+            if(!found) {
               targetPos = nodeList.findIndex((v) => ['local', 'remote'].includes(v.type));
-              if (targetPos == -1) last = true;
+              if(targetPos == -1) last = true;
             }
 
             // remove n append in dom
             rootDom.removeChild(node.wrapper);
-            if (last)
+            if(last)
               rootDom.appendChild(node.wrapper);
             else
               rootDom.insertBefore(node.wrapper, Array.from(rootDom.children).slice(1)[targetPos]);
 
             // append in node list
-            if (last)
+            if(last)
               nodeList.push(node);
             else
               nodeList.splice(targetPos, 0, node);
@@ -538,29 +538,29 @@ export class List extends Disposable {
           } else {
             let targetPos = 0, found: boolean = false, last: boolean = false;
 
-            for (let i = 0; i < nodeList.length; i++) {
-              if (['local', 'remote'].includes(nodeList[i].type)) {
-                if (nodeList[i].titleEl.innerHTML > node.input.value) {
+            for(let i = 0; i < nodeList.length; i++) {
+              if(['local', 'remote'].includes(nodeList[i].type)) {
+                if(nodeList[i].titleEl.innerHTML > node.input.value) {
                   targetPos = i; found = true;
                   break;
                 }
               }
             }
 
-            if (!found) {
+            if(!found) {
               // targetPos = this.nodes.length-1;
               last = true;
             }
 
             // remove n append in dom
             rootDom.removeChild(node.wrapper);
-            if (last)
+            if(last)
               rootDom.appendChild(node.wrapper);
             else
               rootDom.insertBefore(node.wrapper, Array.from(rootDom.children).slice(1)[targetPos]);
 
             // append in node list
-            if (last)
+            if(last)
               nodeList.push(node);
             else
               nodeList.splice(targetPos, 0, node);
@@ -633,11 +633,11 @@ export class Node extends Disposable implements Children<Node> {
 
     node.style.paddingLeft = `${4+level*16}px`;
 
-    if (
+    if(
       // data.type !== 'folder' &&
       level !== 0
     ) {
-      for (let i = 0; i < level; i++) {
+      for(let i = 0; i < level; i++) {
         const indent = $('.indent');
         // 마지막에만 8이고 그전은 16으로
         indent.style.left = `${4+i*16+8}px`;
@@ -672,11 +672,11 @@ export class Node extends Disposable implements Children<Node> {
       e.dataTransfer.setData('text/plain', uri);
       e.dataTransfer.effectAllowed = 'copyMove';
 
-      if (e.dataTransfer.setDragImage) {
+      if(e.dataTransfer.setDragImage) {
         const dragImage = $('.drag-image');
 
         const elements = this.dnd.getDragElements(data);
-        if (elements.length > 1)
+        if(elements.length > 1)
           label = String(elements.length);
         else
           label = uri;
@@ -709,7 +709,7 @@ export class Node extends Disposable implements Children<Node> {
     this._register(_addEventListener(node, 'dragleave', (e: DragEvent) => {
       console.log('dragleave event is called...');
 
-      if (this.targetNode) {
+      if(this.targetNode) {
         this.targetNode.wrapper.classList.remove('drop-target');
         this.targetNode = undefined;
       }
@@ -721,11 +721,11 @@ export class Node extends Disposable implements Children<Node> {
       // find target node (first folder node, null if not exist)
       let findNode: Node = this, targetNode: Node = null;
 
-      for (;findNode !== null && findNode.type !== 'folder';) {
+      for(;findNode !== null && findNode.type !== 'folder';) {
         findNode = findNode.parent;
       }
 
-      if (findNode) {
+      if(findNode) {
         this.targetNode = targetNode = findNode;
         this.targetNode.wrapper.classList.add('drop-target');
       }
@@ -739,7 +739,7 @@ export class Node extends Disposable implements Children<Node> {
 
       node.classList.remove('dragging');
 
-      if (this.targetNode) {
+      if(this.targetNode) {
         this.targetNode.wrapper.classList.remove('drop-target');
         this.targetNode = undefined;
       }
@@ -762,9 +762,9 @@ export class Node extends Disposable implements Children<Node> {
     }));
 
     const header = $('.ln-header');
-    if (data.isDirectory) {
+    if(data.isDirectory) {
       const arrow = $('.arrow');
-      if (isCollapsed) wrapper.classList.add('collapsed');
+      if(isCollapsed) wrapper.classList.add('collapsed');
       this._register(_addEventListener(arrow, 'click', (e: MouseEvent) => {
         const isCollapsed = wrapper.classList.contains('collapsed');
         const toggled = !isCollapsed;
@@ -773,7 +773,7 @@ export class Node extends Disposable implements Children<Node> {
       }));
 
       const collapseArrow = $('a.codicon.codicon-chevron-right');
-      if (collapseArrow)
+      if(collapseArrow)
         arrow.appendChild(collapseArrow);
       else
         arrow.innerHTML = '>';
@@ -791,7 +791,7 @@ export class Node extends Disposable implements Children<Node> {
     const codicon = data.type === 'folder' ? 'folder' :
       data.type === 'local' ? 'note' /* 'package' */ :
       data.type === 'remote' ? 'globe' : data.type;
-    if (data.type !== 'folder') {
+    if(data.type !== 'folder') {
       const itemIcon = $(`a.codicon.codicon-${codicon}`);
       span.appendChild(itemIcon);
     }
@@ -807,7 +807,7 @@ export class Node extends Disposable implements Children<Node> {
     node.appendChild(content);
     wrapper.appendChild(node);
 
-    if (hasChildren) {
+    if(hasChildren) {
       // this.children = [];
       data.children.map((v: ListItemElem, i: number) => {
         const _node = new Node(wrapper, this, this.dnd, this.toggleCollapsed);
@@ -821,7 +821,7 @@ export class Node extends Disposable implements Children<Node> {
 
   setCollapsed(isCollapsed: boolean) {
     this.isCollapsed = isCollapsed;
-    if (isCollapsed)
+    if(isCollapsed)
       this.wrapper.classList.add('collapsed');
     else
       this.wrapper.classList.remove('collapsed');
@@ -846,7 +846,7 @@ export class Node extends Disposable implements Children<Node> {
     const content = $('.content');
     const header = $('.ln-header');
 
-    if (data.type == 'folder') {
+    if(data.type == 'folder') {
       const arrow = $('.arrow');
       wrapper.classList.add('collapsed');
       const collapseArrow = $('a.codicon.codicon-chevron-right');
@@ -867,9 +867,9 @@ export class Node extends Disposable implements Children<Node> {
     const input = this.input = $('input.title');
 
     this._register(_addEventListener(input, 'keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if(e.key === 'Escape') {
         onCancel();
-      } else if (e.key === 'Enter') {
+      } else if(e.key === 'Enter') {
         onFinish();
       }
     }));
@@ -883,7 +883,7 @@ export class Node extends Disposable implements Children<Node> {
       function validate(name: string): { content: string; severity: Severity } | null {
 
         // Name not provided
-        if (!name || name.length === 0 || /^\s+$/.test(name)) {
+        if(!name || name.length === 0 || /^\s+$/.test(name)) {
           return {
             content: 'Name must be provided.', // emptyNameError
             severity: Severity.Error
@@ -897,8 +897,8 @@ export class Node extends Disposable implements Children<Node> {
         }; */
 
         // const names = coalesce(name.split(/[\\/]/));
-        // if (names.some(name => /^\s|\s$/.test(name))) {
-        if (/^\s|\s$/.test(name)) {
+        // if(names.some(name => /^\s|\s$/.test(name))) {
+        if(/^\s|\s$/.test(name)) {
           return {
             content: `Leading or trailing whitespace detected in name.`, // nameWhitespaceWarning
             severity: Severity.Warning
@@ -909,14 +909,14 @@ export class Node extends Disposable implements Children<Node> {
       }
 
       let errorMsg = validate(input.value);
-      if (errorMsg) {
+      if(errorMsg) {
 
         input.classList.remove('idle');
         input.classList.remove('info');
         input.classList.remove('warning');
         input.classList.remove('error');
 
-        function classFor (severity: Severity): string {
+        function classFor(severity: Severity): string {
           switch(severity) {
             case Severity.Info: return 'info';
             case Severity.Warning: return 'warning';
@@ -924,9 +924,9 @@ export class Node extends Disposable implements Children<Node> {
           }
         }
 
-        input.classList.add(classFor (errorMsg.severity));
+        input.classList.add(classFor(errorMsg.severity));
 
-        function stylesFor (severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
+        function stylesFor(severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
           switch(severity) {
             // case Severity.Info: return { border: styles.inputValidationInfoBorder, background: styles.inputValidationInfoBackground, foreground: styles.inputValidationInfoForeground };
             case Severity.Warning: return { border: 'rgb(184 149 0)', background: 'rgb(53 42 5)', foreground: 'white' };
@@ -934,7 +934,7 @@ export class Node extends Disposable implements Children<Node> {
           }
         }
 
-        const styles = stylesFor (errorMsg.severity);
+        const styles = stylesFor(errorMsg.severity);
         input.style.border = `1px solid ${styles.border}`;
 
         let div: HTMLElement;
@@ -952,9 +952,9 @@ export class Node extends Disposable implements Children<Node> {
 
             const spanElement = document.createElement('span');
             spanElement.textContent = errorMsg.content;
-            spanElement.classList.add(classFor (errorMsg.severity));
+            spanElement.classList.add(classFor(errorMsg.severity));
 
-            const styles = stylesFor (errorMsg.severity);
+            const styles = stylesFor(errorMsg.severity);
             spanElement.style.backgroundColor = styles.background ?? '';
             spanElement.style.color = styles.foreground ?? '';
             spanElement.style.border = styles.border ? `1px solid ${styles.border}` : '';
@@ -991,8 +991,8 @@ export class Node extends Disposable implements Children<Node> {
     node.appendChild(content);
     wrapper.appendChild(node);
 
-    if (level > 0) {
-      if (data.type == 'folder') {
+    if(level > 0) {
+      if(data.type == 'folder') {
         const at = Array.from(this.container.children).slice(1)[0]
         this.container.insertBefore(wrapper, at || null);
       } else {
@@ -1000,7 +1000,7 @@ export class Node extends Disposable implements Children<Node> {
         this.container.insertBefore(wrapper, at || null);
       }
     } else {
-      if (data.type == 'folder') {
+      if(data.type == 'folder') {
         this.container.insertBefore(wrapper, Array.from(this.container.children)[0] || null);
       } else {
         const at = Array.from(this.container.children).find((v) => (v as HTMLElement).dataset.type !== 'folder');

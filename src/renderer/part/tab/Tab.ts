@@ -27,26 +27,26 @@ export class Tab {
     // find active item index
     const find_active = findActiveItem(wrapper.tree, 0, []);
 
-    if (find_active) {
+    if(find_active) {
       const { depth, index, pos, item: activeItem, group } = find_active;
 
       // turn off active item's selected property if current is in same group
       let same_group = false;
-      for (let i = 0; i < group.length; i++) {
-        if (group[i].uid === currItem.uid) {
+      for(let i = 0; i < group.length; i++) {
+        if(group[i].uid === currItem.uid) {
           same_group = true;
           break;
         }
       }
 
-      if (same_group) activeItem.selected = false;
+      if(same_group) activeItem.selected = false;
       activeItem.active = false;
 
       // console.log('find_active =', find_active);
       this.sessionPartService.controlStyle({depth, index, pos}, {selected: same_group ? false : activeItem.selected, active: false});
 
       const find_curr = findItemById(wrapper.tree, 0, [], currItem.uid);
-      if (find_curr) {
+      if(find_curr) {
         currItem.selected = true;
         currItem.active = true;
 
@@ -83,7 +83,7 @@ export class Tab {
   }
 
   updateStatus(status: ConnStatus): void {
-    if (!this.statusDot) return;
+    if(!this.statusDot) return;
     this.statusDot.className = `tab-status-dot status-${status}`;
     this.statusDot.title = status;
   }
@@ -92,8 +92,8 @@ export class Tab {
     const item = this.item;
 
     const el = this.element = $('.tab');
-    if (item.selected) el.classList.add('selected');
-    if (item.active) el.classList.add('active');
+    if(item.selected) el.classList.add('selected');
+    if(item.active) el.classList.add('active');
     el.style.setProperty('--tab-border-bottom-color', 'rgb(31, 31, 31)');
     el.style.setProperty('--tab-border-top-color', 'rgb(0, 120, 212)');
 

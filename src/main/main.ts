@@ -57,7 +57,7 @@ class MainWindow extends Disposable {
 
   constructor() {
     super();
-    if (process.env.NODE_ENV === 'production') {
+    if(process.env.NODE_ENV === 'production') {
       const sourceMapSupport = require('source-map-support');
       sourceMapSupport.install();
     }
@@ -65,7 +65,7 @@ class MainWindow extends Disposable {
     this.isDebug =
       process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
-    if (this.isDebug) {
+    if(this.isDebug) {
       require('electron-debug')();
     }
   }
@@ -80,7 +80,7 @@ class MainWindow extends Disposable {
         extensions.map((name) => installer[name]),
         forceDownload,
       )
-      .catch (console.log);
+      .catch(console.log);
   };
 
   getMaxScreenSize = () => {
@@ -121,7 +121,7 @@ class MainWindow extends Disposable {
     // let width = maxWidth;
     // let height = maxHeight;
 
-    if (this.isDebug) {
+    if(this.isDebug) {
       width = maxWidth;
       height = maxHeight;
     }
@@ -144,7 +144,7 @@ class MainWindow extends Disposable {
       const { uid, type } = arg;
 
       let terminal: TerminalBase;
-      if (type === 'remote') {
+      if(type === 'remote') {
         terminal = new TerminalSsh(arg);
         terminal.on('error', (message: string) => {
           this.browserWindow?.webContents.send('terminal error', uid, message);
@@ -168,7 +168,7 @@ class MainWindow extends Disposable {
       // console.log('[main.ts/data] args =', args);
       const arg = args[0];
       const terminal = arg && arg.uid && terminals.get(arg.uid);
-      if (terminal) {
+      if(terminal) {
         terminal.write(arg.data);
       }
     });
@@ -185,18 +185,18 @@ class MainWindow extends Disposable {
     });
 
     function helper(obj: BrowserWindow | NodeJS.Process, type: string, val: string) {
-      if (obj[val]) {
+      if(obj[val]) {
         // console.log(typeof obj[val]);
-        if (type == 'function')
+        if(type == 'function')
           return obj[val]();
-        else if (type == 'property')
+        else if(type == 'property')
           return obj[val];
       }
       return null;
     }
 
     ipcMain.handle('window get', (event, args: any[]) => {
-      if (args.length > 1) {
+      if(args.length > 1) {
         const [ type, value ] = args;
         return helper(this.browserWindow, type, value);
       }
@@ -204,7 +204,7 @@ class MainWindow extends Disposable {
     });
 
     ipcMain.handle('process get', (event, args: any[]) => {
-      if (args.length > 1) {
+      if(args.length > 1) {
         const [ type, value ] = args;
         return helper(process, type, value);
       }
@@ -216,7 +216,7 @@ class MainWindow extends Disposable {
       const [ who, fn ] = args;
       // console.log(typeof this[who][fn]);
 
-      if (this[who] && this[who][fn] && typeof this[who][fn] == 'function') {
+      if(this[who] && this[who][fn] && typeof this[who][fn] == 'function') {
         this[who][fn]();
       }
     });
@@ -228,14 +228,14 @@ class MainWindow extends Disposable {
         let menuitem: MenuItem;
 
         // Separator
-        if (item.type === 'separator') {
+        if(item.type === 'separator') {
           menuitem = new MenuItem({
             type: item.type,
           });
         }
 
         // Sub Menu
-        else if (Array.isArray(item.submenu)) {
+        else if(Array.isArray(item.submenu)) {
           menuitem = new MenuItem({
             submenu: createMenu(event, onClick, item.submenu),
             label: item.label
@@ -271,7 +271,7 @@ class MainWindow extends Disposable {
         y: options ? options.y : undefined,
         callback: () => {
           // console.log('menu popup callback is called ..');
-          if (menu) {
+          if(menu) {
             event.sender.send('contextmenu close', contextMenuId);
           }
         }
@@ -294,7 +294,7 @@ class MainWindow extends Disposable {
         }
 
         // Submenu
-        if (Array.isArray(item.submenu)) {
+        if(Array.isArray(item.submenu)) {
           serializableItem.submenu = item.submenu.map(submenuItem => createItem(submenuItem));
         }
 
@@ -315,7 +315,7 @@ class MainWindow extends Disposable {
         const packageJson = JSON.parse(data);
         console.log(packageJson.version);
         return packageJson;
-      } catch (err) {
+      } catch(err) {
         console.error("파일을 읽는 중 오류가 발생했습니다:", err);
       }
       return null;
@@ -327,11 +327,11 @@ class MainWindow extends Disposable {
     }
 
     const dir = path.join(app.getPath('userData'), 'potdb');
-    if (!fs.existsSync(dir)) {
+    if(!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    if (!fs.existsSync(path.join(dir, 'dict', 'cfg.json'))) {
+    if(!fs.existsSync(path.join(dir, 'dict', 'cfg.json'))) {
       const db = getDb();
       const update = await db.dict.cfg.update(default_configs);
     }
@@ -380,7 +380,7 @@ class MainWindow extends Disposable {
   }
 
   createWindow = async () => {
-    if (this.isDebug) {
+    if(this.isDebug) {
       await this.installExtensions();
     }
 
@@ -391,7 +391,7 @@ class MainWindow extends Disposable {
     const storageService = setService(storageServiceId, new MainStorageService(environmentService, fileService));
     const configurationService = setService(configurationServiceId, new MainConfigurationService(environmentService, fileService));
     this._register(configurationService.onDidChangeConfiguration(change => {
-      if (this.browserWindow) {
+      if(this.browserWindow) {
         this.browserWindow.webContents.send('configuration changed', change);
       }
     }));
@@ -399,7 +399,7 @@ class MainWindow extends Disposable {
     const dialogService = setService(dialogServiceId, new MainDialogService());
 
     // expose services to render
-    for (const channel of [
+    for(const channel of [
       new FileServiceChannel(fileService),
       new StorageServiceChannel(storageService),
       new ConfigurationServiceChannel(configurationService),
@@ -440,10 +440,10 @@ class MainWindow extends Disposable {
     this.browserWindow.loadURL(utils.resolveHtmlPath('index.html'));
 
     this.browserWindow.on('ready-to-show', () => {
-      if (!this.browserWindow) {
+      if(!this.browserWindow) {
         throw new Error('"mainWindow" is not defined');
       }
-      if (process.env.START_MINIMIZED) {
+      if(process.env.START_MINIMIZED) {
         this.browserWindow.minimize();
       } else {
         this.browserWindow.show();
@@ -453,7 +453,7 @@ class MainWindow extends Disposable {
     this.browserWindow.on('close', (event) => {
       console.log('close event is called ..');
 
-      /* if (!isReadyToQuit) {
+      /* if(!isReadyToQuit) {
         event.preventDefault();
         this.browserWindow.webContents.send('app quit request');
       } */
@@ -497,7 +497,7 @@ class MainWindow extends Disposable {
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
-  if (process.platform !== 'darwin') {
+  if(process.platform !== 'darwin') {
     app.quit();
   }
 });
@@ -506,12 +506,12 @@ let isReadyToQuit: boolean = false;
 
 app.on('before-quit', (event) => {
   console.log('before-quit is called ..');
-  if (!isReadyToQuit) {
+  if(!isReadyToQuit) {
     // 1. 이미 데이터 저장이 끝난 게 아니라면, 앱 전체 종료를 일단 '취소'합니다.
     event.preventDefault();
 
     // 2. 렌더러에게 데이터를 정리하라고 이벤트를 보냅니다.
-    if (mainWindow && mainWindow.browserWindow && !mainWindow.browserWindow.isDestroyed()) {
+    if(mainWindow && mainWindow.browserWindow && !mainWindow.browserWindow.isDestroyed()) {
       mainWindow.browserWindow.webContents.send('app quit request');
     } else {
       // 만약 창이 이미 없는 상태라면 바로 종료
@@ -530,7 +530,7 @@ app
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      // TODO: if (mainWindow === null) mainWindow.createWindow();
+      // TODO: if(mainWindow === null) mainWindow.createWindow();
     });
   })
-  .catch (console.log);
+  .catch(console.log);

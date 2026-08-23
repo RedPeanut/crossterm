@@ -26,7 +26,7 @@ export class DetailPane extends Pane {
 
   renderHeader(container: HTMLElement): void {
     // const klass: string = this.expanded ? '' : 'collapsed';
-    // if (!this.expanded)
+    // if(!this.expanded)
     //   this.header.classList.add('collapsed');
     const arrow = $('.arrow');
     const right = $('a.codicon.codicon-chevron-right');
