@@ -109,7 +109,7 @@ export class ContextViewServiceImpl implements ContextViewService {
     const delegate = this.delegate;
     this.delegate = null;
 
-    if(delegate?.onHide) {
+    if (delegate?.onHide) {
       delegate.onHide();
     }
     dom.hide(this.contextView);

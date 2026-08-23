@@ -36,13 +36,13 @@ interface Navigator {
 declare const navigator: Navigator;
 
 let nodeProcess: NodeProcess | undefined = undefined;
-if(typeof process !== 'undefined' && typeof process?.versions?.node === 'string') {
+if (typeof process !== 'undefined' && typeof process?.versions?.node === 'string') {
   // Native environment (non-sandboxed)
   nodeProcess = process;
 }
 
 // Native environment
-if(typeof nodeProcess === 'object') {
+if (typeof nodeProcess === 'object') {
   _isWindows = (nodeProcess.platform === 'win32');
   _isMacintosh = (nodeProcess.platform === 'darwin');
   _isLinux = (nodeProcess.platform === 'linux');

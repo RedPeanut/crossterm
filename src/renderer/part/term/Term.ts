@@ -30,15 +30,15 @@ export class Term {
   create(): HTMLElement {
     const el = this.element = $('.term');
     const item = this.item;
-    if(item.selected) el.classList.add('selected');
-    if(item.active) el.classList.add('active');
+    if (item.selected) el.classList.add('selected');
+    if (item.active) el.classList.add('active');
     el.id = this.uid;
     return el;
   }
 
   createTerminal(): void {
 
-    if(terminals[this.uid]) return;
+    if (terminals[this.uid]) return;
 
     let retVal = window.ipc.send('terminal new', {
       ...this.item,
@@ -115,9 +115,9 @@ export class Term {
   }
 
   destroy(): void {
-    // if(this.onConnected) window.ipc.off('terminal connected', this.onConnected);
-    if(this.onError) window.ipc.off('terminal error', this.onError);
-    if(this.onClosed) window.ipc.off('terminal closed', this.onClosed);
+    // if (this.onConnected) window.ipc.off('terminal connected', this.onConnected);
+    if (this.onError) window.ipc.off('terminal error', this.onError);
+    if (this.onClosed) window.ipc.off('terminal closed', this.onClosed);
     this.xterm.dispose();
     delete terminals[this.uid];
   }

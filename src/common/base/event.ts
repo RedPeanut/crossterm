@@ -14,7 +14,7 @@ export class Emitter<T> implements IDisposable {
   private _event?: Event<T>;
 
   get event(): Event<T> {
-    if(!this._event) {
+    if (!this._event) {
       this._event = (listener: (e: T) => any): IDisposable => {
         this._listeners.push(listener);
 
@@ -33,7 +33,7 @@ export class Emitter<T> implements IDisposable {
   fire(data: T): void {
     // 루프 중 배열이 변형되는 것을 방지하기 위해 복사본으로 순회
     const queue = [...this._listeners];
-    for(const listener of queue) {
+    for (const listener of queue) {
       listener(data);
     }
   }

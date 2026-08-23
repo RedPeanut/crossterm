@@ -42,7 +42,7 @@ export abstract class Popup extends Disposable {
     container.appendChild(popup);
 
     this._register(_addEventListener(container, 'mousedown', (e: MouseEvent) => {
-      if(e.target === container)
+      if (e.target === container)
         this.cancel();
     }));
 
@@ -51,9 +51,9 @@ export abstract class Popup extends Disposable {
       // e.stopPropagation();
       // e.preventDefault();
 
-      if(e.key === 'Escape') {
+      if (e.key === 'Escape') {
         this.cancel();
-      } else if(e.key === 'Enter') {
+      } else if (e.key === 'Enter') {
         this.ok();
       }
     }));

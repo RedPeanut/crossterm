@@ -134,7 +134,7 @@ export class BranchNode implements SplitViewItemView {
     this._minimumSize = node.minimumSize || 0;
 
     this._element = $('.grid-branch-node');
-    if(!childDescriptors) {
+    if (!childDescriptors) {
       // Normal behavior
     } else {
       // Reconstruction behavior
@@ -226,7 +226,7 @@ export class GridView {
 
   set root(root: BranchNode) {
     const oldRoot = this._root;
-    if(oldRoot) {
+    if (oldRoot) {
       this.element.removeChild(oldRoot.element);
       // oldRoot.dispose();
       // TODO: clean event listener in here
@@ -266,7 +266,7 @@ export class GridView {
 
   _deserializeNode(node: SerializedNode, orientation: Orientation, deserializer: ViewDeserializer<SerializableView>, size: number): Node {
     let result: Node;
-    if(node.type === 'branch') {
+    if (node.type === 'branch') {
       const data: SerializedNode[] = node.data; // as SerializedNode[];
       const desc: NodeDescriptor[] = data.map(item => {
         return {

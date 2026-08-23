@@ -58,7 +58,7 @@ export abstract class Pane implements SplitViewItemView {
 
   _sashEnablement: boolean = true;
   get sashEnablement(): boolean {
-    if(!this.expanded)
+    if (!this.expanded)
       return false;
     else
       return this._sashEnablement;
@@ -106,22 +106,22 @@ export abstract class Pane implements SplitViewItemView {
       this.element.classList.remove('hover');
     });
 
-    if(this.options) {
-      if(typeof this.options.collapsed === 'boolean')
+    if (this.options) {
+      if (typeof this.options.collapsed === 'boolean')
         this.expanded = !this.options.collapsed;
       else
         this.expanded = true;
 
-      if(this.options.sizeType)
+      if (this.options.sizeType)
         this.sizeType = this.options.sizeType;
 
-      if(this.options.size)
+      if (this.options.size)
         this.size = this.options.size;
 
-      if(this.options.preferredWidth)
+      if (this.options.preferredWidth)
         this.preferredHeight = this.options.preferredWidth;
 
-      if(this.options.preferredHeight)
+      if (this.options.preferredHeight)
         this.preferredHeight = this.options.preferredHeight;
     }
 

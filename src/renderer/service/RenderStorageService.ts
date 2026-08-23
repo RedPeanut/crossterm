@@ -31,7 +31,7 @@ export class RenderStorageService implements StorageService {
     await this.isReady;
 
     const rawValue = this.cache.get(key);
-    if(rawValue === undefined) return fallbackValue;
+    if (rawValue === undefined) return fallbackValue;
 
     try {
       return rawValue as T;

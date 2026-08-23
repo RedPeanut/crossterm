@@ -47,7 +47,7 @@ export class OrientationView implements SplitViewItemView {
     let dimension = getClientArea(this.element);
     // console.log('dimension =', dimension);
     this.splitView.saveProportions();
-    if(this.splitView.orientation === Orientation.HORIZONTAL)
+    if (this.splitView.orientation === Orientation.HORIZONTAL)
       this.splitView.layout(dimension.width);
     else
       this.splitView.layout(dimension.height);

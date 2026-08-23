@@ -13,12 +13,12 @@ export class MainDialogService implements DialogService {
    * 다음 것이 열리도록 한다.
    */
   private getWindowDialogQueue(window?: electron.BrowserWindow): Queue {
-    if(!window) {
+    if (!window) {
       return this.noWindowDialogQueue;
     }
 
     let windowDialogQueue = this.windowDialogQueues.get(window.id);
-    if(!windowDialogQueue) {
+    if (!windowDialogQueue) {
       windowDialogQueue = new Queue();
       this.windowDialogQueues.set(window.id, windowDialogQueue);
     }

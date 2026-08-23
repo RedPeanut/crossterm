@@ -1,7 +1,7 @@
 import { Component } from "./Component";
 
 export abstract class Panel extends Component {
-  
+
   parent: HTMLElement | undefined;
   visible = false;
 
@@ -14,7 +14,7 @@ export abstract class Panel extends Component {
   }
 
   setVisible(visible: boolean): void {
-    if(this.visible !== !!visible) {
+    if (this.visible !== !!visible) {
       this.visible = visible;
     }
   }

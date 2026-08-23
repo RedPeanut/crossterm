@@ -24,7 +24,7 @@ export class Menubar {
   install(): void {
     const template: MenuItemConstructorOptions[] = this.template = [];
 
-    if(process.platform === 'darwin') {
+    if (process.platform === 'darwin') {
       // set application menu
       this.addApplicationMenu(template);
     }
@@ -90,7 +90,7 @@ export class Menubar {
 
     fileSubmenu.push();
 
-    if(process.platform === 'win32') {
+    if (process.platform === 'win32') {
       fileSubmenu.push({ type: 'separator' as const });
       fileSubmenu.push({
         id: filePreferencesMenuId,

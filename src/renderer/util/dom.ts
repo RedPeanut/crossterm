@@ -10,12 +10,12 @@ export const {
   return {
     getWindow(e: Node | UIEvent | undefined | null): CodeWindow {
       const candidateNode = e as Node | undefined | null;
-      if(candidateNode?.ownerDocument?.defaultView) {
+      if (candidateNode?.ownerDocument?.defaultView) {
         return candidateNode.ownerDocument.defaultView.window as CodeWindow;
       }
 
       const candidateEvent = e as UIEvent | undefined | null;
-      if(candidateEvent?.view) {
+      if (candidateEvent?.view) {
         return candidateEvent.view.window as CodeWindow;
       }
 
@@ -29,7 +29,7 @@ export const {
 })();
 
 export function clearNode(node: HTMLElement): void {
-  while(node.firstChild) {
+  while (node.firstChild) {
     node.firstChild.remove();
   }
 }
@@ -37,7 +37,7 @@ export function clearNode(node: HTMLElement): void {
 export function append<T extends Node>(parent: HTMLElement, child: T): T;
 export function append<T extends Node>(parent: HTMLElement, ...children: (T | string)[]): T | void {
   parent.append(...children);
-  if(children.length === 1 && typeof children[0] !== 'string') {
+  if (children.length === 1 && typeof children[0] !== 'string') {
     return <T>children[0];
   }
 }
@@ -57,20 +57,20 @@ export enum Namespace {
 function _$<T extends Element>(namespace: Namespace, description: string, attrs?: { [key: string]: any }, ...children: Array<Node | string>): T {
   const match = SELECTOR_REGEX.exec(description);
 
-  if(!match) {
+  if (!match) {
     throw new Error('Bad use of emmet');
   }
 
   const tagName = match[1] || 'div';
   let result: T;
   result = document.createElement(tagName) as unknown as T;
-  if(match[3]) {
+  if (match[3]) {
     result.id = match[3];
   }
-  if(match[4]) {
+  if (match[4]) {
     result.className = match[4].replace(/\./g, ' ').trim();
   }
-  if(attrs) {
+  if (attrs) {
     Object.entries(attrs).forEach(([name, value]) => {
     });
   }
@@ -96,27 +96,27 @@ export function getClientArea(element: HTMLElement): Dimension {
   const elDocument = elWindow.document;
 
   // Try with DOM clientWidth / clientHeight
-  if(element !== elDocument.body) {
+  if (element !== elDocument.body) {
     return new Dimension(element.clientWidth, element.clientHeight);
   }
 
   /* // If visual view port exits and it's on mobile, it should be used instead of window innerWidth / innerHeight, or document.body.clientWidth / document.body.clientHeight
-  if(platform.isIOS && elWindow?.visualViewport) {
+  if (platform.isIOS && elWindow?.visualViewport) {
     return new Dimension(elWindow.visualViewport.width, elWindow.visualViewport.height);
   } */
 
   // Try innerWidth / innerHeight
-  if(elWindow?.innerWidth && elWindow.innerHeight) {
+  if (elWindow?.innerWidth && elWindow.innerHeight) {
     return new Dimension(elWindow.innerWidth, elWindow.innerHeight);
   }
 
   // Try with document.body.clientWidth / document.body.clientHeight
-  if(elDocument.body && elDocument.body.clientWidth && elDocument.body.clientHeight) {
+  if (elDocument.body && elDocument.body.clientWidth && elDocument.body.clientHeight) {
     return new Dimension(elDocument.body.clientWidth, elDocument.body.clientHeight);
   }
 
   // Try with document.documentElement.clientWidth / document.documentElement.clientHeight
-  if(elDocument.documentElement && elDocument.documentElement.clientWidth && elDocument.documentElement.clientHeight) {
+  if (elDocument.documentElement && elDocument.documentElement.clientWidth && elDocument.documentElement.clientHeight) {
     return new Dimension(elDocument.documentElement.clientWidth, elDocument.documentElement.clientHeight);
   }
 
@@ -124,29 +124,29 @@ export function getClientArea(element: HTMLElement): Dimension {
 }
 
 export function size(element: HTMLElement, width: number | null, height: number | null): void {
-  if(typeof width === 'number') {
+  if (typeof width === 'number') {
     element.style.width = `${width}px`;
   }
 
-  if(typeof height === 'number') {
+  if (typeof height === 'number') {
     element.style.height = `${height}px`;
   }
 }
 
 export function position(element: HTMLElement, top: number, right?: number, bottom?: number, left?: number, position: string = 'absolute'): void {
-  if(typeof top === 'number') {
+  if (typeof top === 'number') {
     element.style.top = `${top}px`;
   }
 
-  if(typeof right === 'number') {
+  if (typeof right === 'number') {
     element.style.right = `${right}px`;
   }
 
-  if(typeof bottom === 'number') {
+  if (typeof bottom === 'number') {
     element.style.bottom = `${bottom}px`;
   }
 
-  if(typeof left === 'number') {
+  if (typeof left === 'number') {
     element.style.left = `${left}px`;
   }
 
@@ -168,21 +168,21 @@ export function domContentLoaded(targetWindow: Window): Promise<void> {
 }
 
 export function show(...elements: HTMLElement[]): void {
-  for(const element of elements) {
+  for (const element of elements) {
     element.style.display = '';
     element.removeAttribute('aria-hidden');
   }
 }
 
 export function hide(...elements: HTMLElement[]): void {
-  for(const element of elements) {
+  for (const element of elements) {
     element.style.display = 'none';
     element.setAttribute('aria-hidden', 'true');
   }
 }
 
 export function clearContainer(container: HTMLElement) {
-  while(container.firstChild) {
+  while (container.firstChild) {
     container.removeChild(container.firstChild);
   }
 }

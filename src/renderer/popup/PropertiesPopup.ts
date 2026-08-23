@@ -34,7 +34,7 @@ export class PropertiesPopup extends Popup {
   override renderTitleArea(): void {
     super.renderTitleArea();
     let title;
-    if(this.options.data && this.options.data.title)
+    if (this.options.data && this.options.data.title)
       title = this.options.data.title + ' 등록정보';
     else
       title = '등록정보';
@@ -151,24 +151,24 @@ export class PropertiesPopup extends Popup {
     _breadcrumb.innerHTML = breadcrumb;
     container.appendChild(_breadcrumb);
 
-    if(data.render) data.render(container, data);
+    if (data.render) data.render(container, data);
 
     container.style.display = 'none';
     this.right.appendChild(container);
   }
 
   callRenders(list: Node[], level: number, id: string, breadcrumb: string): void {
-    for(let i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       let _id = id + '-' + list[i].label.replace(/ /g, '_');
-      if(_id.startsWith('-')) _id = _id.substring(1);
+      if (_id.startsWith('-')) _id = _id.substring(1);
       let _breadcrumb;
-      if(!breadcrumb)
+      if (!breadcrumb)
         _breadcrumb = list[i].label;
       else
         _breadcrumb = breadcrumb + ' > ' + list[i].label;
 
       this.callRender(list[i], level, _id, _breadcrumb);
-      if(list[i].children) {
+      if (list[i].children) {
         this.callRenders(list[i].children, level+1, _id, _breadcrumb);
       }
     }
@@ -185,16 +185,16 @@ export class PropertiesPopup extends Popup {
 
     const onClick = (e: MouseEvent) => {
       const contents = this.tree.getElementsByClassName('content');
-      for(let i = 0; i < contents.length; i++) {
-        if(contents[i].classList.contains('selected'))
+      for (let i = 0; i < contents.length; i++) {
+        if (contents[i].classList.contains('selected'))
           contents[i].classList.remove('selected');
       }
       content.classList.add('selected');
 
       const containers = this.right.getElementsByClassName('container');
-      for(let i = 0; i < containers.length; i++) {
+      for (let i = 0; i < containers.length; i++) {
         const container = containers[i] as HTMLElement;
-        if(container.id == id)
+        if (container.id == id)
           container.style.display = 'block';
         else
           container.style.display = 'none';
@@ -203,7 +203,7 @@ export class PropertiesPopup extends Popup {
 
     this._register(_addEventListener(content, 'click', onClick));
 
-    if(level != 0) {
+    if (level != 0) {
       const up = $(".up");
       const down = $(".down");
       const header = $(".ln-header");
@@ -219,18 +219,18 @@ export class PropertiesPopup extends Popup {
   }
 
   addNodes(container: HTMLElement, list: Node[], level: number, id: string): void {
-    for(let i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       let _id = id + '-' + list[i].label.replace(/ /g, '_');
-      if(_id.startsWith('-')) _id = _id.substring(1);
+      if (_id.startsWith('-')) _id = _id.substring(1);
 
       const node = this.addNode(container, list[i], level, _id);
-      if(list[i].children) {
+      if (list[i].children) {
         this.addNodes(node, list[i].children, level+1, _id);
       }
 
-      if(i == list.length-1 && level != 0) {
+      if (i == list.length-1 && level != 0) {
         const header_down = node.getElementsByClassName('down')[0] as HTMLElement;
-        if(header_down) {
+        if (header_down) {
           // console.log('header_down =', header_down);
           header_down.style.display = 'none';
         }

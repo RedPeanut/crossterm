@@ -59,7 +59,7 @@ export class DropOverlay {
 
     // No split if mouse is above certain threshold in the center of the view
     // this.splitDirection = undefined;
-    if(
+    if (
       mousePosX > edgeWidthThreshold && mousePosX < clientWidth - edgeWidthThreshold &&
       mousePosY > edgeHeightThreshold && mousePosY < clientHeight - edgeHeightThreshold
     ) {
@@ -78,11 +78,11 @@ export class DropOverlay {
       // |  LEFT   |--------------|  RIGHT  |
       // |         |  SPLIT DOWN  |         |
       // ------------------------------------
-      if(mousePosX < splitWidthThreshold) {
+      if (mousePosX < splitWidthThreshold) {
         this.splitDirection = GroupDirection.LEFT;
-      } else if(mousePosX > splitWidthThreshold * 2) {
+      } else if (mousePosX > splitWidthThreshold * 2) {
         this.splitDirection = GroupDirection.RIGHT;
-      } else if(mousePosY < clientHeight / 2) {
+      } else if (mousePosY < clientHeight / 2) {
         this.splitDirection = GroupDirection.UP;
       } else {
         this.splitDirection = GroupDirection.DOWN;
@@ -145,12 +145,12 @@ export class DropOverlay {
     console.log('find_curr =', find_curr);
     const { depth: curr_depth, index: curr_index, group: curr_group, splitItem: curr_splitItem } = find_curr;
 
-    if(this.splitDirection !== GroupDirection.UP
+    if (this.splitDirection !== GroupDirection.UP
       && this.splitDirection !== GroupDirection.DOWN
       && this.splitDirection !== GroupDirection.LEFT
       && this.splitDirection !== GroupDirection.RIGHT
     ) {
-      if(curr_group === drag_group) {
+      if (curr_group === drag_group) {
         // nothing do
         return;
       } else {
@@ -171,7 +171,7 @@ export class DropOverlay {
         }
         */
 
-        if(drag_group.length > 1) {
+        if (drag_group.length > 1) {
           drag_group.splice(drag_pos, 1);
           drag_group[drag_group.length-1].selected = true;
         } else
@@ -180,7 +180,7 @@ export class DropOverlay {
       }
     } else {
 
-      /* if(curr_group.length === 1) {
+      /* if (curr_group.length === 1) {
         // nothing do
         return;
       } */
@@ -188,13 +188,13 @@ export class DropOverlay {
       const mode: Mode = this.splitDirection === GroupDirection.UP
         || this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
 
-      if(curr_group === drag_group) {
+      if (curr_group === drag_group) {
         // let new_group: Group = [];
         curr_group.splice(drag_pos, 1);
         curr_group[curr_group.length-1].selected = true;
 
         let new_split: SplitItem = { mode: mode, list: []};
-        if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
+        if (this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
           new_split.list.push([drag_item]);
           new_split.list.push(curr_group);
         } else {
@@ -206,19 +206,19 @@ export class DropOverlay {
         let new_list: (SplitItem | Group)[] = [];
         // curr_index[curr_index.length-1] : 현재 떨구려는 리스트의 인덱스
         const curr_drop_index = curr_index[curr_index.length-1];
-        if(0 < curr_drop_index) {
-          for(let i = 0; i <= curr_drop_index-1; i++)
+        if (0 < curr_drop_index) {
+          for (let i = 0; i <= curr_drop_index-1; i++)
             new_list.push(curr_splitItem.list[i])
         }
         new_list.push(new_split);
-        if(curr_drop_index < curr_splitItem.list.length-1) {
-          for(let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
+        if (curr_drop_index < curr_splitItem.list.length-1) {
+          for (let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
             new_list.push(curr_splitItem.list[i]);
         }
         curr_splitItem.list = new_list;
       } else {
         let new_split: SplitItem = { mode: mode, list: []};
-        if(this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
+        if (this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.LEFT) {
           new_split.list.push([drag_item]);
           new_split.list.push(curr_group);
         } else {
@@ -230,19 +230,19 @@ export class DropOverlay {
         let new_list: (SplitItem | Group)[] = [];
         // curr_index[curr_index.length-1] : 현재 떨구려는 리스트의 인덱스
         const curr_drop_index = curr_index[curr_index.length-1];
-        if(0 < curr_drop_index) {
-          for(let i = 0; i <= curr_drop_index-1; i++)
+        if (0 < curr_drop_index) {
+          for (let i = 0; i <= curr_drop_index-1; i++)
             new_list.push(curr_splitItem.list[i])
         }
         new_list.push(new_split);
-        if(curr_drop_index < curr_splitItem.list.length-1) {
-          for(let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
+        if (curr_drop_index < curr_splitItem.list.length-1) {
+          for (let i = curr_drop_index+1; i <= curr_splitItem.list.length-1; i++)
             new_list.push(curr_splitItem.list[i]);
         }
         curr_splitItem.list = new_list;
 
         // remove
-        if(drag_group.length > 1)
+        if (drag_group.length > 1)
           drag_group.splice(drag_pos, 1);
         else {
           // drag_group = null; // constant error
@@ -253,8 +253,8 @@ export class DropOverlay {
     }
 
     // console.log('wrapper.tree =', wrapper.tree);
-    if(wrapper.tree.list.length === 1) {
-      if(isSplitItem(wrapper.tree.list[0]))
+    if (wrapper.tree.list.length === 1) {
+      if (isSplitItem(wrapper.tree.list[0]))
         wrapper.tree = wrapper.tree.list[0] as SplitItem;
     } else
       this.cleanSingleSplitItemOnce(wrapper.tree);
@@ -269,12 +269,12 @@ export class DropOverlay {
   }
 
   cleanSingleSplitItemOnce(curr: SplitItem): void {
-    if(curr.list && curr.list.length > 0) {
-      for(let i = 0; i < curr.list.length; i++) {
+    if (curr.list && curr.list.length > 0) {
+      for (let i = 0; i < curr.list.length; i++) {
         let item = curr.list[i];
-        if(isSplitItem(item)) {
+        if (isSplitItem(item)) {
           const _item = item as SplitItem;
-          if(_item.list.length === 1) {
+          if (_item.list.length === 1) {
             curr.list[i] = _item.list[0];
           } else {
             this.cleanSingleSplitItemOnce(_item);

@@ -134,10 +134,10 @@ export class Dialog extends Disposable {
     this.message.innerHTML = message;
 
     let button;
-    for(let i = 0; i < buttons.length; i++) {
+    for (let i = 0; i < buttons.length; i++) {
       button = $('button');
       button.textContent = buttons[i].label;
-      if(buttons[i].click) {
+      if (buttons[i].click) {
 
         const clickWrapper = () => {
           // dom.clearContainer(this.buttons);

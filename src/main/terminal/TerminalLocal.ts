@@ -54,7 +54,7 @@ export default class TerminalLocal extends TerminalBase {
   }
 
   write(data: string) {
-    if(this.pty) {
+    if (this.pty) {
       this.pty.write(data);
     } else {
       console.warn('Warning: Attempted to write to a session with no pty');
