@@ -5,7 +5,7 @@ export type ConnStatus = 'connecting' | 'connected' | 'error' | 'closed';
 export interface TerminalItem {
   uid: string,
 
-  // in renderer
+  // in render
   selected?: boolean; // default: false
   active?: boolean; // default: false
   term?: Term;

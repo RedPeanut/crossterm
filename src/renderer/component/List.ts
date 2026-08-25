@@ -747,16 +747,18 @@ export class Node extends Disposable implements Children<Node> {
 
     const content = $('.content');
 
-    const onProperties = () => {
-      (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', data);
-    }; // this.properties();
+    // const onProperties = () => {
+    //   (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', data);
+    // }; // this.properties();
 
     this._register(_addEventListener(content, 'contextmenu', (e: PointerEvent) => {
       const items: ContextMenuItem[] = [];
       items.push({
         accelerator: 'P',
         label: 'Properties',
-        click: onProperties
+        click: () => {
+          (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', data);
+        }
       });
       popup(items);
     }));

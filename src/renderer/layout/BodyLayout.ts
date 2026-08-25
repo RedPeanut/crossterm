@@ -224,9 +224,11 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
           // toggle or switch
 
           // activitybar part
-          const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
-          if (activeItem) {
-            if (activeItem.id === items[0].id) {
+          const currActiveItem: ActivitybarItem = this.activitybarPart.getActiveItem();
+          const lastActiveItem: ActivitybarItem = this.activitybarPart.lastActiveItem;
+
+          if (currActiveItem) {
+            if (currActiveItem.id === items[0].id) {
               this.activitybarPart.hideActiveItem();
             } else {
               this.activitybarPart.changeActiveItem(items[0].id);
@@ -257,9 +259,11 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
           // toggle or switch
 
           // activitybar part
-          const activeItem: ActivitybarItem = this.activitybarPart.getActiveItem();
-          if (activeItem) {
-            if (activeItem.id === items[1].id) {
+          const currActiveItem: ActivitybarItem = this.activitybarPart.getActiveItem();
+          const lastActiveItem: ActivitybarItem = this.activitybarPart.lastActiveItem;
+
+          if (currActiveItem) {
+            if (currActiveItem.id === items[1].id) {
               this.activitybarPart.hideActiveItem();
             } else {
               this.activitybarPart.changeActiveItem(items[1].id);
