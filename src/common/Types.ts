@@ -65,12 +65,19 @@ export interface PopupOptions {
 
 // app
 export const appPreferencesMenuId = 'app.preferences';
+export const appSettingsMenuId = 'app.settings';
+export const appShortcutsMenuId = 'app.shortcuts';
 export const appQuitMenuId = 'app.quit';
 
 // most application specific menu category exists between edit n window
 
 // file
 export const filePreferencesMenuId = 'file.preferences';
+export const fileSettingsMenuId = 'file.settings';
+export const fileShortcutsMenuId = 'file.shortcuts';
+export const fileDisconnMenuId = 'file.disconn';
+export const fileReconnMenuId = 'file.reconn';
+export const fileReconnAllMenuId = 'file.reconn.all';
 
 // edit
 export const editUndoMenuId = 'edit.undo';
@@ -81,6 +88,12 @@ export const editPasteMenuId = 'edit.paste';
 export const editSelectAllMenuId = 'edit.selectAll';
 
 // view
+
+// tab
+export const tabAlignMenuId = 'tab.align';
+export const tabAlignVerticalMenuId = 'tab.align.vertical';
+export const tabAlignHorizontalMenuId = 'tab.align.horizontal';
+export const tabAlignTilesMenuId = 'tab.align.tiles';
 
 // window
 

@@ -1,7 +1,15 @@
 import {
   appPreferencesMenuId,
+  appSettingsMenuId,
+  appShortcutsMenuId,
   appQuitMenuId,
+
   filePreferencesMenuId,
+  fileSettingsMenuId,
+  fileShortcutsMenuId,
+  fileDisconnMenuId,
+  fileReconnMenuId,
+  fileReconnAllMenuId,
 
   editUndoMenuId,
   editRedoMenuId,
@@ -9,13 +17,26 @@ import {
   editCopyMenuId,
   editPasteMenuId,
   editSelectAllMenuId,
+
+  tabAlignMenuId,
+  tabAlignVerticalMenuId,
+  tabAlignHorizontalMenuId,
+  tabAlignTilesMenuId,
 } from "./Types";
 
 // { id: [Win, Mac] }
 export const keyBinding: { [id: string]: string[] } = {};
-keyBinding[appPreferencesMenuId] = [ null, 'Cmd+,' ];
+keyBinding[appPreferencesMenuId] = [ null, null ];
+keyBinding[appSettingsMenuId] = [ null, 'Cmd+,' ];
+keyBinding[appShortcutsMenuId] = [ null, null ];
 keyBinding[appQuitMenuId] = [ null, 'Cmd+Q' ];
-keyBinding[filePreferencesMenuId] =  ['Ctrl+P', null ];
+
+keyBinding[filePreferencesMenuId] =  [ null, null ];
+keyBinding[fileSettingsMenuId] = [ 'Ctrl+P', null ];
+keyBinding[fileShortcutsMenuId] = [ null, null ];
+keyBinding[fileDisconnMenuId] =  [ 'Alt+C', null ];
+keyBinding[fileReconnMenuId] =  [ 'Ctrl+Shift+R', null ];
+keyBinding[fileReconnAllMenuId] =  [ null, null ];
 
 keyBinding[editUndoMenuId] = [ 'Ctrl+Z', 'Cmd+Z' ];
 keyBinding[editRedoMenuId] = [ 'Shift+Ctrl+Z', 'Shift+Cmd+Z' ];

@@ -6,9 +6,10 @@ import {
 // import { isMacintosh, isWindows } from './util/platform';
 import { mainWindow } from './main';
 import {
-  appPreferencesMenuId, appQuitMenuId,
-  filePreferencesMenuId,
+  appPreferencesMenuId, appSettingsMenuId, appShortcutsMenuId, appQuitMenuId,
+  filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId,
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
+  tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
 } from '../common/Types';
 import { keyBinding } from '../common/globals';
 
@@ -32,6 +33,7 @@ export class Menubar {
     this.addFileMenu(template);
     this.addEditMenu(template);
     this.addViewMenu(template);
+    this.addTabMenu(template);
     this.addWindowMenu(template);
     this.addHelpMenu(template);
 
@@ -52,8 +54,20 @@ export class Menubar {
         { type: 'separator' },
         {
           label: 'Preferences...',
-          accelerator: 'Command+,',
+          accelerator: null, // keyBinding[appPreferencesMenuId][keyBindingIdx], // 'Command+,',
           click: null, // mainWindow.preferenceClickHandler.bind(mainWindow),
+          submenu: [
+            {
+              label: 'Settings',
+              accelerator: keyBinding[appSettingsMenuId][keyBindingIdx],
+              click: (item, focusedWindow) => {}
+            },
+            {
+              label: `Keyboard Shortcuts [⌘K ⌘S]`,
+              accelerator: keyBinding[appShortcutsMenuId][keyBindingIdx],
+              click: (item, focusedWindow) => {}
+            },
+          ]
         },
         { type: 'separator' },
         {
@@ -107,7 +121,26 @@ export class Menubar {
 
     options.push({
       label: '&File',
-      submenu: [],
+      submenu: [
+        {
+          id: fileDisconnMenuId,
+          label: '연결 끊기',
+          accelerator: keyBinding[fileDisconnMenuId][keyBindingIdx],
+          click: null
+        },
+        {
+          id: fileReconnMenuId,
+          label: '다시 연결',
+          accelerator: keyBinding[fileReconnMenuId][keyBindingIdx],
+          click: null
+        },
+        {
+          id: fileReconnAllMenuId,
+          label: '모두 다시 연결',
+          accelerator: null, // keyBinding[fileReconnAllMenuId][keyBindingIdx],
+          click: null
+        },
+      ],
     });
   }
 
@@ -141,6 +174,40 @@ export class Menubar {
     options.push({
       label: '&View',
       submenu: [],
+    });
+  }
+
+  addTabMenu(options: MenuItemConstructorOptions[]) {
+    options.push({
+      label: 'Ta&b',
+      submenu: [
+        {
+          id: tabAlignMenuId,
+          label: '정렬',
+          accelerator: null, // keyBinding[tabAlignMenuId][keyBindingIdx],
+          // click: () => {},
+          submenu: [
+            {
+              id: tabAlignVerticalMenuId,
+              label: '세로로 정렬',
+              accelerator: null, // keyBinding[tabAlignVerticalMenuId][keyBindingIdx],
+              // click: () => {},
+            },
+            {
+              id: tabAlignHorizontalMenuId,
+              label: '가로로 정렬',
+              accelerator: null, // keyBinding[tabAlignHorizontalMenuId][keyBindingIdx],
+              // click: () => {},
+            },
+            {
+              id: tabAlignTilesMenuId,
+              label: '바둑판식 정렬',
+              accelerator: null, // keyBinding[tabAlignTilesMenuId][keyBindingIdx],
+              // click: () => {},
+            },
+          ],
+        },
+      ],
     });
   }
 
