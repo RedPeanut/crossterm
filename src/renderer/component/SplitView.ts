@@ -112,7 +112,7 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
     }
     this._container.classList.toggle('visible', visible);
 
-    this.view.doWhenVisible(visible);
+    // this.view.doWhenVisible(visible);
   }
 
   get minimumSize(): number { return this.visible ? this.view.minimumSize : 0; }
