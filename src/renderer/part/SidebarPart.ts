@@ -33,18 +33,18 @@ export class SidebarPart extends Part implements SidebarPartService {
     if (visible) {
       const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
       activitybarPartService.restoreActiveItem();
-      this.restoreActivePanel();
+      // this.restoreActivePanel();
     } else {
       const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
       activitybarPartService.hideActiveItem();
-      this.hideActivePanel();
+      // this.hideActivePanel();
     }
     // (getService(mainLayoutServiceId) as MainLayout).layout(); // not working properly
   }
 
-  mapPanelToPanelContainer = new Map<string, HTMLElement>();
-  activePanel: Panel | undefined;
-  lastActivePanel: Panel | undefined = undefined;
+  // mapPanelToPanelContainer = new Map<string, HTMLElement>();
+  // activePanel: Panel | undefined;
+  // lastActivePanel: Panel | undefined = undefined;
 
   constructor(options: SidebarPartOptions) {
     super(options);
@@ -57,7 +57,7 @@ export class SidebarPart extends Part implements SidebarPartService {
     setService(sidebarPartServiceId, this);
   }
 
-  showPanel(panel: Panel): void {
+  /* showPanel(panel: Panel): void {
     this.activePanel = panel;
 
     let panelContainer = this.mapPanelToPanelContainer.get(panel.getId());
@@ -104,7 +104,7 @@ export class SidebarPart extends Part implements SidebarPartService {
       return undefined;
 
     this.showPanel(this.lastActivePanel);
-  }
+  } */
 
   activePaneView: PaneView;
   lastActivePaneView: PaneView;
