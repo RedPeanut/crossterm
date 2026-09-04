@@ -11,6 +11,7 @@ import {
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
   appShortcutsCommandId,
+  editCopyCommandId, editPasteCommandId,
 } from '../common/Types';
 import { keyBinding } from '../common/globals';
 
@@ -157,16 +158,18 @@ export class Menubar {
         { type: 'separator' },
         { id: editCutMenuId, label: 'Cut', accelerator: keyBinding[editCutMenuId][keyBindingIdx], role: 'cut' },
         {
+          // Note. role: 'copy'는 DOM 선택 영역만 복사한다. xterm의 선택은 DOM selection이 아니라
+          //       직접 그린 것이므로 네이티브 role로는 복사되지 않는다. renderer 커맨드로 넘긴다.
           id: editCopyMenuId,
           label: 'Copy', accelerator: keyBinding[editCopyMenuId][keyBindingIdx],
-          role: 'copy',
-          // click: () => { console.log('click event handler is called ..'); shell.beep(); },
+          // role: 'copy',
+          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editCopyCommandId),
         },
         {
           id: editPasteMenuId,
           label: 'Paste', accelerator: keyBinding[editPasteMenuId][keyBindingIdx],
-          role: 'paste',
-          // click: () => {},
+          // role: 'paste',
+          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editPasteCommandId),
         },
         { id: editSelectAllMenuId, label: 'Select All', accelerator: keyBinding[editSelectAllMenuId][keyBindingIdx], role: 'selectAll' },
       ],

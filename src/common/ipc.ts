@@ -52,6 +52,10 @@ export type MainEvents =
 
   // dialog
   | 'dialog show messagebox'
+
+  // clipboard
+  | 'clipboard read text'
+  | 'clipboard write text'
 ;
 
 // main to renderer

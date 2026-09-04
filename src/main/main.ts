@@ -10,7 +10,7 @@
  */
 import path from 'path';
 import fs from 'fs';
-import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions, IpcMainEvent, Menu, MenuItem } from 'electron';
+import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions, IpcMainEvent, Menu, MenuItem, clipboard } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -306,6 +306,15 @@ class MainWindow extends Disposable {
       return template
         .filter(item => item.id !== 'application')
         .map(item => createItem(item));
+    });
+
+    // clipboard
+    // Note. renderer는 contextIsolation 때문에 electron의 clipboard를 직접 쓸 수 없다.
+    ipcMain.handle('clipboard read text', () => clipboard.readText());
+
+    ipcMain.on('clipboard write text', (event, args: any[]) => {
+      const [ text ] = args;
+      if (typeof text === 'string') clipboard.writeText(text);
     });
 
     ipcMain.handle('get package json', (event, args: any[]) => {

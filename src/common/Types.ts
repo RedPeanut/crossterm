@@ -86,7 +86,9 @@ export const editUndoMenuId = 'edit.undo';
 export const editRedoMenuId = 'edit.redo';
 export const editCutMenuId = 'edit.cut';
 export const editCopyMenuId = 'edit.copy';
+export const editCopyCommandId = 'edit.copy.cmd';
 export const editPasteMenuId = 'edit.paste';
+export const editPasteCommandId = 'edit.paste.cmd';
 export const editSelectAllMenuId = 'edit.selectAll';
 
 // view
