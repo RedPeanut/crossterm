@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { ContextKeyExpr } from './ContextKey';
 import { ContextKeyService } from '../service/ContextKeyService';
-import { parseKeybinding } from './Keybindings';
+import { parseKeybinding } from './Keybinding';
 import { KeybindingResolver, ResultKind } from './KeybindingResolver';
 import { KeybindingWeight, toUserKeybindingItems } from './KeybindingsRegistry';
 import { commandsRegistry } from '../globals';

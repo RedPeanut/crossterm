@@ -2,7 +2,7 @@ import { Emitter, Event } from '../../common/base/event';
 import { Disposable, IDisposable } from '../../common/base/lifecycle';
 import { CommandService } from './CommandService';
 import { ContextKeyService, ContextKeyServiceTarget } from './ContextKeyService';
-import { Chord } from '../key/Keybindings';
+import { Chord } from '../key/Keybinding';
 import { KeybindingResolver, ResultKind } from '../key/KeybindingResolver';
 import { KeybindingRule, ResolvedKeybindingItem, toUserKeybindingItems } from '../key/KeybindingsRegistry';
 import { keybindingsRegistry } from '../globals';

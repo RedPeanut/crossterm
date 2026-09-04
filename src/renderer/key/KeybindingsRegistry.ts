@@ -3,7 +3,7 @@ import { commandsRegistry } from '../globals';
 import { CommandHandler } from './CommandsRegistry';
 // import { CommandHandler } from './CommandService';
 import { ContextKeyExpr, ContextKeyExpression } from './ContextKey';
-import { parseKeybinding } from './Keybindings';
+import { parseKeybinding } from './Keybinding';
 
 /**
  * VSCode의 `vs/platform/keybinding/common/keybindingsRegistry.ts`를 최소 형태로 옮긴 것.
