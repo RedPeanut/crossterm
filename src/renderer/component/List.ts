@@ -1,7 +1,7 @@
 import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
 import { Children, DirentExt, ListItemElem, ContextMenuItem, TerminalItem } from "../../common/Types";
-import { wrapper } from "../../globals";
+// import { wrapper } from "../globals";
 import { IDisposable, Disposable } from "../../common/base/lifecycle";
 import { $, _addEventListener } from "../util/dom";
 import * as dom from "../util/dom";

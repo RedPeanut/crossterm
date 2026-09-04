@@ -2,7 +2,7 @@ import { $ } from "../../util/dom";
 import { ConnStatus, TerminalItem } from "../../../common/Types";
 import { SessionPartService } from "../SessionPart";
 import { getService, sessionPartServiceId } from "../../Service";
-import { wrapper } from "../../../globals";
+import { wrapper } from "../../globals";
 import { findActiveItem, findItemById } from "../../utils";
 
 export class Tab {

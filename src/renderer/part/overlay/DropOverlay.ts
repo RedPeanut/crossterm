@@ -5,7 +5,7 @@ import { DropTarget } from "./DropTarget";
 import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../../Service";
 import { BodyLayoutService } from "../../layout/BodyLayout";
 import { SessionPartService } from "../SessionPart";
-import { wrapper } from "../../../globals";
+import { wrapper } from "../../globals";
 import { findActiveItem, findItemById, findSplitItemByGroup } from "../../utils";
 import { Group, isSplitItem, Mode, SplitItem } from "../../Types";
 

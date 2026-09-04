@@ -7,7 +7,7 @@ import { GroupView } from './view/GroupView';
 import { OrientationView } from './view/OrientationView';
 import { Service, sessionPartServiceId, setService } from '../Service';
 import { TerminalItem } from '../../common/Types';
-import { wrapper } from '../../globals';
+import { wrapper } from '../globals';
 import { result } from 'lodash';
 
 export interface SessionPartService extends Service {

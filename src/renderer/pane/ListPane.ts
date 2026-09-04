@@ -1,6 +1,6 @@
 import { renderer } from "..";
 import { TerminalItem, ListItemElem } from "../../common/Types";
-import { wrapper } from "../../globals";
+import { wrapper } from "../globals";
 import { List } from "../component/List";
 import { BodyLayoutService } from "../layout/BodyLayout";
 import { MainLayoutService } from "../layout/MainLayout";
