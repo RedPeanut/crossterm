@@ -14,7 +14,7 @@ import { Orientation } from '../component/Sash';
 import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId, contextViewServiceId,
   contextKeyServiceId, commandServiceId, keybindingServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
-import { terminals } from '../../globals';
+import { terminals } from '../globals';
 import { MenubarService } from '../part/Menubar';
 import { renderer } from '..';
 // import { SerializableGrid, SerializableView, SerializedGrid, SerializedLeafNode, SerializedNode } from '../component/Grid';

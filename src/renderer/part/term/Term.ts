@@ -5,7 +5,7 @@ import 'xterm/css/xterm.css';
 import { Terminal as xterm } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
-import { terminals } from '../../../globals';
+import { terminals } from '../../globals';
 // import { ContextKey } from '../../../common/key/ContextKey';
 import { ContextKeyService } from '../../service/ContextKeyService';
 import { contextKeyServiceId, getService } from '../../Service';

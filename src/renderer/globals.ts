@@ -3,6 +3,8 @@ import { isSplitItem, SplitItem } from "./Types";
 import { CommandsRegistryImpl } from "./key/CommandsRegistry";
 import { KeybindingsRegistryImpl } from "./key/KeybindingsRegistry";
 
+export const terminals: { [key: string]: any } = {};
+
 export const wrapper: { [key: string]: SplitItem } = {
   // /* initial case
   'tree': {} //*/
