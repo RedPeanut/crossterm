@@ -63,6 +63,10 @@ export class Renderer {
   }
 
   async loadInMain(): Promise<void> {
+    // init main services in here
+    const storageService = setService(storageServiceId, new RenderStorageService()) as StorageService;
+    // console.log(await storageService.get<string>('layoutState'));
+
     this.window.isMaximized = await window.ipc.invoke('window get', 'function', 'isMaximized');
     this.window.isMinimized = await window.ipc.invoke('window get', 'function', 'isMinimized');
     this.process.platform = await window.ipc.invoke('process get', 'property', 'platform');
@@ -71,9 +75,6 @@ export class Renderer {
     // this.initial_value = await window.ipc.invoke('config get', 'initial_value');
     // this.list = await window.ipc.invoke('config get', 'list');
     this.sessions = await window.ipc.invoke('read sessions dir');
-
-    const storageService = setService(storageServiceId, new RenderStorageService()) as StorageService;
-    // console.log(await storageService.get<string>('layoutState'));
     this.layoutState = JSON.parse(await storageService.get<string>('layoutState'));
   }
 }
