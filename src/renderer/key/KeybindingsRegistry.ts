@@ -1,6 +1,7 @@
 import { isLinux, isMacintosh, isWindows } from '../../common/base/platform';
 import { commandsRegistry } from '../globals';
-import { CommandHandler } from './Commands';
+import { CommandHandler } from './CommandsRegistry';
+// import { CommandHandler } from './CommandService';
 import { ContextKeyExpr, ContextKeyExpression } from './ContextKey';
 import { parseKeybinding } from './Keybindings';
 

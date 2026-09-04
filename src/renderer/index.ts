@@ -15,6 +15,9 @@ import { setService, storageServiceId } from './Service';
 import { ListItemElem } from '../common/Types';
 import { LayoutStateType, StorageService } from '../common/service/StorageService';
 
+import './globals';
+import './keybindings';
+
 declare global {
   interface Window {
     ipc: ElectronHandler;

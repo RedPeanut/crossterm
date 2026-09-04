@@ -1,10 +1,11 @@
 import { Emitter, Event } from '../../common/base/event';
 import { Disposable, IDisposable } from '../../common/base/lifecycle';
-import { CommandService } from '../key/Commands';
+import { CommandService } from './CommandService';
 import { ContextKeyService, ContextKeyServiceTarget } from './ContextKeyService';
 import { Chord } from '../key/Keybindings';
 import { KeybindingResolver, ResultKind } from '../key/KeybindingResolver';
-import { KeybindingRule, keybindingsRegistry, ResolvedKeybindingItem, toUserKeybindingItems } from '../key/KeybindingsRegistry';
+import { KeybindingRule, ResolvedKeybindingItem, toUserKeybindingItems } from '../key/KeybindingsRegistry';
+import { keybindingsRegistry } from '../globals';
 
 /**
  * VSCode의 `vs/platform/keybinding/common/abstractKeybindingService.ts` +

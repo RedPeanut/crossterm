@@ -27,9 +27,8 @@ import { ListItemElem } from '../../common/Types';
 import { Dialog } from '../Dialog';
 import { StorageService } from '../../common/service/StorageService';
 import { ContextKeyService } from '../service/ContextKeyService';
-import { CommandService } from '../key/Commands';
+import { CommandService } from '../service/CommandService';
 import { KeybindingService } from '../service/KeybindingService';
-import '../keybindings'; // side effect import?
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;

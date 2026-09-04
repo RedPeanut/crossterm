@@ -1,6 +1,6 @@
 import { renderer } from "..";
 import { SerializableMenuItem, MenubarEnableElem } from "../../common/Types";
-import { CommandService } from "../key/Commands";
+import { CommandService } from "../service/CommandService";
 import { Service, setService, getService, menubarServiceId,
   commandServiceId,
 } from "../Service";
