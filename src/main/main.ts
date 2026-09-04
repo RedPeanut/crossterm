@@ -284,6 +284,7 @@ class MainWindow extends Disposable {
       function createItem(item: MenuItemConstructorOptions/* , processedItems: MenuItemConstructorOptions[] */): SerializableMenuItem {
         const serializableItem: SerializableMenuItem = {
           id: item.id,
+          commandId: item.appCommandId,
           label: item.label,
           type: item.type,
           accelerator: item.accelerator,

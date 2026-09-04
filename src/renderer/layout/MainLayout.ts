@@ -11,7 +11,8 @@ import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../component/SplitView';
 import { getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
-import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId, contextViewServiceId } from '../Service';
+import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId, contextViewServiceId,
+  contextKeyServiceId, commandServiceId, keybindingServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../../globals';
 import { MenubarService } from '../part/Menubar';
@@ -25,6 +26,10 @@ import { PropertiesPopup } from '../popup/PropertiesPopup';
 import { ListItemElem } from '../../common/Types';
 import { Dialog } from '../Dialog';
 import { StorageService } from '../../common/service/StorageService';
+import { ContextKeyService } from '../service/ContextKeyService';
+import { CommandService } from '../key/Commands';
+import { KeybindingService } from '../service/KeybindingService';
+import '../keybindings'; // side effect import?
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -63,6 +68,7 @@ export class MainLayout extends Layout implements MainLayoutService {
   splitView: SplitView<TitlebarPart | BodyLayout | StatusbarPart>;
   // mainGrid: SerializableGrid<SerializableView>;
   gridView: GridView;
+  commandService: CommandService;
 
   constructor(parent: HTMLElement) {
     super(parent);
@@ -72,8 +78,14 @@ export class MainLayout extends Layout implements MainLayoutService {
   create(): void {
     // console.log('render() is called ..');
 
-    //
+    // init render services in here
+    const contextViewService = setService(contextViewServiceId, new ContextViewServiceImpl(this.container));
+    const contextKeyService = setService(contextKeyServiceId, new ContextKeyService()) as ContextKeyService;
+    const commandService = this.commandService = setService(commandServiceId, new CommandService()) as CommandService;
+    const keybindingService = setService(keybindingServiceId, new KeybindingService(contextKeyService, commandService)) as KeybindingService;
+    keybindingService.attach(window);
 
+    //
     let platformClass = '', platform = '';
     if (renderer.process && renderer.process.platform)
       platform = renderer.process.platform.toLowerCase();
@@ -103,8 +115,6 @@ export class MainLayout extends Layout implements MainLayoutService {
     splitView.addView(statusbarPart);
 
     this.parent.appendChild(this.container);
-
-    setService(contextViewServiceId, new ContextViewServiceImpl(this.container));
   }
 
   layout(): void {
@@ -147,6 +157,11 @@ export class MainLayout extends Layout implements MainLayoutService {
       // await window.ipc.invoke('config set', 'initial_value', renderer.initial_value);
       // await window.ipc.invoke('config set', 'list', renderer.list);
       window.ipc.send('app quit ready', null);
+    });
+    // 네이티브 메뉴(main) 클릭 -> 단축키와 동일한 커맨드를 실행한다.
+    window.ipc.on('execute command', (...args: any[]) => {
+      const [, commandId, ...commandArgs] = args; // args[0]은 IpcRendererEvent
+      this.commandService.executeCommand(commandId, ...commandArgs);
     });
   }
 

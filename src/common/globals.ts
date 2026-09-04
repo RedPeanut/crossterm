@@ -34,8 +34,8 @@ keyBinding[appQuitMenuId] = [ null, 'Cmd+Q' ];
 keyBinding[filePreferencesMenuId] =  [ null, null ];
 keyBinding[fileSettingsMenuId] = [ 'Ctrl+P', null ];
 keyBinding[fileShortcutsMenuId] = [ null, null ];
-keyBinding[fileDisconnMenuId] =  [ 'Alt+C', null ];
-keyBinding[fileReconnMenuId] =  [ 'Ctrl+Shift+R', null ];
+keyBinding[fileDisconnMenuId] =  [ 'Alt+C', 'Alt+C' ];
+keyBinding[fileReconnMenuId] =  [ 'Ctrl+Shift+R', 'Cmd+Shift+R' ];
 keyBinding[fileReconnAllMenuId] =  [ null, null ];
 
 keyBinding[editUndoMenuId] = [ 'Ctrl+Z', 'Cmd+Z' ];

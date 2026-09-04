@@ -1,6 +1,10 @@
 import { renderer } from "..";
 import { SerializableMenuItem, MenubarEnableElem } from "../../common/Types";
-import { Service, setService, menubarServiceId } from "../Service";
+import { CommandService } from "../key/Commands";
+import { Service, setService, getService, menubarServiceId,
+  commandServiceId,
+} from "../Service";
+import { KeybindingService } from "../service/KeybindingService";
 import { $, Dimension } from "../util/dom";
 
 enum MenubarType {
@@ -21,6 +25,7 @@ export class Menubar implements MenubarService {
   normalButtons: HTMLElement[] = [];
   hamburgerButton: HTMLElement;
   menubarType: MenubarType;
+  commandService: CommandService;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -48,6 +53,7 @@ export class Menubar implements MenubarService {
       console.log('mousedown is called ..');
     }); */
     setService(menubarServiceId, this);
+    this.commandService = getService(commandServiceId);
   }
 
   layout(dimension: Dimension): void {
@@ -143,9 +149,11 @@ export class Menubar implements MenubarService {
 
         const a = $('a');
 
-        if (submenuItem.enabled && submenuItem.clickable && submenuItem.id) {
+        if (submenuItem.enabled && submenuItem.clickable && submenuItem.commandId) {
+          const commandId = submenuItem.commandId;
           a.addEventListener('click', () => {
-            // broadcast.emit('menu click', null, submenuItem.id);
+            this.commandService.executeCommand(commandId)
+              .catch(err => console.error(`[menubar] command '${commandId}' failed`, err));
           });
         }
         li.appendChild(a);

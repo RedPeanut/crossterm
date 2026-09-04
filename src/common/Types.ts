@@ -32,6 +32,7 @@ export interface TerminalItem {
 
 export interface CommonMenuItem {
   id?: number | string;
+  commandId?: string;
   label?: string;
   type?: 'normal' | 'separator' | 'submenu' | 'checkbox' | 'radio';
   accelerator?: string;
@@ -67,6 +68,7 @@ export interface PopupOptions {
 export const appPreferencesMenuId = 'app.preferences';
 export const appSettingsMenuId = 'app.settings';
 export const appShortcutsMenuId = 'app.shortcuts';
+export const appShortcutsCommandId = 'app.shortcuts.cmd';
 export const appQuitMenuId = 'app.quit';
 
 // most application specific menu category exists between edit n window

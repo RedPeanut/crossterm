@@ -10,6 +10,7 @@ import {
   filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId,
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
+  appShortcutsCommandId,
 } from '../common/Types';
 import { keyBinding } from '../common/globals';
 
@@ -63,9 +64,11 @@ export class Menubar {
               click: (item, focusedWindow) => {}
             },
             {
+              id: appShortcutsMenuId,
+              appCommandId: appShortcutsCommandId,
               label: `Keyboard Shortcuts [⌘K ⌘S]`,
               accelerator: keyBinding[appShortcutsMenuId][keyBindingIdx],
-              click: (item, focusedWindow) => {}
+              click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', appShortcutsCommandId),
             },
           ]
         },

@@ -8,6 +8,9 @@ export const sidebarPartServiceId = "sidebarPartService";
 export const sessionPartServiceId = "sessionPartService";
 export const contextViewServiceId = "contextViewService";
 export const storageServiceId = "storageService";
+export const contextKeyServiceId = "contextKeyService";
+export const commandServiceId = "commandService";
+export const keybindingServiceId = "keybindingServiceId";
 export const blarBlarServiceId = "blarBlarService";
 
 type ServiceId =
@@ -19,6 +22,9 @@ type ServiceId =
   | typeof sessionPartServiceId
   | typeof contextViewServiceId
   | typeof storageServiceId
+  | typeof contextKeyServiceId
+  | typeof commandServiceId
+  | typeof keybindingServiceId
   | typeof blarBlarServiceId
 ;
 
