@@ -16,7 +16,7 @@ import { ListItemElem } from '../common/Types';
 import { LayoutStateType, StorageService } from '../common/service/StorageService';
 
 import './globals';
-import './keybindings';
+import './key/keybindings';
 
 declare global {
   interface Window {

@@ -10,7 +10,7 @@ import { terminals } from '../../globals';
 import { ContextKeyService } from '../../service/ContextKeyService';
 import { contextKeyServiceId, getService } from '../../Service';
 import { ContextKey } from "../../key/ContextKey";
-import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from "../../contextKeys";
+import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from "../../key/contextKeys";
 // import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from './TerminalContextKeys';
 
 /**
