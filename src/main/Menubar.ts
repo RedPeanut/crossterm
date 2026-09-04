@@ -39,8 +39,12 @@ export class Menubar {
     this.addWindowMenu(template);
     this.addHelpMenu(template);
 
-    const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    if (process.platform === 'darwin') {
+      const menu = Menu.buildFromTemplate(template);
+      Menu.setApplicationMenu(menu);
+    } else {
+      Menu.setApplicationMenu(null);
+    }
   }
 
   getTemplate(): MenuItemConstructorOptions[] { return this.template; }
