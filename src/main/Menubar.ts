@@ -71,7 +71,7 @@ export class Menubar {
             {
               id: appShortcutsMenuId,
               appCommandId: appShortcutsCommandId,
-              label: `Keyboard Shortcuts [⌘K ⌘S]`,
+              label: `Keyboard Shortcuts ${process.platform === 'darwin' ? '[⌘K ⌘S]' : 'Ctrl+K Ctrl+S'}`,
               accelerator: keyBinding[appShortcutsMenuId][keyBindingIdx],
               click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', appShortcutsCommandId),
             },
