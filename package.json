@@ -132,8 +132,8 @@
     "webpack-merge": "5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "crossterm",
+    "appId": "kr.home.zamong99",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -192,8 +192,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "zamong99",
+      "repo": "https://github.com/RedPeanut/crossterm"
     }
   },
   "collective": {
