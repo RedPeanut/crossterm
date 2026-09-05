@@ -21,7 +21,7 @@ import { TerminalItem } from '../common/Types';
 import TerminalLocal from './terminal/TerminalLocal';
 import TerminalSsh from './terminal/TerminalSsh';
 import TerminalBase from './terminal/TerminalBase';
-import PotDb from 'potdb';
+// import PotDb from 'potdb';
 import default_configs, { ConfigsType } from '../common/configs';
 import { clamp } from '../common/util/numbers';
 import { MainFileService } from './service/MainFileService';
@@ -331,7 +331,7 @@ class MainWindow extends Disposable {
       return null;
     });
 
-    function getDb(): PotDb {
+    /* function getDb(): PotDb {
       const dir = path.join(app.getPath('userData'), 'potdb');
       return new PotDb(dir);
     }
@@ -374,7 +374,7 @@ class MainWindow extends Disposable {
       // console.log('_new =', _new);
       const update = await db.dict.cfg.update(_new);
       // console.log('update =', update);
-    });
+    }); */
 
     ipcMain.on('app quit ready', (event, data) => {
       console.log('렌더러로부터 받은 최종 데이터:', data);

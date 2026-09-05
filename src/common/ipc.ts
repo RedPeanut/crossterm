@@ -16,11 +16,11 @@ export type MainEvents =
   // process
   | 'process get'
 
-  // config
+  /* // config (potdb)
   | 'config all'
   | 'config get'
   | 'config set'
-  | 'config update'
+  | 'config update' */
 
   // configuration
   | 'configuration get value'
