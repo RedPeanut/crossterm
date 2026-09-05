@@ -12,7 +12,7 @@ export interface Command {
   readonly handler: CommandHandler;
 }
 
-export class CommandsRegistryImpl {
+class CommandsRegistryImpl {
   private readonly _commands = new Map<string, Command>();
 
   registerCommand(id: string, handler: CommandHandler): IDisposable {
@@ -28,3 +28,5 @@ export class CommandsRegistryImpl {
     return this._commands;
   }
 }
+
+export const commandsRegistry = new CommandsRegistryImpl();

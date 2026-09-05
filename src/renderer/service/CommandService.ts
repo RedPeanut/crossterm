@@ -1,4 +1,5 @@
-import { commandsRegistry } from '../globals';
+// import { commandsRegistry } from '../globals';
+import { commandsRegistry } from "../key/CommandsRegistry";
 
 export class CommandService {
   async executeCommand<T = unknown>(id: string, ...args: unknown[]): Promise<T | undefined> {

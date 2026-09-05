@@ -1,7 +1,4 @@
 import { isSplitItem, SplitItem } from "./Types";
-// import { CommandsRegistryImpl } from "./key/CommandService";
-import { CommandsRegistryImpl } from "./key/CommandsRegistry";
-import { KeybindingsRegistryImpl } from "./key/KeybindingsRegistry";
 
 export const terminals: { [key: string]: any } = {};
 
@@ -62,5 +59,9 @@ export const wrapper: { [key: string]: SplitItem } = {
   } //*/
 };
 
-export const commandsRegistry = new CommandsRegistryImpl();
-export const keybindingsRegistry = new KeybindingsRegistryImpl();
+// import { CommandsRegistryImpl } from "./key/CommandService";
+// import { CommandsRegistryImpl } from "./key/CommandsRegistry";
+// import { KeybindingsRegistryImpl } from "./key/KeybindingsRegistry";
+
+// export const commandsRegistry = new CommandsRegistryImpl();
+// export const keybindingsRegistry = new KeybindingsRegistryImpl();

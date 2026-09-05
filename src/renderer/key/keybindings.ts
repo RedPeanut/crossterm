@@ -1,10 +1,10 @@
 import { appShortcutsCommandId,
   editCopyCommandId, editPasteCommandId
 } from '../../common/Types';
-import { KeybindingWeight } from './KeybindingsRegistry';
+import { KeybindingWeight, keybindingsRegistry } from './KeybindingsRegistry';
 import { getService, mainLayoutServiceId } from '../Service';
 import { MainLayoutService } from '../layout/MainLayout';
-import { keybindingsRegistry } from '../globals';
+// import { keybindingsRegistry } from '../globals';
 import { getFocusedTerm } from '../part/term/Term';
 
 /**

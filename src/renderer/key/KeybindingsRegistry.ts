@@ -1,6 +1,6 @@
 import { isLinux, isMacintosh, isWindows } from '../../common/base/platform';
-import { commandsRegistry } from '../globals';
-import { CommandHandler } from './CommandsRegistry';
+// import { commandsRegistry } from '../globals';
+import { CommandHandler, commandsRegistry } from './CommandsRegistry';
 // import { CommandHandler } from './CommandService';
 import { ContextKeyExpr, ContextKeyExpression } from './ContextKey';
 import { parseKeybinding } from './Keybinding';
@@ -45,7 +45,7 @@ export interface ResolvedKeybindingItem {
   readonly label: string;
 }
 
-export class KeybindingsRegistryImpl {
+class KeybindingsRegistryImpl {
   private readonly _items: ResolvedKeybindingItem[] = [];
   private _order = 0;
 
@@ -69,6 +69,8 @@ export class KeybindingsRegistryImpl {
     return this._items.slice().sort((a, b) => a.weight !== b.weight ? a.weight - b.weight : a.order - b.order);
   }
 }
+
+export const keybindingsRegistry = new KeybindingsRegistryImpl();
 
 /** 사용자 설정(keybindings.json 등)에서 읽은 룰을 resolver 입력으로 변환한다. */
 export function toUserKeybindingItems(rules: KeybindingRule[]): ResolvedKeybindingItem[] {

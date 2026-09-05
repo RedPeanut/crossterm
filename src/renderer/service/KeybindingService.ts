@@ -4,8 +4,8 @@ import { CommandService } from './CommandService';
 import { ContextKeyService, ContextKeyServiceTarget } from './ContextKeyService';
 import { Chord } from '../key/Keybinding';
 import { KeybindingResolver, ResultKind } from '../key/KeybindingResolver';
-import { KeybindingRule, ResolvedKeybindingItem, toUserKeybindingItems } from '../key/KeybindingsRegistry';
-import { keybindingsRegistry } from '../globals';
+import { KeybindingRule, ResolvedKeybindingItem, keybindingsRegistry, toUserKeybindingItems } from '../key/KeybindingsRegistry';
+// import { keybindingsRegistry } from '../globals';
 
 /**
  * VSCode의 `vs/platform/keybinding/common/abstractKeybindingService.ts` +
