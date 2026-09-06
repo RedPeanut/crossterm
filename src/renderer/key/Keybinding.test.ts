@@ -4,7 +4,8 @@ import { ContextKeyService } from '../service/ContextKeyService';
 import { parseKeybinding } from './Keybinding';
 import { KeybindingResolver, ResultKind } from './KeybindingResolver';
 import { KeybindingWeight, toUserKeybindingItems } from './KeybindingsRegistry';
-import { commandsRegistry } from '../globals';
+import { commandsRegistry } from './CommandsRegistry';
+// import { commandsRegistry } from '../globals';
 
 describe('#Keybinding', function () {
 

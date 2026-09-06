@@ -113,7 +113,8 @@ export class Term {
     });
     this.fitAddon.fit();
     this.xterm = _xterm;
-    this.xterm.write(`Connecting to ${this.item.url.host}:${this.item.url.port}...\r\n`);
+    if (this.item.type === 'remote')
+      this.xterm.write(`Connecting to ${this.item.url.host}:${this.item.url.port}...\r\n`);
 
     terminals[this.uid] = this;
 
