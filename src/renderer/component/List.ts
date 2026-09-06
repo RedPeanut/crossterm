@@ -95,6 +95,8 @@ export class List extends Disposable {
   isDragging: boolean;
   mouseIsOver: boolean;
   dnd: ListDragAndDrop;
+  /** 키보드 포커스가 있는 노드의 shortenedId */
+  focusedId: string | undefined;
 
   constructor(container: HTMLElement,
     items: ListItemElem[],
@@ -186,6 +188,10 @@ export class List extends Disposable {
       };
     }
 
+    if (find) {
+      this._setFocused(find);
+    }
+
     this.onClick(e, id);
     // e.stopPropagation();
   }
@@ -218,6 +224,12 @@ export class List extends Disposable {
   create(): void {
     const listEl: HTMLElement = this.element = $('.list');
     listEl.classList.add('scrollable');
+    // 화살표 네비게이션을 받으려면 목록 자체가 포커스를 가질 수 있어야 한다
+    listEl.tabIndex = 0;
+
+    this._register(_addEventListener(listEl, 'keydown', (e: KeyboardEvent) => {
+      this._onKeyDown(e);
+    }));
     // const scrollable = this.scrollable = $('.scrollable');
 
     this._register(_addEventListener(listEl, 'wheel', (e: WheelEvent) => {
@@ -238,9 +250,7 @@ export class List extends Disposable {
       else
         _scrollTop = scrollTop + deltaY;
 
-      this.element.scrollTop = _scrollTop;
-      // this.slider.style.top = (scrollTop * clientHeight / scrollHeight).toFixed(2) + 'px';
-      this.slider.style.top = Math.ceil(_scrollTop * clientHeight / scrollHeight) + 'px';
+      this.setScrollTop(_scrollTop);
     }));
 
     this._register(_addEventListener(listEl, 'mouseover', (e: MouseEvent) => {
@@ -355,6 +365,152 @@ export class List extends Disposable {
       this.scrollbar_v.classList.remove('visible');
       this.scrollbar_v.classList.remove('fade');
       this.scrollbar_v.classList.add('invisible');
+    }
+  }
+
+  /**
+   * 스크롤 위치를 옮기면서 커스텀 스크롤바의 슬라이더도 함께 갱신한다.
+   */
+  setScrollTop(scrollTop: number): void {
+    const { clientHeight, scrollHeight } = this.element;
+    this.element.scrollTop = scrollTop;
+    this.slider.style.top = Math.ceil(scrollTop * clientHeight / scrollHeight) + 'px';
+  }
+
+  /**
+   * 화면에 보이는(펼쳐진) 노드를 위에서 아래 순서로 돌려준다.
+   * 선택 해제용으로 맨 끝에 붙는 빈 줄 노드는 제외한다.
+   */
+  getVisibleNodes(): Node[] {
+    return utils.flatten(this.nodes).filter((node) => !!node.id);
+  }
+
+  getFocusedNode(): Node | undefined {
+    if (!this.focusedId) return undefined;
+    return this.getVisibleNodes().find((node) => node.shortenedId === this.focusedId);
+  }
+
+  /**
+   * 포커스 표시만 옮긴다. 선택 상태나 스크롤은 건드리지 않는다.
+   */
+  _setFocused(node: Node): void {
+    const flattened = utils.flatten(this.nodes);
+    for (let i = 0; i < flattened.length; i++) {
+      flattened[i].node.classList.remove('focused');
+    }
+
+    node.node.classList.add('focused');
+    this.focusedId = node.shortenedId;
+  }
+
+  /**
+   * 포커스와 선택을 함께 옮기고, 필요하면 보이도록 스크롤한다.
+   */
+  focusNode(node: Node): void {
+    const flattened = utils.flatten(this.nodes);
+    for (let i = 0; i < flattened.length; i++) {
+      flattened[i].node.classList.remove('selected');
+      flattened[i].node.classList.remove('focused');
+    }
+
+    node.node.classList.add('selected');
+    node.node.classList.add('focused');
+    this.focusedId = node.shortenedId;
+    this.state = {
+      ...this.state,
+      selectedIds: [ node.shortenedId ]
+    };
+
+    this.revealNode(node);
+  }
+
+  /**
+   * 노드가 목록 밖으로 잘려 있으면 보이는 위치까지 스크롤한다.
+   */
+  revealNode(node: Node): void {
+    const listEl = this.element;
+    const nodeRect = node.node.getBoundingClientRect();
+    const listRect = listEl.getBoundingClientRect();
+
+    const top = nodeRect.top - listRect.top + listEl.scrollTop;
+    const bottom = top + nodeRect.height;
+
+    if (top < listEl.scrollTop) {
+      this.setScrollTop(top);
+    } else if (bottom > listEl.scrollTop + listEl.clientHeight) {
+      this.setScrollTop(bottom - listEl.clientHeight);
+    }
+  }
+
+  /**
+   * 화살표/Home/End/Enter 로 목록을 이동하고 폴더를 펼치거나 접는다.
+   */
+  _onKeyDown(e: KeyboardEvent): void {
+    // 이름 편집 중이면 입력에 맡긴다
+    if (e.target instanceof HTMLInputElement) return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+
+    const nodes = this.getVisibleNodes();
+    if (nodes.length === 0) return;
+
+    const focused = this.getFocusedNode();
+    const index = focused ? nodes.indexOf(focused) : -1;
+    let handled = true;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        this.focusNode(nodes[Math.min(index+1, nodes.length-1)]);
+        break;
+
+      case 'ArrowUp':
+        this.focusNode(nodes[Math.max(index-1, 0)]);
+        break;
+
+      case 'ArrowRight':
+        if (!focused) {
+          this.focusNode(nodes[0]);
+        } else if (focused.isDirectory && focused.isCollapsed) {
+          focused.setCollapsed(false);
+        } else if (!focused.isCollapsed && focused.children.length > 0) {
+          this.focusNode(focused.children[0]);
+        }
+        break;
+
+      case 'ArrowLeft':
+        if (!focused) {
+          this.focusNode(nodes[0]);
+        } else if (focused.isDirectory && !focused.isCollapsed) {
+          focused.setCollapsed(true);
+        } else if (focused.parent) {
+          this.focusNode(focused.parent);
+        }
+        break;
+
+      case 'Home':
+        this.focusNode(nodes[0]);
+        break;
+
+      case 'End':
+        this.focusNode(nodes[nodes.length-1]);
+        break;
+
+      case 'Enter':
+        if (!focused) break;
+        if (focused.isDirectory) {
+          focused.setCollapsed(!focused.isCollapsed);
+        } else {
+          // 더블클릭과 같은 경로로 열리도록 이벤트를 그대로 흘려보낸다
+          focused.node.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+        }
+        break;
+
+      default:
+        handled = false;
+    }
+
+    if (handled) {
+      e.preventDefault();
+      e.stopPropagation();
     }
   }
 
@@ -611,6 +767,7 @@ export class Node extends Disposable implements Children<Node> {
   id: string;
   shortenedId: string;
   type: string;
+  isDirectory: boolean = false;
 
   targetNode: Node | undefined;
   dnd: ListDragAndDrop;
@@ -638,6 +795,7 @@ export class Node extends Disposable implements Children<Node> {
     this.id = data.id;
     this.shortenedId = data.id.substring(0, 7);
     this.type = data.type;
+    this.isDirectory = data.isDirectory === true;
 
     const isSelected = selectedIds.includes(data.id);
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
@@ -853,6 +1011,7 @@ export class Node extends Disposable implements Children<Node> {
     this.id = data.id;
     this.shortenedId = data.id.substring(0, 7);
     this.type = data.type;
+    this.isDirectory = data.type === 'folder';
 
     // this.isCollapsed = true;
 
