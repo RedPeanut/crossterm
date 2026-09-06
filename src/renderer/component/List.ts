@@ -84,6 +84,7 @@ export class List extends Disposable {
 
   onClick: (e: MouseEvent, id: string) => void;
   onDblClick: (e: MouseEvent, id: string) => void;
+  onSelectionChange: ((items: ListItemElem[]) => void) | undefined;
 
   // tree: Tree;
   tree: HTMLElement;
@@ -102,7 +103,8 @@ export class List extends Disposable {
     items: ListItemElem[],
     treeViewState: TreeViewStateType,
     onClick: (e: MouseEvent, id: string) => void,
-    onDblClick: (e: MouseEvent, id: string) => void
+    onDblClick: (e: MouseEvent, id: string) => void,
+    onSelectionChange?: (items: ListItemElem[]) => void
   ) {
     super();
     this.container = container;
@@ -113,6 +115,7 @@ export class List extends Disposable {
     utils.applyTreeViewState(this.state.items, treeViewState?.expanded || []);
     this.onClick = onClick;
     this.onDblClick = onDblClick;
+    this.onSelectionChange = onSelectionChange;
     this.dnd = new ListDragAndDrop(this);
   }
 
@@ -189,11 +192,32 @@ export class List extends Disposable {
     }
 
     if (find) {
-      this._setFocused(find);
+      this.setFocused(find);
     }
 
+    this.notifySelectionChange();
     this.onClick(e, id);
     // e.stopPropagation();
+  }
+
+  /**
+   * 현재 선택된 노드의 원본 데이터를 모아 선택 변경을 알린다.
+   */
+  notifySelectionChange(): void {
+    if (!this.onSelectionChange) return;
+
+    const flattened = utils.flatten(this.nodes);
+    const items: ListItemElem[] = [];
+
+    const shortenedIds = Array.from(new Set(this.state.selectedIds));
+    for (let i = 0; i < shortenedIds.length; i++) {
+      const find = flattened.find((node) => node.shortenedId === shortenedIds[i]);
+      if (find?.data) {
+        items.push(find.data);
+      }
+    }
+
+    this.onSelectionChange(items);
   }
 
   _onDblClick(e: MouseEvent, id: string): void {
@@ -289,6 +313,8 @@ export class List extends Disposable {
         ...this.state,
         selectedIds: []
       };
+
+      this.notifySelectionChange();
     }));
     const tree = this.tree = $('.tree');
     this.nodes = [];
@@ -393,7 +419,7 @@ export class List extends Disposable {
   /**
    * 포커스 표시만 옮긴다. 선택 상태나 스크롤은 건드리지 않는다.
    */
-  _setFocused(node: Node): void {
+  setFocused(node: Node): void {
     const flattened = utils.flatten(this.nodes);
     for (let i = 0; i < flattened.length; i++) {
       flattened[i].node.classList.remove('focused');
@@ -421,6 +447,7 @@ export class List extends Disposable {
       selectedIds: [ node.shortenedId ]
     };
 
+    this.notifySelectionChange();
     this.revealNode(node);
   }
 
@@ -768,6 +795,7 @@ export class Node extends Disposable implements Children<Node> {
   shortenedId: string;
   type: string;
   isDirectory: boolean = false;
+  data: ListItemElem | undefined;
 
   targetNode: Node | undefined;
   dnd: ListDragAndDrop;
@@ -796,6 +824,7 @@ export class Node extends Disposable implements Children<Node> {
     this.shortenedId = data.id.substring(0, 7);
     this.type = data.type;
     this.isDirectory = data.isDirectory === true;
+    this.data = data;
 
     const isSelected = selectedIds.includes(data.id);
     const hasChildren = Array.isArray(data.children) && data.children.length > 0;
@@ -1012,6 +1041,7 @@ export class Node extends Disposable implements Children<Node> {
     this.shortenedId = data.id.substring(0, 7);
     this.type = data.type;
     this.isDirectory = data.type === 'folder';
+    this.data = data;
 
     // this.isCollapsed = true;
 

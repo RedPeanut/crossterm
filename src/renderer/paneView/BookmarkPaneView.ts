@@ -37,5 +37,7 @@ export class BookmarkPaneView extends PaneView {
     });
     detailPane.render();
     this.addPane(detailPane);
+
+    bookmarkPane.onSelectionChange = (item) => detailPane.setItem(item);
   }
 }

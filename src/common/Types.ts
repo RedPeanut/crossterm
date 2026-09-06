@@ -146,6 +146,7 @@ export interface ListItemElem extends Partial<DirentExt>, Children<ListItemElem>
   id: string;
   // children?: ListItemElem[];
   // isCollapsed?: boolean;
+  description?: string;
 
   // only remote
   url?: { host: string, port: number, username: string, password: string };

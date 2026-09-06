@@ -1,8 +1,29 @@
+import { ListItemElem } from "../../common/Types";
 import { Pane, PaneOptions } from "../Pane";
 import { getService, sidebarPartServiceId } from "../Service";
 import { SidebarPartService } from "../part/SidebarPart";
 import { $ } from "../util/dom";
 import * as dom from "../util/dom";
+
+interface DetailRow {
+  label: string;
+  value: (item: ListItemElem) => string;
+}
+
+/** 상세 표에 보여줄 항목. 선택이 없으면 값은 모두 비운다. */
+const DETAIL_ROWS: DetailRow[] = [
+  { label: '이름', value: (item) => item.title || item.name || '' },
+  {
+    label: '종류',
+    value: (item) => item.type === 'remote' ? '원격' :
+      item.type === 'local' ? '로컬' :
+      item.type === 'folder' ? '폴더' : ''
+  },
+  { label: '호스트', value: (item) => item.url?.host || '' },
+  { label: '사용자이름', value: (item) => item.url?.username || '' },
+  { label: '포트', value: (item) => item.url?.port ? String(item.url.port) : '' },
+  { label: '설명', value: (item) => item.description || '' },
+];
 
 export class DetailPane extends Pane {
 
@@ -42,6 +63,23 @@ export class DetailPane extends Pane {
   }
 
   wrap: HTMLElement;
+  /** DETAIL_ROWS 와 같은 순서의 값 셀 */
+  valueCells: HTMLElement[] | undefined;
+  item: ListItemElem | undefined;
+
+  /**
+   * 상세에 표시할 항목을 바꾼다. 선택이 없으면 undefined 를 넘겨 값을 비운다.
+   */
+  setItem(item: ListItemElem | undefined): void {
+    this.item = item;
+
+    // 아직 renderBody 전이면 렌더 시점에 반영된다
+    if (!this.valueCells) return;
+
+    DETAIL_ROWS.map((row, i) => {
+      this.valueCells[i].textContent = item ? row.value(item) : '';
+    });
+  }
 
   renderBody(container: HTMLElement): void {
     // draw description in body in here
@@ -65,41 +103,28 @@ export class DetailPane extends Pane {
     </table>
     */
 
-    // 호스트, 사용자이름, 프로토콜, 포트, 설명
     const wrap = this.wrap = $('.wrap');
     wrap.style.position = 'relative';
 
     const table = $('table') as HTMLTableElement;
     const tbody = $('tbody');
-    let tr, th, td, i = 0;
-    tr = $('tr'); th = $('th'); td = $('td');
-    tr.dataset.parity = i%2 == 0 ? 'even' : 'odd'; i++;
-    th.innerHTML = '호스트';
-    td.innerHTML = '123.123.123.123';
-    tr.appendChild(th); tr.appendChild(td); tbody.appendChild(tr);
+    const valueCells: HTMLElement[] = this.valueCells = [];
 
-    tr = $('tr'); th = $('th'); td = $('td');
-    tr.dataset.parity = i%2 == 0 ? 'even' : 'odd'; i++;
-    th.innerHTML = '프로토콜';
-    td.innerHTML = 'SSH';
-    tr.appendChild(th); tr.appendChild(td); tbody.appendChild(tr);
-
-    tr = $('tr'); th = $('th'); td = $('td');
-    tr.dataset.parity = i%2 == 0 ? 'even' : 'odd'; i++;
-    th.innerHTML = '포트';
-    td.innerHTML = '';
-    tr.appendChild(th); tr.appendChild(td); tbody.appendChild(tr);
-
-    tr = $('tr'); th = $('th'); td = $('td');
-    tr.dataset.parity = i%2 == 0 ? 'even' : 'odd'; i++;
-    th.innerHTML = '설명';
-    td.innerHTML = '';
-    tr.appendChild(th); tr.appendChild(td); tbody.appendChild(tr);
+    DETAIL_ROWS.map((row, i) => {
+      const tr = $('tr'), th = $('th'), td = $('td');
+      tr.dataset.parity = i%2 == 0 ? 'even' : 'odd';
+      th.innerHTML = row.label;
+      tr.appendChild(th); tr.appendChild(td); tbody.appendChild(tr);
+      valueCells.push(td);
+    });
 
     table.appendChild(tbody);
     wrap.appendChild(table);
     this.enableTableResizable(wrap);
     this.body.appendChild(wrap);
+
+    // // 렌더 전에 setItem 이 먼저 불렸을 수 있다?
+    // this.setItem(this.item);
   }
 
   enableTableResizable(wrap: HTMLElement) {

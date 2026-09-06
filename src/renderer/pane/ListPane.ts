@@ -22,6 +22,8 @@ export class ListPane extends Pane {
   }
 
   list: List;
+  /** 선택이 바뀔 때 호출된다. 선택이 없거나 여러 개면 undefined 를 넘긴다. */
+  onSelectionChange: ((item: ListItemElem | undefined) => void) | undefined;
 
   constructor(parent: HTMLElement, options: PaneOptions) {
     super(parent, options);
@@ -92,7 +94,6 @@ export class ListPane extends Pane {
       renderer.sessions, // list: ListItemElem[]
       renderer.treeViewState,
       (e: MouseEvent, id: string) => {
-        // TODO: send click event to detail view
 
       }, // onClick
       (e: MouseEvent, id: string) => {
@@ -130,7 +131,10 @@ export class ListPane extends Pane {
         const sessionPartService: SessionPartService = getService(sessionPartServiceId);
         sessionPartService.getServices();
         sessionPartService.createTerminal();
-      } // onDblClick
+      }, // onDblClick
+      (items: ListItemElem[]) => {
+        this.onSelectionChange?.(items.length === 1 ? items[0] : undefined);
+      } // onSelectionChange
     );
     list.create();
   }
