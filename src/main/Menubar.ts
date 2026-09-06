@@ -110,7 +110,26 @@ export class Menubar {
   addFileMenu(options: MenuItemConstructorOptions[]) {
     const fileSubmenu: MenuItemConstructorOptions[] = [];
 
-    fileSubmenu.push();
+    fileSubmenu.push(...[
+      /* {
+        id: fileDisconnMenuId,
+        label: '연결 끊기',
+        accelerator: keyBinding[fileDisconnMenuId][keyBindingIdx],
+        click: null
+      }, */
+      {
+        id: fileReconnMenuId,
+        label: '다시 연결',
+        accelerator: keyBinding[fileReconnMenuId][keyBindingIdx],
+        click: null
+      },
+      {
+        id: fileReconnAllMenuId,
+        label: '모두 다시 연결',
+        accelerator: null, // keyBinding[fileReconnAllMenuId][keyBindingIdx],
+        click: null
+      },
+    ]);
 
     if (process.platform === 'win32') {
       fileSubmenu.push({ type: 'separator' as const });
@@ -120,35 +139,11 @@ export class Menubar {
         accelerator: keyBinding[filePreferencesMenuId][keyBindingIdx],
         click: null, // mainWindow.preferenceClickHandler.bind(mainWindow),
       });
-
-      options.push({
-      label: '&File',
-      submenu: fileSubmenu
-    });
     }
 
     options.push({
       label: '&File',
-      submenu: [
-        {
-          id: fileDisconnMenuId,
-          label: '연결 끊기',
-          accelerator: keyBinding[fileDisconnMenuId][keyBindingIdx],
-          click: null
-        },
-        {
-          id: fileReconnMenuId,
-          label: '다시 연결',
-          accelerator: keyBinding[fileReconnMenuId][keyBindingIdx],
-          click: null
-        },
-        {
-          id: fileReconnAllMenuId,
-          label: '모두 다시 연결',
-          accelerator: null, // keyBinding[fileReconnAllMenuId][keyBindingIdx],
-          click: null
-        },
-      ],
+      submenu: fileSubmenu,
     });
   }
 
@@ -156,11 +151,10 @@ export class Menubar {
     options.push({
       label: '&Edit',
       submenu: [
-
-        { id: editUndoMenuId, label: 'Undo', accelerator: keyBinding[editUndoMenuId][keyBindingIdx], role: 'undo' },
-        { id: editRedoMenuId, label: 'Redo', accelerator: keyBinding[editRedoMenuId][keyBindingIdx], role: 'redo' },
-        { type: 'separator' },
-        { id: editCutMenuId, label: 'Cut', accelerator: keyBinding[editCutMenuId][keyBindingIdx], role: 'cut' },
+        // { id: editUndoMenuId, label: 'Undo', accelerator: keyBinding[editUndoMenuId][keyBindingIdx], role: 'undo' },
+        // { id: editRedoMenuId, label: 'Redo', accelerator: keyBinding[editRedoMenuId][keyBindingIdx], role: 'redo' },
+        // { type: 'separator' },
+        // { id: editCutMenuId, label: 'Cut', accelerator: keyBinding[editCutMenuId][keyBindingIdx], role: 'cut' },
         {
           // Note. role: 'copy'는 DOM 선택 영역만 복사한다. xterm의 선택은 DOM selection이 아니라
           //       직접 그린 것이므로 네이티브 role로는 복사되지 않는다. renderer 커맨드로 넘긴다.
@@ -175,7 +169,7 @@ export class Menubar {
           // role: 'paste',
           click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editPasteCommandId),
         },
-        { id: editSelectAllMenuId, label: 'Select All', accelerator: keyBinding[editSelectAllMenuId][keyBindingIdx], role: 'selectAll' },
+        // { id: editSelectAllMenuId, label: 'Select All', accelerator: keyBinding[editSelectAllMenuId][keyBindingIdx], role: 'selectAll' },
       ],
     });
   }
