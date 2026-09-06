@@ -55,7 +55,8 @@ export class Tab {
         this.sessionPartService.controlStyle({depth, index, pos}, {selected: true, active: true});
       }
 
-      this.sessionPartService.fit();
+      // this.sessionPartService.fit();
+      requestAnimationFrame(() => requestAnimationFrame(() => this.sessionPartService.fit()));
     }
   }
 

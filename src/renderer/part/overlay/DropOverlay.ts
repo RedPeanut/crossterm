@@ -265,7 +265,8 @@ export class DropOverlay {
 
     const sessionPartService = getService(sessionPartServiceId)
     sessionPartService.getServices(); // reconnect service
-    sessionPartService.fit(); // fit again
+    // sessionPartService.fit(); // fit again
+    requestAnimationFrame(() => requestAnimationFrame(() => this.sessionPartService.fit()));
   }
 
   cleanSingleSplitItemOnce(curr: SplitItem): void {

@@ -111,7 +111,9 @@ export class Term {
     _xterm.onResize(({cols, rows}) => {
       window.ipc.send('terminal resize', { uid: this.uid, cols, rows });
     });
-    this.fitAddon.fit();
+    // this.fitAddon.fit();
+    requestAnimationFrame(() => requestAnimationFrame(() => this.fitAddon.fit()));
+
     this.xterm = _xterm;
     if (this.item.type === 'remote')
       this.xterm.write(`Connecting to ${this.item.url.host}:${this.item.url.port}...\r\n`);
@@ -161,7 +163,16 @@ export class Term {
     });
   }
 
-  fit() { this.fitAddon.fit(); }
+  fit() {
+    if (!this.xterm || !this.element.isConnected || this.element.offsetParent === null)
+      return;
+
+    const { width, height } = this.element.getBoundingClientRect();
+    if (width === 0 || height === 0)
+      return;
+
+    this.fitAddon.fit();
+  }
 
   setConnStatus(status: ConnStatus): void {
     this.item.connStatus = status;
