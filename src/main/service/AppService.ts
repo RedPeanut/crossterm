@@ -32,7 +32,7 @@ export class AppService {
       if (item.isDirectory) {
         folders.push({
           ...item,
-          children: [], isCollapsed: false,
+          children: [], // isCollapsed: false,
           type: 'folder',
           id: uuidv4(),
           title: item.name

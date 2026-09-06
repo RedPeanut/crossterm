@@ -13,7 +13,7 @@ import { ConfigsInitialValueType } from '../common/configs';
 import { RenderStorageService } from './service/RenderStorageService';
 import { setService, storageServiceId } from './Service';
 import { ListItemElem } from '../common/Types';
-import { LayoutStateType, StorageService } from '../common/service/StorageService';
+import { LayoutStateType, StorageService, TreeViewStateType } from '../common/service/StorageService';
 
 import './globals';
 import './key/keybindings';
@@ -53,6 +53,7 @@ export class Renderer {
   // list: ListItemElem[];
   sessions: ListItemElem[];
   layoutState: LayoutStateType;
+  treeViewState: TreeViewStateType;
 
   constructor() {}
 
@@ -76,6 +77,7 @@ export class Renderer {
     // this.list = await window.ipc.invoke('config get', 'list');
     this.sessions = await window.ipc.invoke('read sessions dir');
     this.layoutState = JSON.parse(await storageService.get<string>('layoutState'));
+    this.treeViewState = JSON.parse(await storageService.get<string>('treeViewState'));
   }
 }
 

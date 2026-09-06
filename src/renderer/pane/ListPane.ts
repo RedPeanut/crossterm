@@ -90,6 +90,7 @@ export class ListPane extends Pane {
     // draw list in body
     const list = this.list = new List(this.body,
       renderer.sessions, // list: ListItemElem[]
+      renderer.treeViewState,
       (e: MouseEvent, id: string) => {
         // TODO: send click event to detail view
 

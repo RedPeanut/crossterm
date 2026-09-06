@@ -25,9 +25,13 @@ const layoutStateValue = {
     { name: 'bookmark', collapsed: [ false, false ], sizeType: [ 'fill_parent', null ], size: [ null, 200 ], preferredHeight: [ null, 200 ] },
     { name: 'sample', collapsed: [ false ], sizeType: [ 'fill_parent' ], size: [ null ] }
   ],
-}
+};
 
 export type LayoutStateType = typeof layoutStateValue;
+
+const treeViewState = {focus:[],selection:[],expanded:["r1::c11","r3::c32::cc321"]};
+
+export type TreeViewStateType = typeof treeViewState;
 
 export interface StorageService {
   getall(): Promise<unknown[]>;

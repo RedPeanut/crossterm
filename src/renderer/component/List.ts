@@ -8,11 +8,12 @@ import * as dom from "../util/dom";
 import { findActiveItem } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
-import { contextViewServiceId, getService, mainLayoutServiceId } from "../Service";
+import { contextViewServiceId, getService, mainLayoutServiceId, storageServiceId } from "../Service";
 import { ContextViewService } from "../service/ContextViewService";
 import { Severity } from "../Types";
 import { popup } from "../util/contextmenu";
 import { MainLayoutService } from "../layout/MainLayout";
+import { StorageService, TreeViewStateType } from "../../common/service/StorageService";
 
 const SCROLL_HIDE_TIMEOUT: number = 500;
 
@@ -95,7 +96,9 @@ export class List extends Disposable {
   mouseIsOver: boolean;
   dnd: ListDragAndDrop;
 
-  constructor(container: HTMLElement, items: ListItemElem[],
+  constructor(container: HTMLElement,
+    items: ListItemElem[],
+    treeViewState: TreeViewStateType,
     onClick: (e: MouseEvent, id: string) => void,
     onDblClick: (e: MouseEvent, id: string) => void
   ) {
@@ -105,6 +108,7 @@ export class List extends Disposable {
       selectedIds: [],
       items: items || []
     };
+    utils.applyTreeViewState(this.state.items, treeViewState?.expanded || []);
     this.onClick = onClick;
     this.onDblClick = onDblClick;
     this.dnd = new ListDragAndDrop(this);
@@ -197,6 +201,18 @@ export class List extends Disposable {
     const flattened = utils.flatten(this.state.items);
     const findItem = flattened.find((item) => item.id === id);
     findItem.isCollapsed = data.isCollapsed;
+    this.saveTreeViewState();
+  }
+
+  saveTreeViewState(): void {
+    const storageService = getService(storageServiceId) as StorageService;
+    const val = JSON.stringify({
+      // focus: [],
+      // selection: [],
+      expanded: utils.collectExpandedPaths(this.state.items)
+    });
+    console.log('val =', val);
+    storageService.set('treeViewState', val);
   }
 
   create(): void {

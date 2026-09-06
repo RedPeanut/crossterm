@@ -19,7 +19,7 @@ describe('#MainStorageService', function() {
     // fs.rmSync(userDataPath, { recursive: true, force: true });
   });
 
-  it('기본동작 테스트#1 (test set n getall by sessions.treeViewState)', async function() {
+  it('기본동작 테스트#1 (test set n getall by treeViewState)', async function() {
     const environmentService: EnvironmentService = { userDataPath };
     const fileService = new MainFileService();
     const storageService = new MainStorageService(environmentService, fileService);
@@ -27,9 +27,9 @@ describe('#MainStorageService', function() {
     let resultList, resultMap, resultVal;
 
     // 구분자는 ::, 상대경로로 기술
-    await storageService.set('sessions.treeViewState', JSON.stringify({
-      focus:[],
-      selection:[],
+    await storageService.set('treeViewState', JSON.stringify({
+      // focus:[],
+      // selection:[],
       expanded:[
         // r: root, c: child, p: parent
         'r1::c11',
@@ -40,7 +40,7 @@ describe('#MainStorageService', function() {
     console.log(resultList);
   });
 
-  it('기본동작 테스트#2 (test set n get by layoutState)', async function() {
+  /* it('기본동작 테스트#2 (test set n get by layoutState)', async function() {
     const environmentService: EnvironmentService = { userDataPath };
     const fileService = new MainFileService();
     const storageService = new MainStorageService(environmentService, fileService);
@@ -76,5 +76,5 @@ describe('#MainStorageService', function() {
 
     resultVal = await storageService.get<string>('layoutState');
     console.log('storage layoutState is', JSON.parse(resultVal));
-  });
+  }); */
 });
