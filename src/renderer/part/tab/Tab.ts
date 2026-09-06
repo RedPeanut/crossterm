@@ -117,7 +117,7 @@ export class Tab {
       el.appendChild(dot);
 
       // // register status callback on the item
-      // item.onConnStatusChange = (status) => this.updateStatus(status);
+      item.onConnStatusChange = (status) => this.updateStatus(status);
     }
 
     const label = $('.label');

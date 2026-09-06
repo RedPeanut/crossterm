@@ -1,4 +1,4 @@
-import { Client, ClientChannel } from 'ssh2';
+import { Client, ClientChannel, ClientErrorExtensions, NegotiatedAlgorithms } from 'ssh2';
 import { EventEmitter } from 'events';
 import { TerminalItem } from '../../common/Types';
 import DataBatcher from './DataBatcher';
@@ -40,13 +40,15 @@ export default class TerminalSsh extends TerminalBase {
 
       }
     );
-    conn.on('handshake', async (handshake) => {
-      console.log('handshake =', handshake);
+    conn.on('handshake', async (data: NegotiatedAlgorithms) => {
+      console.log('data =', data);
     });
     conn.on('x11', () => {});
     conn.on('ready', () => {
       // console.log('ready event is called..');
       connected = true;
+      this.emit('connected');
+
       // open shell channel
       conn.shell({ term: 'xterm-256color' }, {}, (err, stream) => {
         if (err) throw err;
@@ -60,11 +62,12 @@ export default class TerminalSsh extends TerminalBase {
         this.stream = stream;
       });
     });
-    conn.on('error', (error) => {
-      console.log('error =', error);
+    conn.on('error', (error: Error & ClientErrorExtensions) => {
+      /* console.log('error =', error);
       if (error.message.includes('All configured authentication methods failed')) {
         console.log('TODO: show popup in render');
-      }
+      } */
+     this.emit('error', error);
     });
 
     // console.log('this.options =', this.options);

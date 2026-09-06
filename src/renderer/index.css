@@ -720,7 +720,7 @@ body { height: 100%; }
   transition: background-color 0.3s ease;
 }
 
-.status-connecting { background-color: rgb(200, 200, 60); animation: pulse 1.2s infinite; }
+.status-connecting { background-color: rgb(200, 200, 60); } /* animation: pulse 1.2s infinite; } */
 .status-connected { background-color: rgb(50, 200, 100); }
 .status-error { background-color: rgb(220, 60, 60); }
 .status-closed { background-color: rgb(120, 120, 120); }

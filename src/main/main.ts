@@ -146,6 +146,9 @@ class MainWindow extends Disposable {
       let terminal: TerminalBase;
       if (type === 'remote') {
         terminal = new TerminalSsh(arg);
+        terminal.on('connected', () => {
+          this.browserWindow?.webContents.send('terminal connected', uid);
+        });
         terminal.on('error', (message: string) => {
           this.browserWindow?.webContents.send('terminal error', uid, message);
         });

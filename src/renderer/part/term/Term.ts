@@ -39,6 +39,9 @@ export class Term {
   onConnected: ((...args: unknown[]) => void) | null = null;
   onError: ((...args: unknown[]) => void) | null = null;
   onClosed: ((...args: unknown[]) => void) | null = null;
+  offConnected: any = null;
+  offError: any = null;
+  offClosed: any = null;
 
   constructor(parent: HTMLElement, item: TerminalItem) {
     this.parent = parent;
@@ -81,6 +84,12 @@ export class Term {
     let retVal = window.ipc.send('terminal new', {
       ...this.item,
       uid: this.uid,
+
+      // remove object when pass ipc
+      term: null,
+      connStatus: null,
+      onConnStatusChange: null,
+
       // type: 'local',
       // size: { col: 80, row: 24 },
       // url: { protocol: '', user: '', resource: '', port: '' }
@@ -104,6 +113,7 @@ export class Term {
     });
     this.fitAddon.fit();
     this.xterm = _xterm;
+    this.xterm.write(`Connecting to ${this.item.url.host}:${this.item.url.port}...\r\n`);
 
     terminals[this.uid] = this;
 
@@ -113,25 +123,28 @@ export class Term {
         const uid = args[1] as string;
         if (uid !== this.uid) return;
         this.setConnStatus('connected');
+        this.xterm.write('Connection established.\r\n');
       };
 
       this.onError = (...args: unknown[]) => {
-        const { uid, message } = args[1] as { uid: string; message: string };
+        console.log('onError is occured .., ...args =', ...args);
+        const [ , uid, message ] = args; // as { uid: string; message: string };
         if (uid !== this.uid) return;
         this.setConnStatus('error');
         // toast.show(`SSH 연결 오류: ${message}`, 'error', 5000);
+        this.xterm.write('Connection failed.\r\n');
       };
 
       this.onClosed = (...args: unknown[]) => {
         const uid = args[1] as string;
         if (uid !== this.uid) return;
         this.setConnStatus('closed');
-        this.xterm.write('\r\n\x1b[33m[연결이 종료되었습니다]\x1b[0m\r\n');
+        this.xterm.write('Connection Closed.\r\n');
       };
 
-      // window.ipc.on('terminal connected', this.onConnected);
-      window.ipc.on('terminal error', this.onError);
-      window.ipc.on('terminal closed', this.onClosed);
+      this.offConnected = window.ipc.on('terminal connected', this.onConnected);
+      this.offError = window.ipc.on('terminal error', this.onError);
+      this.offClosed = window.ipc.on('terminal closed', this.onClosed);
     }
   }
 
@@ -151,13 +164,13 @@ export class Term {
 
   setConnStatus(status: ConnStatus): void {
     this.item.connStatus = status;
-    // this.item.onConnStatusChange?.(status);
+    this.item.onConnStatusChange?.(status);
   }
 
   destroy(): void {
-    // if (this.onConnected) window.ipc.off('terminal connected', this.onConnected);
-    if (this.onError) window.ipc.off('terminal error', this.onError);
-    if (this.onClosed) window.ipc.off('terminal closed', this.onClosed);
+    if (this.offConnected) this.offConnected(); // window.ipc.off('terminal connected', this.onConnected);
+    if (this.offError) this.offConnected(); // window.ipc.off('terminal error', this.onError);
+    if (this.offClosed) this.offConnected(); // window.ipc.off('terminal closed', this.onClosed);
     this.xterm.dispose();
     this.scopedContextKeyService.dispose();
     delete terminals[this.uid];

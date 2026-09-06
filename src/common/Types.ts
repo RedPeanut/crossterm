@@ -8,9 +8,11 @@ export interface TerminalItem {
   // in render
   selected?: boolean; // default: false
   active?: boolean; // default: false
+
+  //
   term?: Term;
   connStatus?: ConnStatus;
-  // onConnStatusChange?: (status: ConnStatus) => void;
+  onConnStatusChange?: (status: ConnStatus) => void;
 
   // in main
   // properties that are describe to terminal
