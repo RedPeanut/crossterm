@@ -3,7 +3,7 @@ import { TerminalOptions } from '../Types';
 
 export default abstract class TerminalBase extends EventEmitter {
 
-  options;
+  options: TerminalOptions;
 
   constructor(options: TerminalOptions) {
     super();

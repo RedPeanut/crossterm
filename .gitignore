@@ -1,7 +1,4 @@
-# Dependency directory
 node_modules
-
-# OSX
 .DS_Store
 
 # ERB
@@ -10,5 +7,4 @@ release/app/dist
 release/build
 .erb/dll
 
-# App
 package-lock.json
