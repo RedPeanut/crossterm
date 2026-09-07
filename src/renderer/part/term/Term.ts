@@ -8,7 +8,8 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 import { terminals } from '../../globals';
 // import { ContextKey } from '../../../common/key/ContextKey';
 import { ContextKeyService } from '../../service/ContextKeyService';
-import { contextKeyServiceId, getService } from '../../Service';
+import { contextKeyServiceId, getService, statusbarPartServiceId } from '../../Service';
+import { StatusbarPartService } from "../StatusbarPart";
 import { ContextKey } from "../../key/ContextKey";
 import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from "../../key/contextKeys";
 import { TermResizeOverlay } from "./TermResizeOverlay";
@@ -35,6 +36,8 @@ export class Term extends Disposable {
 
   /** 크기 변경 시 가운데에 `cols x rows`를 잠시 띄우는 오버레이. */
   resizeOverlay: TermResizeOverlay | null = null;
+
+  statusbarPartService: StatusbarPartService | null = null;
 
   /** 이 터미널 하위에서만 유효한 context. */
   scopedContextKeyService: ContextKeyService;
@@ -110,6 +113,9 @@ export class Term extends Disposable {
     });
     // console.log('retVal =', retVal);
 
+    // 상태바는 SessionPart보다 늦게 생성되므로 여기(터미널 생성 시점)에서 가져온다.
+    this.statusbarPartService = getService(statusbarPartServiceId);
+
     const _xterm = new xterm({
       fontSize: 13
     });
@@ -125,7 +131,9 @@ export class Term extends Disposable {
     _xterm.onResize(({cols, rows}) => {
       window.ipc.send('terminal resize', { uid: this.uid, cols, rows });
       this.resizeOverlay?.show(cols, rows);
+      this.updateStatusbar();
     });
+    _xterm.onCursorMove(() => this.updateStatusbar());
     // this.fitAddon.fit();
     requestAnimationFrame(() => requestAnimationFrame(() => this.fitAddon.fit()));
 
@@ -170,6 +178,22 @@ export class Term extends Disposable {
     const printable: boolean = !e.domEvent.altKey && !e.domEvent.ctrlKey && !e.domEvent.metaKey;
   }
 
+  /**
+   * 상태바의 크기/커서 위치 영역을 갱신한다.
+   * 활성 터미널이 아니면 무시한다(상태바는 활성 터미널 하나만 표시).
+   */
+  updateStatusbar(): void {
+    if (!this.xterm || !this.item.active) return;
+
+    const buffer = this.xterm.buffer.active;
+    this.statusbarPartService?.updateTerminalStatus({
+      cols: this.xterm.cols,
+      rows: this.xterm.rows,
+      col: buffer.cursorX + 1,
+      row: buffer.cursorY + 1
+    });
+  }
+
   onData(data: string) {
     // console.log('onData() is called..., e =', data);
     window.ipc.send('terminal write', {
@@ -198,6 +222,7 @@ export class Term extends Disposable {
     if (this.offConnected) this.offConnected(); // window.ipc.off('terminal connected', this.onConnected);
     if (this.offError) this.offConnected(); // window.ipc.off('terminal error', this.onError);
     if (this.offClosed) this.offConnected(); // window.ipc.off('terminal closed', this.onClosed);
+    if (this.item.active) this.statusbarPartService?.updateTerminalStatus(undefined);
     this.xterm.dispose();
     this.resizeOverlay?.dispose();
     this.scopedContextKeyService.dispose();

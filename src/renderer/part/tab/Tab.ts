@@ -53,6 +53,9 @@ export class Tab {
         const { depth, index, pos } = find_curr;
         // console.log('find_curr =', find_curr);
         this.sessionPartService.controlStyle({depth, index, pos}, {selected: true, active: true});
+
+        // 탭 전환만으로는 크기가 안 바뀔 수 있어 onResize가 안 나므로 직접 갱신한다.
+        currItem.term?.updateStatusbar();
       }
 
       // this.sessionPartService.fit();
