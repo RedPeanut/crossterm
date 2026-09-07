@@ -120,13 +120,13 @@ export class Menubar {
       }, */
       {
         id: fileReconnMenuId,
-        label: '다시 연결',
+        label: 'Reconnect', // '다시 연결',
         accelerator: keyBinding[fileReconnMenuId][keyBindingIdx],
         click: null
       },
       {
         id: fileReconnAllMenuId,
-        label: '모두 다시 연결',
+        label: 'Reconnect All', // '모두 다시 연결',
         accelerator: null, // keyBinding[fileReconnAllMenuId][keyBindingIdx],
         click: null
       },
@@ -188,25 +188,25 @@ export class Menubar {
       submenu: [
         {
           id: tabAlignMenuId,
-          label: '정렬',
+          label: 'Align',
           accelerator: null, // keyBinding[tabAlignMenuId][keyBindingIdx],
           // click: () => {},
           submenu: [
             {
               id: tabAlignVerticalMenuId,
-              label: '세로로 정렬',
+              label: 'Vertical',
               accelerator: null, // keyBinding[tabAlignVerticalMenuId][keyBindingIdx],
               // click: () => {},
             },
             {
               id: tabAlignHorizontalMenuId,
-              label: '가로로 정렬',
+              label: 'Horizontal',
               accelerator: null, // keyBinding[tabAlignHorizontalMenuId][keyBindingIdx],
               // click: () => {},
             },
             {
               id: tabAlignTilesMenuId,
-              label: '바둑판식 정렬',
+              label: 'Tiles',
               accelerator: null, // keyBinding[tabAlignTilesMenuId][keyBindingIdx],
               // click: () => {},
             },
