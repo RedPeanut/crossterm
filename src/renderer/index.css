@@ -804,8 +804,28 @@ body { height: 100%; }
   height: 17px;
   width: 100%;
   display: flex;
-  background-color: purple;
+  /* background-color: purple; */
+  padding: 0 8px;
+  align-items: center;
 }
+
+.part.statusbar .left-items {
+  flex-grow: 1;
+  display: flex;
+}
+
+.part.statusbar .right-items {
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  display: flex;
+}
+
+.part.statusbar div {
+  /* height: 100%; */
+  /* margin: 0 3px; padding: 0 5px; */
+  line-height: 22px; padding: 0 5px;
+}
+.part.statusbar div:hover { background: rgba(241,241,241,0.2); cursor: pointer; }
 
 /* ContextView */
 .context-view {}

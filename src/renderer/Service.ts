@@ -11,6 +11,7 @@ export const storageServiceId = "storageService";
 export const contextKeyServiceId = "contextKeyService";
 export const commandServiceId = "commandService";
 export const keybindingServiceId = "keybindingServiceId";
+export const statusbarPartServiceId = 'statusbarPartService';
 export const blarBlarServiceId = "blarBlarService";
 
 type ServiceId =
@@ -25,6 +26,7 @@ type ServiceId =
   | typeof contextKeyServiceId
   | typeof commandServiceId
   | typeof keybindingServiceId
+  | typeof statusbarPartServiceId
   | typeof blarBlarServiceId
 ;
 
