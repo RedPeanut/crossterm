@@ -3,6 +3,7 @@ import { SerializableMenuItem, MenubarEnableElem } from "../../common/Types";
 import { CommandService } from "../service/CommandService";
 import { Service, setService, getService, menubarServiceId,
   commandServiceId,
+  keybindingServiceId,
 } from "../Service";
 import { KeybindingService } from "../service/KeybindingService";
 import { $, Dimension } from "../util/dom";
@@ -26,6 +27,7 @@ export class Menubar implements MenubarService {
   hamburgerButton: HTMLElement;
   menubarType: MenubarType;
   commandService: CommandService;
+  keybindingService: KeybindingService;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -54,6 +56,7 @@ export class Menubar implements MenubarService {
     }); */
     setService(menubarServiceId, this);
     this.commandService = getService(commandServiceId);
+    this.keybindingService = getService(keybindingServiceId);
   }
 
   layout(dimension: Dimension): void {
@@ -168,6 +171,7 @@ export class Menubar implements MenubarService {
         if (submenuItem.accelerator) {
           const keybiding = $('span.keybinding');
           keybiding.innerHTML = this.symbolizeShrtcut(this.normalizeShortcut(submenuItem.accelerator));
+          // keybiding.innerHTML = this.keybindingService.lookupKeybindingLabel(submenuItem.commandId) ?? '';
           a.appendChild(keybiding);
         }
 

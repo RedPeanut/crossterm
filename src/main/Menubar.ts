@@ -6,11 +6,13 @@ import {
 // import { isMacintosh, isWindows } from './util/platform';
 import { mainWindow } from './main';
 import {
+  // menu id
   appPreferencesMenuId, appSettingsMenuId, appShortcutsMenuId, appQuitMenuId,
   filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId,
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
   tabCloseAllMenuId, tabCloseOthersMenuId,
+  // command id
   appShortcutsCommandId,
   editCopyCommandId, editPasteCommandId,
 } from '../common/Types';
