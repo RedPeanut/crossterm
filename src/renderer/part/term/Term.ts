@@ -11,6 +11,7 @@ import { ContextKeyService } from '../../service/ContextKeyService';
 import { contextKeyServiceId, getService } from '../../Service';
 import { ContextKey } from "../../key/ContextKey";
 import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from "../../key/contextKeys";
+import { TermResizeOverlay } from "./TermResizeOverlay";
 // import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from './TerminalContextKeys';
 
 /**
@@ -30,6 +31,9 @@ export class Term {
   uid: string;
   xterm: xterm | null = null;
   fitAddon: FitAddon;
+
+  /** 크기 변경 시 가운데에 `cols x rows`를 잠시 띄우는 오버레이. */
+  resizeOverlay: TermResizeOverlay | null = null;
 
   /** 이 터미널 하위에서만 유효한 context. */
   scopedContextKeyService: ContextKeyService;
@@ -56,6 +60,8 @@ export class Term {
     if (item.selected) el.classList.add('selected');
     if (item.active) el.classList.add('active');
     el.id = this.uid;
+
+    this.resizeOverlay = new TermResizeOverlay(el);
 
     // 이 터미널 하위에서만 보이는 context를 만들고, 포커스 상태를 노출한다.
     // keydown은 xterm의 textarea에서 올라오는데 그게 이 element 안에 있으므로,
@@ -110,6 +116,7 @@ export class Term {
     _xterm.onData((e) => this.onData(e));
     _xterm.onResize(({cols, rows}) => {
       window.ipc.send('terminal resize', { uid: this.uid, cols, rows });
+      this.resizeOverlay?.show(cols, rows);
     });
     // this.fitAddon.fit();
     requestAnimationFrame(() => requestAnimationFrame(() => this.fitAddon.fit()));
@@ -184,6 +191,7 @@ export class Term {
     if (this.offError) this.offConnected(); // window.ipc.off('terminal error', this.onError);
     if (this.offClosed) this.offConnected(); // window.ipc.off('terminal closed', this.onClosed);
     this.xterm.dispose();
+    this.resizeOverlay?.dispose();
     this.scopedContextKeyService.dispose();
     delete terminals[this.uid];
   }

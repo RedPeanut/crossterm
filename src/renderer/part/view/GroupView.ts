@@ -39,7 +39,13 @@ export class GroupView implements SplitViewItemView {
   get sashEnablement(): boolean { return this._sashEnablement; }
   set sashEnablement(b: boolean) { this._sashEnablement = b; }
 
-  layout(offset: number, size: number): void {}
+  /**
+   * SplitView가 컨테이너 크기를 반영한 뒤 호출한다.
+   * sash 드래그와 윈도우 리사이즈 모두 이 경로를 타므로 여기서 터미널을 맞춘다.
+   */
+  layout(offset: number, size: number): void {
+    this.terms?.fit();
+  }
   onDidChange(mappedEvent: MappedSashEvent): void {}
   doWhenVisible(visible: boolean): void {}
 

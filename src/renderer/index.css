@@ -754,6 +754,29 @@ body { height: 100%; }
 .terms .term { display: none; }
 .terms .term.selected { display: block; }
 
+/* Resize Overlay */
+.terms .term .resize-overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 4px 10px;
+  border-radius: 4px;
+  background-color: rgb(31, 31, 31);
+  color: rgb(204, 204, 204);
+  border: 1px solid rgb(69, 69, 69);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 80ms ease-out;
+  z-index: 35;
+  font-size: 11px;
+}
+
+.terms .term .resize-overlay.visible {
+  opacity: 1;
+}
+
 .group-view { width:100%; height:100%; }
 
 .terms .drop-target {

@@ -55,4 +55,11 @@ export class Terms {
 
     return el;
   }
+
+  /** 보이는 터미널들을 컨테이너 크기에 맞춘다. 숨겨진 터미널은 Term.fit()에서 걸러진다. */
+  fit(): void {
+    for (const term of this.terms) {
+      term.fit();
+    }
+  }
 }

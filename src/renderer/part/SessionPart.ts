@@ -304,8 +304,7 @@ export class SessionPart extends Part implements SessionPartService {
     for (let i = 0; i < viewItems.length; i++) {
       if (viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        for (let i = 0; i < v.terms.terms.length; i++)
-          v.terms.terms[i].fit();
+        v.terms.fit();
       } else if (viewItems[i].view instanceof OrientationView) {
         this.fit_r(viewItems[i].view as OrientationView);
       }
@@ -316,8 +315,7 @@ export class SessionPart extends Part implements SessionPartService {
     if (this.resultView) {
       if (this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        for (let i = 0; i < v.terms.terms.length; i++)
-          v.terms.terms[i].fit();
+        v.terms.fit();
       } else if (this.resultView instanceof OrientationView) {
         this.fit_r(this.resultView as OrientationView);
       }
