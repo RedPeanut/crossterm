@@ -8,6 +8,7 @@ import { OrientationView } from './view/OrientationView';
 import { Service, sessionPartServiceId, setService } from '../Service';
 import { TerminalItem } from '../../common/Types';
 import { wrapper } from '../globals';
+import { findActiveItem, findItemById } from '../utils';
 import { result } from 'lodash';
 
 export interface SessionPartService extends Service {
@@ -15,6 +16,7 @@ export interface SessionPartService extends Service {
   getServices(): void;
   makeOverlayVisible(b: boolean): void;
   controlStyle({depth, index, pos}, {selected, active}): void;
+  setActiveTerminal(item: TerminalItem): void;
   fit(): void;
 }
 
@@ -297,6 +299,39 @@ export class SessionPart extends Part implements SessionPartService {
         }
       }
     }
+  }
+
+  /**
+   * 주어진 터미널을 활성 터미널로 만든다.
+   * 이전 활성 터미널의 active를 내리고, 같은 그룹이면 selected까지 넘겨받는다.
+   * 탭 클릭과 터미널 영역 클릭이 모두 이 경로를 탄다.
+   */
+  setActiveTerminal(item: TerminalItem): void {
+    if (item.active) return;
+
+    const find_active = findActiveItem(wrapper.tree, 0, []);
+    if (!find_active) return;
+
+    const { depth, index, pos, item: activeItem, group } = find_active;
+
+    // 같은 그룹이면 selected도 새 터미널로 넘어간다 (그룹 내 표시 대상이 하나이므로)
+    const same_group = group.some(groupItem => groupItem.uid === item.uid);
+
+    if (same_group) activeItem.selected = false;
+    activeItem.active = false;
+    this.controlStyle({depth, index, pos}, {selected: same_group ? false : activeItem.selected, active: false});
+
+    const find_curr = findItemById(wrapper.tree, 0, [], item.uid);
+    if (find_curr) {
+      item.selected = true;
+      item.active = true;
+      this.controlStyle({depth: find_curr.depth, index: find_curr.index, pos: find_curr.pos}, {selected: true, active: true});
+
+      // 탭 전환만으로는 크기가 안 바뀔 수 있어 onResize가 안 나므로 직접 갱신한다.
+      item.term?.updateStatusbar();
+    }
+
+    requestAnimationFrame(() => requestAnimationFrame(() => this.fit()));
   }
 
   fit_r(v: OrientationView): void {

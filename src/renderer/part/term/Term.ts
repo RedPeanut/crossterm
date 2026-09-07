@@ -8,8 +8,9 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 import { terminals } from '../../globals';
 // import { ContextKey } from '../../../common/key/ContextKey';
 import { ContextKeyService } from '../../service/ContextKeyService';
-import { contextKeyServiceId, getService, statusbarPartServiceId } from '../../Service';
+import { contextKeyServiceId, getService, sessionPartServiceId, statusbarPartServiceId } from '../../Service';
 import { StatusbarPartService } from "../StatusbarPart";
+import { SessionPartService } from "../SessionPart";
 import { ContextKey } from "../../key/ContextKey";
 import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from "../../key/contextKeys";
 import { TermResizeOverlay } from "./TermResizeOverlay";
@@ -78,7 +79,14 @@ export class Term extends Disposable {
 
     // xterm 5.x에는 onFocus/onBlur 이벤트가 없어서 DOM 이벤트로 잡는다.
     // (focus/blur와 달리 focusin/focusout은 버블링되므로 textarea의 포커스도 여기서 받는다)
-    this._register(_addEventListener(el, 'focusin', () => this.terminalFocused.set(true)));
+    this._register(_addEventListener(el, 'focusin', () => {
+      this.terminalFocused.set(true);
+
+      // 터미널 영역을 클릭(또는 포커스)해도 탭이 활성화되도록 한다.
+      // SessionPart는 레이아웃 recreate 때 다시 만들어지므로 매번 조회한다.
+      const sessionPartService: SessionPartService = getService(sessionPartServiceId);
+      sessionPartService?.setActiveTerminal(this.item);
+    }));
     this._register(_addEventListener(el, 'focusout', (e: FocusEvent) => {
       const next = e.relatedTarget as Node | null;
       if (next && el.contains(next)) return; // 터미널 내부에서의 포커스 이동은 무시

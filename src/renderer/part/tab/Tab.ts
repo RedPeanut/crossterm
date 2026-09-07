@@ -2,8 +2,6 @@ import { $ } from "../../util/dom";
 import { ConnStatus, TerminalItem } from "../../../common/Types";
 import { SessionPartService } from "../SessionPart";
 import { getService, sessionPartServiceId } from "../../Service";
-import { wrapper } from "../../globals";
-import { findActiveItem, findItemById } from "../../utils";
 
 export class Tab {
 
@@ -21,46 +19,7 @@ export class Tab {
   }
 
   onMouseDown(e: any) {
-
-    const currItem = this.item;
-
-    // find active item index
-    const find_active = findActiveItem(wrapper.tree, 0, []);
-
-    if (find_active) {
-      const { depth, index, pos, item: activeItem, group } = find_active;
-
-      // turn off active item's selected property if current is in same group
-      let same_group = false;
-      for (let i = 0; i < group.length; i++) {
-        if (group[i].uid === currItem.uid) {
-          same_group = true;
-          break;
-        }
-      }
-
-      if (same_group) activeItem.selected = false;
-      activeItem.active = false;
-
-      // console.log('find_active =', find_active);
-      this.sessionPartService.controlStyle({depth, index, pos}, {selected: same_group ? false : activeItem.selected, active: false});
-
-      const find_curr = findItemById(wrapper.tree, 0, [], currItem.uid);
-      if (find_curr) {
-        currItem.selected = true;
-        currItem.active = true;
-
-        const { depth, index, pos } = find_curr;
-        // console.log('find_curr =', find_curr);
-        this.sessionPartService.controlStyle({depth, index, pos}, {selected: true, active: true});
-
-        // 탭 전환만으로는 크기가 안 바뀔 수 있어 onResize가 안 나므로 직접 갱신한다.
-        currItem.term?.updateStatusbar();
-      }
-
-      // this.sessionPartService.fit();
-      requestAnimationFrame(() => requestAnimationFrame(() => this.sessionPartService.fit()));
-    }
+    this.sessionPartService.setActiveTerminal(this.item);
   }
 
   onDragStart(e: any): void {
