@@ -10,6 +10,7 @@ import {
   filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId,
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
+  tabCloseAllMenuId, tabCloseOthersMenuId,
   appShortcutsCommandId,
   editCopyCommandId, editPasteCommandId,
 } from '../common/Types';
@@ -211,6 +212,20 @@ export class Menubar {
             },
           ],
         },
+        {
+          id: tabCloseOthersMenuId,
+          label: 'Close Others',
+          accelerator: null, // keyBinding[tabCloseOthersMenuId][keyBindingIdx],
+          // click: () => {},
+          submenu: null
+        },
+        {
+          id: tabCloseAllMenuId,
+          label: 'Close All',
+          accelerator: null, // keyBinding[tabCloseAllMenuId][keyBindingIdx],
+          // click: () => {},
+          submenu: null
+        }
       ],
     });
   }

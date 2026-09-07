@@ -100,6 +100,8 @@ export const tabAlignMenuId = 'tab.align';
 export const tabAlignVerticalMenuId = 'tab.align.vertical';
 export const tabAlignHorizontalMenuId = 'tab.align.horizontal';
 export const tabAlignTilesMenuId = 'tab.align.tiles';
+export const tabCloseOthersMenuId = 'tab.close.others';
+export const tabCloseAllMenuId = 'tab.close.all';
 
 // window
 
