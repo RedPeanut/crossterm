@@ -67,13 +67,13 @@ export class Term extends Disposable {
     if (item.active) el.classList.add('active');
     el.id = this.uid;
 
-    this.resizeOverlay = new TermResizeOverlay(el);
+    this.resizeOverlay = this._register(new TermResizeOverlay(el));
 
     // 이 터미널 하위에서만 보이는 context를 만들고, 포커스 상태를 노출한다.
     // keydown은 xterm의 textarea에서 올라오는데 그게 이 element 안에 있으므로,
     // KeybindingService가 DOM을 거슬러 올라가며 이 context를 찾게 된다.
     const contextKeyService: ContextKeyService = getService(contextKeyServiceId);
-    this.scopedContextKeyService = contextKeyService.createScoped(el);
+    this.scopedContextKeyService = this._register(contextKeyService.createScoped(el));
     this.terminalFocused = this.scopedContextKeyService.createKey<boolean>(terminalFocusedContextKeyName, false);
     this.terminalHasSelection = this.scopedContextKeyService.createKey<boolean>(terminalHasSelectionContextKeyName, false);
 
@@ -92,12 +92,12 @@ export class Term extends Disposable {
       if (next && el.contains(next)) return; // 터미널 내부에서의 포커스 이동은 무시
       this.terminalFocused.set(false);
     }));
-    // el.addEventListener('focusin', () => this.terminalFocused.set(true));
-    // el.addEventListener('focusout', (e: FocusEvent) => {
+    // this._register(_addEventListener(el, 'focusin', () => this.terminalFocused.set(true)));
+    // this._register(_addEventListener(el, 'focusout', (e: FocusEvent) => {
     //   const next = e.relatedTarget as Node | null;
     //   if (next && el.contains(next)) return; // 터미널 내부에서의 포커스 이동은 무시
     //   this.terminalFocused.set(false);
-    // });
+    // }));
 
     return el;
   }
@@ -145,7 +145,7 @@ export class Term extends Disposable {
     // this.fitAddon.fit();
     requestAnimationFrame(() => requestAnimationFrame(() => this.fitAddon.fit()));
 
-    this.xterm = _xterm;
+    this.xterm = this._register(_xterm);
     if (this.item.type === 'remote')
       this.xterm.write(`Connecting to ${this.item.url.host}:${this.item.url.port}...\r\n`);
 
@@ -176,9 +176,12 @@ export class Term extends Disposable {
         this.xterm.write('Connection Closed.\r\n');
       };
 
-      this.offConnected = window.ipc.on('terminal connected', this.onConnected);
-      this.offError = window.ipc.on('terminal error', this.onError);
-      this.offClosed = window.ipc.on('terminal closed', this.onClosed);
+      // this.offConnected = window.ipc.on('terminal connected', this.onConnected);
+      // this.offError = window.ipc.on('terminal error', this.onError);
+      // this.offClosed = window.ipc.on('terminal closed', this.onClosed);
+      this._register(window.ipc.on('terminal connected', this.onConnected));
+      this._register(window.ipc.on('terminal error', this.onError));
+      this._register(window.ipc.on('terminal closed', this.onClosed));
     }
   }
 
@@ -227,13 +230,13 @@ export class Term extends Disposable {
   }
 
   destroy(): void {
-    if (this.offConnected) this.offConnected(); // window.ipc.off('terminal connected', this.onConnected);
-    if (this.offError) this.offConnected(); // window.ipc.off('terminal error', this.onError);
-    if (this.offClosed) this.offConnected(); // window.ipc.off('terminal closed', this.onClosed);
+    // if (this.offConnected) this.offConnected(); // window.ipc.off('terminal connected', this.onConnected);
+    // if (this.offError) this.offError(); // window.ipc.off('terminal error', this.onError);
+    // if (this.offClosed) this.offClosed(); // window.ipc.off('terminal closed', this.onClosed);
     if (this.item.active) this.statusbarPartService?.updateTerminalStatus(undefined);
-    this.xterm.dispose();
-    this.resizeOverlay?.dispose();
-    this.scopedContextKeyService.dispose();
+    // this.xterm.dispose();
+    // this.resizeOverlay?.dispose();
+    // this.scopedContextKeyService.dispose();
     delete terminals[this.uid];
     super.dispose();
   }

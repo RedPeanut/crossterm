@@ -26,12 +26,17 @@ const electronHandler = {
   on: (channel: Channels, cb: (...args: unknown[]) => void): any => {
     const listener = (event: IpcRendererEvent, ...args: unknown[]) => cb(event, ...args);
     ipcRenderer.on(channel, listener);
-    return () => ipcRenderer.off(channel, listener);
+    // return () => ipcRenderer.off(channel, listener);
+    return {
+      dispose: () => ipcRenderer.off(channel, listener)
+    }
   },
   once: (channel: string, cb: (...args: unknown[]) => void): any => {
     const listener = (event: IpcRendererEvent, ...args: unknown[]) => cb(event, ...args);
     ipcRenderer.once(channel, listener);
-    return () => ipcRenderer.off(channel, listener);
+    return {
+      dispose: () => ipcRenderer.off(channel, listener)
+    }
   },
   off: (channel: Channels, cb: (...args: unknown[]) => void) => {
     ipcRenderer.removeListener(channel, cb)

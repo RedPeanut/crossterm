@@ -9,7 +9,7 @@ import { SidebarPart } from '../part/SidebarPart';
 import { SessionPart } from '../part/SessionPart';
 import { BodyLayout, BodyLayoutService } from './BodyLayout';
 import { SplitView, SplitViewItem } from '../component/SplitView';
-import { getClientArea, position, size } from '../util/dom';
+import { _addEventListener, getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
 import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId, contextViewServiceId,
   contextKeyServiceId, commandServiceId, keybindingServiceId } from '../Service';
@@ -141,7 +141,7 @@ export class MainLayout extends Layout implements MainLayoutService {
   } */
 
   installIpc(): void {
-    window.ipc.on('terminal data', (...args: any[]) => {
+    this._register(window.ipc.on('terminal data', (...args: any[]) => {
       // console.log('terminal data event is called..');
       // console.log('args =', args);
       const raw: string = args[1];
@@ -151,17 +151,17 @@ export class MainLayout extends Layout implements MainLayoutService {
       if (term) {
         term.xterm.write(data);
       }
-    });
-    window.ipc.on('app quit request', async (...args: any[]) => {
+    }));
+    this._register(window.ipc.on('app quit request', async (...args: any[]) => {
       // await window.ipc.invoke('config set', 'initial_value', renderer.initial_value);
       // await window.ipc.invoke('config set', 'list', renderer.list);
       window.ipc.send('app quit ready', null);
-    });
+    }));
     // 네이티브 메뉴(main) 클릭 -> 단축키와 동일한 커맨드를 실행한다.
-    window.ipc.on('execute command', (...args: any[]) => {
+    this._register(window.ipc.on('execute command', (...args: any[]) => {
       const [, commandId, ...commandArgs] = args; // args[0]은 IpcRendererEvent
       this.commandService.executeCommand(commandId, ...commandArgs);
-    });
+    }));
   }
 
   /* createPartContainer(id: string, role: string, classes: string[]): HTMLElement {
@@ -336,10 +336,10 @@ export class MainLayout extends Layout implements MainLayoutService {
       resizeTimeout = setTimeout(resize, 100);
     };
 
-    window.addEventListener('resize', (event: UIEvent) => {
+    this._register(_addEventListener(window, 'resize', (event: UIEvent) => {
       // console.log('resize event is called ..');
       _handleResize(event);
-    });
+    }));
 
     // create terminal after layout n ipc install
     (getService(sessionPartServiceId) as SessionPartService).createTerminal();

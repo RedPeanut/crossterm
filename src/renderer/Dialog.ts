@@ -60,11 +60,11 @@ export class Dialog extends Disposable {
     this._register(_addEventListener(document, 'mouseup', onDragEnd));
 
     const closeBtn = $('a.codicon.codicon-chrome-close.close');
-    closeBtn.addEventListener('click', async () => {
+    this._register(_addEventListener(closeBtn, 'click', async () => {
       // dom.clearContainer(this.buttons);
       // this.dispose();
       this.close();
-    });
+    }));
 
     titlebar.appendChild(closeBtn);
     dialog.appendChild(titlebar);

@@ -6,7 +6,8 @@ import { Service, setService, getService, menubarServiceId,
   keybindingServiceId,
 } from "../Service";
 import { KeybindingService } from "../service/KeybindingService";
-import { $, Dimension } from "../util/dom";
+import { $, Dimension, _addEventListener } from "../util/dom";
+import { Disposable } from '../../common/base/lifecycle';
 
 enum MenubarType {
   Normal,
@@ -20,7 +21,7 @@ export interface MenubarService extends Service {
 
 export interface MenubarOptions {}
 
-export class Menubar implements MenubarService {
+export class Menubar extends Disposable implements MenubarService {
 
   container: HTMLElement;
   normalButtons: HTMLElement[] = [];
@@ -30,17 +31,18 @@ export class Menubar implements MenubarService {
   keybindingService: KeybindingService;
 
   constructor(container: HTMLElement) {
+    super();
     this.container = container;
 
     this.container.tabIndex = -1;
-    container.addEventListener('keydown', (e: KeyboardEvent) => {
+    this._register(_addEventListener(container, 'keydown', (e: KeyboardEvent) => {
       console.log('e.key =', e.key);
 
-    });
-    /* container.addEventListener('focusin', (e: KeyboardEvent) => {
+    }));
+    /* this._register(_addEventListener(container, 'focusin', (e: KeyboardEvent) => {
       console.log('focusin is called ..');
-    }); */
-    container.addEventListener('focusout', (e: FocusEvent) => {
+    })); */
+    this._register(_addEventListener(container, 'focusout', (e: FocusEvent) => {
       // console.log('focusout is called ..');
       if (this.menubarType === MenubarType.Hamburger) {
         this.hamburgerButton.classList.remove('on');
@@ -49,11 +51,11 @@ export class Menubar implements MenubarService {
           this.normalButtons[i].classList.remove('on')
         }
       }
-    });
+    }));
 
-    /* window.addEventListener('mousedown', (e) => {
+    /* this._register(_addEventListener(window, 'mousedown', (e) => {
       console.log('mousedown is called ..');
-    }); */
+    })); */
     setService(menubarServiceId, this);
     this.commandService = getService(commandServiceId);
     this.keybindingService = getService(keybindingServiceId);
@@ -146,18 +148,18 @@ export class Menubar implements MenubarService {
         a.classList.add('separator');
         li.appendChild(a);
       } else {
-        // li.addEventListener('mouseover', (e) => {});
-        // li.addEventListener('mouseleave', (e) => {});
-        // li.addEventListener('focusout', (e) => {});
+        // this._register(_addEventListener(li, 'mouseover', (e) => {}));
+        // this._register(_addEventListener(li, 'mouseleave', (e) => {}));
+        // this._register(_addEventListener(li, 'focusout', (e) => {}));
 
         const a = $('a');
 
         if (submenuItem.enabled && submenuItem.clickable && submenuItem.commandId) {
           const commandId = submenuItem.commandId;
-          a.addEventListener('click', () => {
+          this._register(_addEventListener(a, 'click', () => {
             this.commandService.executeCommand(commandId)
               .catch(err => console.error(`[menubar] command '${commandId}' failed`, err));
-          });
+          }));
         }
         li.appendChild(a);
 
@@ -188,10 +190,10 @@ export class Menubar implements MenubarService {
 
   async createHamburgerMenu(container: HTMLElement) {
     const button = this.hamburgerButton = $('.button.hamburger');
-    button.addEventListener('click', (e) => {
+    this._register(_addEventListener(button, 'click', (e) => {
       // console.log('e.target =', e.target);
       (e.currentTarget as HTMLElement).classList.toggle('on');
-    });
+    }));
 
     const title = $('.title.codicon.codicon-menu');
     button.appendChild(title);
@@ -210,9 +212,9 @@ export class Menubar implements MenubarService {
         a.classList.add('separator');
         li.appendChild(a);
       } else {
-        li.addEventListener('mouseover', (e) => { (e.currentTarget as HTMLElement).classList.add('on');  });
-        li.addEventListener('mouseleave', (e) => { (e.currentTarget as HTMLElement).classList.remove('on'); });
-        li.addEventListener('focusout', (e) => { (e.currentTarget as HTMLElement).classList.remove('on'); });
+        this._register(_addEventListener(li, 'mouseover', (e) => { (e.currentTarget as HTMLElement).classList.add('on');  }));
+        this._register(_addEventListener(li, 'mouseleave', (e) => { (e.currentTarget as HTMLElement).classList.remove('on'); }));
+        this._register(_addEventListener(li, 'focusout', (e) => { (e.currentTarget as HTMLElement).classList.remove('on'); }));
 
         const a = $('a');
         li.appendChild(a);
@@ -245,12 +247,12 @@ export class Menubar implements MenubarService {
       this.normalButtons.push(button);
 
       // button.innerHTML = item.label.replace(/&/g, '');
-      button.addEventListener('click', (e) => {
+      this._register(_addEventListener(button, 'click', (e) => {
         // console.log('e.target =', e.target);
         (e.currentTarget as HTMLElement).classList.toggle('on');
-      });
+      }));
 
-      button.addEventListener('mouseover', (e) => {
+      this._register(_addEventListener(button, 'mouseover', (e) => {
         // if there is any menu on-ed (clicked) → change on
         let i, b = false;
         for (i = 0; i < this.normalButtons.length; i++) {
@@ -263,9 +265,9 @@ export class Menubar implements MenubarService {
           this.normalButtons[i].classList.remove('on');
           (e.currentTarget as HTMLElement).classList.toggle('on');
         }
-      });
-      button.addEventListener('mouseout', (e) => {});
-      // button.addEventListener('keydown', (e) => {});
+      }));
+      this._register(_addEventListener(button, 'mouseout', (e) => {}));
+      // this._register(_addEventListener(button, 'keydown', (e) => {}));
 
       const title = $('.title');
       title.innerHTML = menuItem.label.replace(/&/g, '');

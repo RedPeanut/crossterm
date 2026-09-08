@@ -62,7 +62,7 @@ export class ActivitybarPart extends Part implements ActivitybarPartService {
     actionList.forEach((item) => {
       const li = document.createElement('li');
       li.classList.add(...'activitybar-item'.split(' '));
-      li.addEventListener('click', item.onClick);
+      this._register(_addEventListener(li, 'click', item.onClick));
       const a = document.createElement('a');
       a.classList.add(...`codicon codicon-${item.codicon}`.split(' '));
       li.appendChild(a);

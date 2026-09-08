@@ -1,12 +1,14 @@
 import { Part } from './Part';
+import { Disposable } from '../common/base/lifecycle';
 
-export abstract class Layout {
+export abstract class Layout extends Disposable {
 
   parent: HTMLElement;
   container: HTMLElement = document.createElement('div');
   parts = new Map<string, Part>();
 
   constructor(parent: HTMLElement) {
+    super();
     this.parent = parent;
   }
 

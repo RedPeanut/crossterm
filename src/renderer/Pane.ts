@@ -1,5 +1,6 @@
 import { MappedSashEvent, SplitViewItemSizeType, SplitViewItemView } from "./component/SplitView";
-import { $, append } from "./util/dom";
+import { $, _addEventListener, append } from "./util/dom";
+import { Disposable } from '../common/base/lifecycle';
 
 export interface _PaneOptions {
   collapsed: boolean;
@@ -11,7 +12,7 @@ export interface _PaneOptions {
 
 export type PaneOptions = Partial<_PaneOptions>;
 
-export abstract class Pane implements SplitViewItemView {
+export abstract class Pane extends Disposable implements SplitViewItemView {
   static HEADER_SIZE = 22;
 
   _element: HTMLElement;
@@ -95,16 +96,17 @@ export abstract class Pane implements SplitViewItemView {
   body: HTMLElement;
 
   constructor(parent: HTMLElement, options: PaneOptions) {
+    super();
     this.parent = parent;
     this.options = options;
     this.element = $('.pane');
 
-    this.element.addEventListener('mouseenter', (e) => {
+    this._register(_addEventListener(this.element, 'mouseenter', (e: MouseEvent) => {
       this.element.classList.add('hover');
-    });
-    this.element.addEventListener('mouseleave', (e) => {
+    }));
+    this._register(_addEventListener(this.element, 'mouseleave', (e: MouseEvent) => {
       this.element.classList.remove('hover');
-    });
+    }));
 
     if (this.options) {
       if (typeof this.options.collapsed === 'boolean')

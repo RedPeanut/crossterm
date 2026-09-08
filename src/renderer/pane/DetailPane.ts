@@ -4,6 +4,7 @@ import { getService, sidebarPartServiceId } from "../Service";
 import { SidebarPartService } from "../part/SidebarPart";
 import { $ } from "../util/dom";
 import * as dom from "../util/dom";
+import { _addEventListener } from "../util/dom";
 
 interface DetailRow {
   label: string;
@@ -52,10 +53,10 @@ export class DetailPane extends Pane {
     const arrow = $('.arrow');
     const right = $('a.codicon.codicon-chevron-right');
     arrow.appendChild(right);
-    arrow.addEventListener('click', (e: MouseEvent) => {
+    this._register(_addEventListener(arrow, 'click', (e: MouseEvent) => {
       this.expanded = !this.expanded;
       (getService(sidebarPartServiceId) as SidebarPartService).layout(null, null);
-    });
+    }));
     this.header.appendChild(arrow);
     const title = $('h3.title');
     title.innerHTML = 'DETAIL';
@@ -134,7 +135,7 @@ export class DetailPane extends Pane {
     wrap.appendChild(sash);
 
     // add event handler
-    sash.addEventListener('pointerdown', (e: PointerEvent) => {
+    this._register(_addEventListener(sash, 'pointerdown', (e: PointerEvent) => {
       e.preventDefault();
       sash.classList.add('active');
 
@@ -169,7 +170,7 @@ export class DetailPane extends Pane {
       // 전역(window)에 이벤트를 걸어야 테이블 밖으로 마우스가 나가도 부드럽게 트래킹됨
       window.addEventListener('pointermove', onPointerMove);
       window.addEventListener('pointerup', onPointerUp);
-    });
+    }));
 
     /* const headers = tableEl.querySelectorAll('th');
 

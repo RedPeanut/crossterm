@@ -8,7 +8,7 @@ import { Pane, PaneOptions } from "../Pane";
 import { SessionPartService } from "../part/SessionPart";
 import { SidebarPartService } from "../part/SidebarPart";
 import { getService, bodyLayoutServiceId, sessionPartServiceId, sidebarPartServiceId, mainLayoutServiceId } from "../Service";
-import { $ } from "../util/dom";
+import { $, _addEventListener } from "../util/dom";
 import { findActiveItem } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
@@ -37,10 +37,10 @@ export class ListPane extends Pane {
     const arrow = $('.arrow');
     const right = $('a.codicon.codicon-chevron-right');
     arrow.appendChild(right);
-    arrow.addEventListener('click', (e: MouseEvent) => {
+    this._register(_addEventListener(arrow, 'click', (e: MouseEvent) => {
       this.expanded = !this.expanded;
       (getService(sidebarPartServiceId) as SidebarPartService).layout(null, null);
-    });
+    }));
     this.header.appendChild(arrow);
 
     const title = $('h3.title');
@@ -79,7 +79,7 @@ export class ListPane extends Pane {
       let a = $('a');
       a.title = items[i].title;
       a.classList.add('codicon', 'codicon-' + items[i].icon);
-      a.addEventListener('click', items[i].click);
+      this._register(_addEventListener(a, 'click', items[i].click));
       li.appendChild(a);
       ul.appendChild(li);
     }

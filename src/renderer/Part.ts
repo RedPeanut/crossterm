@@ -1,6 +1,7 @@
 import { MappedSashEvent, SplitViewItem, SplitViewItemSizeType, SplitViewItemView } from "./component/SplitView";
 import { Component } from "./Component";
 import { Parts } from "./layout/MainLayout";
+import { Disposable } from '../common/base/lifecycle';
 
 export interface _PartOptions {
   id: Parts;
@@ -11,7 +12,7 @@ export interface _PartOptions {
 
 export type PartOptions = Partial<_PartOptions>;
 
-export abstract class Part implements SplitViewItemView {
+export abstract class Part extends Disposable implements SplitViewItemView {
 
   // _element: HTMLElement;
   get element(): HTMLElement { return this.container; }
@@ -56,6 +57,7 @@ export abstract class Part implements SplitViewItemView {
   options: PartOptions;
 
   constructor(options: PartOptions) {
+    super();
     this.options = options;
   }
 

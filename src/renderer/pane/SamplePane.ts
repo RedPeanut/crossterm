@@ -1,7 +1,7 @@
 import { Pane, PaneOptions } from "../Pane";
 import { getService, sidebarPartServiceId } from "../Service";
 import { SidebarPartService } from "../part/SidebarPart";
-import { $ } from "../util/dom";
+import { $, _addEventListener } from "../util/dom";
 
 export class SamplePane extends Pane {
 
@@ -19,10 +19,10 @@ export class SamplePane extends Pane {
     const arrow = $('.arrow');
     const right = $('a.codicon.codicon-chevron-right');
     arrow.appendChild(right);
-    arrow.addEventListener('click', (e: MouseEvent) => {
+    this._register(_addEventListener(arrow, 'click', (e: MouseEvent) => {
       this.expanded = !this.expanded;
       (getService(sidebarPartServiceId) as SidebarPartService).layout(null, null);
-    });
+    }));
     this.header.appendChild(arrow);
     const title = $('h3.title');
     title.innerHTML = 'SAMPLE';

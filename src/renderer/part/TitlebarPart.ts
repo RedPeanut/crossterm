@@ -2,7 +2,7 @@ import { renderer } from '..';
 import { MappedSashEvent, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from '../component/SplitView';
 import { TITLEBAR_HEIGHT } from '../layout/MainLayout';
 import { Part, PartOptions } from '../Part';
-import { $ } from '../util/dom';
+import { $, _addEventListener } from '../util/dom';
 import { Menubar } from './Menubar';
 
 interface TitlebarPartOptions extends PartOptions {}
@@ -15,7 +15,7 @@ export class TitlebarPart extends Part {
     this.size = TITLEBAR_HEIGHT;
     // this.border = true;
 
-    window.ipc.on('window state changed', (...args: any[]) => {
+    this._register(window.ipc.on('window state changed', (...args: any[]) => {
       // console.log('on window state changed is called ..');
       // console.log('args =', args);
       const arg = args[1];
@@ -24,7 +24,7 @@ export class TitlebarPart extends Part {
         this.maxResBtn.classList.add('codicon-chrome-restore');
       else
       this.maxResBtn.classList.add('codicon-chrome-maximize');
-    });
+    }));
   }
 
   override create(): void {
@@ -48,23 +48,23 @@ export class TitlebarPart extends Part {
       else
         window.ipc.send('window fn', 'browserWindow', 'maximize');
     }
-    middle.addEventListener('dblclick', handleMaxOrRes);
+    this._register(_addEventListener(middle, 'dblclick', handleMaxOrRes));
     menubar.appendChild(middle);
 
     const right = $('.right');
     const minimizeBtn = $('a.codicon.codicon-chrome-minimize');
-    minimizeBtn.addEventListener('click', () => {
+    this._register(_addEventListener(minimizeBtn, 'click', () => {
       window.ipc.send('window fn', 'browserWindow', 'minimize');
-    });
+    }));
 
     const maxResBtn = this.maxResBtn = $('a.codicon');
     maxResBtn.classList.add('codicon-chrome-' + (renderer.window.isMaximized ? 'restore' : 'maximize'));
-    maxResBtn.addEventListener('click', handleMaxOrRes);
+    this._register(_addEventListener(maxResBtn, 'click', handleMaxOrRes));
 
     const closeBtn = $('a.codicon.codicon-chrome-close.close');
-    closeBtn.addEventListener('click', () => {
+    this._register(_addEventListener(closeBtn, 'click', () => {
       window.ipc.send('window fn', 'browserWindow', 'close');
-    });
+    }));
 
     right.appendChild(minimizeBtn);
     right.appendChild(maxResBtn);

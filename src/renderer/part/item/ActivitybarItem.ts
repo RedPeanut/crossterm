@@ -1,6 +1,7 @@
-import { $, append } from "../../util/dom";
+import { $, _addEventListener, append } from "../../util/dom";
 import { Component } from "../../Component";
 import { Panel } from "../../Panel";
+import { Disposable } from '../../../common/base/lifecycle';
 
 export interface ActivitybarItemOptions {}
 
@@ -11,7 +12,7 @@ export interface ActivitybarItem {
   get element(): HTMLElement;
 }
 
-export class ActivitybarItemImpl implements ActivitybarItem {
+export class ActivitybarItemImpl extends Disposable implements ActivitybarItem {
   // static ID: string = 'acion-item.xxx';
 
   _container: HTMLElement;
@@ -24,6 +25,7 @@ export class ActivitybarItemImpl implements ActivitybarItem {
   get element(): HTMLElement { return this._element; }
 
   constructor(container: HTMLElement, id: string, options: ActivitybarItemOptions = {}) {
+    super();
     this._container = container;
     this._id = id;
     // this._panel = panel;
@@ -31,20 +33,20 @@ export class ActivitybarItemImpl implements ActivitybarItem {
 
   append(onClick: (e: MouseEvent) => void, codicon: string): void {
     const li = this._element = document.createElement('li');
-      li.classList.add(...'activitybar-item'.split(' '));
-      li.addEventListener('click', onClick);
-      const a = document.createElement('a');
-      a.classList.add(...`codicon codicon-${codicon}`.split(' '));
-      li.appendChild(a);
+    li.classList.add(...'activitybar-item'.split(' '));
+    this._register(_addEventListener(li, 'click', onClick));
+    const a = document.createElement('a');
+    a.classList.add(...`codicon codicon-${codicon}`.split(' '));
+    li.appendChild(a);
 
-      // Badge
-      const badge = append(li, $('.badge'));
-      const badgeContent = append(badge, $('.badge-content'));
+    // Badge
+    const badge = append(li, $('.badge'));
+    const badgeContent = append(badge, $('.badge-content'));
 
-      // active indicator
-      append(li, $('.active-item-indicator'));
+    // active indicator
+    append(li, $('.active-item-indicator'));
 
-      this._container.appendChild(li);
+    this._container.appendChild(li);
   }
 
   updateChecked(checked: boolean): void {

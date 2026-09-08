@@ -9,9 +9,9 @@ export class RenderConfigurationService extends Disposable implements Configurat
 
   constructor() {
     super();
-    window.ipc.on('configuration changed', (_event: unknown, change: ConfigurationChangeEvent) => {
+    this._register(window.ipc.on('configuration changed', (_event: unknown, change: ConfigurationChangeEvent) => {
       this._onDidChangeConfiguration.fire(change);
-    });
+    }));
   }
 
   init(): Promise<void> {
