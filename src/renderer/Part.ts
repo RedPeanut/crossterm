@@ -1,6 +1,6 @@
-import { MappedSashEvent, SplitViewItem, SplitViewItemSizeType, SplitViewItemView } from "./component/SplitView";
-import { Component } from "./Component";
-import { Parts } from "./layout/MainLayout";
+import { MappedSashEvent, SplitViewItem, SplitViewItemSizeType, SplitViewItemView } from './component/SplitView';
+import { Component } from './Component';
+import { Parts } from './layout/MainLayout';
 import { Disposable } from '../common/base/lifecycle';
 
 export interface _PartOptions {
