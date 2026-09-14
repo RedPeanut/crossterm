@@ -95,13 +95,13 @@ export class PropertiesPopup extends Popup {
               append(row, $<HTMLLabelElement>('label')).textContent = '사용자 이름';
               input = append(row, $<HTMLInputElement>('input'));
               input.type = 'text';
-              input.value = this.options.data.url.username;
+              input.value = this.options.data.url ? this.options.data.url.username : '';
 
               row = append(container, $('.row'));
               append(row, $<HTMLLabelElement>('label')).textContent = '암호';
               input = append(row, $<HTMLInputElement>('input'))
               input.type = 'password';
-              input.value = this.options.data.url.password;
+              input.value = this.options.data.url ? this.options.data.url.password : '';
             }
           }
         ],
@@ -123,13 +123,13 @@ export class PropertiesPopup extends Popup {
           append(row, $<HTMLLabelElement>('label')).textContent = '호스트';
           input = append(row, $<HTMLInputElement>('input'))
           input.type = 'text';
-          input.value = this.options.data.url.host;
+          input.value = this.options.data.url ? this.options.data.url.host : '';
 
           row = append(container, $('.row'));
           append(row, $<HTMLLabelElement>('label')).textContent = '포트 번호';
           input = append(row, $<HTMLInputElement>('input'));
           input.type = 'number';
-          input.value = this.options.data.url.port;
+          input.value = this.options.data.url ? this.options.data.url.port : '';
         }
       }
     ];
