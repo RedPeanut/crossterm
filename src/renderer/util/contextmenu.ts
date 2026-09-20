@@ -8,13 +8,13 @@ export function popup(items: ContextMenuItem[], options?: PopupOptions, onHide?:
 
   const contextMenuId = contextMenuIdPool++;
   const onClickChannel = `contextmenu on ${contextMenuId}`;
-  const onClickChannelHandler = (event: unknown, itemId: number, context: ContextMenuEvent) => {
+  const onClickChannelHandler = (event: unknown, itemId: number, contextMenuEvent: ContextMenuEvent) => {
     console.log('once channelHandler is called ..');
     // console.log('itemId =', itemId);
     // console.log('context =', context);
 
     const item = processedItems[itemId];
-    item.click?.([event, itemId, context]);
+    item.click?.([event, itemId, contextMenuEvent]);
   };
   const disposeClick = window.ipc.once(onClickChannel, onClickChannelHandler);
 

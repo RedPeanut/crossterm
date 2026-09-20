@@ -15,7 +15,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import * as utils from './utils';
-import { SerializableMenuItem } from '../common/Types';
+import { SerializableContextMenuItem, SerializableMenuItem } from '../common/Types';
 import { Menubar } from './Menubar';
 import { TerminalItem } from '../common/Types';
 import TerminalLocal from './terminal/TerminalLocal';
@@ -224,7 +224,7 @@ class MainWindow extends Disposable {
       }
     });
 
-    function createMenu(event: IpcMainEvent, onClick: string, items): Menu {
+    function createMenu(event: IpcMainEvent, items : SerializableContextMenuItem[], onClickChannel: string): Menu {
       const menu = new Menu();
 
       items.forEach(item => {
@@ -240,7 +240,7 @@ class MainWindow extends Disposable {
         // Sub Menu
         else if (Array.isArray(item.submenu)) {
           menuitem = new MenuItem({
-            submenu: createMenu(event, onClick, item.submenu),
+            submenu: createMenu(event, item.submenu, onClickChannel),
             label: item.label
           });
         }
@@ -254,7 +254,7 @@ class MainWindow extends Disposable {
             checked: item.checked,
             enabled: item.enabled,
             visible: item.visible,
-            click: (menuItem, win, contextmenuEvent) => event.sender.send(onClick, item.id, contextmenuEvent)
+            click: (menuItem, win, contextMenuEvent) => event.sender.send(onClickChannel, item.id, contextMenuEvent)
           });
         }
 
@@ -266,9 +266,9 @@ class MainWindow extends Disposable {
 
     ipcMain.on('contextmenu', (event, args: any[]) => {
       // (event, contextMenuId, items, onClick, options) => {
-      const [ contextMenuId, items, onClick, options ] = args;
+      const [ contextMenuId, items, onClickChannel, options ] = args;
 
-      const menu = createMenu(event, onClick, items);
+      const menu = createMenu(event, items, onClickChannel);
       menu.popup({
         x: options ? options.x : undefined,
         y: options ? options.y : undefined,
