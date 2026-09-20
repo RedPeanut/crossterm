@@ -33,8 +33,9 @@ export interface TerminalItem {
 }
 
 export interface CommonMenuItem {
-  id?: number | string;
+  // id?: number | string;
   commandId?: string;
+
   label?: string;
   type?: 'normal' | 'separator' | 'submenu' | 'checkbox' | 'radio';
   accelerator?: string;
@@ -45,10 +46,26 @@ export interface CommonMenuItem {
 }
 
 export interface SerializableMenuItem extends CommonMenuItem {
+  id: number | string;
   submenu?: SerializableMenuItem[];
 }
 
-export interface ContextMenuItem extends CommonMenuItem {
+// what the difference of context menu item vs simple menu item?
+export interface CommonContextMenuItem {
+  label?: string;
+  type?: 'normal' | 'separator' | 'submenu' | 'checkbox' | 'radio';
+  accelerator?: string;
+  enabled?: boolean;
+  visible?: boolean;
+  checked?: boolean;
+}
+
+export interface SerializableContextMenuItem extends CommonContextMenuItem {
+  id: number;
+  submenu?: SerializableContextMenuItem[];
+}
+
+export interface ContextMenuItem extends CommonContextMenuItem {
   click?: (args: any[]) => void;
   submenu?: ContextMenuItem[];
 }

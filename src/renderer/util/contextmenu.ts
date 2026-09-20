@@ -1,5 +1,5 @@
 // import { MenuEvent, MenuItem, PopupOptions, SerializableMenuItem } from "../Types";
-import { ContextMenuEvent, ContextMenuItem, PopupOptions, SerializableMenuItem } from "../../common/Types";
+import { ContextMenuEvent, ContextMenuItem, PopupOptions, SerializableContextMenuItem } from "../../common/Types";
 
 let contextMenuIdPool = 0;
 
@@ -35,15 +35,15 @@ export function popup(items: ContextMenuItem[], options?: PopupOptions, onHide?:
   window.ipc.send('contextmenu', contextMenuId, items.map(item => createItem(item, processedItems)), onClickChannel, options);
 }
 
-function createItem(item: ContextMenuItem, processedItems: ContextMenuItem[]): SerializableMenuItem {
-  const serializableItem: SerializableMenuItem = {
+function createItem(item: ContextMenuItem, processedItems: ContextMenuItem[]): SerializableContextMenuItem {
+  const serializableItem: SerializableContextMenuItem = {
     id: processedItems.length,
     label: item.label,
     type: item.type,
     accelerator: item.accelerator,
-    checked: item.checked,
     enabled: typeof item.enabled === 'boolean' ? item.enabled : true,
-    visible: typeof item.visible === 'boolean' ? item.visible : true
+    visible: typeof item.visible === 'boolean' ? item.visible : true,
+    checked: item.checked,
   };
 
   processedItems.push(item);
