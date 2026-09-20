@@ -26,8 +26,8 @@ export function popup(items: ContextMenuItem[], options?: PopupOptions, onHide?:
       return;
 
     // window.ipc.off(onClickChannel, onClickChannelHandler);
-    disposeClose();
-    disposeClick();
+    disposeClose.dispose();
+    disposeClick.dispose();
     onHide?.();
   });
 
