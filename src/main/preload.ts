@@ -38,9 +38,9 @@ const electronHandler = {
       dispose: () => ipcRenderer.off(channel, listener)
     }
   },
-  off: (channel: Channels, cb: (...args: unknown[]) => void) => {
+  /* off: (channel: Channels, cb: (...args: unknown[]) => void) => {
     ipcRenderer.removeListener(channel, cb)
-  },
+  }, */
 };
 
 contextBridge.exposeInMainWorld('ipc', electronHandler);
