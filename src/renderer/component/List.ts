@@ -1123,7 +1123,7 @@ export class Node extends Disposable implements Children<Node> {
         input.classList.remove('warning');
         input.classList.remove('error');
 
-        function classFor (severity: Severity): string {
+        function classFor(severity: Severity): string {
           switch (severity) {
             case Severity.Info: return 'info';
             case Severity.Warning: return 'warning';
@@ -1131,9 +1131,9 @@ export class Node extends Disposable implements Children<Node> {
           }
         }
 
-        input.classList.add(classFor (errorMsg.severity));
+        input.classList.add(classFor(errorMsg.severity));
 
-        function stylesFor (severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
+        function stylesFor(severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
           switch (severity) {
             // case Severity.Info: return { border: styles.inputValidationInfoBorder, background: styles.inputValidationInfoBackground, foreground: styles.inputValidationInfoForeground };
             case Severity.Warning: return { border: 'rgb(184 149 0)', background: 'rgb(53 42 5)', foreground: 'white' };
@@ -1141,7 +1141,7 @@ export class Node extends Disposable implements Children<Node> {
           }
         }
 
-        const styles = stylesFor (errorMsg.severity);
+        const styles = stylesFor(errorMsg.severity);
         input.style.border = `1px solid ${styles.border}`;
 
         let div: HTMLElement;
@@ -1159,9 +1159,9 @@ export class Node extends Disposable implements Children<Node> {
 
             const spanElement = document.createElement('span');
             spanElement.textContent = errorMsg.content;
-            spanElement.classList.add(classFor (errorMsg.severity));
+            spanElement.classList.add(classFor(errorMsg.severity));
 
-            const styles = stylesFor (errorMsg.severity);
+            const styles = stylesFor(errorMsg.severity);
             spanElement.style.backgroundColor = styles.background ?? '';
             spanElement.style.color = styles.foreground ?? '';
             spanElement.style.border = styles.border ? `1px solid ${styles.border}` : '';
