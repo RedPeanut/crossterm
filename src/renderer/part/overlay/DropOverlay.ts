@@ -90,7 +90,7 @@ export class DropOverlay {
     }
 
     // Draw overlay based on split direction
-    switch(this.splitDirection) {
+    switch (this.splitDirection) {
       case GroupDirection.UP:
         style = { top: '0', left: '0', width: '100%', height: '50%' };
         break;

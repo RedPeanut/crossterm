@@ -102,7 +102,7 @@ export class KeybindingService extends Disposable {
         this._leaveChordMode();
         void this._commandService
           .executeCommand(result.commandId, ...(result.commandArgs === undefined ? [] : [result.commandArgs]))
-          .catch(err => console.error(`[keybinding] command '${result.commandId}' failed`, err));
+          .catch (err => console.error(`[keybinding] command '${result.commandId}' failed`, err));
         return true;
       }
     }

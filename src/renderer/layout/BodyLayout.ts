@@ -118,7 +118,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
   }
 
   setPartHidden(hidden: boolean, part: Parts): void {
-    switch(part) {
+    switch (part) {
       case Parts.SIDEBAR_PART:
         return this.setSidebarHidden(hidden);
     }

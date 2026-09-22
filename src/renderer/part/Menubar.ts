@@ -158,7 +158,7 @@ export class Menubar extends Disposable implements MenubarService {
           const commandId = submenuItem.commandId;
           this._register(_addEventListener(a, 'click', () => {
             this.commandService.executeCommand(commandId)
-              .catch(err => console.error(`[menubar] command '${commandId}' failed`, err));
+              .catch (err => console.error(`[menubar] command '${commandId}' failed`, err));
           }));
         }
         li.appendChild(a);

@@ -1124,7 +1124,7 @@ export class Node extends Disposable implements Children<Node> {
         input.classList.remove('error');
 
         function classFor (severity: Severity): string {
-          switch(severity) {
+          switch (severity) {
             case Severity.Info: return 'info';
             case Severity.Warning: return 'warning';
             default: return 'error';
@@ -1134,7 +1134,7 @@ export class Node extends Disposable implements Children<Node> {
         input.classList.add(classFor (errorMsg.severity));
 
         function stylesFor (severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
-          switch(severity) {
+          switch (severity) {
             // case Severity.Info: return { border: styles.inputValidationInfoBorder, background: styles.inputValidationInfoBackground, foreground: styles.inputValidationInfoForeground };
             case Severity.Warning: return { border: 'rgb(184 149 0)', background: 'rgb(53 42 5)', foreground: 'white' };
             default: return { border: 'rgb(190 17 0)', background: 'rgb(90 29 29)', foreground: 'white' };
