@@ -31,7 +31,7 @@ export class DetailPane extends Pane {
   // splitView: SplitView<DetailLeft | DetailBody>;
 
   override layout(offset: number, size: number) {
-    console.log(`layout is called .., offset = ${offset}, size = ${size}`);
+    // console.log(`layout is called .., offset = ${offset}, size = ${size}`);
 
     // position sash
     const firstHeader = this.wrap.querySelector('th');

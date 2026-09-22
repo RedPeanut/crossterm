@@ -377,11 +377,11 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
       minDelta = Math.max(minDeltaUp);
       maxDelta = Math.min(maxDeltaDown);
 
-      console.log('minDeltaUp =', minDeltaUp);
-      // console.log('minDeltaDown =', minDeltaDown);
-      console.log('maxDeltaDown =', maxDeltaDown);
-      console.log('minDelta =', minDelta);
-      // console.log('maxDelta =', maxDelta);
+      // console.log('minDeltaUp =', minDeltaUp);
+      // // console.log('minDeltaDown =', minDeltaDown);
+      // console.log('maxDeltaDown =', maxDeltaDown);
+      // console.log('minDelta =', minDelta);
+      // // console.log('maxDelta =', maxDelta);
 
       let beforeItem: SashDragItemState | undefined;
       let afterItem: SashDragItemState | undefined;
@@ -486,7 +486,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
   distributeEmptySpace(): void {
     const contentSize = this.viewItems.reduce((r, i) => r + i.view.size + (i.view.border ? 1 : 0), 0);
     let emptyDelta = this.size - contentSize;
-    console.log(`${emptyDelta} = ${this.size} - ${contentSize}`);
+    // console.log(`${emptyDelta} = ${this.size} - ${contentSize}`);
 
     const indexes = range(this.viewItems.length - 1, -1);
 
