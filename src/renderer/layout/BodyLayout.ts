@@ -117,12 +117,12 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
       this.splitView.setViewVisible(i, !hidden);
   }
 
-  setPartHidden(hidden: boolean, part: Parts): void {
+  /* setPartHidden(hidden: boolean, part: Parts): void {
     switch (part) {
       case Parts.SIDEBAR_PART:
         return this.setSidebarHidden(hidden);
     }
-  }
+  } */
 
   /* _inflate(): void {
 
@@ -241,11 +241,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
           const activePaneView = this.sidebarPart.activePaneView;
           if (activePaneView instanceof BookmarkPaneView) {
             this.sidebarPart.hideActivePaneView();
-            this.setPartHidden(true, Parts.SIDEBAR_PART);
+            // this.setPartHidden(true, Parts.SIDEBAR_PART);
+            this.setSidebarHidden(true);
           } else {
             this.sidebarPart.hideActivePaneView();
             this.sidebarPart.showPaneView(items[0].title, items[0].paneView);
-            this.setPartHidden(false, Parts.SIDEBAR_PART);
+            // this.setPartHidden(false, Parts.SIDEBAR_PART);
+            this.setSidebarHidden(false);
           }
           (getService(mainLayoutServiceId) as MainLayout).layout();
         }
@@ -276,11 +278,13 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
           const activePaneView = this.sidebarPart.activePaneView;
           if (activePaneView instanceof SamplePaneView) {
             this.sidebarPart.hideActivePaneView();
-            this.setPartHidden(true, Parts.SIDEBAR_PART);
+            // this.setPartHidden(true, Parts.SIDEBAR_PART);
+            this.setSidebarHidden(true);
           } else {
             this.sidebarPart.hideActivePaneView();
             this.sidebarPart.showPaneView(items[1].title, items[1].paneView);
-            this.setPartHidden(false, Parts.SIDEBAR_PART);
+            // this.setPartHidden(false, Parts.SIDEBAR_PART);
+            this.setSidebarHidden(false);
           }
           (getService(mainLayoutServiceId) as MainLayout).layout();
         }
