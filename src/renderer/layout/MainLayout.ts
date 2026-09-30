@@ -12,7 +12,7 @@ import { SplitView, SplitViewItem } from '../component/SplitView';
 import { _addEventListener, getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
 import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId, contextViewServiceId,
-  contextKeyServiceId, commandServiceId, keybindingServiceId } from '../Service';
+  contextKeyServiceId, commandServiceId, keybindingServiceId, broadcastInputServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../globals';
 import { MenubarService } from '../part/Menubar';
@@ -28,6 +28,7 @@ import { Dialog } from '../Dialog';
 import { StorageService } from '../../common/service/StorageService';
 import { ContextKeyService } from '../service/ContextKeyService';
 import { CommandService } from '../service/CommandService';
+import { BroadcastInputServiceImpl } from '../service/BroadcastInputService';
 import { KeybindingService } from '../service/KeybindingService';
 
 export const TITLEBAR_HEIGHT = 34;
@@ -83,6 +84,8 @@ export class MainLayout extends Layout implements MainLayoutService {
     const commandService = this.commandService = setService(commandServiceId, new CommandService()) as CommandService;
     const keybindingService = setService(keybindingServiceId, new KeybindingService(contextKeyService, commandService)) as KeybindingService;
     keybindingService.attach(window);
+
+    const broadcastInputService = setService(broadcastInputServiceId, new BroadcastInputServiceImpl());
 
     //
     let platformClass = '', platform = '';

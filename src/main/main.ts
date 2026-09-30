@@ -539,6 +539,20 @@ export const mainWindow = new MainWindow();
 app
   .whenReady()
   .then(() => {
+    // electron-debug가 mac에서 DevTools를 Command+Alt+I에 걸어둔다.
+    // 브로드캐스트 토글(⌘⌥I)과 같은 키라 개발 모드에서 둘이 같이 발동하므로 그 등록만 뗀다.
+    // (electron-localshortcut은 preventDefault를 하지 않아, 키는 렌더러까지 그대로 올라간다)
+    //
+    // 시점이 중요하다. electron-debug도 `await app.whenReady()` 뒤에 등록하므로,
+    // 생성자에서 바로 부르면 아직 등록 전이라 아무것도 지우지 못한다.
+    // setImmediate로 미뤄서 microtask가 다 빠진 뒤 = 그쪽 등록이 끝난 뒤에 풀리게 한다.
+    // DevTools는 F12 / ⌘⇧C 로 계속 열 수 있다.
+    if (mainWindow.isDebug) {
+      setImmediate(() => {
+        require('electron-localshortcut').unregister('Command+Alt+I');
+      });
+    }
+
     mainWindow.createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

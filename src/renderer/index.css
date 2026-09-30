@@ -856,3 +856,30 @@ body { height: 100%; }
   z-index: 35;
   font-size: 11px;
 }
+
+/* Broadcast Input */
+.terms .term .broadcast-toggle {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  z-index: 36;
+  padding: 3px;
+  cursor: pointer;
+  color: rgb(204, 204, 204);
+  transition: opacity 80ms ease-out, color 80ms ease-out;
+
+  font-size: 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  display: none;
+  opacity: 0.55;
+}
+
+.terms .term.broadcasting .broadcast-toggle {
+  display: block;
+}
+
+.terms .term.broadcasting .broadcast-toggle.on {
+  opacity: 1;
+}
+

@@ -120,6 +120,10 @@ export const tabAlignTilesMenuId = 'tab.align.tiles';
 export const tabCloseOthersMenuId = 'tab.close.others';
 export const tabCloseAllMenuId = 'tab.close.all';
 
+// terminal
+export const terminalBroadcastToggleCommandId = 'terminal.broadcast.toggle.cmd';
+export const terminalBroadcastToggleCurrentCommandId = 'terminal.broadcast.toggleCurrent.cmd';
+
 // window
 
 export interface MenubarEnableElem { id: string, enable: boolean }

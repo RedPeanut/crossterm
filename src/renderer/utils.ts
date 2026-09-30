@@ -47,6 +47,32 @@ export function findItemById(curr: SplitItem, depth: number, index: number[], id
   return undefined;
 }
 
+/**
+ * 화면에 보이는 터미널들. Group마다 selected 하나만 표시되므로 그것들만 모은다.
+ * (findActiveItem/findItemById는 첫 매치에서 멈추는 단일 타겟 탐색이라 재사용할 수 없다)
+ *
+ * 방송 대상 스냅샷을 만들 때 쓴다. 스냅샷 이후로는 아무도 이 함수를 다시 부르지 않으므로,
+ * 나중에 생긴 터미널이 방송 집합에 저절로 끼어들 경로가 없다.
+ */
+export function collectVisibleItems(curr: SplitItem): TerminalItem[] {
+  const result: TerminalItem[] = [];
+
+  const walk = (node: SplitItem): void => {
+    if (!node.list || node.list.length === 0) return;
+    for (const entry of node.list) {
+      if (isSplitItem(entry)) {
+        walk(entry as SplitItem);
+      } else {
+        const selected = (entry as Group).find((item) => item.selected);
+        if (selected) result.push(selected);
+      }
+    }
+  };
+
+  walk(curr);
+  return result;
+}
+
 export function findSplitItemByGroup(curr: SplitItem, depth: number, index: number[], group: Group)
 : { depth: number, index: number[], group: Group, splitItem: SplitItem } | undefined {
   if (curr.list && curr.list.length > 0) {

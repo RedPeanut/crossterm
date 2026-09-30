@@ -1,11 +1,34 @@
 import { appShortcutsCommandId,
-  editCopyCommandId, editPasteCommandId
+  editCopyCommandId, editPasteCommandId,
+  terminalBroadcastToggleCommandId,
 } from '../../common/Types';
 import { KeybindingWeight, keybindingsRegistry } from './KeybindingsRegistry';
-import { getService, mainLayoutServiceId } from '../Service';
+import { getService, mainLayoutServiceId, broadcastInputServiceId } from '../Service';
 import { MainLayoutService } from '../layout/MainLayout';
 // import { keybindingsRegistry } from '../globals';
 import { getFocusedTerm } from '../part/term/Term';
+import { BroadcastInputService } from '../service/BroadcastInputService';
+
+/**
+ * 입력 브로드캐스트 contribution.
+ *
+ * `mod`는 mac에서 ⌘, 그 외에서 Ctrl로 갈리므로 플랫폼 분기가 필요 없다.
+ *   mac : ⌘⌥I
+ *   win : Ctrl+Alt+I
+ *
+ * Note. mac 개발 모드에서는 electron-debug가 ⌘⌥I를 DevTools로 먼저 잡는다.
+ *       main.ts에서 그 등록을 풀어주고 있다(DevTools는 F12로 계속 열린다).
+ */
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: terminalBroadcastToggleCommandId,
+  weight: KeybindingWeight.Core,
+  primary: 'mod+alt+i',
+  handler: () => {
+    const broadcastInputService: BroadcastInputService = getService(broadcastInputServiceId);
+    broadcastInputService.toggleVisible();
+  },
+});
 
 /**
  * "Keyboard Shortcuts" 기능의 contribution.

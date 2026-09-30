@@ -8,7 +8,7 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 import { terminals } from '../../globals';
 // import { ContextKey } from '../../../common/key/ContextKey';
 import { ContextKeyService } from '../../service/ContextKeyService';
-import { contextKeyServiceId, getService, sessionPartServiceId, statusbarPartServiceId } from '../../Service';
+import { broadcastInputServiceId, contextKeyServiceId, getService, sessionPartServiceId, statusbarPartServiceId } from '../../Service';
 import { StatusbarPartService } from "../StatusbarPart";
 import { SessionPartService } from "../SessionPart";
 import { ContextKey } from "../../key/ContextKey";
@@ -16,6 +16,7 @@ import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } fro
 import { TermResizeOverlay } from "./TermResizeOverlay";
 // import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from './TerminalContextKeys';
 import { Disposable } from "../../../common/base/lifecycle";
+import { BroadcastInputService } from "../../service/BroadcastInputService";
 
 /**
  * 지금 포커스를 갖고 있는 터미널. 없으면 undefined.
@@ -50,6 +51,7 @@ export class Term extends Disposable {
   offClosed: any = null;
 
   resizeOverlay: TermResizeOverlay | null = null;
+  broadcastInputIcon: HTMLElement;
 
   constructor(parent: HTMLElement, item: TerminalItem) {
     super();
@@ -98,6 +100,21 @@ export class Term extends Disposable {
     //   if (next && el.contains(next)) return; // 터미널 내부에서의 포커스 이동은 무시
     //   this.terminalFocused.set(false);
     // }));
+
+    const broadcastIcon = this.broadcastInputIcon = $('a.codicon.codicon-broadcast.broadcast-toggle');
+
+    // mousedown을 막지 않으면 아이콘을 누르는 순간 터미널이 포커스를 잃는다.
+    this._register(_addEventListener(broadcastIcon, 'mousedown', (e: MouseEvent) => e.preventDefault()));
+    this._register(_addEventListener(broadcastIcon, 'click', (e: MouseEvent) => {
+      e.stopPropagation();
+      const broadcastInputService: BroadcastInputService = getService(broadcastInputServiceId);
+      broadcastInputService.toggleTerminal(this.uid);
+    }));
+    el.appendChild(broadcastIcon);
+
+    const broadcastInputService: BroadcastInputService = getService(broadcastInputServiceId);
+    this._register(broadcastInputService.onDidChange(() => this.updateBroadcastInputState()));
+    this.updateBroadcastInputState();
 
     return el;
   }
@@ -205,12 +222,37 @@ export class Term extends Disposable {
     });
   }
 
+  /**
+   * 터미널 입력의 유일한 출구. 방송이 켜져 있으면 여기서 여러 터미널로 퍼진다.
+   *
+   * 붙여넣기(xterm.paste)도 결국 onData로 들어오므로 따로 처리할 게 없고,
+   * 출력은 uid로 라우팅되므로(MainLayout의 'terminal data') 손댈 필요가 없다.
+   */
   onData(data: string) {
     // console.log('onData() is called..., e =', data);
-    window.ipc.send('terminal write', {
-      uid: this.uid,
-      data: data
-    });
+    const broadcastInputService: BroadcastInputService = getService(broadcastInputServiceId);
+    const uids = broadcastInputService.targetsFor(this.uid);
+    for (const uid of uids) {
+      window.ipc.send('terminal write', { uid, data });
+    }
+  }
+
+  /**
+   * 방송 참여 여부를 화면에 반영한다.
+   *
+   * 배경 탭의 `.term`은 `display: none`이라 아이콘도 테두리도 안 보인다.
+   * 그 경우 탭 마커가 "이 터미널이 입력을 받고 있다"는 유일한 신호이므로 같이 갱신한다.
+   * 탭 element는 레이아웃 recreate 때 새로 만들어지므로 매번 DOM에서 찾는다.
+   */
+  updateBroadcastInputState(): void {
+    const broadcastInputService: BroadcastInputService = getService(broadcastInputServiceId);
+
+    const visible: boolean = broadcastInputService.visible;
+    this.element.classList.toggle('broadcasting', visible);
+
+    const on: boolean = broadcastInputService.has(this.uid);
+    this.broadcastInputIcon.classList.toggle('on', on);
+    this.broadcastInputIcon.title = on ? 'Broadcast input: on (click to remove)' : 'Broadcast input: off (click to add)';
   }
 
   fit() {
@@ -234,6 +276,7 @@ export class Term extends Disposable {
     // if (this.offError) this.offError(); // window.ipc.off('terminal error', this.onError);
     // if (this.offClosed) this.offClosed(); // window.ipc.off('terminal closed', this.onClosed);
     if (this.item.active) this.statusbarPartService?.updateTerminalStatus(undefined);
+    (getService(broadcastInputServiceId) as BroadcastInputService).remove(this.uid);
     // this.xterm.dispose();
     // this.resizeOverlay?.dispose();
     // this.scopedContextKeyService.dispose();
