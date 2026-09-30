@@ -783,7 +783,7 @@ body { height: 100%; }
 /* StatusBar */
 .part.statusbar {
   height: 17px;
-  width: 100%;
+  width: calc(100% - 16px);
   display: flex;
   /* background-color: purple; */
   padding: 0 8px;
@@ -804,7 +804,8 @@ body { height: 100%; }
 .part.statusbar div {
   /* height: 100%; */
   /* margin: 0 3px; padding: 0 5px; */
-  line-height: 22px; padding: 0 5px;
+  /* line-height: 22px; */
+  padding: 0 5px;
 }
 .part.statusbar div:hover { background: rgba(241,241,241,0.2); cursor: pointer; }
 
