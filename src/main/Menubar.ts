@@ -12,9 +12,11 @@ import {
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
   tabCloseAllMenuId, tabCloseOthersMenuId,
+  tabToggleBroadcastInputMenuId,
   // command id
   appShortcutsCommandId,
   editCopyCommandId, editPasteCommandId,
+  tabToggleBroadcastInputCommandId
 } from '../common/Types';
 import { keyBinding } from '../common/globals';
 
@@ -214,6 +216,7 @@ export class Menubar {
             },
           ],
         },
+        { type: 'separator' },
         {
           id: tabCloseOthersMenuId,
           label: 'Close Others',
@@ -227,7 +230,14 @@ export class Menubar {
           accelerator: null, // keyBinding[tabCloseAllMenuId][keyBindingIdx],
           // click: () => {},
           submenu: null
-        }
+        },
+        { type: 'separator' },
+        {
+          id: tabToggleBroadcastInputMenuId,
+          label: 'Toggle Broadcast Input',
+          accelerator: keyBinding[tabToggleBroadcastInputMenuId][keyBindingIdx],
+          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabToggleBroadcastInputCommandId),
+        },
       ],
     });
   }

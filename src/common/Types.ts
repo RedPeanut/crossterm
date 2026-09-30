@@ -119,10 +119,8 @@ export const tabAlignHorizontalMenuId = 'tab.align.horizontal';
 export const tabAlignTilesMenuId = 'tab.align.tiles';
 export const tabCloseOthersMenuId = 'tab.close.others';
 export const tabCloseAllMenuId = 'tab.close.all';
-
-// terminal
-export const terminalBroadcastToggleCommandId = 'terminal.broadcast.toggle.cmd';
-export const terminalBroadcastToggleCurrentCommandId = 'terminal.broadcast.toggleCurrent.cmd';
+export const tabToggleBroadcastInputMenuId = 'tab.toggle.broadcast-input';
+export const tabToggleBroadcastInputCommandId = 'tab.toggle.broadcast-input.cmd';
 
 // window
 

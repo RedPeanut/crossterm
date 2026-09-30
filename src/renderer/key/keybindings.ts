@@ -1,6 +1,6 @@
 import { appShortcutsCommandId,
   editCopyCommandId, editPasteCommandId,
-  terminalBroadcastToggleCommandId,
+  tabToggleBroadcastInputCommandId,
 } from '../../common/Types';
 import { KeybindingWeight, keybindingsRegistry } from './KeybindingsRegistry';
 import { getService, mainLayoutServiceId, broadcastInputServiceId } from '../Service';
@@ -21,7 +21,7 @@ import { BroadcastInputService } from '../service/BroadcastInputService';
  */
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
-  id: terminalBroadcastToggleCommandId,
+  id: tabToggleBroadcastInputCommandId,
   weight: KeybindingWeight.Core,
   primary: 'mod+alt+i',
   handler: () => {

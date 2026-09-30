@@ -22,6 +22,7 @@ import {
   tabAlignVerticalMenuId,
   tabAlignHorizontalMenuId,
   tabAlignTilesMenuId,
+  tabToggleBroadcastInputMenuId,
 } from "./Types";
 
 // { id: [Win, Mac] }
@@ -44,3 +45,5 @@ keyBinding[editCutMenuId] = [ 'Ctrl+X', 'Cmd+X' ];
 keyBinding[editCopyMenuId] = [ 'Ctrl+C', 'Cmd+C' ];
 keyBinding[editPasteMenuId] = [ 'Ctrl+V', 'Cmd+V' ];
 keyBinding[editSelectAllMenuId] = [ 'Ctrl+A', 'Cmd+A' ];
+
+keyBinding[tabToggleBroadcastInputMenuId] = [ 'Ctrl+Alt+I', 'Cmd+Alt+I' ];
