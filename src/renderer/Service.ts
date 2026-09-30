@@ -1,18 +1,18 @@
 export interface Service { /* marker */ }
 
-export const mainLayoutServiceId = "mainLayoutService";
-export const bodyLayoutServiceId = "bodyLayoutService";
-export const menubarServiceId = "menubarServiceId";
-export const activitybarPartServiceId = "activitybarPartService";
-export const sidebarPartServiceId = "sidebarPartService";
-export const sessionPartServiceId = "sessionPartService";
-export const contextViewServiceId = "contextViewService";
-export const storageServiceId = "storageService";
-export const contextKeyServiceId = "contextKeyService";
-export const commandServiceId = "commandService";
-export const keybindingServiceId = "keybindingServiceId";
+export const mainLayoutServiceId = 'mainLayoutService';
+export const bodyLayoutServiceId = 'bodyLayoutService';
+export const menubarServiceId = 'menubarServiceId';
+export const activitybarPartServiceId = 'activitybarPartService';
+export const sidebarPartServiceId = 'sidebarPartService';
+export const sessionPartServiceId = 'sessionPartService';
+export const contextViewServiceId = 'contextViewService';
+export const storageServiceId = 'storageService';
+export const contextKeyServiceId = 'contextKeyService';
+export const commandServiceId = 'commandService';
+export const keybindingServiceId = 'keybindingServiceId';
 export const statusbarPartServiceId = 'statusbarPartService';
-export const blarBlarServiceId = "blarBlarService";
+export const blarBlarServiceId = 'blarBlarService';
 
 type ServiceId =
   typeof mainLayoutServiceId

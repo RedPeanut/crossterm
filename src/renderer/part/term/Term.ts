@@ -35,9 +35,6 @@ export class Term extends Disposable {
   xterm: xterm | null = null;
   fitAddon: FitAddon;
 
-  /** 크기 변경 시 가운데에 `cols x rows`를 잠시 띄우는 오버레이. */
-  resizeOverlay: TermResizeOverlay | null = null;
-
   statusbarPartService: StatusbarPartService | null = null;
 
   /** 이 터미널 하위에서만 유효한 context. */
@@ -51,6 +48,8 @@ export class Term extends Disposable {
   offConnected: any = null;
   offError: any = null;
   offClosed: any = null;
+
+  resizeOverlay: TermResizeOverlay | null = null;
 
   constructor(parent: HTMLElement, item: TerminalItem) {
     super();
@@ -92,6 +91,7 @@ export class Term extends Disposable {
       if (next && el.contains(next)) return; // 터미널 내부에서의 포커스 이동은 무시
       this.terminalFocused.set(false);
     }));
+
     // this._register(_addEventListener(el, 'focusin', () => this.terminalFocused.set(true)));
     // this._register(_addEventListener(el, 'focusout', (e: FocusEvent) => {
     //   const next = e.relatedTarget as Node | null;

@@ -57,6 +57,7 @@ export class Tab {
     const el = this.element = $('.tab');
     if (item.selected) el.classList.add('selected');
     if (item.active) el.classList.add('active');
+
     el.style.setProperty('--tab-border-bottom-color', 'rgb(31, 31, 31)');
     el.style.setProperty('--tab-border-top-color', 'rgb(0, 120, 212)');
 
