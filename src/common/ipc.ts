@@ -78,6 +78,9 @@ export type RenderEvents =
 
   // command (네이티브 메뉴 클릭 -> renderer의 커맨드 실행)
   | 'execute command'
+
+  // 
+  | 'contextmenu close'
 ;
 
 export type Channels = MainEvents | RenderEvents;
