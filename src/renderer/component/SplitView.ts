@@ -81,7 +81,7 @@ export interface SplitViewItemView {
 
   layout(offset: number, size: number): void;
   onDidChange(mappedEvent: MappedSashEvent): void;
-  doWhenVisible(visible: boolean): void;
+  snapped(visible: boolean): void;
 
   readonly preferredWidth?: number;
   readonly preferredHeight?: number;
@@ -97,7 +97,7 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
     return typeof this._cachedVisibleSize === 'undefined';
   }
 
-  setVisible(visible: boolean): void {
+  setVisible(visible: boolean, snapped: boolean): void {
 
     if (visible === this.visible) {
       return;
@@ -112,7 +112,8 @@ export abstract class SplitViewItem<T extends SplitViewItemView> {
     }
     this._container.classList.toggle('visible', visible);
 
-    // this.view.doWhenVisible(visible);
+    if (snapped)
+      this.view.snapped(visible);
   }
 
   get minimumSize(): number { return this.visible ? this.view.minimumSize : 0; }
@@ -462,7 +463,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
       const snapView = this.viewItems[beforeItem.index];
       const visible = delta >= beforeItem.limitDelta;
       snapped = visible !== snapView.visible;
-      snapView.setVisible(visible); //, beforeItem.size);
+      snapView.setVisible(visible, true); //, beforeItem.size);
     }
 
     /* if (!snapped && afterItem) {
@@ -583,7 +584,7 @@ export class SplitView<T extends SplitViewItemView> extends Disposable {
     }
 
     const viewItem = this.viewItems[index];
-    viewItem.setVisible(visible);
+    viewItem.setVisible(visible, false);
 
     this.layoutViews();
   }

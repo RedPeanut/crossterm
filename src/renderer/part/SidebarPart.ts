@@ -29,7 +29,7 @@ export class SidebarPart extends Part implements SidebarPartService {
     this.activePaneView && this.activePaneView.layout(width, height);
   }
 
-  override doWhenVisible(visible: boolean) {
+  override snapped(visible: boolean) {
     if (visible) {
       const activitybarPartService = getService(activitybarPartServiceId) as ActivitybarPartService;
       activitybarPartService.restoreActiveItem();

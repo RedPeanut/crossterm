@@ -44,7 +44,7 @@ export abstract class Part extends Disposable implements SplitViewItemView {
 
   layout(offset: number, size: number): void {}
   onDidChange(mappedEvent: MappedSashEvent): void {}
-  doWhenVisible(visible: boolean): void {}
+  snapped(visible: boolean): void {}
 
   preferredWidth: number = 0;
   preferredHeight: number = 0;

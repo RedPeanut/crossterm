@@ -53,7 +53,7 @@ export class OrientationView implements SplitViewItemView {
       this.splitView.layout(dimension.height);
   }
   onDidChange(mappedEvent: MappedSashEvent): void {}
-  doWhenVisible(visible: boolean): void {}
+  snapped(visible: boolean): void {}
 
   parent: HTMLElement;
   splitView: SplitView<SplitViewItemView>;

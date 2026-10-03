@@ -62,7 +62,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     this.splitView.layout(dimension.width);
   }
   onDidChange(mappedEvent: MappedSashEvent): void {}
-  doWhenVisible(visible: boolean): void {}
+  snapped(visible: boolean): void {}
 
   activitybarPart: ActivitybarPart;
   sidebarPart: SidebarPart;
@@ -221,6 +221,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
         codicon: 'bookmark',
         onClick: (e: any) => {
           // console.log('onClick is called ..');
+
           // toggle or switch
 
           // activitybar part

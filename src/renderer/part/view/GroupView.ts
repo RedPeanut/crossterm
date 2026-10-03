@@ -47,7 +47,7 @@ export class GroupView implements SplitViewItemView {
     this.terms?.fit();
   }
   onDidChange(mappedEvent: MappedSashEvent): void {}
-  doWhenVisible(visible: boolean): void {}
+  snapped(visible: boolean): void {}
 
   parent: HTMLElement;
   group: Group;
