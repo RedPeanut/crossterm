@@ -87,7 +87,7 @@ export interface PopupOptions {
 export const appPreferencesMenuId = 'app.preferences';
 export const appSettingsMenuId = 'app.settings';
 export const appShortcutsMenuId = 'app.shortcuts';
-export const appShortcutsCommandId = 'app.shortcuts.cmd';
+export const appShortcutsCmdId = 'app.shortcuts.cmd';
 export const appQuitMenuId = 'app.quit';
 
 // most application specific menu category exists between edit n window
@@ -105,9 +105,9 @@ export const editUndoMenuId = 'edit.undo';
 export const editRedoMenuId = 'edit.redo';
 export const editCutMenuId = 'edit.cut';
 export const editCopyMenuId = 'edit.copy';
-export const editCopyCommandId = 'edit.copy.cmd';
+export const editCopyCmdId = 'edit.copy.cmd';
 export const editPasteMenuId = 'edit.paste';
-export const editPasteCommandId = 'edit.paste.cmd';
+export const editPasteCmdId = 'edit.paste.cmd';
 export const editSelectAllMenuId = 'edit.selectAll';
 
 // view
@@ -120,7 +120,7 @@ export const tabAlignTilesMenuId = 'tab.align.tiles';
 export const tabCloseOthersMenuId = 'tab.close.others';
 export const tabCloseAllMenuId = 'tab.close.all';
 export const tabToggleBroadcastInputMenuId = 'tab.toggle.broadcast-input';
-export const tabToggleBroadcastInputCommandId = 'tab.toggle.broadcast-input.cmd';
+export const tabToggleBroadcastInputCmdId = 'tab.toggle.broadcast-input.cmd';
 
 // window
 

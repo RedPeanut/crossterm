@@ -14,9 +14,9 @@ import {
   tabCloseAllMenuId, tabCloseOthersMenuId,
   tabToggleBroadcastInputMenuId,
   // command id
-  appShortcutsCommandId,
-  editCopyCommandId, editPasteCommandId,
-  tabToggleBroadcastInputCommandId
+  appShortcutsCmdId,
+  editCopyCmdId, editPasteCmdId,
+  tabToggleBroadcastInputCmdId
 } from '../common/Types';
 import { keyBinding } from '../common/globals';
 
@@ -75,10 +75,10 @@ export class Menubar {
             },
             {
               id: appShortcutsMenuId,
-              appCommandId: appShortcutsCommandId,
+              appCommandId: appShortcutsCmdId,
               label: `Keyboard Shortcuts ${process.platform === 'darwin' ? '[⌘K ⌘S]' : 'Ctrl+K Ctrl+S'}`,
               accelerator: keyBinding[appShortcutsMenuId][keyBindingIdx],
-              click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', appShortcutsCommandId),
+              click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', appShortcutsCmdId),
             },
           ]
         },
@@ -166,13 +166,13 @@ export class Menubar {
           id: editCopyMenuId,
           label: 'Copy', accelerator: keyBinding[editCopyMenuId][keyBindingIdx],
           // role: 'copy',
-          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editCopyCommandId),
+          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editCopyCmdId),
         },
         {
           id: editPasteMenuId,
           label: 'Paste', accelerator: keyBinding[editPasteMenuId][keyBindingIdx],
           // role: 'paste',
-          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editPasteCommandId),
+          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editPasteCmdId),
         },
         // { id: editSelectAllMenuId, label: 'Select All', accelerator: keyBinding[editSelectAllMenuId][keyBindingIdx], role: 'selectAll' },
       ],
@@ -236,7 +236,7 @@ export class Menubar {
           id: tabToggleBroadcastInputMenuId,
           label: 'Toggle Broadcast Input',
           accelerator: keyBinding[tabToggleBroadcastInputMenuId][keyBindingIdx],
-          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabToggleBroadcastInputCommandId),
+          click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabToggleBroadcastInputCmdId),
         },
       ],
     });

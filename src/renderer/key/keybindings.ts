@@ -1,6 +1,6 @@
-import { appShortcutsCommandId,
-  editCopyCommandId, editPasteCommandId,
-  tabToggleBroadcastInputCommandId,
+import { appShortcutsCmdId,
+  editCopyCmdId, editPasteCmdId,
+  tabToggleBroadcastInputCmdId,
 } from '../../common/Types';
 import { KeybindingWeight, keybindingsRegistry } from './KeybindingsRegistry';
 import { getService, mainLayoutServiceId, broadcastInputServiceId } from '../Service';
@@ -21,7 +21,7 @@ import { BroadcastInputService } from '../service/BroadcastInputService';
  */
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
-  id: tabToggleBroadcastInputCommandId,
+  id: tabToggleBroadcastInputCmdId,
   weight: KeybindingWeight.Core,
   primary: 'mod+alt+i',
   handler: () => {
@@ -39,7 +39,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
  */
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
-  id: appShortcutsCommandId,
+  id: appShortcutsCmdId,
   weight: KeybindingWeight.Core,
   primary: 'mod+k mod+s', // mac: ⌘K ⌘S / win, linux: Ctrl+K Ctrl+S
   // TODO: 단축키 편집 화면이 생기면 그걸 열도록 교체
@@ -57,7 +57,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
  */
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
-  id: editCopyCommandId,
+  id: editCopyCmdId,
   weight: KeybindingWeight.Core,
   primary: 'mod+c',
   // 터미널 밖이거나, 터미널 안이어도 선택 영역이 있을 때만 이 키를 가져간다.
@@ -67,7 +67,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 });
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
-  id: editPasteCommandId,
+  id: editPasteCmdId,
   weight: KeybindingWeight.Core,
   primary: 'mod+v',
   handler: () => paste(),
