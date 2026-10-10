@@ -185,8 +185,8 @@ export class DropOverlay {
         return;
       } */
 
-      const mode: Mode = this.splitDirection === GroupDirection.UP
-        || this.splitDirection === GroupDirection.DOWN ? 'vertical' : 'horizontal';
+      const mode: Mode = this.splitDirection === GroupDirection.UP || this.splitDirection === GroupDirection.DOWN
+        ? 'vertical' : 'horizontal';
 
       if (curr_group === drag_group) {
         // let new_group: Group = [];
@@ -263,8 +263,8 @@ export class DropOverlay {
     this.bodyLayoutService.recreate();
     this.bodyLayoutService.layout(0, 0); // not use param
 
-    const sessionPartService = getService(sessionPartServiceId)
-    sessionPartService.getServices(); // reconnect service
+    // const sessionPartService = getService(sessionPartServiceId)
+    // sessionPartService.getServices(); // reconnect service
     // sessionPartService.fit(); // fit again
     requestAnimationFrame(() => requestAnimationFrame(() => this.sessionPartService.fit()));
   }
