@@ -16,6 +16,7 @@ import {
   // command id
   appShortcutsCmdId,
   editCopyCmdId, editPasteCmdId,
+  tabAlignVerticalCmdId, tabAlignHorizontalCmdId, tabAlignTilesCmdId,
   tabToggleBroadcastInputCmdId
 } from '../common/Types';
 import { keyBinding } from '../common/globals';
@@ -200,19 +201,19 @@ export class Menubar {
               id: tabAlignVerticalMenuId,
               label: 'Vertical',
               accelerator: null, // keyBinding[tabAlignVerticalMenuId][keyBindingIdx],
-              // click: () => {},
+              click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabAlignVerticalCmdId),
             },
             {
               id: tabAlignHorizontalMenuId,
               label: 'Horizontal',
               accelerator: null, // keyBinding[tabAlignHorizontalMenuId][keyBindingIdx],
-              // click: () => {},
+              click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabAlignHorizontalCmdId),
             },
             {
               id: tabAlignTilesMenuId,
               label: 'Tiles',
               accelerator: null, // keyBinding[tabAlignTilesMenuId][keyBindingIdx],
-              // click: () => {},
+              click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabAlignTilesCmdId),
             },
           ],
         },

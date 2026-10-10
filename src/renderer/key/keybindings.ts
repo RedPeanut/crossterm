@@ -1,13 +1,83 @@
 import { appShortcutsCmdId,
   editCopyCmdId, editPasteCmdId,
+  tabAlignVerticalCmdId, tabAlignHorizontalCmdId, tabAlignTilesCmdId,
   tabToggleBroadcastInputCmdId,
 } from '../../common/Types';
 import { KeybindingWeight, keybindingsRegistry } from './KeybindingsRegistry';
-import { getService, mainLayoutServiceId, broadcastInputServiceId } from '../Service';
+import { getService, mainLayoutServiceId, broadcastInputServiceId, bodyLayoutServiceId, sessionPartServiceId } from '../Service';
 import { MainLayoutService } from '../layout/MainLayout';
 // import { keybindingsRegistry } from '../globals';
 import { getFocusedTerm } from '../part/term/Term';
 import { BroadcastInputService } from '../service/BroadcastInputService';
+import { Group, SplitItem } from '../Types';
+import { wrapper } from '../globals';
+import { collectAllItems, getTileRows } from '../utils';
+import { BodyLayoutService } from '../layout/BodyLayout';
+import { SessionPartService } from '../part/SessionPart';
+
+/**
+ * 탭 정렬(Align) contribution.
+ *
+ * 탭으로 묶여 있던 것까지 포함해 모든 터미널을 펼친다. 터미널 하나가 그룹 하나가 된다.
+ *   vertical  : 위→아래로 쌓기 (DropOverlay의 UP/DOWN 분할과 같은 mode)
+ *   horizontal: 왼→오른쪽으로 늘어놓기
+ *   tiles     : 행(vertical) 안에 열(horizontal)을 넣은 격자. 행별 개수는 getTileRows가 정한다.
+ */
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: tabAlignVerticalCmdId,
+  weight: KeybindingWeight.Core,
+  handler: () => alignTabs((groups) => ({ mode: 'vertical', list: groups })),
+});
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: tabAlignHorizontalCmdId,
+  weight: KeybindingWeight.Core,
+  handler: () => alignTabs((groups) => ({ mode: 'horizontal', list: groups })),
+});
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: tabAlignTilesCmdId,
+  weight: KeybindingWeight.Core,
+  handler: () => alignTabs(buildTiles),
+});
+
+/**
+ * ex. 3 -> { mode: 'vertical', list: [ [a], { mode: 'horizontal', list: [[b], [c]] } ] }
+ *
+ * 그룹이 하나뿐인 행은 SplitItem으로 감싸지 않고 그룹을 그대로 넣는다.
+ * (list가 1개인 SplitItem은 cleanSingleSplitItemOnce가 걷어내는 형태다)
+ */
+function buildTiles(groups: Group[]): SplitItem {
+  const rows = getTileRows(groups.length);
+  if (rows.length === 1) return { mode: 'horizontal', list: groups };
+
+  let offset = 0;
+  const list = rows.map((count): SplitItem | Group => {
+    const row = groups.slice(offset, offset += count);
+    return row.length === 1 ? row[0] : { mode: 'horizontal', list: row };
+  });
+  return { mode: 'vertical', list };
+}
+
+function alignTabs(build: (groups: Group[]) => SplitItem): void {
+  const items = collectAllItems(wrapper.tree);
+  if (items.length === 0) return;
+
+  // 그룹마다 터미널이 하나뿐이므로 모두 selected여야 화면에 보인다. active는 그대로 둔다.
+  const groups: Group[] = items.map((item) => {
+    item.selected = true;
+    return [item];
+  });
+  wrapper.tree = build(groups);
+
+  // 이후 처리는 DropOverlay.onDrop과 동일하다: 트리로 SessionPart를 다시 만들고 터미널 크기를 맞춘다.
+  const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
+  const sessionPartService: SessionPartService = getService(sessionPartServiceId);
+  bodyLayoutService.recreate();
+  bodyLayoutService.layout(0, 0); // not use param
+  requestAnimationFrame(() => requestAnimationFrame(() => sessionPartService.fit()));
+}
 
 /**
  * 입력 브로드캐스트 contribution.

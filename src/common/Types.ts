@@ -115,8 +115,11 @@ export const editSelectAllMenuId = 'edit.selectAll';
 // tab
 export const tabAlignMenuId = 'tab.align';
 export const tabAlignVerticalMenuId = 'tab.align.vertical';
+export const tabAlignVerticalCmdId = 'tab.align.vertical.cmd';
 export const tabAlignHorizontalMenuId = 'tab.align.horizontal';
+export const tabAlignHorizontalCmdId = 'tab.align.horizontal.cmd';
 export const tabAlignTilesMenuId = 'tab.align.tiles';
+export const tabAlignTilesCmdId = 'tab.align.tiles.cmd';
 export const tabCloseOthersMenuId = 'tab.close.others';
 export const tabCloseAllMenuId = 'tab.close.all';
 export const tabToggleBroadcastInputMenuId = 'tab.toggle.broadcast-input';
