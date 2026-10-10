@@ -115,7 +115,7 @@ export class Menubar {
   addFileMenu(options: MenuItemConstructorOptions[]) {
     const fileSubmenu: MenuItemConstructorOptions[] = [];
 
-    fileSubmenu.push(...[
+    fileSubmenu.push(
       /* {
         id: fileDisconnMenuId,
         label: '연결 끊기',
@@ -134,10 +134,10 @@ export class Menubar {
         accelerator: null, // keyBinding[fileReconnAllMenuId][keyBindingIdx],
         click: null
       },
-    ]);
+    );
 
     if (process.platform === 'win32') {
-      fileSubmenu.push({ type: 'separator' as const });
+      fileSubmenu.push({ type: 'separator' });
       fileSubmenu.push({
         id: filePreferencesMenuId,
         label: 'Preferences...',
@@ -222,14 +222,12 @@ export class Menubar {
           label: 'Close Others',
           accelerator: null, // keyBinding[tabCloseOthersMenuId][keyBindingIdx],
           // click: () => {},
-          submenu: null
         },
         {
           id: tabCloseAllMenuId,
           label: 'Close All',
           accelerator: null, // keyBinding[tabCloseAllMenuId][keyBindingIdx],
           // click: () => {},
-          submenu: null
         },
         { type: 'separator' },
         {
