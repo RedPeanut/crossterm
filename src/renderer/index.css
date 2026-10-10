@@ -654,13 +654,13 @@ body { height: 100%; }
 }
 
 .tabs .tab {
-  /* left: auto; */
+  flex: 1;
   border-right: 1px solid rgb(43, 43, 43);
   background-color: rgb(24, 24, 24);
-  width: 120px;
+  /* width: 120px; */
+  /* flex-shrink: 0; */
   position: relative;
   display: flex;
-  flex-shrink: 0;
   align-items: center;
   cursor: pointer;
   padding-left: 10px;
