@@ -12,6 +12,8 @@ export class FileServiceChannel implements IpcChannel {
         this.fileService.readFile(filePath, opts)],
       ['file write atomic', (filePath: string, content: string | Buffer, opts?: WriteFileOptions) =>
         this.fileService.writeFileAtomic(filePath, content, opts)],
+      ['file move', (source: string, target: string, overwrite?: boolean) =>
+        this.fileService.move(source, target, overwrite)],
     ]);
   }
 }

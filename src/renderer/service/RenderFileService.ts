@@ -20,4 +20,8 @@ export class FileServiceImpl implements FileService {
     throw new Error("Method not implemented.");
     // return await window.ipc.invoke('folder readdir with stat', [path]);
   }
+
+  async move(source: string, target: string, overwrite?: boolean): Promise<void> {
+    return await window.ipc.invoke('file move', [source, target, overwrite]);
+  }
 }

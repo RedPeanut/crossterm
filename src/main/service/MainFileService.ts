@@ -104,6 +104,50 @@ export class MainFileService implements FileService {
     return result;
   }
 
+  async move(source: string, target: string, overwrite: boolean = false): Promise<void> {
+    source = path.resolve(source);
+    target = path.resolve(target);
+
+    if (source === target) {
+      return; // node.js 와 동일하게 경로가 같으면 no-op
+    }
+
+    // 폴더를 자기 자신의 하위로 이동 금지
+    const relative = path.relative(source, target);
+    if (relative && !relative.startsWith('..') && !path.isAbsolute(relative)) {
+      throw new Error(`Cannot move '${path.basename(source)}' into itself`);
+    }
+
+    const sourceStat = await fs.promises.lstat(source);
+    const targetStat = await fs.promises.lstat(target).catch(() => null);
+
+    if (targetStat) {
+      // 대소문자만 다른 rename (a.txt -> A.txt) 은 case-insensitive 파일시스템(macOS, Windows)에서
+      // 같은 파일을 가리키므로 존재 검사를 건너뛴다
+      const isSameFile = sourceStat.dev === targetStat.dev && sourceStat.ino === targetStat.ino;
+      if (!isSameFile) {
+        if (!overwrite) {
+          const error: NodeJS.ErrnoException = new Error(`'${path.basename(target)}' already exists`);
+          error.code = 'EEXIST';
+          throw error;
+        }
+        await fs.promises.rm(target, { recursive: true, force: true });
+      }
+    }
+
+    try {
+      await fs.promises.rename(source, target);
+    } catch (error) {
+      // 서로 다른 디스크 간 이동은 rename 이 불가능하므로 copy + delete 로 대체
+      if ((error as NodeJS.ErrnoException).code === 'EXDEV') {
+        await fs.promises.cp(source, target, { recursive: true, verbatimSymlinks: true });
+        await fs.promises.rm(source, { recursive: true, force: true });
+      } else {
+        throw error;
+      }
+    }
+  }
+
   /* registerIpcHandlers() {
     ipcMain.handle('file read', async (event, args: any[]) => { return this.readFile(args[0], args[1]); });
     ipcMain.handle('file write atomic', async (event, args: any[]) => {

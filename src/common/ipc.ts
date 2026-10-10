@@ -44,6 +44,7 @@ export type MainEvents =
   // file or folder op
   | 'file read'
   | 'file write atomic'
+  | 'file move'
   // | 'file exists'
   // | 'folder readdir with stat'
 

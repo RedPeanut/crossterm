@@ -33,5 +33,6 @@ export interface FileService {
   writeFileAtomic(filePath: string, content: string | Buffer, options?: WriteFileOptions): Promise<void>;
   exists(path: string): Promise<boolean>;
   readdirWithStat(path: string): Promise<DirentExt[]>;
-  // TODO: move, copy, del, etc ..
+  move(source: string, target: string, overwrite?: boolean): Promise<void>;
+  // TODO: copy, del, etc ..
 }
