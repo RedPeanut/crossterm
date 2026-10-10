@@ -20,7 +20,7 @@ describe('#utils', function() {
     assert.deepStrictEqual(getTileRows(13), [4, 4, 5]);
     assert.deepStrictEqual(getTileRows(14), [4, 5, 5]);
     assert.deepStrictEqual(getTileRows(15), [5, 5, 5]);
-    assert.deepStrictEqual(getTileRows(16), [4, 4]);
+    assert.deepStrictEqual(getTileRows(16), [4, 4, 4, 4]);
   });
 
 });

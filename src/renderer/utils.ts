@@ -204,7 +204,10 @@ export function getTileRows(n: number): number[] {
   for (let r = 1; r <= n; r++) {
     const c = Math.ceil(n / r);
     const diff = Math.abs(c / r - 1.5);
-    if (diff < minDiff) {
+    // if (diff < minDiff) {
+    if (diff < minDiff
+      || (diff === minDiff && n % r === 0 && n % bestRows !== 0)
+    ) {
       minDiff = diff;
       bestRows = r;
     }
