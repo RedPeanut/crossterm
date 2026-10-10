@@ -535,15 +535,24 @@ body { height: 100%; }
   /* border-radius: 4px; */
 }
 
-.sidebar .list:focus {
+.sidebar .list *:focus {
   outline: none;
 }
 
-/* 키보드 포커스 표시는 목록이 포커스를 가진 동안에만 보인다 */
+.sidebar .list input:focus {
+  border: 1px solid rgb(0, 120, 212);
+  /* outline-offset: -1px; */
+}
+
+/* .sidebar .list:focus {
+  outline: none;
+}
+
+// 키보드 포커스 표시는 목록이 포커스를 가진 동안에만 보인다
 .sidebar .list:focus .node.focused {
   outline: 1px solid rgb(0, 120, 212);
   outline-offset: -1px;
-}
+} */
 
 .sidebar .list .indent {
   height: 100%;
@@ -810,7 +819,9 @@ body { height: 100%; }
 .part.statusbar div:hover { background: rgba(241,241,241,0.2); cursor: pointer; }
 
 /* ContextView */
-.context-view {}
+.context-view {
+  z-index: 5;
+}
 
 .context-view .input-msgbox span {
   display: inline-block;

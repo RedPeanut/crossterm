@@ -2,7 +2,7 @@ import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
 import { Children, DirentExt, ListItemElem, ContextMenuItem, TerminalItem } from "../../common/Types";
 // import { wrapper } from "../globals";
-import { IDisposable, Disposable } from "../../common/base/lifecycle";
+import { IDisposable, Disposable, DisposableStore } from "../../common/base/lifecycle";
 import { $, _addEventListener } from "../util/dom";
 import * as dom from "../util/dom";
 import { findActiveItem } from "../utils";
@@ -14,8 +14,11 @@ import { Severity } from "../Types";
 import { popup } from "../util/contextmenu";
 import { MainLayoutService } from "../layout/MainLayout";
 import { StorageService, TreeViewStateType } from "../../common/service/StorageService";
+import { FileServiceImpl } from "../service/RenderFileService";
 
 const SCROLL_HIDE_TIMEOUT: number = 500;
+
+const fileService = new FileServiceImpl();
 
 export interface ListOptions {}
 
@@ -521,6 +524,10 @@ export class List extends Disposable {
         this.focusNode(nodes[nodes.length-1]);
         break;
 
+      case 'F2':
+        focused?.rename();
+        break;
+
       case 'Enter':
         if (!focused) break;
         if (focused.isDirectory) {
@@ -780,6 +787,118 @@ export class List extends Disposable {
 
 }
 
+type InputMessage = { content: string; severity: Severity };
+
+/** VS Code 의 validateFileName 과 같은 규칙으로 새 이름을 검사한다 */
+function validateFileName(name: string, siblingNames: string[]): InputMessage | null {
+
+  // Name not provided
+  if (!name || name.length === 0 || /^\s+$/.test(name)) {
+    return {
+      content: 'Name must be provided.', // emptyNameError
+      severity: Severity.Error
+    };
+  }
+
+  if (/[\\/]/.test(name)) {
+    return {
+      content: `A file or folder name cannot contain '/' or '\\'.`,
+      severity: Severity.Error
+    };
+  }
+
+  // Do not allow to overwrite existing
+  // (macOS/Windows 는 대소문자를 구분하지 않으므로 대소문자 무시하고 비교)
+  if (siblingNames.some(v => v.toLowerCase() === name.toLowerCase())) {
+    return {
+      content: `${name} already exists at this location. Please choose a different name.`, // nameExistsError
+      severity: Severity.Error
+    };
+  }
+
+  // const names = coalesce(name.split(/[\\/]/));
+  // if (names.some(name => /^\s|\s$/.test(name))) {
+  if (/^\s|\s$/.test(name)) {
+    return {
+      content: `Leading or trailing whitespace detected in name.`, // nameWhitespaceWarning
+      severity: Severity.Warning
+    };
+  }
+
+  return null;
+}
+
+/** input 아래에 ContextView 로 검증 메시지를 표시한다. message 가 null 이면 숨긴다 */
+function showInputMessage(input: HTMLInputElement, message: InputMessage | null): void {
+  input.classList.remove('idle');
+  input.classList.remove('info');
+  input.classList.remove('warning');
+  input.classList.remove('error');
+
+  if (!message) {
+    input.classList.add('idle');
+
+    (getService(contextViewServiceId) as ContextViewService).hide();
+
+    // reset
+    input.style.border = 'transparent';
+    return;
+  }
+
+  function classFor(severity: Severity): string {
+    switch (severity) {
+      case Severity.Info: return 'info';
+      case Severity.Warning: return 'warning';
+      default: return 'error';
+    }
+  }
+
+  input.classList.add(classFor(message.severity));
+
+  function stylesFor(severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
+    switch (severity) {
+      // case Severity.Info: return { border: styles.inputValidationInfoBorder, background: styles.inputValidationInfoBackground, foreground: styles.inputValidationInfoForeground };
+      case Severity.Warning: return { border: 'rgb(184 149 0)', background: 'rgb(53 42 5)', foreground: 'white' };
+      default: return { border: 'rgb(190 17 0)', background: 'rgb(90 29 29)', foreground: 'white' };
+    }
+  }
+
+  const styles = stylesFor(message.severity);
+  input.style.border = `1px solid ${styles.border}`;
+
+  let div: HTMLElement;
+
+  const layout = () => {
+    const totalWidth = dom.getTotalWidth(input);
+    return div.style.width = totalWidth + 'px';
+  };
+
+  (getService(contextViewServiceId) as ContextViewService).show({
+    getAnchor: () => input,
+    render: (container: HTMLElement) => {
+      div = dom.append(container, $('.input-msgbox'));
+      layout();
+
+      const spanElement = document.createElement('span');
+      spanElement.textContent = message.content;
+      spanElement.classList.add(classFor(message.severity));
+
+      spanElement.style.backgroundColor = styles.background ?? '';
+      spanElement.style.color = styles.foreground ?? '';
+      spanElement.style.border = styles.border ? `1px solid ${styles.border}` : '';
+
+      dom.append(div, spanElement);
+    },
+    onHide: null
+  });
+}
+
+/** main 에서 받은 경로의 구분자(/ 또는 \\)를 유지하며 이어붙인다 */
+function joinPath(dir: string, name: string): string {
+  const sep = dir.includes('\\') && !dir.includes('/') ? '\\' : '/';
+  return dir.endsWith(sep) ? dir + name : dir + sep + name;
+}
+
 export class Node extends Disposable implements Children<Node> {
   container: HTMLElement;
   wrapper: HTMLElement;
@@ -790,6 +909,7 @@ export class Node extends Disposable implements Children<Node> {
   parent: Node;
   children: Node[] = [];
   isCollapsed: boolean = false;
+  isRenaming: boolean = false;
 
   id: string;
   shortenedId: string;
@@ -956,13 +1076,61 @@ export class Node extends Disposable implements Children<Node> {
 
     this._register(_addEventListener(content, 'contextmenu', (e: PointerEvent) => {
       const items: ContextMenuItem[] = [];
-      items.push({
-        accelerator: 'P',
-        label: 'Properties',
-        click: () => {
-          (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', data);
+
+      // TODO: 상황별 메뉴 생성
+
+      // create new file n new folder when ...
+      // create copy, cut when item is selected
+      // create paste when clipboard are exists
+      // create rename, delete when item is selected
+
+      items.push(
+        {
+          label: 'New File...',
+          accelerator: '',
+          click: () => {}
+        },
+        {
+          label: 'New Folder...',
+          accelerator: '',
+          click: () => {}
+        },
+        { type: 'separator' },
+        {
+          label: 'Cut',
+          accelerator: 'Cmd+X',
+          click: () => {}
+        },
+        {
+          label: 'Copy',
+          accelerator: 'Cmd+C',
+          click: () => {}
+        },
+        {
+          label: 'Paste',
+          accelerator: 'Cmd+V',
+          click: () => {}
+        },
+        { type: 'separator' },
+        {
+          label: 'Rename',
+          accelerator: 'F2',
+          click: () => this.rename()
+        },
+        {
+          label: 'Delete',
+          accelerator: 'Cmd+Back',
+          click: () => {}
+        },
+        { type: 'separator' },
+        {
+          label: 'Properties',
+          accelerator: 'P',
+          click: () => {
+            (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', data);
+          }
         }
-      });
+      );
       popup(items);
     }));
 
@@ -1034,6 +1202,139 @@ export class Node extends Disposable implements Children<Node> {
     this.toggleCollapsed(this.id, { isCollapsed: isCollapsed });
   }
 
+  /** 같은 폴더에 있는 다른 노드들 (마지막 blank 노드 제외) */
+  getSiblings(): Node[] {
+    const siblings = this.parent ? this.parent.children : this.dnd.list.nodes;
+    return siblings.filter(v => v !== this && v.titleEl);
+  }
+
+  /**
+   * 제목 자리에 input 을 띄워 이름을 편집하고, 확정하면 디스크의 파일/폴더 이름을 바꾼다.
+   * VS Code 탐색기와 같이 Enter 는 확정, Escape 는 취소, 포커스를 잃으면 확정(오류면 취소)한다.
+   */
+  rename(): void {
+    if (this.isRenaming || !this.titleEl || !this.data?.path) return;
+    this.isRenaming = true;
+
+    const titleEl = this.titleEl;
+    const oldName = titleEl.textContent;
+    const siblingNames = this.getSiblings().map(v => v.titleEl.textContent);
+    const store = new DisposableStore();
+    let isCommitting = false;
+
+    const input = $('input.title') as HTMLInputElement;
+    input.value = oldName;
+    titleEl.style.display = 'none';
+    titleEl.after(input);
+
+    // 편집 중에는 드래그, 노드 클릭(선택)/더블클릭(열기)이 일어나지 않도록 한다
+    this.node.draggable = false;
+    for (const type of ['click', 'dblclick', 'mousedown']) {
+      store.add(_addEventListener(input, type, (e: MouseEvent) => e.stopPropagation()));
+    }
+
+    const finish = () => {
+      store.dispose();
+      showInputMessage(input, null);
+      input.remove();
+      titleEl.style.display = '';
+      this.node.draggable = true;
+      this.isRenaming = false;
+      this.dnd.list.element.focus();
+    };
+
+    const commit = async (cancelOnError: boolean) => {
+      if (isCommitting) return;
+
+      const newName = input.value;
+      if (newName === oldName) {
+        finish();
+        return;
+      }
+
+      const message = validateFileName(newName, siblingNames);
+      if (message?.severity === Severity.Error) {
+        if (cancelOnError) finish();
+        else showInputMessage(input, message);
+        return;
+      }
+
+      isCommitting = true;
+      try {
+        await fileService.move(joinPath(this.data.path, oldName), joinPath(this.data.path, newName));
+      } catch (error) {
+        isCommitting = false;
+        showInputMessage(input, { content: (error as Error).message, severity: Severity.Error });
+        input.focus();
+        return;
+      }
+
+      this.applyRename(oldName, newName);
+      finish();
+    };
+
+    store.add(_addEventListener(input, 'keydown', (e: KeyboardEvent) => {
+      e.stopPropagation(); // 목록/전역 키바인딩으로 흘러가지 않게
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        commit(false);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        finish();
+      }
+    }));
+    store.add(_addEventListener(input, 'input', () => {
+      showInputMessage(input, input.value === oldName ? null : validateFileName(input.value, siblingNames));
+    }));
+    store.add(_addEventListener(input, 'blur', () => {
+      commit(true);
+    }));
+
+    input.focus();
+    // 파일은 확장자를 뺀 부분만 선택 (VS Code 와 동일)
+    const lastDot = oldName.lastIndexOf('.');
+    input.setSelectionRange(0, !this.isDirectory && lastDot > 0 ? lastDot : oldName.length);
+  }
+
+  /** 디스크 rename 이 끝난 뒤 제목, data, 하위 항목 경로, 정렬 위치를 갱신한다 */
+  applyRename(oldName: string, newName: string): void {
+    const oldPath = joinPath(this.data.path, oldName);
+    const newPath = joinPath(this.data.path, newName);
+
+    this.titleEl.textContent = newName;
+    this.data.name = this.data.title = newName;
+
+    // 폴더면 하위 항목들의 path(부모 폴더 경로)도 새 경로로 바꾼다
+    const updatePath = (nodes: Node[]) => {
+      for (const node of nodes) {
+        const path = node.data?.path;
+        if (path === oldPath || path?.startsWith(oldPath + '/') || path?.startsWith(oldPath + '\\')) {
+          node.data.path = newPath + path.substring(oldPath.length);
+        }
+        updatePath(node.children);
+      }
+    };
+    updatePath(this.children);
+
+    // 펼침 상태는 이름 경로를 키로 저장하므로 다시 저장한다
+    if (this.isDirectory) this.dnd.list.saveTreeViewState();
+
+    // 폴더 먼저, 같은 종류끼리는 이름순 (AppService.readdir 와 같은 규칙) 으로 다시 배치
+    const siblings = this.parent ? this.parent.children : this.dnd.list.nodes;
+    siblings.splice(siblings.indexOf(this), 1);
+
+    let index = siblings.findIndex(v => {
+      if (!v.titleEl) return true; // blank 노드 앞
+      if (this.isDirectory !== v.isDirectory) return this.isDirectory;
+      return v.titleEl.textContent > newName;
+    });
+    if (index === -1) index = siblings.length;
+
+    siblings.splice(index, 0, this);
+    this.container.insertBefore(this.wrapper, siblings[index+1]?.wrapper ?? null);
+  }
+
   createEdit(data: ListItemElem, level: number = 0,
     onCancel: () => void, onFinish: () => void
   ): void {
@@ -1082,106 +1383,9 @@ export class Node extends Disposable implements Children<Node> {
     }));
 
     this._register(_addEventListener(input, 'input', (e: KeyboardEvent) => {
-
-      // console.log('input.value =', input.value);
-
       // validate n show message box
-
-      function validate(name: string): { content: string; severity: Severity } | null {
-
-        // Name not provided
-        if (!name || name.length === 0 || /^\s+$/.test(name)) {
-          return {
-            content: 'Name must be provided.', // emptyNameError
-            severity: Severity.Error
-          };
-        }
-
-        /* // Do not allow to overwrite existing
-        return {
-          content: `**${name}** already exists at this location. Please choose a different name.`, // nameExistsError
-          severity: Severity.Error
-        }; */
-
-        // const names = coalesce(name.split(/[\\/]/));
-        // if (names.some(name => /^\s|\s$/.test(name))) {
-        if (/^\s|\s$/.test(name)) {
-          return {
-            content: `Leading or trailing whitespace detected in name.`, // nameWhitespaceWarning
-            severity: Severity.Warning
-          };
-        }
-
-        return null;
-      }
-
-      let errorMsg = validate(input.value);
-      if (errorMsg) {
-
-        input.classList.remove('idle');
-        input.classList.remove('info');
-        input.classList.remove('warning');
-        input.classList.remove('error');
-
-        function classFor(severity: Severity): string {
-          switch (severity) {
-            case Severity.Info: return 'info';
-            case Severity.Warning: return 'warning';
-            default: return 'error';
-          }
-        }
-
-        input.classList.add(classFor(errorMsg.severity));
-
-        function stylesFor(severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
-          switch (severity) {
-            // case Severity.Info: return { border: styles.inputValidationInfoBorder, background: styles.inputValidationInfoBackground, foreground: styles.inputValidationInfoForeground };
-            case Severity.Warning: return { border: 'rgb(184 149 0)', background: 'rgb(53 42 5)', foreground: 'white' };
-            default: return { border: 'rgb(190 17 0)', background: 'rgb(90 29 29)', foreground: 'white' };
-          }
-        }
-
-        const styles = stylesFor(errorMsg.severity);
-        input.style.border = `1px solid ${styles.border}`;
-
-        let div: HTMLElement;
-
-        const layout = () => {
-          const totalWidth = dom.getTotalWidth(input);
-          return div.style.width = totalWidth + 'px';
-        };
-
-        (getService(contextViewServiceId) as ContextViewService).show({
-          getAnchor: () => input,
-          render: (container: HTMLElement) => {
-            div = dom.append(container, $('.input-msgbox'));
-            layout();
-
-            const spanElement = document.createElement('span');
-            spanElement.textContent = errorMsg.content;
-            spanElement.classList.add(classFor(errorMsg.severity));
-
-            const styles = stylesFor(errorMsg.severity);
-            spanElement.style.backgroundColor = styles.background ?? '';
-            spanElement.style.color = styles.foreground ?? '';
-            spanElement.style.border = styles.border ? `1px solid ${styles.border}` : '';
-
-            dom.append(div, spanElement);
-          },
-          onHide: null
-        });
-      } else {
-        input.classList.remove('info');
-        input.classList.remove('warning');
-        input.classList.remove('error');
-        input.classList.add('idle');
-
-        (getService(contextViewServiceId) as ContextViewService).hide();
-
-        // reset
-        input.style.border = 'transparent';
-      }
-
+      const siblingNames = this.getSiblings().map(v => v.titleEl.textContent);
+      showInputMessage(input, validateFileName(input.value, siblingNames));
     }));
     this._register(_addEventListener(input, 'blur', (e: UIEvent) => {
 
