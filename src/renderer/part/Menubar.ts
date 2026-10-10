@@ -281,26 +281,26 @@ export class Menubar extends Disposable implements MenubarService {
   enable(list: MenubarEnableElem[]): void {
     for (let i = 0; i < list.length; i++) {
       const item = list[i];
-      const quired = this.hamburgerButton.querySelector(`#h_${item.id.replace(/\./g, '_')}`);
-      if (quired) {
+      const queried = this.hamburgerButton.querySelector(`#h_${item.id.replace(/\./g, '_')}`);
+      if (queried) {
         // console.log('find!!');
         if (!item.enable)
-          quired.classList.add('disabled');
+          queried.classList.add('disabled');
         else
-          quired.classList.remove('disabled');
+          queried.classList.remove('disabled');
       }
     }
 
     for (let i = 0; i < list.length; i++) {
       const item = list[i];
       for (let j = 0; j < this.normalButtons.length; j++) {
-        let quired = this.normalButtons[j].querySelector(`#n_${item.id.replace(/\./g, '_')}`);
-        if (quired) {
+        let queried = this.normalButtons[j].querySelector(`#n_${item.id.replace(/\./g, '_')}`);
+        if (queried) {
           // console.log('find!!');
           if (!item.enable)
-            quired.classList.add('disabled');
+            queried.classList.add('disabled');
           else
-            quired.classList.remove('disabled');
+            queried.classList.remove('disabled');
           break;
         }
       }
