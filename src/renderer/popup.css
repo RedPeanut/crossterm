@@ -202,12 +202,16 @@
 }
 
 .properties .popup .right .desc {
-  padding: 12px 2px 18px;
+  padding: 12px 2px 0px;
   line-height: 19px;
   color: rgb(180, 180, 180);
 }
 
 .properties .popup .right .desc p + p { margin-top: 8px; }
+
+/* .properties .popup .right .row:nth-of-type(1) { margin-top: 10px; } */
+/* 바로 앞 형제가 .row가 아닌 첫 번째 .row */
+.properties .popup .right :not(.row) + .row { margin-top: 10px; }
 
 .properties .popup .right .row {
   display: flex;
