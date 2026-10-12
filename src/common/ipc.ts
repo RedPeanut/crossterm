@@ -45,7 +45,10 @@ export type MainEvents =
   | 'file read'
   | 'file write atomic'
   | 'file move'
-  // | 'file exists'
+  | 'file copy'
+  | 'file delete'
+  | 'folder create'
+  | 'file exists'
   // | 'folder readdir with stat'
 
   // app

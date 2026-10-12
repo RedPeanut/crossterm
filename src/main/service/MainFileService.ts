@@ -1,6 +1,7 @@
 import fs from 'fs';
+import { shell } from 'electron';
 import path from 'path';
-import { FileService, ReadFileOptions, Stat, WriteFileOptions, FileType } from '../../common/service/FileService';
+import { DeleteOptions, FileService, ReadFileOptions, Stat, WriteFileOptions, FileType } from '../../common/service/FileService';
 import { DirentExt } from '../../common/Types';
 
 export class MainFileService implements FileService {
@@ -126,11 +127,7 @@ export class MainFileService implements FileService {
       // 같은 파일을 가리키므로 존재 검사를 건너뛴다
       const isSameFile = sourceStat.dev === targetStat.dev && sourceStat.ino === targetStat.ino;
       if (!isSameFile) {
-        if (!overwrite) {
-          const error: NodeJS.ErrnoException = new Error(`'${path.basename(target)}' already exists`);
-          error.code = 'EEXIST';
-          throw error;
-        }
+        if (!overwrite) throw existsError(target);
         await fs.promises.rm(target, { recursive: true, force: true });
       }
     }
@@ -148,6 +145,53 @@ export class MainFileService implements FileService {
     }
   }
 
+  async copy(source: string, target: string, overwrite: boolean = false): Promise<void> {
+    source = path.resolve(source);
+    target = path.resolve(target);
+
+    // 폴더를 자기 자신(또는 하위)으로 복사 금지. 같은 경로면 overwrite 시 원본이 지워지므로 같이 막는다
+    const relative = path.relative(source, target);
+    if (!relative || (!relative.startsWith('..') && !path.isAbsolute(relative))) {
+      throw new Error(`Cannot copy '${path.basename(source)}' into itself`);
+    }
+
+    const sourceStat = await fs.promises.lstat(source);
+    const targetStat = await fs.promises.lstat(target).catch(() => null);
+
+    if (targetStat) {
+      // case-insensitive 파일시스템에서 대소문자만 다른 경로는 원본 자신이다
+      if (sourceStat.dev === targetStat.dev && sourceStat.ino === targetStat.ino) {
+        throw new Error(`Cannot copy '${path.basename(source)}' into itself`);
+      }
+      if (!overwrite) throw existsError(target);
+      await fs.promises.rm(target, { recursive: true, force: true });
+    }
+
+    await fs.promises.cp(source, target, { recursive: true, verbatimSymlinks: true, errorOnExist: true, force: false });
+  }
+
+  async del(path_: string, opts: DeleteOptions = {}): Promise<void> {
+    path_ = path.resolve(path_);
+
+    // 없는 경로는 ENOENT 로 알린다 (rm 의 force 는 이를 숨기므로 미리 확인)
+    await fs.promises.lstat(path_);
+
+    if (opts.useTrash) {
+      await shell.trashItem(path_);
+    } else {
+      await fs.promises.rm(path_, { recursive: true });
+    }
+  }
+
+  async createFolder(path_: string): Promise<void> {
+    path_ = path.resolve(path_);
+
+    if (await this.exists(path_)) throw existsError(path_);
+
+    // 상위 폴더가 없으면 같이 만든다
+    await fs.promises.mkdir(path_, { recursive: true });
+  }
+
   /* registerIpcHandlers() {
     ipcMain.handle('file read', async (event, args: any[]) => { return this.readFile(args[0], args[1]); });
     ipcMain.handle('file write atomic', async (event, args: any[]) => {
@@ -155,4 +199,10 @@ export class MainFileService implements FileService {
       return this.writeFileAtomic(args[0], args[1], args[2]);
     });
   } */
+}
+
+function existsError(target: string): NodeJS.ErrnoException {
+  const error: NodeJS.ErrnoException = new Error(`'${path.basename(target)}' already exists`);
+  error.code = 'EEXIST';
+  return error;
 }
