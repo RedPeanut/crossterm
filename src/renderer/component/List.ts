@@ -353,6 +353,28 @@ export class List extends Disposable {
     this.container.appendChild(scrollbar_v);
   }
 
+  /** 선택된 노드들. 선택된 폴더 안의 항목은 폴더와 같이 처리되므로 뺀다 */
+  getSelectedNodes(): Node[] {
+    const selectedIds = this.state.selectedIds;
+    const isSelected = (v: Node) => !!v.data?.path && selectedIds.includes(v.shortenedId);
+    const hasSelectedParent = (v: Node) => {
+      for (let p = v.parent; p; p = p.parent)
+        if (isSelected(p)) return true;
+      return false;
+    };
+    return utils.flatten(this.nodes).filter(v => isSelected(v) && !hasSelectedParent(v));
+  }
+
+  cutSelected(): void {
+    const paths = this.getSelectedNodes().map(getNodePath);
+    if (paths.length > 0) this.clipboard = { paths, isCut: true };
+  }
+
+  copySelected(): void {
+    const paths = this.getSelectedNodes().map(getNodePath);
+    if (paths.length > 0) this.clipboard = { paths, isCut: false };
+  }
+
   scrollHide(): void {
     if (!this.mouseIsOver && !this.isDragging) {
       if (this.scrollbar_v.classList.contains('visible')) {
@@ -901,6 +923,11 @@ function joinPath(dir: string, name: string): string {
   return dir.endsWith(sep) ? dir + name : dir + sep + name;
 }
 
+/** 노드가 가리키는 파일/폴더의 전체 경로 (data.path 는 상위 폴더 경로다) */
+function getNodePath(node: Node): string {
+  return joinPath(node.data.path, node.data.name);
+}
+
 export class Node extends Disposable implements Children<Node> {
   container: HTMLElement;
   wrapper: HTMLElement;
@@ -1115,12 +1142,12 @@ export class Node extends Disposable implements Children<Node> {
         {
           label: 'Cut',
           accelerator: 'Cmd+X',
-          click: null
+          click: () => list.cutSelected()
         },
         {
           label: 'Copy',
           accelerator: 'Cmd+C',
-          click: null
+          click: () => list.copySelected()
         }
       );
 
