@@ -10,6 +10,8 @@ export class AppServiceChannel implements IpcChannel {
     this.handlers = new Map<MainEvents, IpcHandler>([
       ['read sessions dir', () =>
         this.appService.readSessionsDir()],
+      ['get sessions dir', () =>
+        this.appService.getSessionsDir()],
     ]);
   }
 }

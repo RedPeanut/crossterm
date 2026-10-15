@@ -81,6 +81,10 @@ export class AppService {
     return resultList;
   }
 
+  getSessionsDir(): string {
+    return this.environmentService.userDataPath + path.sep + 'user' + path.sep + 'sessions';
+  }
+
   async readSessionsDir(): Promise<ListItemElem[]> {
 
     /*
@@ -116,8 +120,7 @@ export class AppService {
     }
     */
 
-    const userDataPath = this.environmentService.userDataPath;
-    const sessionsDir = userDataPath + path.sep + 'user' + path.sep + 'sessions';
+    const sessionsDir = this.getSessionsDir();
 
     let exists = await this.fileService.exists(sessionsDir);
     if (!exists) {

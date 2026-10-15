@@ -322,6 +322,21 @@ export class List extends Disposable {
       this.notifySelectionChange();
     }));
     const tree = this.tree = $('.tree');
+    this.renderNodes();
+
+    const scrollbar_v = this.scrollbar_v = $('.scrollbar.vertical.invisible');
+    const slider = this.slider = $('.slider');
+    scrollbar_v.appendChild(slider);
+
+    listEl.appendChild(tree);
+    this.container.appendChild(listEl);
+    // this.container.appendChild(scrollable);
+    this.container.appendChild(scrollbar_v);
+  }
+
+  /** state.items 로 트리 노드들을 만든다 */
+  renderNodes(): void {
+    const tree = this.tree;
     this.nodes = [];
     // const list = this.state.showList;
     this.state.items.map((v: ListItemElem, i: number) => {
@@ -342,15 +357,46 @@ export class List extends Disposable {
     );
     node.createBlank();
     this.nodes.push(node);
+  }
 
-    const scrollbar_v = this.scrollbar_v = $('.scrollbar.vertical.invisible');
-    const slider = this.slider = $('.slider');
-    scrollbar_v.appendChild(slider);
+  /**
+   * 디스크에서 세션 폴더를 다시 읽어 트리를 새로 그린다. 펼침 상태는 유지하고,
+   * selectPaths 에 있는 항목들을 선택한다.
+   */
+  async refresh(selectPaths: string[] = []): Promise<void> {
+    const expanded = utils.collectExpandedPaths(this.state.items);
+    const items: ListItemElem[] = await window.ipc.invoke('read sessions dir');
+    utils.applyTreeViewState(items, expanded);
 
-    listEl.appendChild(tree);
-    this.container.appendChild(listEl);
-    // this.container.appendChild(scrollable);
-    this.container.appendChild(scrollbar_v);
+    // ListPane 의 더블클릭이 renderer.sessions 에서 id 로 항목을 찾으므로 같이 바꾼다
+    renderer.sessions = items;
+
+    const disposeAll = (nodes: Node[]) => nodes.forEach(v => {
+      disposeAll(v.children);
+      v.dispose();
+    });
+    disposeAll(this.nodes);
+    this.tree.replaceChildren();
+
+    this.focusedId = undefined;
+    this.state = {
+      selectedIds: [],
+      items
+    };
+    this.renderNodes();
+
+    const selected = utils.flatten(this.nodes).filter(v => v.data?.path && selectPaths.includes(getNodePath(v)));
+    for (const node of selected) {
+      node.node.classList.add('selected');
+      this.state.selectedIds.push(node.shortenedId);
+    }
+    if (selected.length > 0) {
+      this.setFocused(selected[selected.length-1]);
+      this.revealNode(selected[selected.length-1]);
+    }
+
+    this.notifySelectionChange();
+    this.setScrollVisibility();
   }
 
   /** 선택된 노드들. 선택된 폴더 안의 항목은 폴더와 같이 처리되므로 뺀다 */
@@ -373,6 +419,47 @@ export class List extends Disposable {
   copySelected(): void {
     const paths = this.getSelectedNodes().map(getNodePath);
     if (paths.length > 0) this.clipboard = { paths, isCut: false };
+  }
+
+  /** node 를 기준으로 붙여넣을 폴더. 폴더면 그 안, 파일이면 파일이 있는 폴더, 없으면 최상위 */
+  getPasteDir(node: Node | undefined): string {
+    if (!node?.data?.path) return renderer.sessionsDir;
+    return getNodePath(node);
+  }
+
+  /** 클립보드의 항목들을 targetDir 로 붙여넣는다. 잘라내기면 이동, 복사면 겹치지 않는 이름으로 복사 */
+  async paste(targetDir: string): Promise<void> {
+    if (!this.clipboard) return;
+    const { paths, isCut } = this.clipboard;
+    const pasted: string[] = [];
+
+    try {
+      for (const source of paths) {
+        const name = basename(source);
+        if (isCut) {
+          const target = joinPath(targetDir, name);
+          if (target !== source) await fileService.move(source, target);
+          pasted.push(target);
+        } else {
+          const target = await findCopyPath(targetDir, name);
+          await fileService.copy(source, target);
+          pasted.push(target);
+        }
+      }
+      // 잘라낸 항목은 한 번만 붙여넣을 수 있다 (VS Code 와 동일)
+      if (isCut) this.clipboard = undefined;
+    } catch (error) {
+      showError((error as Error).message);
+    }
+
+    this.expandDir(targetDir);
+    await this.refresh(pasted);
+  }
+
+  /** dir 폴더 노드를 펼친 상태로 표시해서 다시 그린 뒤에도 안의 항목이 보이게 한다 */
+  expandDir(dir: string): void {
+    const node = utils.flatten(this.nodes).find(v => v.isDirectory && v.data?.path && getNodePath(v) === dir);
+    if (node) node.data.isCollapsed = false;
   }
 
   scrollHide(): void {
@@ -923,9 +1010,32 @@ function joinPath(dir: string, name: string): string {
   return dir.endsWith(sep) ? dir + name : dir + sep + name;
 }
 
+function basename(path: string): string {
+  return path.substring(Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\')) + 1);
+}
+
 /** 노드가 가리키는 파일/폴더의 전체 경로 (data.path 는 상위 폴더 경로다) */
 function getNodePath(node: Node): string {
   return joinPath(node.data.path, node.data.name);
+}
+
+/** VS Code 와 같이 'a.txt' -> 'a copy.txt' -> 'a copy 2.txt' 순으로 비어 있는 이름을 찾는다 */
+async function findCopyPath(dir: string, name: string): Promise<string> {
+  let target = joinPath(dir, name);
+  if (!await fileService.exists(target)) return target;
+
+  const lastDot = name.lastIndexOf('.');
+  const stem = lastDot > 0 ? name.substring(0, lastDot) : name;
+  const ext = lastDot > 0 ? name.substring(lastDot) : '';
+
+  for (let i = 1; ; i++) {
+    target = joinPath(dir, `${stem} copy${i > 1 ? ' ' + i : ''}${ext}`);
+    if (!await fileService.exists(target)) return target;
+  }
+}
+
+function showError(message: string): void {
+  window.ipc.invoke('dialog show messagebox', { type: 'error', message });
 }
 
 export class Node extends Disposable implements Children<Node> {
@@ -1151,11 +1261,11 @@ export class Node extends Disposable implements Children<Node> {
         }
       );
 
-      if (list.clipboard?.paths.length > 0 && this.data?.path) {
+      if (list.clipboard?.paths.length > 0 && isDirectory) {
         clipboardGroup.push({
           label: 'Paste',
           accelerator: 'Cmd+V',
-          click: null
+          click: () => list.paste(list.getPasteDir(this))
         });
       }
       groups.push(clipboardGroup);

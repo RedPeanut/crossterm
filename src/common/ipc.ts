@@ -35,6 +35,7 @@ export type MainEvents =
   // action
   | 'get package json'
   | 'read sessions dir'
+  | 'get sessions dir'
 
   //
   | 'open context menu'

@@ -52,6 +52,7 @@ export class Renderer {
   // initial_value: ConfigsInitialValueType;
   // list: ListItemElem[];
   sessions: ListItemElem[];
+  sessionsDir: string;
   layoutState: LayoutStateType;
   treeViewState: TreeViewStateType;
 
@@ -76,6 +77,7 @@ export class Renderer {
     // this.initial_value = await window.ipc.invoke('config get', 'initial_value');
     // this.list = await window.ipc.invoke('config get', 'list');
     this.sessions = await window.ipc.invoke('read sessions dir');
+    this.sessionsDir = await window.ipc.invoke('get sessions dir');
     this.layoutState = JSON.parse(await storageService.get<string>('layoutState'));
     this.treeViewState = JSON.parse(await storageService.get<string>('treeViewState'));
   }
