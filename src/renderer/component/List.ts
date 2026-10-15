@@ -101,6 +101,8 @@ export class List extends Disposable {
   dnd: ListDragAndDrop;
   /** 키보드 포커스가 있는 노드의 shortenedId */
   focusedId: string | undefined;
+  /** 잘라내기/복사한 항목들의 디스크 경로. 목록을 다시 읽으면 id 가 바뀌므로 경로로 기억한다 */
+  clipboard: { paths: string[], isCut: boolean } | undefined;
 
   constructor(container: HTMLElement,
     items: ListItemElem[],
@@ -1075,54 +1077,79 @@ export class Node extends Disposable implements Children<Node> {
     // }; // this.properties();
 
     this._register(_addEventListener(content, 'contextmenu', (e: PointerEvent) => {
-      const items: ContextMenuItem[] = [];
 
-      // TODO: 상황별 메뉴 생성
+      // 상황별 메뉴 생성
 
-      // create new file n new folder when ...
-      // create copy, cut when item is selected
-      // create paste when clipboard are exists
-      // create rename, delete when item is selected
+      const list = this.dnd.list;
 
-      items.push(
-        {
-          label: 'New File...',
-          accelerator: '',
-          click: () => {}
-        },
-        {
-          label: 'New Folder...',
-          accelerator: '',
-          click: () => {}
-        },
-        { type: 'separator' },
+      // VS Code 처럼 선택되지 않은 항목을 우클릭하면 그 항목만 선택한다
+      if (!list.state.selectedIds.includes(this.shortenedId))
+        list.focusNode(this);
+
+      const selectedIds = Array.from(new Set(list.state.selectedIds));
+      const isSingle = selectedIds.length === 1;
+      const isDirectory = this.isDirectory;
+
+      const groups: ContextMenuItem[][] = [];
+
+      // new file n folder: 디렉토리일때
+      if (isDirectory) {
+        groups.push([
+          {
+            label: 'New File...',
+            accelerator: '',
+            click: () => list.addNode('session')
+          },
+          {
+            label: 'New Folder...',
+            accelerator: '',
+            click: () => list.addNode('folder')
+          }
+        ]);
+      }
+
+      // cut, copy: 항상, paste: 클립보드에 항목이 있을 때
+      const clipboardGroup: ContextMenuItem[] = [];
+
+      clipboardGroup.push(
         {
           label: 'Cut',
           accelerator: 'Cmd+X',
-          click: () => {}
+          click: null
         },
         {
           label: 'Copy',
           accelerator: 'Cmd+C',
-          click: () => {}
-        },
-        {
+          click: null
+        }
+      );
+
+      if (list.clipboard?.paths.length > 0 && this.data?.path) {
+        clipboardGroup.push({
           label: 'Paste',
           accelerator: 'Cmd+V',
-          click: () => {}
-        },
-        { type: 'separator' },
-        {
-          label: 'Rename',
-          accelerator: 'F2',
-          click: () => this.rename()
-        },
-        {
-          label: 'Delete',
-          accelerator: 'Cmd+Back',
-          click: () => {}
-        },
-        { type: 'separator' },
+          click: null
+        });
+      }
+      groups.push(clipboardGroup);
+
+      // rename, delete: 항상
+      const editGroup: ContextMenuItem[] = [];
+
+      editGroup.push({
+        label: 'Rename',
+        accelerator: 'F2',
+        click: () => this.rename()
+      });
+      editGroup.push({
+        label: 'Delete',
+        accelerator: 'Cmd+Backspace',
+        click: null
+      });
+
+      groups.push(editGroup);
+
+      groups.push([
         {
           label: 'Properties',
           accelerator: 'P',
@@ -1130,7 +1157,14 @@ export class Node extends Disposable implements Children<Node> {
             (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', data);
           }
         }
-      );
+      ]);
+
+      // 비어 있는 그룹은 빼고 그룹 사이에만 separator 를 넣는다
+      const items: ContextMenuItem[] = [];
+      for (const group of groups.filter(v => v.length > 0)) {
+        if (items.length > 0) items.push({ type: 'separator' });
+        items.push(...group);
+      }
       popup(items);
     }));
 
