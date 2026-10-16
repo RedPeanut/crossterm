@@ -500,6 +500,35 @@ export class List extends Disposable {
     await this.refresh(pasted);
   }
 
+  /** 선택된 항목들을 확인 후 휴지통으로 보낸다 */
+  async deleteSelected(): Promise<void> {
+    const nodes = this.getSelectedNodes();
+    if (nodes.length === 0) return;
+
+    const message = nodes.length === 1
+      ? `Are you sure you want to delete '${nodes[0].data.name}'?`
+      : `Are you sure you want to delete the following ${nodes.length} files/directories?`;
+    const { response } = await window.ipc.invoke('dialog show messagebox', {
+      type: 'warning',
+      message,
+      detail: nodes.length === 1 ? 'You can restore from the Trash.' : nodes.map(v => v.data.name).join('\n'),
+      buttons: ['Move to Trash', 'Cancel'],
+      defaultId: 0,
+      cancelId: 1
+    });
+    if (response !== 0) return;
+
+    try {
+      for (const node of nodes) {
+        await fileService.del(getNodePath(node), { useTrash: true });
+      }
+    } catch (error) {
+      showError((error as Error).message);
+    }
+
+    await this.refresh();
+  }
+
   /** dir 폴더 노드를 펼친 상태로 표시해서 다시 그린 뒤에도 안의 항목이 보이게 한다 */
   expandDir(dir: string): void {
     const node = utils.flatten(this.nodes).find(v => v.isDirectory && v.data?.path && getNodePath(v) === dir);
@@ -1327,7 +1356,7 @@ export class Node extends Disposable implements Children<Node> {
       editGroup.push({
         label: 'Delete',
         accelerator: 'Cmd+Backspace',
-        click: null
+        click: () => list.deleteSelected()
       });
 
       groups.push(editGroup);
