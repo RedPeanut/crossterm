@@ -11,3 +11,6 @@ export const terminalFocusedContextKeyName = 'terminalFocused';
 
 /** 터미널에 선택 영역이 있는지. 예: `when: 'terminalFocused && terminalHasSelection'` */
 export const terminalHasSelectionContextKeyName = 'terminalHasSelection';
+
+/** 세션 목록에 포커스가 있는지 (이름 편집 input 에 포커스가 있을 때는 false). 예: `when: 'listFocus'` */
+export const listFocusContextKeyName = 'listFocus';

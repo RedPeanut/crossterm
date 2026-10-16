@@ -8,17 +8,22 @@ import * as dom from "../util/dom";
 import { findActiveItem } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
-import { contextViewServiceId, getService, mainLayoutServiceId, storageServiceId } from "../Service";
+import { contextKeyServiceId, contextViewServiceId, getService, mainLayoutServiceId, storageServiceId } from "../Service";
 import { ContextViewService } from "../service/ContextViewService";
 import { Severity } from "../Types";
 import { popup } from "../util/contextmenu";
 import { MainLayoutService } from "../layout/MainLayout";
 import { StorageService, TreeViewStateType } from "../../common/service/StorageService";
 import { FileServiceImpl } from "../service/RenderFileService";
+import { ContextKeyService } from "../service/ContextKeyService";
+import { listFocusContextKeyName } from "../key/contextKeys";
 
 const SCROLL_HIDE_TIMEOUT: number = 500;
 
 const fileService = new FileServiceImpl();
+
+/** 마지막으로 포커스를 받은 목록. 키바인딩 커맨드가 어느 목록에 동작할지 정할 때 쓴다 */
+let lastFocusedList: List | undefined;
 
 export interface ListOptions {}
 
@@ -258,6 +263,22 @@ export class List extends Disposable {
 
     this._register(_addEventListener(listEl, 'keydown', (e: KeyboardEvent) => {
       this._onKeyDown(e);
+    }));
+
+    // 목록 하위에서만 보이는 context. 잘라내기/복사/붙여넣기/삭제 키바인딩의 when 에 쓴다
+    const contextKeyService: ContextKeyService = getService(contextKeyServiceId);
+    const scopedContextKeyService = this._register(contextKeyService.createScoped(listEl));
+    const listFocus = scopedContextKeyService.createKey<boolean>(listFocusContextKeyName, false);
+
+    this._register(_addEventListener(listEl, 'focusin', (e: FocusEvent) => {
+      lastFocusedList = this;
+      // 이름 편집 input 에서는 기본 잘라내기/복사/붙여넣기가 동작해야 한다
+      listFocus.set(!(e.target instanceof HTMLInputElement));
+    }));
+    this._register(_addEventListener(listEl, 'focusout', (e: FocusEvent) => {
+      const next = e.relatedTarget as HTMLElement | null;
+      if (next && listEl.contains(next)) return; // 목록 내부에서의 포커스 이동은 focusin 에서 처리
+      listFocus.set(false);
     }));
     // const scrollable = this.scrollable = $('.scrollable');
 
