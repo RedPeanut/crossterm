@@ -321,6 +321,50 @@ export class List extends Disposable {
 
       this.notifySelectionChange();
     }));
+
+    // 빈 영역(마지막 blank 줄 포함) 우클릭. 항목 우클릭은 Node 에서 처리하고 여기로 올라오지 않는다
+    this._register(_addEventListener(listEl, 'contextmenu', (e: PointerEvent) => {
+      // 빈 영역 클릭과 같이 선택을 해제해서 새 항목이 최상위에 만들어지게 한다
+      const flattened = utils.flatten(this.nodes);
+      for (let i = 0; i < flattened.length; i++) {
+        flattened[i].node.classList.remove('selected');
+      }
+
+      this.state = {
+        ...this.state,
+        selectedIds: []
+      };
+
+      this.notifySelectionChange();
+
+      const items: ContextMenuItem[] = [
+        {
+          label: 'New File...',
+          accelerator: '',
+          click: () => this.addNode('session')
+        },
+        {
+          label: 'New Folder...',
+          accelerator: '',
+          click: () => this.addNode('folder')
+        }
+      ];
+
+      // paste: 클립보드에 항목이 있을 때
+      if (this.clipboard?.paths.length > 0) {
+        items.push(
+          { type: 'separator' },
+          {
+            label: 'Paste',
+            accelerator: 'Cmd+V',
+            click: () => this.paste(renderer.sessionsDir)
+          }
+        );
+      }
+
+      popup(items);
+    }));
+
     const tree = this.tree = $('.tree');
     this.renderNodes();
 
@@ -1214,6 +1258,8 @@ export class Node extends Disposable implements Children<Node> {
     // }; // this.properties();
 
     this._register(_addEventListener(content, 'contextmenu', (e: PointerEvent) => {
+      // 목록 빈 영역 메뉴가 같이 뜨지 않도록 한다
+      e.stopPropagation();
 
       // 상황별 메뉴 생성
 
