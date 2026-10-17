@@ -1,5 +1,6 @@
 import { appShortcutsCmdId,
   editCopyCmdId, editPasteCmdId,
+  listCutCmdId, listCopyCmdId, listPasteCmdId, listDeleteCmdId,
   tabAlignVerticalCmdId, tabAlignHorizontalCmdId, tabAlignTilesCmdId,
   tabToggleBroadcastInputCmdId,
 } from '../../common/Types';
@@ -8,6 +9,7 @@ import { getService, mainLayoutServiceId, broadcastInputServiceId, bodyLayoutSer
 import { MainLayoutService } from '../layout/MainLayout';
 // import { keybindingsRegistry } from '../globals';
 import { getFocusedTerm } from '../part/term/Term';
+import { getFocusedList } from '../component/List';
 import { BroadcastInputService } from '../service/BroadcastInputService';
 import { Group, SplitItem } from '../Types';
 import { wrapper } from '../globals';
@@ -176,3 +178,42 @@ async function paste(): Promise<void> {
   // 입력 필드에는 insertText로 넣어야 undo 스택이 유지된다.
   document.execCommand('insertText', false, text);
 }
+
+/**
+ * 세션 목록 잘라내기/복사/붙여넣기/삭제.
+ *
+ * 목록에 포커스가 있을 때(listFocus)만 동작한다. Contrib weight 라서 같은 키(mod+c, mod+v)의
+ * Core 커맨드(editCopyCmdId, editPasteCmdId)보다 먼저 매칭되고, 그 밖에서는 기존 커맨드가 그대로 동작한다.
+ */
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: listCutCmdId,
+  weight: KeybindingWeight.Contrib,
+  primary: 'mod+x',
+  when: 'listFocus',
+  handler: () => getFocusedList()?.cutSelected(),
+});
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: listCopyCmdId,
+  weight: KeybindingWeight.Contrib,
+  primary: 'mod+c',
+  when: 'listFocus',
+  handler: () => getFocusedList()?.copySelected(),
+});
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: listPasteCmdId,
+  weight: KeybindingWeight.Contrib,
+  primary: 'mod+v',
+  when: 'listFocus',
+  handler: () => getFocusedList()?.pasteToFocused(),
+});
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: listDeleteCmdId,
+  weight: KeybindingWeight.Contrib,
+  primary: 'delete',
+  mac: 'mod+backspace',
+  when: 'listFocus',
+  handler: () => getFocusedList()?.deleteSelected(),
+});

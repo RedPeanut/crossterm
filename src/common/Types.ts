@@ -110,6 +110,12 @@ export const editPasteMenuId = 'edit.paste';
 export const editPasteCmdId = 'edit.paste.cmd';
 export const editSelectAllMenuId = 'edit.selectAll';
 
+// list (sessions)
+export const listCutCmdId = 'list.cut.cmd';
+export const listCopyCmdId = 'list.copy.cmd';
+export const listPasteCmdId = 'list.paste.cmd';
+export const listDeleteCmdId = 'list.delete.cmd';
+
 // view
 
 // tab

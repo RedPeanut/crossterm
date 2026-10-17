@@ -25,6 +25,10 @@ const fileService = new FileServiceImpl();
 /** 마지막으로 포커스를 받은 목록. 키바인딩 커맨드가 어느 목록에 동작할지 정할 때 쓴다 */
 let lastFocusedList: List | undefined;
 
+export function getFocusedList(): List | undefined {
+  return lastFocusedList;
+}
+
 export interface ListOptions {}
 
 export class ListDragAndDrop implements IDisposable {
@@ -490,6 +494,13 @@ export class List extends Disposable {
   getPasteDir(node: Node | undefined): string {
     if (!node?.data?.path) return renderer.sessionsDir;
     return getNodePath(node);
+  }
+
+  /** 키보드로 붙여넣기. 포커스된 항목(없으면 마지막 선택 항목)을 기준으로 한다 */
+  pasteToFocused(): Promise<void> {
+    const selectedIds = this.state.selectedIds;
+    const lastSelected = utils.flatten(this.nodes).find(v => v.shortenedId === selectedIds[selectedIds.length-1]);
+    return this.paste(this.getPasteDir(this.getFocusedNode() ?? lastSelected));
   }
 
   /** 클립보드의 항목들을 targetDir 로 붙여넣는다. 잘라내기면 이동, 복사면 겹치지 않는 이름으로 복사 */
