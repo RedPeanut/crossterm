@@ -352,10 +352,14 @@ export class List extends Disposable {
       // console.log('click event is called ..');
 
       // is this right clear selected in here?
+
       const flattened = utils.flatten(this.nodes);
       for (let i = 0; i < flattened.length; i++) {
         flattened[i].node.classList.remove('selected');
+        flattened[i].node.classList.remove('focused');
       }
+
+      this.focusedId = undefined;
 
       this.state = {
         ...this.state,
