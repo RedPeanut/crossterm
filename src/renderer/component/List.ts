@@ -817,6 +817,8 @@ export class List extends Disposable {
     const node: Node = new Node(containerDom, targetNode, this.dnd, this._toggleCollapsed.bind(this));
     const nodeList: Node[] = targetNode == null ? this.nodes : targetNode.children;
 
+    let isCreating = false;
+
     node.createEdit(data, depth,
       ///*
       () => { // onCancel
@@ -830,166 +832,48 @@ export class List extends Disposable {
           // remove from targetNode.wrapper
           targetNode.wrapper.removeChild(node.wrapper);
         }
+
+        (getService(contextViewServiceId) as ContextViewService).hide();
       },
-      () => { // onFinish
-        node.input.style.display = 'none';
-        node.titleEl.innerHTML = node.input.value;
-        node.titleEl.style.display = 'inline-block';
+      async () => { // onFinish
+        if (isCreating) return;
 
-        this._register(_addEventListener(node.node, 'click', (e: MouseEvent) => {
-          // onClick(e, data.id);
-          this._onClick(e, data.id);
-          e.stopPropagation();
-        }));
-        this._register(_addEventListener(node.node, 'dblclick', (e: MouseEvent) => {
-          // onDblClick(e, data.id);
-          this._onDblClick(e, data.id);
-        }));
-
-        this._register(_addEventListener(node.node, 'mousedown', (e: MouseEvent) => {
-          // console.log('mousedown event is called...');
-          // this._onClick(e, data.id);
-          // e.stopPropagation();
-        }));
-
-        // move dom n node
-
-        let nodeList: Node[];
-        let rootDom: HTMLElement;
-
-        if (targetNode == null) {
-          nodeList = this.nodes;
-          rootDom = this.tree;
-
-          if (type == 'folder') {
-            let targetPos = 0, found: boolean = false, last: boolean = false;
-
-            for (let i = 0; i < nodeList.length; i++) {
-              if (nodeList[i].type == 'folder') {
-                if (nodeList[i].titleEl.innerHTML > node.input.value) {
-                  targetPos = i; found = true;
-                  break;
-                }
-              }
-            }
-
-            if (!found) {
-              targetPos = nodeList.findIndex((v) => ['local', 'remote'].includes(v.type));
-              if (targetPos == -1) last = true;
-            }
-
-            // remove n append in dom
-            rootDom.removeChild(node.wrapper);
-            if (last)
-              rootDom.appendChild(node.wrapper);
-            else
-              rootDom.insertBefore(node.wrapper, rootDom.children[targetPos]);
-
-            // append in node list
-            if (last)
-              nodeList.push(node);
-            else
-              nodeList.splice(targetPos, 0, node);
-            // console.log('this.nodes =', this.nodes);
-          } else {
-            let targetPos = 0, found: boolean = false, last: boolean = false;
-
-            for (let i = 0; i < nodeList.length; i++) {
-              if (['local', 'remote'].includes(nodeList[i].type)) {
-                if (nodeList[i].titleEl.innerHTML > node.input.value) {
-                  targetPos = i; found = true;
-                  break;
-                }
-              }
-            }
-
-            if (!found) {
-              // targetPos = this.nodes.length-1;
-              last = true;
-            }
-
-            // remove n append in dom
-            rootDom.removeChild(node.wrapper);
-            if (last)
-              rootDom.appendChild(node.wrapper);
-            else
-              rootDom.insertBefore(node.wrapper, rootDom.children[targetPos]);
-
-            // append in node list
-            if (last)
-              nodeList.push(node);
-            else
-              nodeList.splice(targetPos, 0, node);
-            // console.log('this.nodes =', this.nodes);
-          }
-
-        } else {
-          nodeList = targetNode.children;
-          rootDom = targetNode.wrapper;
-
-          if (type == 'folder') {
-            let targetPos = 0, found: boolean = false, last: boolean = false;
-
-            for (let i = 0; i < nodeList.length; i++) {
-              if (nodeList[i].type == 'folder') {
-                if (nodeList[i].titleEl.innerHTML > node.input.value) {
-                  targetPos = i; found = true;
-                  break;
-                }
-              }
-            }
-
-            if (!found) {
-              targetPos = nodeList.findIndex((v) => ['local', 'remote'].includes(v.type));
-              if (targetPos == -1) last = true;
-            }
-
-            // remove n append in dom
-            rootDom.removeChild(node.wrapper);
-            if (last)
-              rootDom.appendChild(node.wrapper);
-            else
-              rootDom.insertBefore(node.wrapper, Array.from(rootDom.children).slice(1)[targetPos]);
-
-            // append in node list
-            if (last)
-              nodeList.push(node);
-            else
-              nodeList.splice(targetPos, 0, node);
-            // console.log('this.nodes =', this.nodes);
-          } else {
-            let targetPos = 0, found: boolean = false, last: boolean = false;
-
-            for (let i = 0; i < nodeList.length; i++) {
-              if (['local', 'remote'].includes(nodeList[i].type)) {
-                if (nodeList[i].titleEl.innerHTML > node.input.value) {
-                  targetPos = i; found = true;
-                  break;
-                }
-              }
-            }
-
-            if (!found) {
-              // targetPos = this.nodes.length-1;
-              last = true;
-            }
-
-            // remove n append in dom
-            rootDom.removeChild(node.wrapper);
-            if (last)
-              rootDom.appendChild(node.wrapper);
-            else
-              rootDom.insertBefore(node.wrapper, Array.from(rootDom.children).slice(1)[targetPos]);
-
-            // append in node list
-            if (last)
-              nodeList.push(node);
-            else
-              nodeList.splice(targetPos, 0, node);
-            // console.log('this.nodes =', this.nodes);
-          }
+        const name = node.input.value;
+        const siblingNames = node.getSiblings().map(v => v.titleEl.textContent);
+        const message = validateFileName(name, siblingNames);
+        if (message?.severity === Severity.Error) {
+          showInputMessage(node.input, message);
+          return;
         }
 
+        // 새 항목은 targetNode 폴더 안, 없으면 최상위 세션 폴더에 만든다
+        const dir = targetNode == null ? renderer.sessionsDir : getNodePath(targetNode);
+        const target = joinPath(dir, name);
+
+        isCreating = true;
+
+        try {
+          // writeFileAtomic 은 기존 파일을 덮어쓰므로 목록에 안 보이는 파일(.DS_Store 등)까지 한 번 더 확인한다
+          if (await fileService.exists(target)) throw new Error(`'${name}' already exists`);
+
+          if (type == 'folder')
+            await fileService.createFolder(target);
+          else
+            await fileService.writeFileAtomic(target, JSON.stringify({ type: 'local' }, null, 2));
+        } catch (error) {
+          isCreating = false;
+          showInputMessage(node.input, { content: (error as Error).message, severity: Severity.Error });
+          node.input.focus();
+          return;
+        }
+
+        showInputMessage(node.input, null);
+        node.dispose();
+        node.wrapper.remove();
+
+        this.expandDir(dir);
+        await this.refresh([target]);
+        this.element.focus();
       }
       //*/
     );
