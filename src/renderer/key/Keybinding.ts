@@ -132,3 +132,29 @@ function parseChord(input: string): Chord | null {
 
   return keyName ? new Chord(ctrl, shift, alt, meta, keyName) : null;
 }
+
+const ACCELERATOR_MODIFIERS: Record<ModifierKeyName, string> = {
+  ctrl: 'Ctrl', shift: 'Shift', alt: 'Alt', meta: 'Cmd',
+};
+
+/**
+ * dispatch 문자열(예: `meta+backspace`)을 Electron 메뉴의 accelerator(예: `Cmd+Backspace`)로 바꾼다.
+ * 메뉴 accelerator 는 chord 하나만 표현할 수 있으므로 multi-chord 는 undefined.
+ */
+export function toElectronAccelerator(chords: readonly string[]): string | undefined {
+  if (chords.length !== 1) return undefined;
+
+  return chords[0].split('+').map(part => {
+    const mapped = ACCELERATOR_MODIFIERS[part as ModifierKeyName];
+
+    // modifier
+    if (mapped)
+      return mapped;
+
+    // key
+    if (part.length === 1)
+      return part.toUpperCase();
+    else
+      return part[0].toUpperCase() + part.substring(1);
+  }).join('+');
+}

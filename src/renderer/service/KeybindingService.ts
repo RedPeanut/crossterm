@@ -2,7 +2,7 @@ import { Emitter, Event } from '../../common/base/event';
 import { Disposable, IDisposable } from '../../common/base/lifecycle';
 import { CommandService } from './CommandService';
 import { ContextKeyService, ContextKeyServiceTarget } from './ContextKeyService';
-import { Chord } from '../key/Keybinding';
+import { Chord, toElectronAccelerator } from '../key/Keybinding';
 import { KeybindingResolver, ResultKind } from '../key/KeybindingResolver';
 import { KeybindingRule, ResolvedKeybindingItem, keybindingsRegistry, toUserKeybindingItems } from '../key/KeybindingsRegistry';
 // import { keybindingsRegistry } from '../globals';
@@ -110,7 +110,14 @@ export class KeybindingService extends Disposable {
 
   /** 메뉴/툴팁에 단축키를 표시할 때 사용. 예: `'⇧⌘P'` */
   lookupKeybindingLabel(commandId: string): string | undefined {
-    return this.resolver.lookupPrimaryKeybinding(commandId, this._contextKeyService.getContext())?.label;
+    const item = this.resolver.lookupPrimaryKeybinding(commandId, this._contextKeyService.getContext());
+    return item ? item.label : undefined;
+  }
+
+  /** Electron 메뉴(컨텍스트 메뉴 포함)의 accelerator 로 표시할 때 사용. 예: `'Cmd+X'` */
+  lookupKeybindingAccelerator(commandId: string): string | undefined {
+    const item = this.resolver.lookupPrimaryKeybinding(commandId, this._contextKeyService.getContext());
+    return item ? toElectronAccelerator(item.chords) : undefined;
   }
 
   private get resolver(): KeybindingResolver {

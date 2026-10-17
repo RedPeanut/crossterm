@@ -1,6 +1,7 @@
 import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
-import { Children, DirentExt, ListItemElem, ContextMenuItem, TerminalItem } from "../../common/Types";
+import { Children, DirentExt, ListItemElem, ContextMenuItem, TerminalItem,
+  listCutCmdId, listCopyCmdId, listPasteCmdId, listDeleteCmdId } from "../../common/Types";
 // import { wrapper } from "../globals";
 import { IDisposable, Disposable, DisposableStore } from "../../common/base/lifecycle";
 import { $, _addEventListener } from "../util/dom";
@@ -8,7 +9,7 @@ import * as dom from "../util/dom";
 import { findActiveItem } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
-import { contextKeyServiceId, contextViewServiceId, getService, mainLayoutServiceId, storageServiceId } from "../Service";
+import { contextKeyServiceId, contextViewServiceId, getService, keybindingServiceId, mainLayoutServiceId, storageServiceId } from "../Service";
 import { ContextViewService } from "../service/ContextViewService";
 import { Severity } from "../Types";
 import { popup } from "../util/contextmenu";
@@ -17,6 +18,7 @@ import { StorageService, TreeViewStateType } from "../../common/service/StorageS
 import { FileServiceImpl } from "../service/RenderFileService";
 import { ContextKeyService } from "../service/ContextKeyService";
 import { listFocusContextKeyName } from "../key/contextKeys";
+import { KeybindingService } from "../service/KeybindingService";
 
 const SCROLL_HIDE_TIMEOUT: number = 500;
 
@@ -27,6 +29,11 @@ let lastFocusedList: List | undefined;
 
 export function getFocusedList(): List | undefined {
   return lastFocusedList;
+}
+
+/** 커맨드에 걸린 단축키를 Electron 메뉴 accelerator 로. 메뉴와 실제 키 설정이 항상 같게 한다 */
+function acceleratorOf(commandId: string): string {
+  return (getService(keybindingServiceId) as KeybindingService).lookupKeybindingAccelerator(commandId) ?? '';
 }
 
 export interface ListOptions {}
@@ -381,7 +388,7 @@ export class List extends Disposable {
           { type: 'separator' },
           {
             label: 'Paste',
-            accelerator: 'Cmd+V',
+            accelerator: acceleratorOf(listPasteCmdId),
             click: () => this.paste(renderer.sessionsDir)
           }
         );
@@ -1245,12 +1252,12 @@ export class Node extends Disposable implements Children<Node> {
       clipboardGroup.push(
         {
           label: 'Cut',
-          accelerator: 'Cmd+X',
+          accelerator: acceleratorOf(listCutCmdId),
           click: () => list.cutSelected()
         },
         {
           label: 'Copy',
-          accelerator: 'Cmd+C',
+          accelerator: acceleratorOf(listCopyCmdId),
           click: () => list.copySelected()
         }
       );
@@ -1258,7 +1265,7 @@ export class Node extends Disposable implements Children<Node> {
       if (list.clipboard?.paths.length > 0 && isDirectory) {
         clipboardGroup.push({
           label: 'Paste',
-          accelerator: 'Cmd+V',
+          accelerator: acceleratorOf(listPasteCmdId),
           click: () => list.paste(list.getPasteDir(this))
         });
       }
@@ -1274,7 +1281,7 @@ export class Node extends Disposable implements Children<Node> {
       });
       editGroup.push({
         label: 'Delete',
-        accelerator: 'Cmd+Backspace',
+        accelerator: acceleratorOf(listDeleteCmdId),
         click: () => list.deleteSelected()
       });
 
