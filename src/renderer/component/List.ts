@@ -143,7 +143,7 @@ export class List extends Disposable {
   _onClick(e: MouseEvent, id: string): void {
     // console.log('_onClick is called ..');
     const shortenedId = id.substring(0, 7);
-    const { selectedIds } = this.state;
+    // const { selectedIds } = this.state;
 
     const flattened = utils.flatten(this.nodes);
     // const find = flattened.find((v) => v.id === id);
@@ -162,8 +162,13 @@ export class List extends Disposable {
 
     } else */
     if (e.shiftKey) {
+      let selectedIds = this.state.selectedIds;
       if (selectedIds.length == 0) return;
+
       const lastSeletedId = selectedIds[selectedIds.length-1];
+
+      this.state.selectedIds = [];
+      selectedIds = this.state.selectedIds;
 
       let lastIdx: number;
       for (i = 0; i < flattened.length; i++) {
@@ -176,19 +181,25 @@ export class List extends Disposable {
 
       // from ~ to
       let from: number = lastIdx, to: number = findIdx;
+      // console.log(`from = ${from}, to =${to}`);
+
       if (from > to) {
-        for (i = from-1; i >= to; i--) {
+        for (i = from; i >= to; i--) {
           flattened[i].node.classList.add('selected');
-          selectedIds.push(shortenedId);
+          selectedIds.push(flattened[i].shortenedId);
         }
       } else {
-        for (i = from+1; i <= to; i++) {
+        for (i = from; i <= to; i++) {
           flattened[i].node.classList.add('selected');
-          selectedIds.push(shortenedId);
+          selectedIds.push(flattened[i].shortenedId);
         }
       }
 
+      // console.log('...selectedIds =', ...selectedIds);
+
     } else if (cmdOrCtrlKey) {
+      const { selectedIds } = this.state;
+
       const isSelected = selectedIds.includes(shortenedId);
       const selectedIdx = selectedIds.findIndex((v) => v == shortenedId);
 
