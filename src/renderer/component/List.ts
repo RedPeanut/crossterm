@@ -512,17 +512,27 @@ export class List extends Disposable {
     if (paths.length > 0) this.clipboard = { paths, isCut: false };
   }
 
-  /** node 를 기준으로 붙여넣을 폴더. 폴더면 그 안, 파일이면 파일이 있는 폴더, 없으면 최상위 */
+  /** 붙여넣을 폴더 */
   getPasteDir(node: Node | undefined): string {
-    if (!node?.data?.path) return renderer.sessionsDir;
+    // 없으면 최상위
+    if (!node) return renderer.sessionsDir;
+
+    // 파일이면 폴더
+    if (!node.isDirectory) return node.data.path;
+
+    // 폴더면 풀패쓰
     return getNodePath(node);
   }
 
-  /** 키보드로 붙여넣기. 포커스된 항목(없으면 마지막 선택 항목)을 기준으로 한다 */
-  pasteToFocused(): Promise<void> {
-    const selectedIds = this.state.selectedIds;
-    const lastSelected = utils.flatten(this.nodes).find(v => v.shortenedId === selectedIds[selectedIds.length-1]);
-    return this.paste(this.getPasteDir(this.getFocusedNode() ?? lastSelected));
+  /** 키보드로 붙여넣기. 포커스된 항목(없으면 루트)을 기준으로 한다 */
+  async pasteToFocused(): Promise<void> {
+    let findFocusedNode = this.getFocusedNode();
+    // console.log('findFocusedNode =', findFocusedNode);
+
+    const pasteDir = this.getPasteDir(findFocusedNode);
+    // console.log('pasteDir =', pasteDir);
+
+    return this.paste(pasteDir);
   }
 
   /** 클립보드의 항목들을 targetDir 로 붙여넣는다. 잘라내기면 이동, 복사면 겹치지 않는 이름으로 복사 */
@@ -653,6 +663,7 @@ export class List extends Disposable {
   }
 
   getFocusedNode(): Node | undefined {
+    // console.log('this.focusedId =', this.focusedId);
     if (!this.focusedId) return undefined;
     return this.getVisibleNodes().find((node) => node.shortenedId === this.focusedId);
   }
