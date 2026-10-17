@@ -741,7 +741,8 @@ export class List extends Disposable {
         break;
 
       case 'F2':
-        focused?.rename();
+        if (focused)
+          focused.rename();
         break;
 
       case 'Enter':
@@ -1206,8 +1207,10 @@ export class Node extends Disposable implements Children<Node> {
       // 목록 빈 영역 메뉴가 같이 뜨지 않도록 한다
       e.stopPropagation();
 
-      // 상황별 메뉴 생성
+      // 이름 편집 중에는 input 의 기본 메뉴를 쓴다
+      if (this.isRenaming) return;
 
+      // 상황별 메뉴 생성
       const list = this.dnd.list;
 
       // VS Code 처럼 선택되지 않은 항목을 우클릭하면 그 항목만 선택한다
