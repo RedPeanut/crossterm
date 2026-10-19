@@ -229,7 +229,7 @@ body { height: 100%; }
 }
 
 .pane-view .pane.detail .table-sash::before {
-  content: "";
+  content: '';
   position: absolute;
   left: calc(var(--vscode-sash-size, 4px) / 2);
   width: 0;
@@ -237,9 +237,9 @@ body { height: 100%; }
   border-left: 1px solid transparent;
 }
 
-.pane-view .pane.detail:hover .table-sash::before {
+.pane-view .pane.detail .table-sash::before {
   border-color: rgba(204, 204, 204, 0.125);
-  transition: border-color 0.2s ease-out;
+  /* transition: border-color 0.2s ease-out; */
 }
 
 .pane-view .pane.detail table { width: 100%; font-size: 11px; }

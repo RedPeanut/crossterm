@@ -853,6 +853,10 @@ export class List extends Disposable {
 
     let isCreating = false;
 
+    if (targetNode != null) {
+      targetNode.wrapper.classList.remove('collapsed');
+    }
+
     node.createEdit(data, depth,
       ///*
       () => { // onCancel
@@ -911,8 +915,11 @@ export class List extends Disposable {
       }
       //*/
     );
+
     this.setScrollVisibility();
-    // TODO: scrollTo if necessary
+
+    // scrollTo if necessary
+    // this.revealNode(node);
   }
 
   collapseAll() {
@@ -1594,6 +1601,10 @@ export class Node extends Disposable implements Children<Node> {
     listItem.appendChild(span);
 
     const input = this.input = $('input.title');
+
+    this._register(_addEventListener(input, 'focusout', (e: FocusEvent) => {
+      onCancel();
+    }));
 
     this._register(_addEventListener(input, 'keydown', (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
