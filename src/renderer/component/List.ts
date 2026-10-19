@@ -843,7 +843,7 @@ export class List extends Disposable {
     }
 
     const data: ListItemElem = {
-      type: type == 'folder' ? 'folder' : 'local',
+      type: type === 'folder' ? 'folder' : 'remote',
       id: uuidv4()
     };
 
@@ -893,7 +893,7 @@ export class List extends Disposable {
           if (type == 'folder')
             await fileService.createFolder(target);
           else
-            await fileService.writeFileAtomic(target, JSON.stringify({ type: 'local' }, null, 2));
+            await fileService.writeFileAtomic(target, JSON.stringify({ type: 'remote', url: { host: '127.0.0.1', port: '22', username: '', password: '' } }, null, 2));
         } catch (error) {
           isCreating = false;
           showInputMessage(node.input, { content: (error as Error).message, severity: Severity.Error });
@@ -1565,7 +1565,7 @@ export class Node extends Disposable implements Children<Node> {
     const listItem = $('.list-item');
 
     const span = $('span.icon');
-    const codicon = data.type === 'folder' ? 'folder' : 'note';
+    const codicon = data.type === 'folder' ? 'folder' : 'globe';
     if (data.type !== 'folder') {
       const itemIcon = $(`a.codicon.codicon-${codicon}`);
       span.appendChild(itemIcon);
