@@ -916,6 +916,27 @@ export class List extends Disposable {
   }
 
   collapseAll() {
+
+    // UI
+    const nodes = utils.flatten(this.nodes);
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].isDirectory && !nodes[i].isCollapsed) {
+        nodes[i].isCollapsed = true;
+        nodes[i].wrapper.classList.add('collapsed');
+      }
+    }
+
+    // data
+    const items = utils.flatten(this.state.items);
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].isDirectory && !items[i].isCollapsed) {
+        items[i].isCollapsed = true;
+        // nodes[i].wrapper.classList.add('collapsed');
+      }
+    }
+    this.saveTreeViewState();
+
+    // await this.refresh();
     this.setScrollVisibility();
   }
 

@@ -65,11 +65,11 @@ export class ListPane extends Pane {
       {
         title: 'Collapse Folders in Sessions', icon: 'collapse-all',
         click: () => {
-          // this.list.collapseAll();
+          this.list.collapseAll();
           // (getService(propertiesDialogId) as PropertiesDialog).show();
           // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('sample');
           // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties');
-          (getService(mainLayoutServiceId) as MainLayoutService).showDialog();
+          // (getService(mainLayoutServiceId) as MainLayoutService).showDialog();
         }
       }
     ];
