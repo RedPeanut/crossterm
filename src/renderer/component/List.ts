@@ -1566,8 +1566,10 @@ export class Node extends Disposable implements Children<Node> {
 
     const span = $('span.icon');
     const codicon = data.type === 'folder' ? 'folder' : 'note';
-    const itemIcon = $(`a.codicon.codicon-${codicon}`);
-    span.appendChild(itemIcon);
+    if (data.type !== 'folder') {
+      const itemIcon = $(`a.codicon.codicon-${codicon}`);
+      span.appendChild(itemIcon);
+    }
     listItem.appendChild(span);
 
     const input = this.input = $('input.title');
