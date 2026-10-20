@@ -241,9 +241,9 @@ export class List extends Disposable {
     const flattened = utils.flatten(this.nodes);
     const items: ListItemElem[] = [];
 
-    const shortenedIds = Array.from(new Set(this.state.selectedIds));
-    for (let i = 0; i < shortenedIds.length; i++) {
-      const find = flattened.find((node) => node.shortenedId === shortenedIds[i]);
+    const selectedIds = this.state.selectedIds; // Array.from(new Set(this.state.selectedIds));
+    for (let i = 0; i < selectedIds.length; i++) {
+      const find = flattened.find((node) => node.shortenedId === selectedIds[i]);
       if (find?.data) {
         items.push(find.data);
       }

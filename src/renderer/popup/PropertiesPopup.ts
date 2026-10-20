@@ -111,7 +111,7 @@ export class PropertiesPopup extends Popup {
             }
           }
         ],
-        render: (container, data) => {
+        render: (container, data: Node) => {
           let row, input, select, option;
 
           row = append(container, $('.row'));
