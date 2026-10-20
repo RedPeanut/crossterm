@@ -361,6 +361,7 @@ export class MainLayout extends Layout implements MainLayoutService {
       case 'sample': popup = new SamplePopup(this.container); break;
       default: throw new Error(); break;
     }
+    popup.render();
     popup.show();
   }
 

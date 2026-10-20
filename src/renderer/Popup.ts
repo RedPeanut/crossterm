@@ -11,7 +11,7 @@ export abstract class Popup extends Disposable {
 
   readonly options: PopupOptions;
 
-  // parent: HTMLElement;
+  parent: HTMLElement;
   container: HTMLElement;
   popup: HTMLElement;
   titleArea: HTMLElement;
@@ -27,11 +27,16 @@ export abstract class Popup extends Disposable {
 
   constructor(parent: HTMLElement, options: PopupOptions = {}) {
     super();
+    this.parent = parent;
+    this.options = options;
+  }
+
+  render() {
     // const _parent = parent ?? document.body;
     const container = this.container = $('.popup-container');
     container.style.display = 'none';
 
-    this.options = options;
+    const options = this.options;
     options && options.classList && container.classList.add(...options.classList);
 
     const popup = this.popup = $('.popup');
@@ -58,7 +63,7 @@ export abstract class Popup extends Disposable {
       }
     }));
 
-    parent.appendChild(container);
+    this.parent.appendChild(container);
   }
 
   onDragStart(e: MouseEvent) {
