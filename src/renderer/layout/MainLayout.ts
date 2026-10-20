@@ -356,7 +356,7 @@ export class MainLayout extends Layout implements MainLayoutService {
     let popup;
     switch (which) {
       case 'properties':
-        popup = new PropertiesPopup(this.container, { data: args[0] as ListItemElem });
+        popup = new PropertiesPopup(this.container, { items: args[0] as ListItemElem[] });
         break;
       case 'sample': popup = new SamplePopup(this.container); break;
       default: throw new Error(); break;

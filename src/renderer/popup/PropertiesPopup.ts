@@ -11,9 +11,11 @@ interface Node {
 }
 
 export interface PropertiesPopupOptions extends PopupOptions {
-  title?: string;
-  data?: ListItemElem;
+  // title?: string;
+  items: ListItemElem[];
 }
+
+enum Mode { SINGLE, MULTI }
 
 export class PropertiesPopup extends Popup {
 
@@ -26,19 +28,23 @@ export class PropertiesPopup extends Popup {
   cancelBtn: HTMLButtonElement;
   applyBtn: HTMLButtonElement;
 
-  constructor(parent: HTMLElement, options: PropertiesPopupOptions = {}) {
+  mode: Mode;
+
+  constructor(parent: HTMLElement, options: PropertiesPopupOptions) {
     super(parent, { classList: ['properties'], ...options });
     this.options = options;
+    this.mode = this.options.items.length > 1 ? Mode.MULTI : Mode.SINGLE;
   }
 
   override renderTitleArea(): void {
     super.renderTitleArea();
     let title;
-    if (this.options.data && this.options.data.title)
-      title = this.options.data.title + ' 등록정보';
+
+    if (this.mode === Mode.MULTI)
+      title = `다중 세션 등록정보 (${this.options.items.length})`;
     else
-      title = '등록정보';
-    this.title.innerHTML = title; // this.options.data?.title ?? '등록 정보';
+      title = this.options.items[0].title + ' 등록정보';
+    this.title.innerHTML = title;
   }
 
   override renderContentArea(): void {
@@ -95,13 +101,13 @@ export class PropertiesPopup extends Popup {
               append(row, $<HTMLLabelElement>('label')).textContent = '사용자 이름';
               input = append(row, $<HTMLInputElement>('input'));
               input.type = 'text';
-              input.value = this.options.data.url ? this.options.data.url.username : '';
+              // input.value = this.options.items.url ? this.options.items.url.username : '';
 
               row = append(container, $('.row'));
               append(row, $<HTMLLabelElement>('label')).textContent = '암호';
               input = append(row, $<HTMLInputElement>('input'))
               input.type = 'password';
-              input.value = this.options.data.url ? this.options.data.url.password : '';
+              // input.value = this.options.items.url ? this.options.items.url.password : '';
             }
           }
         ],
@@ -112,7 +118,7 @@ export class PropertiesPopup extends Popup {
           append(row, $<HTMLLabelElement>('label')).textContent = '이름';
           input = append(row, $<HTMLInputElement>('input'));
           input.type = 'text';
-          input.value = this.options.data.title;
+          // input.value = this.options.items.title;
 
           row = append(container, $('.row'));
           append(row, $<HTMLLabelElement>('label')).textContent = '프로토콜';
@@ -125,19 +131,19 @@ export class PropertiesPopup extends Popup {
           option.value = 'local';
           option.textContent = 'LOCAL';
 
-          select.value = this.options.data.type === 'local' ? 'local' : 'remote';
+          // select.value = this.options.items.type === 'local' ? 'local' : 'remote';
 
           row = append(container, $('.row'));
           append(row, $<HTMLLabelElement>('label')).textContent = '호스트';
           input = append(row, $<HTMLInputElement>('input'))
           input.type = 'text';
-          input.value = this.options.data.url ? this.options.data.url.host : '';
+          // input.value = this.options.items.url ? this.options.items.url.host : '';
 
           row = append(container, $('.row'));
           append(row, $<HTMLLabelElement>('label')).textContent = '포트 번호';
           input = append(row, $<HTMLInputElement>('input'));
           input.type = 'number';
-          input.value = this.options.data.url ? this.options.data.url.port : '';
+          // input.value = this.options.items.url ? this.options.items.url.port : '';
         }
       }
     ];

@@ -1346,7 +1346,20 @@ export class Node extends Disposable implements Children<Node> {
           label: 'Properties',
           accelerator: 'P',
           click: () => {
-            (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', data);
+
+            const flattened = utils.flatten(this.dnd.list.nodes);
+            const selectedIds = this.dnd.list.state.selectedIds;
+            // const items = this.dnd.list.state.items;
+            const items: ListItemElem[] = [];
+
+            for (let i = 0; i < selectedIds.length; i++) {
+              const find = flattened.find((node) => node.shortenedId === selectedIds[i]);
+              if (find && find.data) {
+                items.push(find.data);
+              }
+            }
+
+            (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', items);
           }
         }
       ]);
