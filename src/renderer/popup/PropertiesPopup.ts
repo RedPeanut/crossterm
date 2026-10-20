@@ -106,7 +106,7 @@ export class PropertiesPopup extends Popup {
           }
         ],
         render: (container, data) => {
-          let row, input, select;
+          let row, input, select, option;
 
           row = append(container, $('.row'));
           append(row, $<HTMLLabelElement>('label')).textContent = '이름';
@@ -117,7 +117,15 @@ export class PropertiesPopup extends Popup {
           row = append(container, $('.row'));
           append(row, $<HTMLLabelElement>('label')).textContent = '프로토콜';
           select = append(row, $<HTMLSelectElement>('select'))
-          // input.type = 'text';
+
+          option = append(select, $<HTMLOptionElement>('option'));
+          option.value = 'remote';
+          option.textContent = 'SSH';
+          option = append(select, $<HTMLOptionElement>('option'));
+          option.value = 'local';
+          option.textContent = 'LOCAL';
+
+          select.value = this.options.data.type === 'local' ? 'local' : 'remote';
 
           row = append(container, $('.row'));
           append(row, $<HTMLLabelElement>('label')).textContent = '호스트';
