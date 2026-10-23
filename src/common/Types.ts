@@ -101,6 +101,7 @@ export const fileReconnMenuId = 'file.reconn';
 export const fileReconnAllMenuId = 'file.reconn.all';
 export const fileImportMenuId = 'file.import';
 export const fileExportMenuId = 'file.export';
+export const fileExportCmdId = 'file.export.cmd';
 
 // edit
 export const editUndoMenuId = 'edit.undo';

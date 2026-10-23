@@ -257,3 +257,98 @@
   cursor: default;
   user-select: none;
 }
+
+/* Export Popup */
+.export .popup {
+  width: 520px;
+  height: 340px;
+}
+
+.export .popup .content-area {
+  flex-direction: column;
+  min-height: 0;
+  padding: 12px;
+}
+
+.export .popup .page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 6px;
+}
+
+.export .popup .page .row {
+  display: flex;
+  gap: 4px;
+}
+
+.export .popup input {
+  flex: 1;
+  min-width: 0;
+  height: 24px;
+  padding: 0 6px;
+  background-color: rgb(49, 49, 49);
+  color: rgb(204, 204, 204);
+  border: 1px solid rgb(69, 69, 69);
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: inherit;
+  user-select: text;
+}
+
+.export .popup input:focus {
+  border-color: rgb(0, 120, 212);
+}
+
+.export .popup .page .log {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 6px;
+  background-color: rgb(24, 24, 24);
+  border: 1px solid rgb(43, 43, 43);
+  border-radius: 4px;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 17px;
+  white-space: pre;
+  user-select: text;
+}
+
+.export .popup .footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid rgb(43, 43, 43);
+}
+
+.export .popup button {
+  min-width: 80px;
+  height: 26px;
+  background-color: rgb(49, 49, 49);
+  color: rgb(204, 204, 204);
+  border: 1px solid rgb(69, 69, 69);
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.export .popup button.browse { min-width: 32px; }
+
+.export .popup button:hover:not(:disabled) { background-color: rgb(64, 64, 64); }
+
+.export .popup button.primary:not(:disabled) {
+  background-color: rgb(0, 120, 212);
+  border-color: rgb(0, 120, 212);
+  color: white;
+}
+.export .popup button.primary:hover:not(:disabled) { background-color: rgb(20, 138, 228); }
+
+.export .popup button:disabled {
+  color: rgb(110, 110, 110);
+  border-color: rgb(55, 55, 55);
+  cursor: default;
+}

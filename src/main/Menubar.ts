@@ -8,7 +8,7 @@ import { mainWindow } from './main';
 import {
   // menu id
   appPreferencesMenuId, appSettingsMenuId, appShortcutsMenuId, appQuitMenuId,
-  filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId, fileImportMenuId, fileExportMenuId,
+  filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId, fileImportMenuId, fileExportMenuId, fileExportCmdId,
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
   tabCloseAllMenuId, tabCloseOthersMenuId,
@@ -144,9 +144,10 @@ export class Menubar {
       },
       {
         id: fileExportMenuId,
+        appCommandId: fileExportCmdId,
         label: 'Export', // '내보내기',
         accelerator: null, // keyBinding[fileExportMenuId][keyBindingIdx],
-        click: null
+        click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', fileExportCmdId),
       },
     );
 

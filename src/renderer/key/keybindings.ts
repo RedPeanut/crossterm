@@ -1,4 +1,5 @@
 import { appShortcutsCmdId,
+  fileExportCmdId,
   editCopyCmdId, editPasteCmdId,
   listCutCmdId, listCopyCmdId, listPasteCmdId, listDeleteCmdId,
   tabAlignVerticalCmdId, tabAlignHorizontalCmdId, tabAlignTilesCmdId,
@@ -117,6 +118,24 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
   // TODO: 단축키 편집 화면이 생기면 그걸 열도록 교체
   handler: () => {
     (getService(mainLayoutServiceId) as MainLayoutService).showDialog();
+  },
+});
+
+/**
+ * 내보내기 contribution.
+ */
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: fileExportCmdId,
+  weight: KeybindingWeight.Core,
+  handler: () => {
+    (getService(mainLayoutServiceId) as MainLayoutService).showPopup('export', {
+      // TODO: 실제 내보내기 (sessions + settings) 구현
+      onExport: async (filePath: string, log: (line: string) => void) => {
+        log(`Exporting to ${filePath} ...`);
+        log('(not implemented yet)');
+      },
+    });
   },
 });
 

@@ -23,6 +23,7 @@ import { ContextViewServiceImpl } from '../service/ContextViewService';
 import { Popup } from '../Popup';
 import { SamplePopup } from '../popup/SamplePopup';
 import { PropertiesPopup } from '../popup/PropertiesPopup';
+import { ExportPopup, ExportPopupOptions } from '../popup/ExportPopup';
 import { ListItemElem } from '../../common/Types';
 import { Dialog } from '../Dialog';
 import { StorageService } from '../../common/service/StorageService';
@@ -360,6 +361,11 @@ export class MainLayout extends Layout implements MainLayoutService {
           items: args[0] as ListItemElem[],
           onOk: args[1] as (items: ListItemElem[]) => void
         });
+        break;
+      case 'export': popup = new ExportPopup(
+          this.container,
+          args[0] as ExportPopupOptions
+        );
         break;
       case 'sample': popup = new SamplePopup(this.container); break;
       default: throw new Error(); break;
