@@ -490,6 +490,43 @@ export class List extends Disposable {
     this.setScrollVisibility();
   }
 
+  /**
+   * 등록정보 팝업에서 바뀐 세션들을 파일에 저장하고 (이름이 바뀌면 파일 이름도 바꾼다)
+   * 목록을 다시 읽어 바뀐 항목들을 선택한다.
+   */
+  async saveProperties(items: ListItemElem[]): Promise<void> {
+    const selectPaths: string[] = [];
+
+    for (const item of items) {
+      if (!item.path || !item.name || item.type === 'folder') continue;
+
+      let target = joinPath(item.path, item.name);
+      try {
+        const content: Partial<ListItemElem> = { type: item.type, url: item.url };
+        if (item.description != null) content.description = item.description;
+        await fileService.writeFileAtomic(target, JSON.stringify(content, null, 2));
+
+        const newName = item.title;
+        if (newName != null && newName !== item.name) {
+          const message = validateFileName(newName, []);
+          if (message?.severity === Severity.Error) throw new Error(message.content);
+
+          const renamed = joinPath(item.path, newName);
+          // 대소문자만 바뀐 경우는 같은 파일이므로 존재 검사에서 뺀다
+          if (newName.toLowerCase() !== item.name.toLowerCase() && await fileService.exists(renamed))
+            throw new Error(`'${newName}' already exists`);
+          await fileService.move(target, renamed);
+          target = renamed;
+        }
+      } catch (error) {
+        showError((error as Error).message);
+      }
+      selectPaths.push(target);
+    }
+
+    await this.refresh(selectPaths);
+  }
+
   /** 선택된 노드들. 선택된 폴더 안의 항목은 폴더와 같이 처리되므로 뺀다 */
   getSelectedNodes(): Node[] {
     const selectedIds = this.state.selectedIds;
@@ -1359,7 +1396,8 @@ export class Node extends Disposable implements Children<Node> {
               }
             }
 
-            (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', items);
+            (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties', items,
+              (updated: ListItemElem[]) => this.dnd.list.saveProperties(updated));
           }
         }
       ]);

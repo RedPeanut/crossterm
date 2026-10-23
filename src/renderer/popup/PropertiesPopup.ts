@@ -13,6 +13,8 @@ interface Node {
 export interface PropertiesPopupOptions extends PopupOptions {
   // title?: string;
   items: ListItemElem[];
+  /** 확인 시 변경 내용이 적용된 복사본을 넘긴다 (원본 items 는 바꾸지 않는다) */
+  onOk?: (items: ListItemElem[]) => void;
 }
 
 enum Mode { SINGLE, MULTI }
@@ -154,10 +156,14 @@ export class PropertiesPopup extends Popup {
   }
 
   override ok(): void {
-    for (const { field, input, dirty } of this.boundFields) {
-      if (!dirty) continue;
-      for (const item of this.options.items)
-        field.set(item, input.value);
+    const dirtyFields = this.boundFields.filter(v => v.dirty);
+    if (dirtyFields.length > 0) {
+      const items = this.options.items.map(item => ({ ...item, url: item.url && { ...item.url } }));
+      for (const { field, input } of dirtyFields) {
+        for (const item of items)
+          field.set(item, input.value);
+      }
+      this.options.onOk?.(items);
     }
     super.ok();
   }
