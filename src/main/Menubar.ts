@@ -8,7 +8,7 @@ import { mainWindow } from './main';
 import {
   // menu id
   appPreferencesMenuId, appSettingsMenuId, appShortcutsMenuId, appQuitMenuId,
-  filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId,
+  filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId, fileImportMenuId, fileExportMenuId,
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
   tabCloseAllMenuId, tabCloseOthersMenuId,
@@ -133,6 +133,19 @@ export class Menubar {
         id: fileReconnAllMenuId,
         label: 'Reconnect All', // '모두 다시 연결',
         accelerator: null, // keyBinding[fileReconnAllMenuId][keyBindingIdx],
+        click: null
+      },
+      { type: 'separator' },
+      {
+        id: fileImportMenuId,
+        label: 'Import', // '가져오기',
+        accelerator: null, // keyBinding[fileImportMenuId][keyBindingIdx],
+        click: null
+      },
+      {
+        id: fileExportMenuId,
+        label: 'Export', // '내보내기',
+        accelerator: null, // keyBinding[fileExportMenuId][keyBindingIdx],
         click: null
       },
     );

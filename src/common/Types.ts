@@ -99,6 +99,8 @@ export const fileShortcutsMenuId = 'file.shortcuts';
 export const fileDisconnMenuId = 'file.disconn';
 export const fileReconnMenuId = 'file.reconn';
 export const fileReconnAllMenuId = 'file.reconn.all';
+export const fileImportMenuId = 'file.import';
+export const fileExportMenuId = 'file.export';
 
 // edit
 export const editUndoMenuId = 'edit.undo';
