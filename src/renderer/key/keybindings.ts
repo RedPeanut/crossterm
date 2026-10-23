@@ -130,10 +130,10 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
   weight: KeybindingWeight.Core,
   handler: () => {
     (getService(mainLayoutServiceId) as MainLayoutService).showPopup('export', {
-      // TODO: 실제 내보내기 (sessions + settings) 구현
+      // 세션 폴더, settings.json, 앱 상태(sqlite)를 하나의 JSON 으로 묶는다 (main 의 ExportService)
       onExport: async (filePath: string, log: (line: string) => void) => {
-        log(`Exporting to ${filePath} ...`);
-        log('(not implemented yet)');
+        const lines: string[] = await window.ipc.invoke('app export', filePath);
+        lines.forEach(line => log(line));
       },
     });
   },

@@ -54,6 +54,7 @@ export type MainEvents =
 
   // app
   | 'app quit ready'
+  | 'app export'
 
   // dialog
   | 'dialog show messagebox'

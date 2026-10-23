@@ -39,7 +39,9 @@ import { DisposableStore, Disposable } from '../common/base/lifecycle';
 import { ConfigurationServiceChannel } from './ipc/ConfigurationServiceChannel';
 import { StorageService } from '../common/service/StorageService';
 import { MainDialogService } from './service/MainDialogService';
+import { ExportService } from './service/ExportService';
 import { DialogServiceChannel } from './ipc/DialogServiceChannel';
+import { ExportServiceChannel } from './ipc/ExportServiceChannel';
 
 class AppUpdater {
   constructor() {
@@ -410,6 +412,7 @@ class MainWindow extends Disposable {
     }));
     const appService = setService(appServiceId, new AppService(environmentService, fileService));
     const dialogService = setService(dialogServiceId, new MainDialogService());
+    const exportService = new ExportService(environmentService, fileService, storageService, appService, app.getVersion());
 
     // expose services to render
     for (const channel of [
@@ -418,6 +421,7 @@ class MainWindow extends Disposable {
       new ConfigurationServiceChannel(configurationService),
       new AppServiceChannel(appService),
       new DialogServiceChannel(dialogService),
+      new ExportServiceChannel(exportService),
     ]) {
       this.ipcDisposables.add(registerIpcChannel(channel));
     }

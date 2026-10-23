@@ -934,7 +934,7 @@ export class List extends Disposable {
           if (type == 'folder')
             await fileService.createFolder(target);
           else
-            await fileService.writeFileAtomic(target, JSON.stringify({ type: 'remote', url: { host: '127.0.0.1', port: '22', username: '', password: '' } }, null, 2));
+            await fileService.writeFileAtomic(target, JSON.stringify({ type: 'remote', url: { host: '127.0.0.1', port: 22, username: '', password: '' } }, null, 2));
         } catch (error) {
           isCreating = false;
           showInputMessage(node.input, { content: (error as Error).message, severity: Severity.Error });
