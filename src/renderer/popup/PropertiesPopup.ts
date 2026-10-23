@@ -217,12 +217,14 @@ export class PropertiesPopup extends Popup {
           option.textContent = 'LOCAL';
 
           this.bindField(fields.type, label, select);
+          const protocolSelect = select;
 
           row = append(container, $('.row'));
           label = append(row, $<HTMLLabelElement>('label')); label.textContent = '호스트';
           input = append(row, $<HTMLInputElement>('input'))
           input.type = 'text';
           this.bindField(fields.host, label, input);
+          const hostInput = input;
 
           row = append(container, $('.row'));
           label = append(row, $<HTMLLabelElement>('label')); label.textContent = '포트 번호';
@@ -236,6 +238,15 @@ export class PropertiesPopup extends Popup {
             if (digits !== portInput.value) portInput.value = digits;
           }));
           this.bindField(fields.port, label, input);
+
+          // 로컬 세션은 호스트, 포트 번호를 사용하지 않으므로 비활성화
+          const updateRemoteFields = () => {
+            const isLocal = protocolSelect.value === 'local';
+            hostInput.disabled = isLocal;
+            portInput.disabled = isLocal;
+          };
+          this._register(_addEventListener(protocolSelect, 'change', updateRemoteFields));
+          updateRemoteFields();
         }
       }
     ];

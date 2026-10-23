@@ -248,3 +248,12 @@
   /* outline: none; */
   border-color: rgb(0, 120, 212);
 }
+
+/* 비활성화된 필드 */
+.properties .popup .right .row input:disabled {
+  background-color: rgb(37, 37, 37);
+  color: rgb(110, 110, 110);
+  border-color: rgb(55, 55, 55);
+  cursor: default;
+  user-select: none;
+}
