@@ -25,7 +25,7 @@ export abstract class Popup extends Disposable {
   // private readonly _onDidXxx = this._register(new Emitter<XxxEvent>());
   // public onDidXxx/* : Event<XxxEvent> */ = this._onDidXxx.event;
 
-  constructor(parent: HTMLElement, options: PopupOptions = {}) {
+  constructor(parent: HTMLElement, options: PopupOptions) {
     super();
     this.parent = parent;
     this.options = options;
