@@ -219,6 +219,11 @@ export class PropertiesPopup extends Popup {
           this.bindField(fields.type, label, select);
           const protocolSelect = select;
 
+          // 다중 선택에 로컬과 SSH 세션이 섞여 있으면 프로토콜을 일괄 변경하지 않는다
+          const types: string[] = this.options.items.map(item => fields.type.get(item));
+          const lockProtocol: boolean = types.includes('local') && types.some(t => t !== 'local');
+          protocolSelect.disabled = lockProtocol;
+
           row = append(container, $('.row'));
           label = append(row, $<HTMLLabelElement>('label')); label.textContent = '호스트';
           input = append(row, $<HTMLInputElement>('input'))
@@ -241,7 +246,7 @@ export class PropertiesPopup extends Popup {
 
           // 로컬 세션은 호스트, 포트 번호를 사용하지 않으므로 비활성화
           const updateRemoteFields = () => {
-            const isLocal = protocolSelect.value === 'local';
+            const isLocal = lockProtocol || protocolSelect.value === 'local';
             hostInput.disabled = isLocal;
             portInput.disabled = isLocal;
           };
