@@ -224,6 +224,12 @@
   flex-shrink: 0;
 }
 
+/* 편집된 필드 표시 */
+.properties .popup .right .row label.modified::after {
+  content: '*';
+  margin-left: 2px;
+}
+
 .properties .popup .right .row input {
   flex: 1;
   min-width: 0;

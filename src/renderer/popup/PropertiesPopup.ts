@@ -17,6 +17,39 @@ export interface PropertiesPopupOptions extends PopupOptions {
 
 enum Mode { SINGLE, MULTI }
 
+/** 다중 선택 시 세션마다 값이 다른 필드에 표시하는 값 */
+const MIXED_VALUE = '###';
+
+interface Field {
+  get: (item: ListItemElem) => string;
+  set: (item: ListItemElem, value: string) => void;
+}
+
+type FieldInput = HTMLInputElement | HTMLSelectElement;
+
+interface BoundField {
+  field: Field;
+  input: FieldInput;
+  label: HTMLLabelElement;
+  initial: string;
+  mixed: boolean;
+  dirty: boolean;
+}
+
+function ensureUrl(item: ListItemElem): NonNullable<ListItemElem['url']> {
+  if (!item.url) item.url = { host: '', port: 0, username: '', password: '' };
+  return item.url;
+}
+
+const fields = {
+  title: { get: item => item.title ?? '', set: (item, v) => item.title = v } as Field,
+  type: { get: item => item.type === 'local' ? 'local' : 'remote', set: (item, v) => item.type = v as ListItemElem['type'] } as Field,
+  host: { get: item => item.url?.host ?? '', set: (item, v) => ensureUrl(item).host = v } as Field,
+  port: { get: item => item.url?.port != null ? String(item.url.port) : '', set: (item, v) => ensureUrl(item).port = Number(v) } as Field,
+  username: { get: item => item.url?.username ?? '', set: (item, v) => ensureUrl(item).username = v } as Field,
+  password: { get: item => item.url?.password ?? '', set: (item, v) => ensureUrl(item).password = v } as Field,
+};
+
 export class PropertiesPopup extends Popup {
 
   readonly options: PropertiesPopupOptions;
@@ -30,9 +63,11 @@ export class PropertiesPopup extends Popup {
 
   mode: Mode;
 
+  readonly boundFields: BoundField[] = [];
+
   constructor(parent: HTMLElement, options: PropertiesPopupOptions) {
     super(parent, { classList: ['properties'], ...options });
-    this.options = options;
+    this.options = { classList: ['properties'], ...options };
     this.mode = this.options.items.length > 1 ? Mode.MULTI : Mode.SINGLE;
   }
 
@@ -71,7 +106,7 @@ export class PropertiesPopup extends Popup {
 
     const okBtn: HTMLButtonElement = this.okBtn = $('button.primary'); okBtn.innerHTML = 'Ok';
     // okBtn.addEventListener('click', (e: Event) => {});
-    this._register(_addEventListener(okBtn, 'click', (e: MouseEvent) => this.close()));
+    this._register(_addEventListener(okBtn, 'click', (e: MouseEvent) => this.ok()));
 
     const cancelBtn: HTMLButtonElement = this.cancelBtn = $('button'); cancelBtn.innerHTML = 'Cancel';
     // cancelBtn.addEventListener('click', (e: Event) => {});
@@ -81,6 +116,50 @@ export class PropertiesPopup extends Popup {
     buttons.appendChild(cancelBtn);
     // buttons.appendChild(applyBtn);
     contentArea.appendChild(buttons);
+  }
+
+  /**
+   * 선택된 세션들의 값을 필드에 표시하고 편집 여부를 추적한다.
+   * - 값이 모두 같으면 그 값을, 다르면 '###'을 표시
+   * - 초기값과 달라지면 라벨에 '*' 표시 (.modified)
+   */
+  bindField(field: Field, label: HTMLLabelElement, input: FieldInput): void {
+    const values = this.options.items.map(item => field.get(item));
+    const mixed = values.some(v => v !== values[0]);
+    const initial = mixed ? MIXED_VALUE : values[0];
+
+    if (mixed && input instanceof HTMLSelectElement) {
+      const option = $<HTMLOptionElement>('option');
+      option.value = MIXED_VALUE;
+      option.textContent = MIXED_VALUE;
+      input.insertBefore(option, input.firstChild);
+    }
+    input.value = initial;
+
+    const bound: BoundField = { field, input, label, initial, mixed, dirty: false };
+    this.boundFields.push(bound);
+
+    if (mixed && input instanceof HTMLInputElement) {
+      // 아직 편집하지 않은 '###'은 포커스 시 전체 선택해 바로 덮어쓸 수 있게 한다
+      this._register(_addEventListener(input, 'focus', () => {
+        if (!bound.dirty) input.select();
+      }));
+    }
+
+    const onEdit = () => {
+      bound.dirty = input.value !== initial;
+      label.classList.toggle('modified', bound.dirty);
+    };
+    this._register(_addEventListener(input, input instanceof HTMLSelectElement ? 'change' : 'input', onEdit));
+  }
+
+  override ok(): void {
+    for (const { field, input, dirty } of this.boundFields) {
+      if (!dirty) continue;
+      for (const item of this.options.items)
+        field.set(item, input.value);
+    }
+    super.ok();
   }
 
   renderTree() {
@@ -95,33 +174,39 @@ export class PropertiesPopup extends Popup {
               append(desc, $('p')).textContent = '인증 방법과 기타 관련 매개 변수들을 선택하십시오.';
               append(desc, $('p')).textContent = '이 섹션은 로그인 할 때 시간을 절약하기 위해 사용할 수 있습니다. 그러나 보안을 중요시하는 경우 이 섹션을 비워 두는 것이 좋습니다.';
 
-              let row, input;
+              let row, label, input;
 
               row = append(container, $('.row'));
-              append(row, $<HTMLLabelElement>('label')).textContent = '사용자 이름';
+              label = append(row, $<HTMLLabelElement>('label')); label.textContent = '사용자 이름';
               input = append(row, $<HTMLInputElement>('input'));
               input.type = 'text';
-              // input.value = this.options.items.url ? this.options.items.url.username : '';
+              this.bindField(fields.username, label, input);
 
               row = append(container, $('.row'));
-              append(row, $<HTMLLabelElement>('label')).textContent = '암호';
+              label = append(row, $<HTMLLabelElement>('label')); label.textContent = '암호';
               input = append(row, $<HTMLInputElement>('input'))
               input.type = 'password';
-              // input.value = this.options.items.url ? this.options.items.url.password : '';
+              this.bindField(fields.password, label, input);
             }
           }
         ],
         render: (container, data: Node) => {
-          let row, input, select, option;
+          let row, label, input, select, option;
 
           row = append(container, $('.row'));
-          append(row, $<HTMLLabelElement>('label')).textContent = '이름';
+          label = append(row, $<HTMLLabelElement>('label')); label.textContent = '이름';
           input = append(row, $<HTMLInputElement>('input'));
           input.type = 'text';
-          // input.value = this.options.items.title;
+          if (this.mode === Mode.MULTI) {
+            // 다중 선택 시 이름은 일괄 변경하지 않는다
+            input.value = '다중 세션 등록 정보';
+            input.disabled = true;
+          } else {
+            this.bindField(fields.title, label, input);
+          }
 
           row = append(container, $('.row'));
-          append(row, $<HTMLLabelElement>('label')).textContent = '프로토콜';
+          label = append(row, $<HTMLLabelElement>('label')); label.textContent = '프로토콜';
           select = append(row, $<HTMLSelectElement>('select'))
 
           option = append(select, $<HTMLOptionElement>('option'));
@@ -131,19 +216,26 @@ export class PropertiesPopup extends Popup {
           option.value = 'local';
           option.textContent = 'LOCAL';
 
-          // select.value = this.options.items.type === 'local' ? 'local' : 'remote';
+          this.bindField(fields.type, label, select);
 
           row = append(container, $('.row'));
-          append(row, $<HTMLLabelElement>('label')).textContent = '호스트';
+          label = append(row, $<HTMLLabelElement>('label')); label.textContent = '호스트';
           input = append(row, $<HTMLInputElement>('input'))
           input.type = 'text';
-          // input.value = this.options.items.url ? this.options.items.url.host : '';
+          this.bindField(fields.host, label, input);
 
           row = append(container, $('.row'));
-          append(row, $<HTMLLabelElement>('label')).textContent = '포트 번호';
+          label = append(row, $<HTMLLabelElement>('label')); label.textContent = '포트 번호';
           input = append(row, $<HTMLInputElement>('input'));
-          input.type = 'number';
-          // input.value = this.options.items.url ? this.options.items.url.port : '';
+          // '###' 표시를 위해 number 대신 text + 숫자 필터 사용
+          input.type = 'text';
+          input.inputMode = 'numeric';
+          const portInput = input;
+          this._register(_addEventListener(portInput, 'input', () => {
+            const digits = portInput.value.replace(/\D/g, '');
+            if (digits !== portInput.value) portInput.value = digits;
+          }));
+          this.bindField(fields.port, label, input);
         }
       }
     ];
