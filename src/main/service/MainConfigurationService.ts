@@ -28,7 +28,9 @@ export class MainConfigurationService extends Disposable implements Configuratio
     private readonly environmentService: EnvironmentService,
     private readonly fileService: FileService,
     /** 코드에 정의된 기본값 (VSCode의 DefaultConfiguration 역할) */
-    private readonly defaults: Record<string, unknown> = {},
+    private readonly defaults: Record<string, unknown> = {
+      locale: 'en'
+    },
   ) {
     super();
     this.settingsPath = path.join(this.environmentService.userDataPath, 'settings.json');

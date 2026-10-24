@@ -66,10 +66,10 @@ export class ListPane extends Pane {
       {
         title: 'Collapse Folders in Sessions', icon: 'collapse-all',
         click: async () => {
-          // this.list.collapseAll();
-          const configurationService = getService(configurationServiceId) as ConfigurationService;
-          console.log(await configurationService.getValue('locale'));
-          // configurationService.updateValue('locale', 'en');
+          this.list.collapseAll();
+          // const configurationService = getService(configurationServiceId) as ConfigurationService;
+          // console.log(await configurationService.getValue('locale'));
+          // await configurationService.updateValue('locale', 'ko');
           // (getService(propertiesDialogId) as PropertiesDialog).show();
           // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('sample');
           // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties');
