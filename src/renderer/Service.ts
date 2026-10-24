@@ -13,6 +13,7 @@ export const commandServiceId = 'commandService';
 export const keybindingServiceId = 'keybindingServiceId';
 export const statusbarPartServiceId = 'statusbarPartService';
 export const broadcastInputServiceId = 'broadcastInputService';
+export const configurationServiceId = 'configurationService';
 export const blarBlarServiceId = 'blarBlarService';
 
 type ServiceId =
@@ -29,6 +30,7 @@ type ServiceId =
   | typeof keybindingServiceId
   | typeof statusbarPartServiceId
   | typeof broadcastInputServiceId
+  | typeof configurationServiceId
   | typeof blarBlarServiceId
 ;
 

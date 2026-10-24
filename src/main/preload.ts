@@ -3,8 +3,15 @@
 
 import { contextBridge, ipcRenderer, IpcRendererEvent, IpcRenderer } from 'electron';
 import { Channels } from '../common/ipc';
+import { localeArgPrefix, defaultLocale } from '../common/nls';
+
+// main 이 webPreferences.additionalArguments 로 넘긴 로케일
+const localeArg = process.argv.find(arg => arg.startsWith(localeArgPrefix));
+const locale = localeArg ? localeArg.substring(localeArgPrefix.length) : defaultLocale;
 
 const electronHandler = {
+  locale,
+
   // render to main
   // window.ipc.send - ipcMain.on
   send(channel: Channels, ...args: any[]) {

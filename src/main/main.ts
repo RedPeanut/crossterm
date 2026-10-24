@@ -10,7 +10,7 @@
  */
 import path from 'path';
 import fs from 'fs';
-import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions, IpcMainEvent, Menu, MenuItem, clipboard } from 'electron';
+import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions, IpcMainEvent, Menu, MenuItem, clipboard, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -44,6 +44,8 @@ import { ImportService } from './service/ImportService';
 import { DialogServiceChannel } from './ipc/DialogServiceChannel';
 import { ExportServiceChannel } from './ipc/ExportServiceChannel';
 import { ImportServiceChannel } from './ipc/ImportServiceChannel';
+import { getLocale, localeArgPrefix, localize, setLocale } from '../common/nls';
+import { configureLocaleSwitch, resolveAppLocale } from './locale';
 
 class AppUpdater {
   constructor() {
@@ -411,6 +413,9 @@ class MainWindow extends Disposable {
       if (this.browserWindow) {
         this.browserWindow.webContents.send('configuration changed', change);
       }
+      if (change.affectsConfiguration('locale')) {
+        this.promptRestartForLocale();
+      }
     }));
     const appService = setService(appServiceId, new AppService(environmentService, fileService));
     const dialogService = setService(dialogServiceId, new MainDialogService());
@@ -453,6 +458,7 @@ class MainWindow extends Disposable {
 
       icon: utils.getAssetPath('icon.png'),
       webPreferences: {
+        additionalArguments: [`${localeArgPrefix}${getLocale()}`],
         preload: app.isPackaged
           ? path.join(__dirname, 'preload.js')
           : path.join(__dirname, '../../.erb/dll/preload.js'),
@@ -509,6 +515,26 @@ class MainWindow extends Disposable {
     // eslint-disable-next-line
     new AppUpdater();
   }
+
+  /**
+   * 언어는 시작할 때 한 번만 정해지므로(메뉴 등은 모듈 로드 시점에 번역된다) 바꾸면 재시작해야 한다.
+   */
+  promptRestartForLocale = async () => {
+    const { response } = await dialog.showMessageBox(this.browserWindow, {
+      type: 'info',
+      message: localize('nls.restartRequired', 'A restart is required for the language change to take effect.'),
+      buttons: [
+        localize('nls.restartNow', 'Restart Now'),
+        localize('nls.later', 'Later'),
+      ],
+      defaultId: 0,
+      cancelId: 1,
+    });
+    if (response === 0) {
+      app.relaunch();
+      app.quit();
+    }
+  }
 }
 
 /**
@@ -544,6 +570,9 @@ app.on('before-quit', (event) => {
 
 export const mainWindow = new MainWindow();
 
+// app ready 전에 걸어야 Chromium 로케일에 반영된다.
+configureLocaleSwitch();
+
 app
   .whenReady()
   .then(() => {
@@ -560,6 +589,9 @@ app
         require('electron-localshortcut').unregister('Command+Alt+I');
       });
     }
+
+    // 메뉴(Menubar) 등이 만들어지기 전에 정해야 한다.
+    setLocale(resolveAppLocale());
 
     mainWindow.createWindow();
     app.on('activate', () => {

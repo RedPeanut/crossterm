@@ -7,11 +7,12 @@ import { MainLayoutService } from "../layout/MainLayout";
 import { Pane, PaneOptions } from "../Pane";
 import { SessionPartService } from "../part/SessionPart";
 import { SidebarPartService } from "../part/SidebarPart";
-import { getService, bodyLayoutServiceId, sessionPartServiceId, sidebarPartServiceId, mainLayoutServiceId } from "../Service";
+import { getService, bodyLayoutServiceId, sessionPartServiceId, sidebarPartServiceId, mainLayoutServiceId, configurationServiceId } from "../Service";
 import { $, _addEventListener } from "../util/dom";
 import { findActiveItem } from "../utils";
 import * as utils from "../utils";
 import { v4 as uuidv4 } from 'uuid';
+import { ConfigurationService } from "../../common/service/ConfigurationService";
 
 export class ListPane extends Pane {
 
@@ -64,8 +65,11 @@ export class ListPane extends Pane {
       },
       {
         title: 'Collapse Folders in Sessions', icon: 'collapse-all',
-        click: () => {
-          this.list.collapseAll();
+        click: async () => {
+          // this.list.collapseAll();
+          const configurationService = getService(configurationServiceId) as ConfigurationService;
+          console.log(await configurationService.getValue('locale'));
+          // configurationService.updateValue('locale', 'en');
           // (getService(propertiesDialogId) as PropertiesDialog).show();
           // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('sample');
           // (getService(mainLayoutServiceId) as MainLayoutService).showPopup('properties');

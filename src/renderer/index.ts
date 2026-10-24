@@ -1,5 +1,7 @@
 console.log('👋 This message is being logged by "renderer", included via webpack');
 
+// 반드시 가장 먼저 import 한다. (nls.init.ts 참고)
+import './nls.init';
 import '@vscode/codicons/dist/codicon.css';
 import './index.css';
 import './popup.css';
@@ -11,12 +13,14 @@ import { ElectronHandler } from '../main/preload';
 import { ConfigsInitialValueType } from '../common/configs';
 // import { ListItemElem } from './component/List';
 import { RenderStorageService } from './service/RenderStorageService';
-import { setService, storageServiceId } from './Service';
+import { configurationServiceId, setService, storageServiceId } from './Service';
 import { ListItemElem } from '../common/Types';
 import { LayoutStateType, StorageService, TreeViewStateType } from '../common/service/StorageService';
 
 import './globals';
 import './key/keybindings';
+import { ConfigurationService } from '../common/service/ConfigurationService';
+import { RenderConfigurationService } from './service/RenderConfigurationService';
 
 declare global {
   interface Window {
@@ -67,6 +71,7 @@ export class Renderer {
   async loadInMain(): Promise<void> {
     // init main services in here
     const storageService = setService(storageServiceId, new RenderStorageService()) as StorageService;
+    const configurationService = setService(configurationServiceId, new RenderConfigurationService()) as ConfigurationService;
     // console.log(await storageService.get<string>('layoutState'));
 
     this.window.isMaximized = await window.ipc.invoke('window get', 'function', 'isMaximized');
