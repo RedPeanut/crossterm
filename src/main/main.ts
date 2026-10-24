@@ -40,8 +40,10 @@ import { ConfigurationServiceChannel } from './ipc/ConfigurationServiceChannel';
 import { StorageService } from '../common/service/StorageService';
 import { MainDialogService } from './service/MainDialogService';
 import { ExportService } from './service/ExportService';
+import { ImportService } from './service/ImportService';
 import { DialogServiceChannel } from './ipc/DialogServiceChannel';
 import { ExportServiceChannel } from './ipc/ExportServiceChannel';
+import { ImportServiceChannel } from './ipc/ImportServiceChannel';
 
 class AppUpdater {
   constructor() {
@@ -413,6 +415,7 @@ class MainWindow extends Disposable {
     const appService = setService(appServiceId, new AppService(environmentService, fileService));
     const dialogService = setService(dialogServiceId, new MainDialogService());
     const exportService = new ExportService(environmentService, fileService, storageService, appService, app.getVersion());
+    const importService = new ImportService(environmentService, fileService, appService, () => configurationService.reload());
 
     // expose services to render
     for (const channel of [
@@ -422,6 +425,7 @@ class MainWindow extends Disposable {
       new AppServiceChannel(appService),
       new DialogServiceChannel(dialogService),
       new ExportServiceChannel(exportService),
+      new ImportServiceChannel(importService),
     ]) {
       this.ipcDisposables.add(registerIpcChannel(channel));
     }

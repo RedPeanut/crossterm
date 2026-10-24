@@ -10,7 +10,7 @@ import { getService, mainLayoutServiceId, broadcastInputServiceId, bodyLayoutSer
 import { MainLayoutService } from '../layout/MainLayout';
 // import { keybindingsRegistry } from '../globals';
 import { getFocusedTerm } from '../part/term/Term';
-import { getFocusedList } from '../component/List';
+import { getFocusedList, refreshAllLists } from '../component/List';
 import { BroadcastInputService } from '../service/BroadcastInputService';
 import { Group, SplitItem } from '../Types';
 import { wrapper } from '../globals';
@@ -130,15 +130,12 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
   weight: KeybindingWeight.Core,
   handler: () => {
     (getService(mainLayoutServiceId) as MainLayoutService).showPopup('import', {
-      // TODO: 원본 파일을 읽어 실제 항목/개수 표시 (main 의 ImportService)
-      onLoad: async (filePath: string) => [
-        { id: 'sessions', name: 'Sessions', type: 'Session files', count: 0 },
-        { id: 'settings', name: 'Settings', type: 'User settings (settings.json)', count: 0 },
-      ],
-      // TODO: 실제 가져오기 구현
+      // 내보내기 파일을 세션 폴더, settings.json 으로 되돌린다 (main 의 ImportService)
+      onLoad: (filePath: string) => window.ipc.invoke('app import load', filePath),
       onImport: async (filePath: string, itemIds: string[], onExist: string, log: (line: string) => void) => {
-        log(`Importing ${itemIds.join(', ')} from ${filePath} (if exists: ${onExist}) ...`);
-        log('(not implemented yet)');
+        const lines: string[] = await window.ipc.invoke('app import', filePath, itemIds, onExist);
+        lines.forEach(line => log(line));
+        if (itemIds.includes('sessions')) await refreshAllLists();
       },
     });
   },

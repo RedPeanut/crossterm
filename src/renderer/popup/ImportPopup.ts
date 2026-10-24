@@ -149,6 +149,12 @@ export class ImportPopup extends Popup {
     this.itemsBody.textContent = '';
     this.itemChecks = [];
 
+    if (this.items.length === 0) {
+      const td = append(append(this.itemsBody, $('tr')), $<HTMLTableCellElement>('td'));
+      td.colSpan = 3;
+      td.textContent = 'Nothing to import'; // '가져올 항목이 없습니다'
+    }
+
     for (const item of this.items) {
       const tr = append(this.itemsBody, $('tr'));
       const label = append(append(tr, $('td')), $<HTMLLabelElement>('label'));

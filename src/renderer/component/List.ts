@@ -31,6 +31,13 @@ export function getFocusedList(): List | undefined {
   return lastFocusedList;
 }
 
+/** 살아 있는 목록 전부. 가져오기처럼 디스크의 세션이 바깥에서 바뀌었을 때 다시 그린다 */
+const allLists = new Set<List>();
+
+export async function refreshAllLists(): Promise<void> {
+  await Promise.all([...allLists].map(list => list.refresh()));
+}
+
 /** 커맨드에 걸린 단축키를 Electron 메뉴 accelerator 로. 메뉴와 실제 키 설정이 항상 같게 한다 */
 function acceleratorOf(commandId: string): string {
   return (getService(keybindingServiceId) as KeybindingService).lookupKeybindingAccelerator(commandId) ?? '';
@@ -138,6 +145,9 @@ export class List extends Disposable {
     this.onDblClick = onDblClick;
     this.onSelectionChange = onSelectionChange;
     this.dnd = new ListDragAndDrop(this);
+
+    allLists.add(this);
+    this._register({ dispose: () => allLists.delete(this) });
   }
 
   _onClick(e: MouseEvent, id: string): void {
