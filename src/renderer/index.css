@@ -77,7 +77,7 @@ body { height: 100%; }
 
 .sash.hover:before,
 .sash.active:before {
-  background: rgb(0 120 212); /* var(--vscode-sash-hoverBorder); */
+  background: rgb(0 120 212);
   transition: background-color 0.1s ease-out;
 }
 
@@ -225,13 +225,13 @@ body { height: 100%; }
 
 .pane-view .pane.detail .table-sash:hover,
 .pane-view .pane.detail .table-sash.active {
-  background-color: var(--vscode-sash-hoverBorder, rgb(0, 120, 212)); /* VS Code 스타일 */
+  background-color: rgb(0, 120, 212);
 }
 
 .pane-view .pane.detail .table-sash::before {
   content: '';
   position: absolute;
-  left: calc(var(--vscode-sash-size, 4px) / 2);
+  left: calc(4px / 2);
   width: 0;
   height: 100%;
   border-left: 1px solid transparent;
