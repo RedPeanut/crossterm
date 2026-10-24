@@ -13,7 +13,6 @@ import fs from 'fs';
 import { app, BrowserWindow, shell, screen, ipcMain, MenuItemConstructorOptions, IpcMainEvent, Menu, MenuItem, clipboard, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
 import * as utils from './utils';
 import { SerializableContextMenuItem, SerializableMenuItem } from '../common/Types';
 import { Menubar } from './Menubar';
