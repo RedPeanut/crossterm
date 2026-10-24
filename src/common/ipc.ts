@@ -59,6 +59,7 @@ export type MainEvents =
   // dialog
   | 'dialog show messagebox'
   | 'dialog show savedialog'
+  | 'dialog show opendialog'
 
   // clipboard
   | 'clipboard read text'

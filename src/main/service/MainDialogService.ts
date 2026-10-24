@@ -58,4 +58,21 @@ export class MainDialogService implements DialogService {
         : electron.dialog.showSaveDialog(_options);
     });
   }
+
+  /**
+   * defaultPath 가 파일 이름만 있으면 문서 폴더 기준으로 만든다.
+   * window 를 주지 않으면 포커스된 창에 modal 로 띄운다.
+   */
+  showOpenDialog(options: electron.OpenDialogOptions, window?: electron.BrowserWindow): Promise<electron.OpenDialogReturnValue> {
+    const _window = window ?? electron.BrowserWindow.getFocusedWindow();
+    return this.getWindowDialogQueue(_window).queue(async () => {
+      const _options = { ...options };
+      if (_options.defaultPath && !path.isAbsolute(_options.defaultPath))
+        _options.defaultPath = path.join(electron.app.getPath('documents'), _options.defaultPath);
+
+      return _window
+        ? electron.dialog.showOpenDialog(_window, _options)
+        : electron.dialog.showOpenDialog(_options);
+    });
+  }
 }

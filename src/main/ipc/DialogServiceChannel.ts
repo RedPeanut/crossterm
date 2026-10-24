@@ -10,6 +10,7 @@ export class DialogServiceChannel implements IpcChannel {
     this.handlers = new Map<MainEvents, IpcHandler>([
       [ 'dialog show messagebox', (options) => this.service.showMessageBox(options) ],
       [ 'dialog show savedialog', (options) => this.service.showSaveDialog(options) ],
+      [ 'dialog show opendialog', (options) => this.service.showOpenDialog(options) ],
     ]);
   }
 }
