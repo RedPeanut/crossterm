@@ -8,11 +8,11 @@ export class ConfigurationServiceChannel implements IpcChannel {
 
   constructor(private readonly configurationService: ConfigurationService) {
     this.handlers = new Map<MainEvents, IpcHandler>([
-      ['configuration get value', (_, section) =>
+      ['configuration get value', (section?: string) =>
         this.configurationService.getValue(section)],
-      ['configuration update value', (_, key: string, value: string) =>
+      ['configuration update value', (key: string, value: unknown) =>
         this.configurationService.updateValue(key, value)],
-      ['configuration keys', (_) =>
+      ['configuration keys', () =>
         this.configurationService.keys()],
     ]);
   }

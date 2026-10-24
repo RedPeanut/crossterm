@@ -22,17 +22,17 @@ export class RenderConfigurationService extends Disposable implements Configurat
   // getValue<T>(section: string): T {
   async getValue<T>(section?: string): Promise<T> {
     // throw new Error("Method not implemented.");
-    return await window.ipc.invoke('configuration get value', [section]);
+    return await window.ipc.invoke('configuration get value', section);
   }
 
   async updateValue(key: string, value: unknown): Promise<void> {
     // throw new Error("Method not implemented.");
-    await window.ipc.invoke('configuration update value', [key, value]);
+    await window.ipc.invoke('configuration update value', key, value);
   }
 
   async keys(): Promise<string[]> {
     // throw new Error("Method not implemented.");
-    return await window.ipc.invoke('configuration keys', []);
+    return await window.ipc.invoke('configuration keys');
   }
 
 }
