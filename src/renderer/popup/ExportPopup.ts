@@ -42,8 +42,8 @@ export class ExportPopup extends Popup {
   cancelBtn: HTMLButtonElement;
 
   constructor(parent: HTMLElement, options: ExportPopupOptions) {
-    super(parent, { classList: ['export'], ...options });
-    this.options = { classList: ['export'], ...options };
+    super(parent, { classList: ['wizard', 'export'], ...options });
+    this.options = { classList: ['wizard', 'export'], ...options };
   }
 
   override renderTitleArea(): void {

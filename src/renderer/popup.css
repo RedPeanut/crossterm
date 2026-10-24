@@ -258,19 +258,19 @@
   user-select: none;
 }
 
-/* Export Popup */
-.export .popup {
+/* Wizard Popup (Export / Import) */
+.wizard .popup {
   width: 520px;
   height: 340px;
 }
 
-.export .popup .content-area {
+.wizard .popup .content-area {
   flex-direction: column;
   min-height: 0;
   padding: 12px;
 }
 
-.export .popup .page {
+.wizard .popup .page {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -278,12 +278,12 @@
   gap: 6px;
 }
 
-.export .popup .page .row {
+.wizard .popup .page .row {
   display: flex;
   gap: 4px;
 }
 
-.export .popup input {
+.wizard .popup input[type="text"] {
   flex: 1;
   min-width: 0;
   height: 24px;
@@ -297,11 +297,11 @@
   user-select: text;
 }
 
-.export .popup input:focus {
+.wizard .popup input[type="text"]:focus {
   border-color: rgb(0, 120, 212);
 }
 
-.export .popup .page .log {
+.wizard .popup .page .log {
   flex: 1;
   min-height: 0;
   overflow: auto;
@@ -316,7 +316,7 @@
   user-select: text;
 }
 
-.export .popup .footer {
+.wizard .popup .footer {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -324,7 +324,7 @@
   border-top: 1px solid rgb(43, 43, 43);
 }
 
-.export .popup button {
+.wizard .popup button {
   min-width: 80px;
   height: 26px;
   background-color: rgb(49, 49, 49);
@@ -336,19 +336,85 @@
   cursor: pointer;
 }
 
-.export .popup button.browse { min-width: 32px; }
+.wizard .popup button.browse { min-width: 32px; }
 
-.export .popup button:hover:not(:disabled) { background-color: rgb(64, 64, 64); }
+.wizard .popup button:hover:not(:disabled) { background-color: rgb(64, 64, 64); }
 
-.export .popup button.primary:not(:disabled) {
+.wizard .popup button.primary:not(:disabled) {
   background-color: rgb(0, 120, 212);
   border-color: rgb(0, 120, 212);
   color: white;
 }
-.export .popup button.primary:hover:not(:disabled) { background-color: rgb(20, 138, 228); }
+.wizard .popup button.primary:hover:not(:disabled) { background-color: rgb(20, 138, 228); }
 
-.export .popup button:disabled {
+.wizard .popup button:disabled {
   color: rgb(110, 110, 110);
   border-color: rgb(55, 55, 55);
   cursor: default;
+}
+
+/* Import Popup */
+.import .popup .page fieldset {
+  display: flex;
+  gap: 16px;
+  margin: 8px 0 0;
+  padding: 6px 10px 8px;
+  border: 1px solid rgb(69, 69, 69);
+  border-radius: 4px;
+}
+
+.import .popup .page fieldset legend { padding: 0 4px; }
+
+.import .popup .page fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.import .popup .page .source-path {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: text;
+}
+
+.import .popup .page .items {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background-color: rgb(24, 24, 24);
+  border: 1px solid rgb(43, 43, 43);
+  border-radius: 4px;
+}
+
+.import .popup .page .items table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.import .popup .page .items th,
+.import .popup .page .items td {
+  padding: 3px 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.import .popup .page .items th {
+  position: sticky;
+  top: 0;
+  background-color: rgb(37, 37, 37);
+  font-weight: normal;
+  border-bottom: 1px solid rgb(43, 43, 43);
+}
+
+.import .popup .page .items td.count,
+.import .popup .page .items th.count { text-align: right; }
+
+.import .popup .page .items td label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }

@@ -8,7 +8,7 @@ import { mainWindow } from './main';
 import {
   // menu id
   appPreferencesMenuId, appSettingsMenuId, appShortcutsMenuId, appQuitMenuId,
-  filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId, fileImportMenuId, fileExportMenuId, fileExportCmdId,
+  filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId, fileImportMenuId, fileImportCmdId, fileExportMenuId, fileExportCmdId,
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
   tabCloseAllMenuId, tabCloseOthersMenuId,
@@ -138,9 +138,10 @@ export class Menubar {
       { type: 'separator' },
       {
         id: fileImportMenuId,
+        appCommandId: fileImportCmdId,
         label: 'Import', // '가져오기',
         accelerator: null, // keyBinding[fileImportMenuId][keyBindingIdx],
-        click: null
+        click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', fileImportCmdId),
       },
       {
         id: fileExportMenuId,

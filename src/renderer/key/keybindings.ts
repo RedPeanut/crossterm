@@ -1,5 +1,5 @@
 import { appShortcutsCmdId,
-  fileExportCmdId,
+  fileImportCmdId, fileExportCmdId,
   editCopyCmdId, editPasteCmdId,
   listCutCmdId, listCopyCmdId, listPasteCmdId, listDeleteCmdId,
   tabAlignVerticalCmdId, tabAlignHorizontalCmdId, tabAlignTilesCmdId,
@@ -118,6 +118,29 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
   // TODO: 단축키 편집 화면이 생기면 그걸 열도록 교체
   handler: () => {
     (getService(mainLayoutServiceId) as MainLayoutService).showDialog();
+  },
+});
+
+/**
+ * 가져오기 contribution.
+ */
+
+keybindingsRegistry.registerCommandAndKeybindingRule({
+  id: fileImportCmdId,
+  weight: KeybindingWeight.Core,
+  handler: () => {
+    (getService(mainLayoutServiceId) as MainLayoutService).showPopup('import', {
+      // TODO: 원본 파일을 읽어 실제 항목/개수 표시 (main 의 ImportService)
+      onLoad: async (filePath: string) => [
+        { id: 'sessions', name: 'Sessions', type: 'Session files', count: 0 },
+        { id: 'settings', name: 'Settings', type: 'User settings (settings.json)', count: 0 },
+      ],
+      // TODO: 실제 가져오기 구현
+      onImport: async (filePath: string, itemIds: string[], onExist: string, log: (line: string) => void) => {
+        log(`Importing ${itemIds.join(', ')} from ${filePath} (if exists: ${onExist}) ...`);
+        log('(not implemented yet)');
+      },
+    });
   },
 });
 

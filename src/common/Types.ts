@@ -100,6 +100,7 @@ export const fileDisconnMenuId = 'file.disconn';
 export const fileReconnMenuId = 'file.reconn';
 export const fileReconnAllMenuId = 'file.reconn.all';
 export const fileImportMenuId = 'file.import';
+export const fileImportCmdId = 'file.import.cmd';
 export const fileExportMenuId = 'file.export';
 export const fileExportCmdId = 'file.export.cmd';
 

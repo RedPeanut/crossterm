@@ -24,6 +24,7 @@ import { Popup } from '../Popup';
 import { SamplePopup } from '../popup/SamplePopup';
 import { PropertiesPopup } from '../popup/PropertiesPopup';
 import { ExportPopup, ExportPopupOptions } from '../popup/ExportPopup';
+import { ImportPopup, ImportPopupOptions } from '../popup/ImportPopup';
 import { ListItemElem } from '../../common/Types';
 import { Dialog } from '../Dialog';
 import { StorageService } from '../../common/service/StorageService';
@@ -365,6 +366,11 @@ export class MainLayout extends Layout implements MainLayoutService {
       case 'export': popup = new ExportPopup(
           this.container,
           args[0] as ExportPopupOptions
+        );
+        break;
+      case 'import': popup = new ImportPopup(
+          this.container,
+          args[0] as ImportPopupOptions
         );
         break;
       case 'sample': popup = new SamplePopup(this.container); break;
