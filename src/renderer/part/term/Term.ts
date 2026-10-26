@@ -18,6 +18,7 @@ import { TermResizeOverlay } from './TermResizeOverlay';
 // import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from './TerminalContextKeys';
 import { Disposable } from '../../../common/base/lifecycle';
 import { BroadcastInputService } from '../../service/BroadcastInputService';
+import { getTerminalTheme, onDidChangeTheme } from './terminalTheme';
 
 /**
  * 지금 포커스를 갖고 있는 터미널. 없으면 undefined.
@@ -143,7 +144,8 @@ export class Term extends Disposable {
     this.statusbarPartService = getService(statusbarPartServiceId);
 
     const _xterm = new xterm({
-      fontSize: 13
+      fontSize: 13,
+      theme: getTerminalTheme(),
     });
     // Load WebLinksAddon on terminal, this is all that's needed to get web links
     // working in the terminal.
@@ -164,6 +166,7 @@ export class Term extends Disposable {
     requestAnimationFrame(() => requestAnimationFrame(() => this.fitAddon.fit()));
 
     this.xterm = this._register(_xterm);
+    this._register(onDidChangeTheme(() => { _xterm.options.theme = getTerminalTheme(); }));
     if (this.item.type === 'remote')
       this.xterm.write(`Connecting to ${this.item.url.host}:${this.item.url.port}...\r\n`);
 

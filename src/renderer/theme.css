@@ -77,6 +77,29 @@
   --ct-editorGroup-dropBackground: rgb(83, 89, 93, 0.5);
   --ct-broadcastToggle-border: white;
 
+  /* Terminal (xterm) - css를 읽지 않으므로 terminalTheme.ts가 읽어서 넘긴다. dark는 xterm 5.2 기본값과 같다 */
+  --ct-terminal-background: #000000;
+  --ct-terminal-foreground: #ffffff;
+  --ct-terminalCursor-foreground: #ffffff;
+  --ct-terminalCursor-background: #000000;
+  --ct-terminal-selectionBackground: rgba(255, 255, 255, 0.3);
+  --ct-terminal-ansiBlack: #2e3436;
+  --ct-terminal-ansiRed: #cc0000;
+  --ct-terminal-ansiGreen: #4e9a06;
+  --ct-terminal-ansiYellow: #c4a000;
+  --ct-terminal-ansiBlue: #3465a4;
+  --ct-terminal-ansiMagenta: #75507b;
+  --ct-terminal-ansiCyan: #06989a;
+  --ct-terminal-ansiWhite: #d3d7cf;
+  --ct-terminal-ansiBrightBlack: #555753;
+  --ct-terminal-ansiBrightRed: #ef2929;
+  --ct-terminal-ansiBrightGreen: #8ae234;
+  --ct-terminal-ansiBrightYellow: #fce94f;
+  --ct-terminal-ansiBrightBlue: #729fcf;
+  --ct-terminal-ansiBrightMagenta: #ad7fa8;
+  --ct-terminal-ansiBrightCyan: #34e2e2;
+  --ct-terminal-ansiBrightWhite: #eeeeec;
+
   /* StatusBar */
   --ct-statusBarItem-hoverBackground: rgba(241, 241, 241, 0.2);
 
@@ -188,7 +211,30 @@
   --ct-editorGroup-dropBackground: rgb(38 119 203 / 18%);
   --ct-broadcastToggle-border: rgb(59, 59, 59);
 
-    /* StatusBar */
+  /* Terminal (VS Code Light 터미널 팔레트) */
+  --ct-terminal-background: #ffffff;
+  --ct-terminal-foreground: #3b3b3b;
+  --ct-terminalCursor-foreground: #005fb8;
+  --ct-terminalCursor-background: #ffffff;
+  --ct-terminal-selectionBackground: #add6ff;
+  --ct-terminal-ansiBlack: #000000;
+  --ct-terminal-ansiRed: #cd3131;
+  --ct-terminal-ansiGreen: #107c10;
+  --ct-terminal-ansiYellow: #949800;
+  --ct-terminal-ansiBlue: #0451a5;
+  --ct-terminal-ansiMagenta: #bc05bc;
+  --ct-terminal-ansiCyan: #0598bc;
+  --ct-terminal-ansiWhite: #555555;
+  --ct-terminal-ansiBrightBlack: #666666;
+  --ct-terminal-ansiBrightRed: #cd3131;
+  --ct-terminal-ansiBrightGreen: #14ce14;
+  --ct-terminal-ansiBrightYellow: #b5ba00;
+  --ct-terminal-ansiBrightBlue: #0451a5;
+  --ct-terminal-ansiBrightMagenta: #bc05bc;
+  --ct-terminal-ansiBrightCyan: #0598bc;
+  --ct-terminal-ansiBrightWhite: #a5a5a5;
+
+  /* StatusBar */
   --ct-statusBarItem-hoverBackground: rgb(31 31 31 / 7%);
 
   /* Dnd */
