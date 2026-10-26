@@ -12,17 +12,15 @@
   justify-content: center;
   align-items: center;
   z-index: 40; /* over sash(35) */
-  background-color: rgba(0,0,0,0.16);
+  background-color: var(--ct-overlay-background);
 }
 
 .popup {
-  background-color: rgb(31, 31, 31);
-  border: 1px solid rgb(112,112,112);
-
-  border: 1px solid rgb(69, 69, 69);
+  background-color: var(--ct-widget-background);
+  border: 1px solid var(--ct-widget-border);
   border-radius: 6px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  color: rgb(204, 204, 204);
+  box-shadow: 0 8px 24px var(--ct-widget-shadow);
+  color: var(--ct-widget-foreground);
   /* font-size: 13px; */
 
   display: flex;
@@ -55,7 +53,7 @@
   /* height: 34px; */
   padding: 4px 8px;
   position: relative;
-  border-bottom: 1px solid rgb(43, 43, 43);
+  border-bottom: 1px solid var(--ct-border);
 }
 .popup .title-area:hover { cursor: move; }
 
@@ -69,13 +67,13 @@
 }
 
 .popup .title-area a:hover {
-  background-color: rgb(229, 229, 229);
+  background-color: var(--ct-popup-titleButtonHoverBackground);
   cursor: pointer;
 }
 
 .popup .title-area a.close:hover {
-  background-color: rgb(232, 17, 35);
-  color: white;
+  background-color: var(--ct-titleBar-closeHoverBackground);
+  color: var(--ct-titleBar-closeHoverForeground);
 }
 
 .popup .content-area {
@@ -96,9 +94,9 @@
 
 .popup .buttons button {
   height: 26px;
-  background-color: rgb(49, 49, 49);
-  color: rgb(204, 204, 204);
-  border: 1px solid rgb(69, 69, 69);
+  background-color: var(--ct-button-secondaryBackground);
+  color: var(--ct-button-secondaryForeground);
+  border: 1px solid var(--ct-button-border);
   border-radius: 3px;
   font-size: 13px;
   font-family: inherit;
@@ -106,17 +104,17 @@
 }
 
 .popup .buttons button:hover {
-  background-color: rgb(64, 64, 64);
+  background-color: var(--ct-button-secondaryHoverBackground);
 }
 
 .popup .buttons button.primary {
-  background-color: rgb(0, 120, 212);
-  border-color: rgb(0, 120, 212);
-  color: white;
+  background-color: var(--ct-button-background);
+  border-color: var(--ct-button-background);
+  color: var(--ct-button-foreground);
 }
 
 .popup .buttons button.primary:hover {
-  background-color: rgb(20, 138, 228);
+  background-color: var(--ct-button-hoverBackground);
 }
 
 
@@ -144,8 +142,8 @@
   min-height: 0;
   overflow: auto;
   padding: 4px 0;
-  background-color: rgb(24, 24, 24);
-  border: 1px solid rgb(43, 43, 43);
+  background-color: var(--ct-widget-insetBackground);
+  border: 1px solid var(--ct-border);
   border-radius: 4px;
 }
 
@@ -180,8 +178,8 @@
 }
 
 .popup .node > .content.selected .ln-body {
-  background-color: rgb(0,119,214);
-  color: white;
+  background-color: var(--ct-popupTree-selectionBackground);
+  color: var(--ct-popupTree-selectionForeground);
   border: 1px dotted;
 }
 
@@ -194,17 +192,17 @@
 }
 
 .properties .popup .right .breadcrumb {
-  background-color: rgb(24, 24, 24);
-  border: 1px solid rgb(43, 43, 43);
+  background-color: var(--ct-widget-insetBackground);
+  border: 1px solid var(--ct-border);
   border-radius: 4px;
   padding: 3px 5px;
-  color: rgb(160, 160, 160);
+  color: var(--ct-breadcrumb-foreground);
 }
 
 .properties .popup .right .desc {
   padding: 12px 2px 0px;
   line-height: 19px;
-  color: rgb(180, 180, 180);
+  color: var(--ct-descriptionForeground);
 }
 
 .properties .popup .right .desc p + p { margin-top: 8px; }
@@ -235,9 +233,9 @@
   min-width: 0;
   height: 24px;
   padding: 0 6px;
-  background-color: rgb(49, 49, 49);
-  color: rgb(204, 204, 204);
-  border: 1px solid rgb(69, 69, 69);
+  background-color: var(--ct-input-background);
+  color: var(--ct-input-foreground);
+  border: 1px solid var(--ct-input-border);
   border-radius: 3px;
   font-size: 13px;
   font-family: inherit;
@@ -246,14 +244,14 @@
 
 .properties .popup .right .row input:focus {
   /* outline: none; */
-  border-color: rgb(0, 120, 212);
+  border-color: var(--ct-focusBorder);
 }
 
 /* 비활성화된 필드 */
 .properties .popup .right .row input:disabled {
-  background-color: rgb(37, 37, 37);
-  color: rgb(110, 110, 110);
-  border-color: rgb(55, 55, 55);
+  background-color: var(--ct-input-disabledBackground);
+  color: var(--ct-disabledForeground);
+  border-color: var(--ct-disabledBorder);
   cursor: default;
   user-select: none;
 }
@@ -288,9 +286,9 @@
   min-width: 0;
   height: 24px;
   padding: 0 6px;
-  background-color: rgb(49, 49, 49);
-  color: rgb(204, 204, 204);
-  border: 1px solid rgb(69, 69, 69);
+  background-color: var(--ct-input-background);
+  color: var(--ct-input-foreground);
+  border: 1px solid var(--ct-input-border);
   border-radius: 3px;
   font-size: 13px;
   font-family: inherit;
@@ -298,7 +296,7 @@
 }
 
 .wizard .popup input[type="text"]:focus {
-  border-color: rgb(0, 120, 212);
+  border-color: var(--ct-focusBorder);
 }
 
 .wizard .popup .page .log {
@@ -306,8 +304,8 @@
   min-height: 0;
   overflow: auto;
   padding: 4px 6px;
-  background-color: rgb(24, 24, 24);
-  border: 1px solid rgb(43, 43, 43);
+  background-color: var(--ct-widget-insetBackground);
+  border: 1px solid var(--ct-border);
   border-radius: 4px;
   font-family: Menlo, Consolas, monospace;
   font-size: 12px;
@@ -321,15 +319,15 @@
   justify-content: flex-end;
   gap: 8px;
   padding: 8px 12px;
-  border-top: 1px solid rgb(43, 43, 43);
+  border-top: 1px solid var(--ct-border);
 }
 
 .wizard .popup button {
   min-width: 80px;
   height: 26px;
-  background-color: rgb(49, 49, 49);
-  color: rgb(204, 204, 204);
-  border: 1px solid rgb(69, 69, 69);
+  background-color: var(--ct-button-secondaryBackground);
+  color: var(--ct-button-secondaryForeground);
+  border: 1px solid var(--ct-button-border);
   border-radius: 3px;
   font-size: 13px;
   font-family: inherit;
@@ -338,18 +336,18 @@
 
 .wizard .popup button.browse { min-width: 32px; }
 
-.wizard .popup button:hover:not(:disabled) { background-color: rgb(64, 64, 64); }
+.wizard .popup button:hover:not(:disabled) { background-color: var(--ct-button-secondaryHoverBackground); }
 
 .wizard .popup button.primary:not(:disabled) {
-  background-color: rgb(0, 120, 212);
-  border-color: rgb(0, 120, 212);
-  color: white;
+  background-color: var(--ct-button-background);
+  border-color: var(--ct-button-background);
+  color: var(--ct-button-foreground);
 }
-.wizard .popup button.primary:hover:not(:disabled) { background-color: rgb(20, 138, 228); }
+.wizard .popup button.primary:hover:not(:disabled) { background-color: var(--ct-button-hoverBackground); }
 
 .wizard .popup button:disabled {
-  color: rgb(110, 110, 110);
-  border-color: rgb(55, 55, 55);
+  color: var(--ct-disabledForeground);
+  border-color: var(--ct-disabledBorder);
   cursor: default;
 }
 
@@ -359,7 +357,7 @@
   gap: 16px;
   margin: 8px 0 0;
   padding: 6px 10px 8px;
-  border: 1px solid rgb(69, 69, 69);
+  border: 1px solid var(--ct-widget-border);
   border-radius: 4px;
 }
 
@@ -383,8 +381,8 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
-  background-color: rgb(24, 24, 24);
-  border: 1px solid rgb(43, 43, 43);
+  background-color: var(--ct-widget-insetBackground);
+  border: 1px solid var(--ct-border);
   border-radius: 4px;
 }
 
@@ -404,9 +402,9 @@
 .import .popup .page .items th {
   position: sticky;
   top: 0;
-  background-color: rgb(37, 37, 37);
+  background-color: var(--ct-table-headerBackground);
   font-weight: normal;
-  border-bottom: 1px solid rgb(43, 43, 43);
+  border-bottom: 1px solid var(--ct-border);
 }
 
 .import .popup .page .items td.count,

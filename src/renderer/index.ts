@@ -3,6 +3,7 @@ console.log('👋 This message is being logged by "renderer", included via webpa
 // 반드시 가장 먼저 import 한다. (nls.init.ts 참고)
 import './nls.init';
 import '@vscode/codicons/dist/codicon.css';
+import './theme.css';
 import './index.css';
 import './popup.css';
 import './dialog.css';

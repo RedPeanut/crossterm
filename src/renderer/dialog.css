@@ -8,28 +8,28 @@
   justify-content: center;
   align-items: center;
   z-index: 40; /* over sash(35) */
-  background-color: rgba(0,0,0,0.16);
+  background-color: var(--ct-overlay-background);
 }
 
 .dialog {
-  border: 1px solid rgb(112,112,112);
+  border: 1px solid var(--ct-dialog-border);
   /* position: fixed; */
-  background-color: black;
+  background-color: var(--ct-dialog-background);
 }
 
 .dialog button {
   width: 86px;
   /* height: 28px; */
-  background: rgb(225,225,225);
+  background: var(--ct-dialog-buttonBackground);
   border-width: 1px; border-style: solid;
-  border-color: rgb(173,173,173);
+  border-color: var(--ct-dialog-buttonBorder);
   margin-right: 8px;
 }
 .dialog button:last-child { margin-right: 0; }
 
-.dialog button.disabled { background: rgb(204,204,204); border-color: rgb(191,191,191); }
-.dialog button:focus { border-color: rgb(0,120,215); border-width: 2px; }
-.dialog button:hover { background: rgb(229,241,251); border-color: rgb(0,120,215); }
+.dialog button.disabled { background: var(--ct-dialog-buttonDisabledBackground); border-color: var(--ct-dialog-buttonDisabledBorder); }
+.dialog button:focus { border-color: var(--ct-dialog-buttonFocusBorder); border-width: 2px; }
+.dialog button:hover { background: var(--ct-dialog-buttonHoverBackground); border-color: var(--ct-dialog-buttonFocusBorder); }
 
 .dialog .titlebar {
   /* background-color: white; */
@@ -52,13 +52,13 @@
 }
 
 .dialog .titlebar a:hover {
-  background-color: rgb(229, 229, 229);
+  background-color: var(--ct-popup-titleButtonHoverBackground);
   cursor: pointer;
 }
 
 .dialog .titlebar a.close:hover {
-  background-color: rgb(232, 17, 35);
-  color: white;
+  background-color: var(--ct-titleBar-closeHoverBackground);
+  color: var(--ct-titleBar-closeHoverForeground);
 }
 
 .dialog .content-area {
@@ -67,9 +67,9 @@
 }
 
 .dialog .body { display: flex; }
-.dialog .icon.info span { color: blue; }
-.dialog .icon.warning span { background-color: yellow; }
-.dialog .icon.error span { color: red; }
+.dialog .icon.info span { color: var(--ct-dialog-infoIconForeground); }
+.dialog .icon.warning span { background-color: var(--ct-dialog-warningIconBackground); }
+.dialog .icon.error span { color: var(--ct-dialog-errorIconForeground); }
 .dialog .codicon { font-size: 28px; }
 .dialog .message { flex: 1; margin-left: 12px; }
 .dialog .buttons { margin-top: 8px; text-align: center;

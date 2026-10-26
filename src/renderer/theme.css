@@ -1,0 +1,119 @@
+/*
+ * Color tokens (default: dark)
+ *
+ * 이름은 VS Code의 color id를 따른다. (sideBar.background -> --ct-sideBar-background)
+ * 테마 전환은 이 변수들의 값만 바꿔서 처리하고, 다른 css 파일에는 색을 직접 쓰지 않는다.
+ * 파생 토큰(var(--ct-...))은 base 토큰만 바꿔도 따라 바뀐다.
+ */
+:root {
+  /* Base */
+  --ct-foreground: white;
+  --ct-background: rgb(24, 24, 24);
+  --ct-border: rgb(43, 43, 43);
+  --ct-focusBorder: rgb(0, 120, 212);
+  --ct-descriptionForeground: rgb(180, 180, 180);
+  --ct-disabledForeground: rgb(110, 110, 110);
+  --ct-disabledBorder: rgb(55, 55, 55);
+  --ct-icon-foreground: rgb(204, 204, 204);
+  --ct-toolbar-hoverBackground: rgb(90 93 94 / 31%);
+  --ct-scrollbarSlider-background: rgb(121 121 121 / 40%);
+  --ct-overlay-background: rgba(0, 0, 0, 0.16);
+
+  /* Widget (menu box, popup, resize overlay) */
+  --ct-widget-background: rgb(31, 31, 31);
+  --ct-widget-foreground: rgb(204, 204, 204);
+  --ct-widget-border: rgb(69, 69, 69);
+  --ct-widget-shadow: rgba(0, 0, 0, 0.5);
+  --ct-widget-insetBackground: var(--ct-background);
+
+  /* Sash, SplitView */
+  --ct-sash-hoverBorder: var(--ct-focusBorder);
+  --ct-splitView-border: rgba(255, 255, 255, 0.09);
+
+  /* TitleBar, Menubar, Menu */
+  --ct-titleBar-border: var(--ct-border);
+  --ct-titleBar-hoverBackground: rgba(255, 255, 255, 0.16);
+  --ct-titleBar-closeHoverBackground: rgb(232, 17, 35);
+  --ct-titleBar-closeHoverForeground: white;
+  --ct-menubar-foreground: rgb(204, 204, 204);
+  --ct-menu-background: var(--ct-widget-background);
+  --ct-menu-border: var(--ct-widget-border);
+  --ct-menu-separatorBackground: var(--ct-widget-border);
+  --ct-menu-selectionBackground: var(--ct-focusBorder);
+  --ct-menu-selectionForeground: white;
+  --ct-menu-disabledForeground: lightgray;
+
+  /* ActivityBar */
+  --ct-activityBar-border: var(--ct-border);
+  --ct-activityBar-foreground: rgb(215, 215, 215);
+  --ct-activityBar-activeBorder: var(--ct-focusBorder);
+
+  /* SideBar, List, Tree */
+  --ct-sideBar-background: var(--ct-background);
+  --ct-sideBar-border: var(--ct-border);
+  --ct-list-hoverBackground: rgb(42 45 46);
+  --ct-list-activeSelectionBackground: rgb(71 85 102);
+  --ct-list-dropBackground: rgb(56 59 61);
+  --ct-tree-indentGuidesStroke: rgb(88 88 88);
+
+  /* PaneView (Detail table) */
+  --ct-table-columnsBorder: rgba(204, 204, 204, 0.125);
+  --ct-table-oddRowsBackground: rgb(204 204 204 / 4%);
+  --ct-table-headerBackground: rgb(37, 37, 37);
+
+  /* Tabs */
+  --ct-tab-border: var(--ct-border);
+  --ct-tab-inactiveBackground: var(--ct-background);
+  --ct-tab-activeBackground: rgb(31, 31, 31);
+
+  /* Session status dot */
+  --ct-sessionStatus-connecting: rgb(200, 200, 60);
+  --ct-sessionStatus-connected: rgb(50, 200, 100);
+  --ct-sessionStatus-error: rgb(220, 60, 60);
+  --ct-sessionStatus-closed: rgb(120, 120, 120);
+
+  /* Terms */
+  --ct-editorGroup-dropBackground: rgb(83, 89, 93, 0.5);
+  --ct-broadcastToggle-border: white;
+
+  /* StatusBar */
+  --ct-statusBarItem-hoverBackground: rgba(241, 241, 241, 0.2);
+
+  /* Dnd */
+  --ct-dragImage-background: rgb(4, 57, 94);
+  --ct-dragImage-border: var(--ct-focusBorder);
+
+  /* Input */
+  --ct-input-background: rgb(49, 49, 49);
+  --ct-input-foreground: rgb(204, 204, 204);
+  --ct-input-border: var(--ct-widget-border);
+  --ct-input-disabledBackground: rgb(37, 37, 37);
+
+  /* Button */
+  --ct-button-background: var(--ct-focusBorder);
+  --ct-button-foreground: white;
+  --ct-button-hoverBackground: rgb(20, 138, 228);
+  --ct-button-secondaryBackground: rgb(49, 49, 49);
+  --ct-button-secondaryForeground: rgb(204, 204, 204);
+  --ct-button-secondaryHoverBackground: rgb(64, 64, 64);
+  --ct-button-border: var(--ct-widget-border);
+
+  /* Popup */
+  --ct-popup-titleButtonHoverBackground: rgb(229, 229, 229);
+  --ct-popupTree-selectionBackground: rgb(0, 119, 214);
+  --ct-popupTree-selectionForeground: white;
+  --ct-breadcrumb-foreground: rgb(160, 160, 160);
+
+  /* Dialog */
+  --ct-dialog-background: black;
+  --ct-dialog-border: rgb(112, 112, 112);
+  --ct-dialog-buttonBackground: rgb(225, 225, 225);
+  --ct-dialog-buttonBorder: rgb(173, 173, 173);
+  --ct-dialog-buttonHoverBackground: rgb(229, 241, 251);
+  --ct-dialog-buttonFocusBorder: rgb(0, 120, 215);
+  --ct-dialog-buttonDisabledBackground: rgb(204, 204, 204);
+  --ct-dialog-buttonDisabledBorder: rgb(191, 191, 191);
+  --ct-dialog-infoIconForeground: blue;
+  --ct-dialog-warningIconBackground: yellow;
+  --ct-dialog-errorIconForeground: red;
+}
