@@ -637,6 +637,12 @@ body { height: 100%; }
   width: calc(100% - 16px - 7px - 1px);
 }
 
+/* 검증 상태 (showInputMessage가 idle/info/warning/error 클래스를 붙인다) */
+.sidebar .list input.idle { border: none; }
+.sidebar .list input.info { border: 1px solid var(--ct-inputValidation-infoBorder); }
+.sidebar .list input.warning { border: 1px solid var(--ct-inputValidation-warningBorder); }
+.sidebar .list input.error { border: 1px solid var(--ct-inputValidation-errorBorder); }
+
 
 /* Session */
 .part.session {
@@ -716,7 +722,7 @@ body { height: 100%; }
 .tabs .tab .label { flex: 1; }
 
 .tabs .tab .tab-border-top-container {
-  background-color: var(--tab-border-top-color);
+  background-color: var(--ct-tab-activeBorderTop);
   position: absolute;
   width: 100%;
   height: 1px;
@@ -834,6 +840,24 @@ body { height: 100%; }
   line-height: 17px;
   margin-top: -1px;
   word-wrap: break-word;
+}
+
+.context-view .input-msgbox span.info {
+  background-color: var(--ct-inputValidation-infoBackground);
+  color: var(--ct-inputValidation-infoForeground);
+  border: 1px solid var(--ct-inputValidation-infoBorder);
+}
+
+.context-view .input-msgbox span.warning {
+  background-color: var(--ct-inputValidation-warningBackground);
+  color: var(--ct-inputValidation-warningForeground);
+  border: 1px solid var(--ct-inputValidation-warningBorder);
+}
+
+.context-view .input-msgbox span.error {
+  background-color: var(--ct-inputValidation-errorBackground);
+  color: var(--ct-inputValidation-errorForeground);
+  border: 1px solid var(--ct-inputValidation-errorBorder);
 }
 
 /* Dnd */

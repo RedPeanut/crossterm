@@ -1049,9 +1049,6 @@ function showInputMessage(input: HTMLInputElement, message: InputMessage | null)
     input.classList.add('idle');
 
     (getService(contextViewServiceId) as ContextViewService).hide();
-
-    // reset
-    input.style.border = 'transparent';
     return;
   }
 
@@ -1063,18 +1060,8 @@ function showInputMessage(input: HTMLInputElement, message: InputMessage | null)
     }
   }
 
+  // 색은 css(index.css)에서 클래스별로 지정한다
   input.classList.add(classFor(message.severity));
-
-  function stylesFor(severity: Severity): { border: string | undefined; background: string | undefined; foreground: string | undefined } {
-    switch (severity) {
-      // case Severity.Info: return { border: styles.inputValidationInfoBorder, background: styles.inputValidationInfoBackground, foreground: styles.inputValidationInfoForeground };
-      case Severity.Warning: return { border: 'rgb(184 149 0)', background: 'rgb(53 42 5)', foreground: 'white' };
-      default: return { border: 'rgb(190 17 0)', background: 'rgb(90 29 29)', foreground: 'white' };
-    }
-  }
-
-  const styles = stylesFor(message.severity);
-  input.style.border = `1px solid ${styles.border}`;
 
   let div: HTMLElement;
 
@@ -1092,10 +1079,6 @@ function showInputMessage(input: HTMLInputElement, message: InputMessage | null)
       const spanElement = document.createElement('span');
       spanElement.textContent = message.content;
       spanElement.classList.add(classFor(message.severity));
-
-      spanElement.style.backgroundColor = styles.background ?? '';
-      spanElement.style.color = styles.foreground ?? '';
-      spanElement.style.border = styles.border ? `1px solid ${styles.border}` : '';
 
       dom.append(div, spanElement);
     },

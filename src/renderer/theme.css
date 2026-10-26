@@ -65,6 +65,7 @@
   --ct-tab-border: var(--ct-border);
   --ct-tab-inactiveBackground: var(--ct-background);
   --ct-tab-activeBackground: rgb(31, 31, 31);
+  --ct-tab-activeBorderTop: var(--ct-focusBorder);
 
   /* Session status dot */
   --ct-sessionStatus-connecting: rgb(200, 200, 60);
@@ -88,6 +89,17 @@
   --ct-input-foreground: rgb(204, 204, 204);
   --ct-input-border: var(--ct-widget-border);
   --ct-input-disabledBackground: rgb(37, 37, 37);
+
+  /* Input validation (List 이름 편집) - info는 지금까지 error와 같은 색으로 표시됐다 */
+  --ct-inputValidation-errorBorder: rgb(190 17 0);
+  --ct-inputValidation-errorBackground: rgb(90 29 29);
+  --ct-inputValidation-errorForeground: white;
+  --ct-inputValidation-warningBorder: rgb(184 149 0);
+  --ct-inputValidation-warningBackground: rgb(53 42 5);
+  --ct-inputValidation-warningForeground: white;
+  --ct-inputValidation-infoBorder: var(--ct-inputValidation-errorBorder);
+  --ct-inputValidation-infoBackground: var(--ct-inputValidation-errorBackground);
+  --ct-inputValidation-infoForeground: var(--ct-inputValidation-errorForeground);
 
   /* Button */
   --ct-button-background: var(--ct-focusBorder);
