@@ -1,7 +1,7 @@
-import { Emitter, Event } from "../common/base/event";
-import { Disposable } from "../common/base/lifecycle";
-import { $, _addEventListener } from "./util/dom";
-import * as dom from "./util/dom";
+import { Emitter, Event } from '../common/base/event';
+import { Disposable } from '../common/base/lifecycle';
+import { $, _addEventListener } from './util/dom';
+import * as dom from './util/dom';
 
 export interface PopupOptions {
   classList?: string[];

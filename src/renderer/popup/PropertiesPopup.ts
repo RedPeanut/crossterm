@@ -1,9 +1,9 @@
-import { localize } from "../../common/nls";
-import { ListItemElem } from "../../common/Types";
-import { Disposable } from "../../common/base/lifecycle";
-import { Popup, PopupOptions } from "../Popup";
-import { $, append, _addEventListener } from "../util/dom";
-import * as dom from "../util/dom";
+import { localize } from '../../common/nls';
+import { ListItemElem } from '../../common/Types';
+import { Disposable } from '../../common/base/lifecycle';
+import { Popup, PopupOptions } from '../Popup';
+import { $, append, _addEventListener } from '../util/dom';
+import * as dom from '../util/dom';
 
 interface Node {
   label: string;

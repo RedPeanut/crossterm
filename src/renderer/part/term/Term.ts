@@ -1,6 +1,6 @@
-import { localize } from "../../../common/nls";
-import { $, _addEventListener } from "../../util/dom";
-import { ConnStatus, TerminalItem } from "../../../common/Types";
+import { localize } from '../../../common/nls';
+import { $, _addEventListener } from '../../util/dom';
+import { ConnStatus, TerminalItem } from '../../../common/Types';
 import { v4 as uuidv4 } from 'uuid';
 import 'xterm/css/xterm.css';
 import { Terminal as xterm } from 'xterm'
@@ -10,14 +10,14 @@ import { terminals } from '../../globals';
 // import { ContextKey } from '../../../common/key/ContextKey';
 import { ContextKeyService } from '../../service/ContextKeyService';
 import { broadcastInputServiceId, contextKeyServiceId, getService, sessionPartServiceId, statusbarPartServiceId } from '../../Service';
-import { StatusbarPartService } from "../StatusbarPart";
-import { SessionPartService } from "../SessionPart";
-import { ContextKey } from "../../key/ContextKey";
-import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from "../../key/contextKeys";
-import { TermResizeOverlay } from "./TermResizeOverlay";
+import { StatusbarPartService } from '../StatusbarPart';
+import { SessionPartService } from '../SessionPart';
+import { ContextKey } from '../../key/ContextKey';
+import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from '../../key/contextKeys';
+import { TermResizeOverlay } from './TermResizeOverlay';
 // import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from './TerminalContextKeys';
-import { Disposable } from "../../../common/base/lifecycle";
-import { BroadcastInputService } from "../../service/BroadcastInputService";
+import { Disposable } from '../../../common/base/lifecycle';
+import { BroadcastInputService } from '../../service/BroadcastInputService';
 
 /**
  * 지금 포커스를 갖고 있는 터미널. 없으면 undefined.

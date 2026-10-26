@@ -1,8 +1,8 @@
-import { localize } from "../../../common/nls";
-import { $ } from "../../util/dom";
-import { ConnStatus, TerminalItem } from "../../../common/Types";
-import { SessionPartService } from "../SessionPart";
-import { getService, sessionPartServiceId } from "../../Service";
+import { localize } from '../../../common/nls';
+import { $ } from '../../util/dom';
+import { ConnStatus, TerminalItem } from '../../../common/Types';
+import { SessionPartService } from '../SessionPart';
+import { getService, sessionPartServiceId } from '../../Service';
 
 export class Tab {
 

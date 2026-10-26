@@ -1,16 +1,16 @@
-import { localize } from "../../common/nls";
-import { MappedSashEvent, SplitView, SplitViewItem, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from "../component/SplitView";
-import { Layout } from "../Layout";
-import { ActivitybarPart, ActivitybarPartService } from "../part/ActivitybarPart";
-import { SidebarPart, SidebarPartService } from "../part/SidebarPart";
-import { SessionPart } from "../part/SessionPart";
-import { Orientation } from "../component/Sash";
-import { Parts, MainLayoutService, MainLayout } from "./MainLayout";
-import { getClientArea } from "../util/dom";
-import { activitybarPartServiceId, bodyLayoutServiceId, getService, mainLayoutServiceId, Service, setService, sidebarPartServiceId } from "../Service";
-import { ActivitybarItem } from "../part/item/ActivitybarItem";
-import { BookmarkPaneView } from "../paneView/BookmarkPaneView";
-import { SamplePaneView } from "../paneView/SamplePaneView";
+import { localize } from '../../common/nls';
+import { MappedSashEvent, SplitView, SplitViewItem, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from '../component/SplitView';
+import { Layout } from '../Layout';
+import { ActivitybarPart, ActivitybarPartService } from '../part/ActivitybarPart';
+import { SidebarPart, SidebarPartService } from '../part/SidebarPart';
+import { SessionPart } from '../part/SessionPart';
+import { Orientation } from '../component/Sash';
+import { Parts, MainLayoutService, MainLayout } from './MainLayout';
+import { getClientArea } from '../util/dom';
+import { activitybarPartServiceId, bodyLayoutServiceId, getService, mainLayoutServiceId, Service, setService, sidebarPartServiceId } from '../Service';
+import { ActivitybarItem } from '../part/item/ActivitybarItem';
+import { BookmarkPaneView } from '../paneView/BookmarkPaneView';
+import { SamplePaneView } from '../paneView/SamplePaneView';
 
 export interface BodyLayoutOptions {}
 

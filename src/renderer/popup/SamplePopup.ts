@@ -1,6 +1,6 @@
-import { Popup } from "../Popup";
-import { $ } from "../util/dom";
-import * as dom from "../util/dom";
+import { Popup } from '../Popup';
+import { $ } from '../util/dom';
+import * as dom from '../util/dom';
 
 export interface SamplePopupOptions {}
 

@@ -1,6 +1,6 @@
-import { localize } from "../../common/nls";
-import { Popup, PopupOptions } from "../Popup";
-import { $, append, _addEventListener } from "../util/dom";
+import { localize } from '../../common/nls';
+import { Popup, PopupOptions } from '../Popup';
+import { $, append, _addEventListener } from '../util/dom';
 
 /** 결과창에 한 줄씩 기록한다 */
 export type ImportLogger = (line: string) => void;
