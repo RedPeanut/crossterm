@@ -1,34 +1,57 @@
-import { renderer } from "..";
-import { SerializableMenuItem, MenubarEnableElem } from "../../common/Types";
+// import { renderer } from "..";
+import { SerializableMenuItem } from "../../common/Types";
 import { CommandService } from "../service/CommandService";
 import { Service, setService, getService, menubarServiceId,
   commandServiceId,
   keybindingServiceId,
+  contextKeyServiceId,
 } from "../Service";
 import { KeybindingService } from "../service/KeybindingService";
+import { ContextKeyService } from "../service/ContextKeyService";
 import { $, Dimension, _addEventListener } from "../util/dom";
-import { Disposable } from '../../common/base/lifecycle';
+import { Disposable, DisposableStore } from '../../common/base/lifecycle';
+import { MenuId, menuRegistry, resolveMenu } from "../menu/MenuRegistry";
 
 enum MenubarType {
   Normal,
   Hamburger,
 }
 
+/** context 변경이 몰려 올 때 한 번만 다시 그리도록 모으는 시간(ms). */
+const MENUBAR_UPDATE_DELAY = 100;
+
 export interface MenubarService extends Service {
   layout(dimension: Dimension): void;
-  enable(arg: MenubarEnableElem[]): void;
+  // enable(arg: MenubarEnableElem[]): void;
 }
 
 export interface MenubarOptions {}
 
+/**
+ * 메뉴바 컨트롤. VSCode의 `CustomMenubarControl` + `NativeMenubarControl` 역할을 같이 한다.
+ *
+ *   MenuRegistry --resolveMenu--> SerializableMenuItem[]
+ *     -> UI 메뉴바(normal / hamburger)로 렌더링
+ *     -> 'menubar update' 로 main에 보내 네이티브 메뉴로 빌드 (mac)
+ *
+ * 메뉴 등록 변경, context 변경이 오면 다시 resolve 한다.
+ */
 export class Menubar extends Disposable implements MenubarService {
 
   container: HTMLElement;
   normalButtons: HTMLElement[] = [];
   hamburgerButton: HTMLElement;
   menubarType: MenubarType;
+  dimension: Dimension | undefined;
   commandService: CommandService;
   keybindingService: KeybindingService;
+  contextKeyService: ContextKeyService;
+
+  /** 렌더링할 때마다 새로 만드는 메뉴 항목 DOM의 리스너 */
+  renderDisposables: DisposableStore | undefined;
+  updateTimer: ReturnType<typeof setTimeout> | undefined;
+  /** 마지막으로 main에 보낸 메뉴 (JSON). 같으면 다시 보내지 않는다. */
+  lastNativeMenu: string | undefined;
 
   constructor(container: HTMLElement) {
     super();
@@ -59,11 +82,22 @@ export class Menubar extends Disposable implements MenubarService {
     setService(menubarServiceId, this);
     this.commandService = getService(commandServiceId);
     this.keybindingService = getService(keybindingServiceId);
+    this.contextKeyService = getService(contextKeyServiceId);
+
+    this._register(menuRegistry.onDidChangeMenu(() => this.scheduleUpdate()));
+    this._register(this.contextKeyService.onDidChangeContext(() => this.scheduleUpdate()));
   }
 
   layout(dimension: Dimension): void {
     // console.log('dimension =', dimension);
-    if (dimension.width <= 716) {
+    this.dimension = dimension;
+    this.applyLayout();
+  }
+
+  applyLayout(): void {
+    if (!this.dimension) return;
+
+    if (this.dimension.width <= 716) {
       this.hamburgerButton.style.display = 'flex';
       for (let i = 0; i < this.normalButtons.length; i++) {
         this.normalButtons[i].classList.remove('on');
@@ -81,7 +115,7 @@ export class Menubar extends Disposable implements MenubarService {
     }
   }
 
-  install(): void {
+  /*install(): void {
     this.createHamburgerMenu(this.container);
     this.createNormalMenu(this.container);
     // this.parent.appendChild(this.container);
@@ -124,8 +158,61 @@ export class Menubar extends Disposable implements MenubarService {
     if (alt) name = "Alt+" + name;
     if (ctrl) name = "Ctrl+" + name;
     return name
+  }*/
+
+  install(): void {
+    const button = this.hamburgerButton = $('.button.hamburger');
+    this._register(_addEventListener(button, 'click', (e) => {
+      (e.currentTarget as HTMLElement).classList.toggle('on');
+    }));
+    button.appendChild($('.title.codicon.codicon-menu'));
+    this.container.appendChild(button);
+
+    this.update();
   }
 
+  scheduleUpdate(): void {
+    if (this.updateTimer !== undefined) return;
+    this.updateTimer = setTimeout(() => {
+      this.updateTimer = undefined;
+      this.update();
+    }, MENUBAR_UPDATE_DELAY);
+  }
+
+  update(): void {
+    const menu = resolveMenu(MenuId.MenubarMainMenu, this.contextKeyService.getContext(),
+      commandId => this.keybindingService.lookupKeybindingAccelerator(commandId));
+    this.render(menu);
+    this.updateNativeMenubar(menu);
+  }
+
+  updateNativeMenubar(menu: SerializableMenuItem[]): void {
+    const serialized = JSON.stringify(menu);
+    if (serialized === this.lastNativeMenu) return;
+    this.lastNativeMenu = serialized;
+    window.ipc.send('menubar update', menu);
+  }
+
+  /** 다시 그려도 열려 있던 메뉴는 열린 채로 둔다. (메뉴를 여는 순간 focus가 바뀌어 context 변경이 오기 때문) */
+  render(menu: SerializableMenuItem[]): void {
+    const openMenuId = this.normalButtons.find(button => button.classList.contains('on'))?.dataset.menuId;
+
+    this.renderDisposables?.dispose();
+    this.renderDisposables = new DisposableStore();
+
+    this.hamburgerButton.querySelector(':scope > ul.menubox')?.remove();
+    this.normalButtons.forEach(button => button.remove());
+    this.normalButtons = [];
+
+    this.createHamburgerMenu(menu);
+    this.createNormalMenu(menu);
+    this.applyLayout();
+
+    if (openMenuId)
+      this.normalButtons.find(button => button.dataset.menuId === openMenuId)?.classList.add('on');
+  }
+
+  /*
   createMenu_r(type: string, container: HTMLElement, menuItem: SerializableMenuItem, level: number): void {
     const menubox = $('ul.menubox');
     if (level > 0) menubox.classList.add('sub');
@@ -187,7 +274,65 @@ export class Menubar extends Disposable implements MenubarService {
     }
     container.appendChild(menubox);
   }
+  //*/
 
+  createMenu_r(container: HTMLElement, items: SerializableMenuItem[], level: number): void {
+    const store = this.renderDisposables!;
+    const menubox = $('ul.menubox');
+    if (level > 0) menubox.classList.add('sub');
+
+    for (const item of items) {
+      const li = $('li.item');
+
+      if (!item.enabled)
+        li.classList.add('disabled');
+
+      if (item.type === 'separator') {
+        const a = $('a');
+        a.classList.add('separator');
+        li.appendChild(a);
+      } else {
+        const a = $('a');
+
+        if (item.enabled && item.clickable && item.commandId) {
+          const commandId = item.commandId;
+          store.add(_addEventListener(a, 'click', () => {
+            this.commandService.executeCommand(commandId)
+              .catch (err => console.error(`[menubar] command '${commandId}' failed`, err));
+          }));
+        }
+        li.appendChild(a);
+
+        if (item.checked)
+          li.classList.add('checked');
+
+        const label = $('span.label');
+        label.innerHTML = item.label.replace(/&/g, '');
+        a.appendChild(label);
+
+        const padding = $('span.padding');
+        a.appendChild(padding);
+
+        // accelerator(Electron 형식)는 chord를 표현하지 못하므로 UI에는 키바인딩 라벨을 쓴다. 예: '⌘K ⌘S'
+        const keybindingLabel = item.commandId && this.keybindingService.lookupKeybindingLabel(item.commandId);
+        if (keybindingLabel) {
+          const keybiding = $('span.keybinding');
+          keybiding.innerHTML = keybindingLabel;
+          a.appendChild(keybiding);
+        }
+
+        if (item.submenu && item.submenu.length > 0) {
+          const indicator = $('span.indicator.codicon.codicon-chevron-right');
+          a.appendChild(indicator);
+          this.createMenu_r(li, item.submenu, level+1);
+        }
+      }
+      menubox.appendChild(li);
+    }
+    container.appendChild(menubox);
+  }
+
+  /*
   async createHamburgerMenu(container: HTMLElement) {
     const button = this.hamburgerButton = $('.button.hamburger');
     this._register(_addEventListener(button, 'click', (e) => {
@@ -237,8 +382,45 @@ export class Menubar extends Disposable implements MenubarService {
     button.appendChild(menubox);
     container.appendChild(button);
   }
+  //*/
 
-  async createNormalMenu(container: HTMLElement) {
+  createHamburgerMenu(menu: SerializableMenuItem[]): void {
+    const store = this.renderDisposables!;
+    const menubox = $('ul.menubox');
+    for (const menuItem of menu) {
+      const li = $('li.item');
+
+      if (menuItem.type === 'separator') {
+        const a = $('a');
+        a.classList.add('separator');
+        li.appendChild(a);
+      } else {
+        store.add(_addEventListener(li, 'mouseover', (e) => { (e.currentTarget as HTMLElement).classList.add('on');  }));
+        store.add(_addEventListener(li, 'mouseleave', (e) => { (e.currentTarget as HTMLElement).classList.remove('on'); }));
+        store.add(_addEventListener(li, 'focusout', (e) => { (e.currentTarget as HTMLElement).classList.remove('on'); }));
+
+        const a = $('a');
+        li.appendChild(a);
+
+        const label = $('span.label');
+        label.innerHTML = menuItem.label.replace(/&/g, '');
+        a.appendChild(label);
+
+        const padding = $('span.padding');
+        a.appendChild(padding);
+
+        if (menuItem.submenu && menuItem.submenu.length > 0) {
+          const indicator = $('span.indicator.codicon.codicon-chevron-right');
+          a.appendChild(indicator);
+          this.createMenu_r(li, menuItem.submenu, 1);
+        }
+      }
+      menubox.appendChild(li);
+    }
+    this.hamburgerButton.appendChild(menubox);
+  }
+
+  /*async createNormalMenu(container: HTMLElement) {
     const menu = await window.ipc.invoke('menu get');
     for (let i = 0; i < menu.length; i++) {
       const menuItem = menu[i];
@@ -276,9 +458,44 @@ export class Menubar extends Disposable implements MenubarService {
       this.createMenu_r('normal', button, menuItem, 0);
       container.appendChild(button);
     }
+  }*/
+
+  createNormalMenu(menu: SerializableMenuItem[]): void {
+    const store = this.renderDisposables!;
+    for (const menuItem of menu) {
+      const button = $('.button');
+      button.dataset.menuId = String(menuItem.id);
+      this.normalButtons.push(button);
+
+      store.add(_addEventListener(button, 'click', (e) => {
+        (e.currentTarget as HTMLElement).classList.toggle('on');
+      }));
+
+      store.add(_addEventListener(button, 'mouseover', (e) => {
+        // if there is any menu on-ed (clicked) → change on
+        const opened = this.normalButtons.find(b => b.classList.contains('on'));
+        if (opened && opened !== e.currentTarget) {
+          opened.classList.remove('on');
+          (e.currentTarget as HTMLElement).classList.add('on');
+        }
+      }));
+
+      const title = $('.title');
+      title.innerHTML = menuItem.label.replace(/&/g, '');
+      button.appendChild(title);
+
+      this.createMenu_r(button, menuItem.submenu ?? [], 0);
+      this.container.appendChild(button);
+    }
   }
 
-  enable(list: MenubarEnableElem[]): void {
+  override dispose(): void {
+    if (this.updateTimer !== undefined) clearTimeout(this.updateTimer);
+    this.renderDisposables?.dispose();
+    super.dispose();
+  }
+
+  /*enable(list: MenubarEnableElem[]): void {
     for (let i = 0; i < list.length; i++) {
       const item = list[i];
       const queried = this.hamburgerButton.querySelector(`#h_${item.id.replace(/\./g, '_')}`);
@@ -305,6 +522,5 @@ export class Menubar extends Disposable implements MenubarService {
         }
       }
     }
-  }
-
+  }*/
 }

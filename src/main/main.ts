@@ -286,10 +286,13 @@ class MainWindow extends Disposable {
       });
     });
 
+    /*
     ipcMain.handle('menu get', (event, args: any[]) => {
       // return serialized menu n install handler
 
-      function createItem(item: MenuItemConstructorOptions/* , processedItems: MenuItemConstructorOptions[] */): SerializableMenuItem {
+      function createItem(item: MenuItemConstructorOptions
+        // , processedItems: MenuItemConstructorOptions[]
+      ): SerializableMenuItem {
         const serializableItem: SerializableMenuItem = {
           id: item.id,
           commandId: item.appCommandId,
@@ -314,6 +317,13 @@ class MainWindow extends Disposable {
       return template
         .filter(item => item.id !== 'application')
         .map(item => createItem(item));
+    });
+    //*/
+
+    // renderer의 MenuRegistry가 resolve 한 메뉴로 네이티브 메뉴를 다시 만든다.
+    ipcMain.on('menubar update', (event, args: any[]) => {
+      const [ menu ] = args as [ SerializableMenuItem[] ];
+      self.menubar.update(menu);
     });
 
     // clipboard

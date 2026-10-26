@@ -1,8 +1,15 @@
 import assert from 'assert';
+import { commandsRegistry } from '../key/CommandsRegistry';
 import { ContextKeyService } from '../service/ContextKeyService';
 import { MenuId, menuRegistry, resolveMenu } from './MenuRegistry';
 
 describe('#MenuRegistry', function () {
+
+  beforeAll(function () {
+    for (const id of ['tab.a', 'tab.b', 'tab.close', 'edit.hidden', 'edit.copy', 'tab.broadcast']) {
+      commandsRegistry.registerCommand(id, () => {});
+    }
+  });
 
   it('sorts by group then order, and puts separators between groups', function () {
     const disposable = menuRegistry.appendMenuItems([
@@ -59,6 +66,14 @@ describe('#MenuRegistry', function () {
         ],
       },
     ]);
+    disposable.dispose();
+  });
+
+  it('disables items whose command has no handler', function () {
+    const disposable = menuRegistry.appendMenuItem(MenuId.MenubarFileMenu, { command: { id: 'file.unregistered', title: 'Nope' } });
+    const context = new ContextKeyService().getContext();
+
+    assert.strictEqual(resolveMenu(MenuId.MenubarFileMenu, context)[0].enabled, false);
     disposable.dispose();
   });
 });

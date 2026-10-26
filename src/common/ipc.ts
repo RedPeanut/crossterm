@@ -7,7 +7,8 @@ export type MainEvents =
   | 'terminal close'
 
   // menu
-  | 'menu get'
+  // | 'menu get'
+  | 'menubar update'
 
   // window
   | 'window get'

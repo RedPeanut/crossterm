@@ -5,33 +5,44 @@ import {
   MenuItemConstructorOptions,
 } from 'electron';
 // import { isMacintosh, isWindows } from './util/platform';
-import { mainWindow } from './main';
+// import { mainWindow } from './main';
 import {
   // menu id
-  appPreferencesMenuId, appSettingsMenuId, appShortcutsMenuId, appQuitMenuId,
+  appSettingsMenuId, appShortcutsMenuId,
+  /*appPreferencesMenuId, appSettingsMenuId, appShortcutsMenuId, appQuitMenuId,
   filePreferencesMenuId, fileDisconnMenuId, fileReconnMenuId, fileReconnAllMenuId, fileImportMenuId, fileImportCmdId, fileExportMenuId, fileExportCmdId,
   editUndoMenuId, editRedoMenuId, editCutMenuId, editCopyMenuId, editPasteMenuId, editSelectAllMenuId,
   tabAlignMenuId, tabAlignVerticalMenuId, tabAlignHorizontalMenuId, tabAlignTilesMenuId,
   tabCloseAllMenuId, tabCloseOthersMenuId,
-  tabToggleBroadcastInputMenuId,
+  tabToggleBroadcastInputMenuId,*/
   // command id
   appShortcutsCmdId,
-  editCopyCmdId, editPasteCmdId,
+  /*editCopyCmdId, editPasteCmdId,
   tabAlignVerticalCmdId, tabAlignHorizontalCmdId, tabAlignTilesCmdId,
-  tabToggleBroadcastInputCmdId
+  tabToggleBroadcastInputCmdId*/
+  SerializableMenuItem,
 } from '../common/Types';
 import { keyBinding } from '../common/globals';
 
 // { id: [Win, Mac] }
 const keyBindingIdx = process.platform === 'win32' ? 0 : 1;
 
+/**
+ * 네이티브 메뉴바.
+ *
+ * 메뉴 구조는 renderer의 MenuRegistry가 정한다. renderer가 resolve 한 결과를 'menubar update'로 보내면
+ * 여기서는 그걸 Electron 메뉴로 바꾸기만 한다. 클릭하면 'execute command'로 renderer의 커맨드를 실행한다.
+ *
+ * Note. mac의 application 메뉴(About, Hide, Quit 등 role 항목)만 main에서 직접 만든다.
+ * Note. mac 외의 플랫폼은 네이티브 메뉴를 쓰지 않는다. (renderer의 UI 메뉴바만 사용)
+ */
 export class Menubar {
-  template: MenuItemConstructorOptions[];
+  // template: MenuItemConstructorOptions[];
 
-  constructor(mainWindow: BrowserWindow) {
+  constructor(readonly mainWindow: BrowserWindow) {
   }
 
-  install(): void {
+  /*install(): void {
     const template: MenuItemConstructorOptions[] = this.template = [];
 
     if (process.platform === 'darwin') {
@@ -54,10 +65,54 @@ export class Menubar {
     }
   }
 
-  getTemplate(): MenuItemConstructorOptions[] { return this.template; }
+  getTemplate(): MenuItemConstructorOptions[] { return this.template; }*/
 
-  addApplicationMenu(options: MenuItemConstructorOptions[]) {
-    options.push({
+  install(): void {
+    // renderer가 메뉴를 보내기 전까지는 application 메뉴만 보인다.
+    this.update([]);
+  }
+
+  update(menu: SerializableMenuItem[]): void {
+    if (process.platform !== 'darwin') {
+      Menu.setApplicationMenu(null);
+      return;
+    }
+
+    const template: MenuItemConstructorOptions[] = [
+      this.createApplicationMenu(),
+      ...menu.map(item => this.toMenuItemOptions(item)),
+    ];
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  }
+
+  private toMenuItemOptions(item: SerializableMenuItem): MenuItemConstructorOptions {
+    if (item.type === 'separator') {
+      return { type: 'separator' };
+    }
+
+    if (item.submenu) {
+      return {
+        label: item.label,
+        enabled: item.enabled,
+        submenu: item.submenu.map(submenuItem => this.toMenuItemOptions(submenuItem)),
+      };
+    }
+
+    const commandId = item.commandId;
+    return {
+      label: item.label,
+      type: item.type === 'checkbox' ? 'checkbox' : 'normal',
+      checked: item.checked,
+      enabled: item.enabled,
+      accelerator: item.accelerator,
+      click: commandId
+        ? (menuItem, focusedWindow) => (focusedWindow ?? this.mainWindow).webContents.send('execute command', commandId)
+        : undefined,
+    };
+  }
+
+  createApplicationMenu(): MenuItemConstructorOptions {
+    return {
       id: 'application',
       label: 'crossterm',
       submenu: [
@@ -111,19 +166,19 @@ export class Menubar {
           }, */
         },
       ],
-    });
+    };
   }
 
-  addFileMenu(options: MenuItemConstructorOptions[]) {
+  /*addFileMenu(options: MenuItemConstructorOptions[]) {
     const fileSubmenu: MenuItemConstructorOptions[] = [];
 
     fileSubmenu.push(
-      /* {
-        id: fileDisconnMenuId,
-        label: '연결 끊기',
-        accelerator: keyBinding[fileDisconnMenuId][keyBindingIdx],
-        click: null
-      }, */
+      // {
+      //   id: fileDisconnMenuId,
+      //   label: '연결 끊기',
+      //   accelerator: keyBinding[fileDisconnMenuId][keyBindingIdx],
+      //   click: null
+      // },
       {
         id: fileReconnMenuId,
         label: localize('menubar.reconnect', 'Reconnect'),
@@ -269,5 +324,5 @@ export class Menubar {
       label: localize('menubar.help', '&Help'),
       submenu: [],
     });
-  }
+  }*/
 }

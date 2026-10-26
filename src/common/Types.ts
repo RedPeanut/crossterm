@@ -142,8 +142,8 @@ export const tabToggleBroadcastInputCmdId = 'tab.toggle.broadcast-input.cmd';
 
 // window
 
-export interface MenubarEnableElem { id: string, enable: boolean }
-export interface MenubarEnable { [id: string]: MenubarEnableElem[] }
+// export interface MenubarEnableElem { id: string, enable: boolean }
+// export interface MenubarEnable { [id: string]: MenubarEnableElem[] }
 
 export interface Children<T> {
   children?: T[];

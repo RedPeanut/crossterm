@@ -1,6 +1,7 @@
 import { Emitter, Event } from '../../common/base/event';
 import { IDisposable } from '../../common/base/lifecycle';
 import { SerializableMenuItem } from '../../common/Types';
+import { commandsRegistry } from '../key/CommandsRegistry';
 import { Context, ContextKeyExpr, ContextKeyExpression } from '../key/ContextKey';
 
 /**
@@ -117,6 +118,7 @@ export type AcceleratorLookup = (commandId: string) => string | undefined;
  *  - when이 거짓인 항목은 빠진다.
  *  - group 이름순 -> order -> title 순으로 정렬하고, group 사이에 separator를 넣는다.
  *  - 하위 항목이 하나도 남지 않은 서브메뉴는 빠진다.
+ *  - CommandsRegistry에 핸들러가 없는 커맨드는 비활성화된다. (메뉴만 먼저 선언해 둔 경우)
  */
 export function resolveMenu(menuId: MenuId, context: Context, lookupAccelerator?: AcceleratorLookup): SerializableMenuItem[] {
   const groups = new Map<string, MenuEntry[]>();
@@ -178,7 +180,7 @@ function resolveEntry(entry: MenuEntry, context: Context, lookupAccelerator?: Ac
     type: toggled === undefined ? 'normal' : 'checkbox',
     checked: toggled,
     accelerator: lookupAccelerator?.(command.id),
-    enabled: evaluate(command.precondition, context, true),
+    enabled: !!commandsRegistry.getCommand(command.id) && evaluate(command.precondition, context, true),
     visible: true,
     clickable: true,
   };

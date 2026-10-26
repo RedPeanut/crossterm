@@ -19,6 +19,7 @@ import { LayoutStateType, StorageService, TreeViewStateType } from '../common/se
 
 import './globals';
 import './key/keybindings';
+import './menu/menus';
 import { ConfigurationService } from '../common/service/ConfigurationService';
 import { RenderConfigurationService } from './service/RenderConfigurationService';
 
