@@ -129,3 +129,93 @@
   --ct-dialog-warningIconBackground: yellow;
   --ct-dialog-errorIconForeground: red;
 }
+
+/*
+ * Light (VS Code "Light Modern" 기준)
+ * <html data-theme="light"> 일 때 적용된다. 여기 없는 토큰은 위의 값(또는 파생 관계)을 그대로 쓴다.
+ */
+:root[data-theme="light"] {
+  /* Base */
+  --ct-foreground: rgb(59, 59, 59);
+  --ct-background: rgb(248, 248, 248);
+  --ct-border: rgb(229, 229, 229);
+  --ct-focusBorder: rgb(0, 95, 184);
+  --ct-descriptionForeground: rgb(97, 97, 97);
+  --ct-disabledForeground: rgb(97 97 97 / 50%);
+  --ct-disabledBorder: rgb(220, 220, 220);
+  --ct-icon-foreground: rgb(59, 59, 59);
+  --ct-toolbar-hoverBackground: rgb(184 184 184 / 31%);
+  --ct-scrollbarSlider-background: rgb(100 100 100 / 40%);
+
+  /* Widget */
+  --ct-widget-background: white;
+  --ct-widget-foreground: rgb(59, 59, 59);
+  --ct-widget-border: rgb(206, 206, 206);
+  --ct-widget-shadow: rgba(0, 0, 0, 0.16);
+
+  /* SplitView */
+  --ct-splitView-border: rgba(0, 0, 0, 0.09);
+
+  /* TitleBar, Menubar, Menu */
+  --ct-titleBar-hoverBackground: rgba(0, 0, 0, 0.1);
+  --ct-menubar-foreground: rgb(59, 59, 59);
+  --ct-menu-disabledForeground: rgb(160, 160, 160);
+
+  /* ActivityBar */
+  --ct-activityBar-foreground: rgb(31, 31, 31);
+
+  /* SideBar, List, Tree */
+  --ct-list-hoverBackground: rgb(242, 242, 242);
+  --ct-list-activeSelectionBackground: rgb(228, 230, 241);
+  --ct-list-dropBackground: rgb(214, 235, 255);
+  --ct-tree-indentGuidesStroke: rgb(169, 169, 169);
+
+  /* PaneView (Detail table) */
+  --ct-table-columnsBorder: rgb(97 97 97 / 12.5%);
+  --ct-table-oddRowsBackground: rgb(59 59 59 / 4%);
+  --ct-table-headerBackground: rgb(240, 240, 240);
+
+  /* Tabs */
+  --ct-tab-activeBackground: white;
+
+  /* Session status dot */
+  --ct-sessionStatus-connecting: rgb(191, 136, 3);
+  --ct-sessionStatus-connected: rgb(56, 138, 52);
+  --ct-sessionStatus-error: rgb(205, 49, 49);
+  --ct-sessionStatus-closed: rgb(150, 150, 150);
+
+  /* Terms */
+  --ct-editorGroup-dropBackground: rgb(38 119 203 / 18%);
+  --ct-broadcastToggle-border: rgb(59, 59, 59);
+
+    /* StatusBar */
+  --ct-statusBarItem-hoverBackground: rgb(31 31 31 / 7%);
+
+  /* Dnd */
+  --ct-dragImage-background: rgb(214, 235, 255);
+
+  /* Input */
+  --ct-input-background: white;
+  --ct-input-foreground: rgb(59, 59, 59);
+  --ct-input-disabledBackground: rgb(240, 240, 240);
+
+  /* Input validation (info는 error를 따라간다) */
+  --ct-inputValidation-errorBorder: rgb(190, 17, 0);
+  --ct-inputValidation-errorBackground: rgb(242, 222, 222);
+  --ct-inputValidation-errorForeground: rgb(59, 59, 59);
+  --ct-inputValidation-warningBorder: rgb(191, 136, 3);
+  --ct-inputValidation-warningBackground: rgb(246, 245, 210);
+  --ct-inputValidation-warningForeground: rgb(59, 59, 59);
+
+  /* Button */
+  --ct-button-hoverBackground: rgb(2, 88, 168);
+  --ct-button-secondaryBackground: rgb(229, 229, 229);
+  --ct-button-secondaryForeground: rgb(59, 59, 59);
+  --ct-button-secondaryHoverBackground: rgb(204, 204, 204);
+
+  /* Popup */
+  --ct-breadcrumb-foreground: rgb(97, 97, 97);
+
+  /* Dialog */
+  --ct-dialog-background: white;
+}
