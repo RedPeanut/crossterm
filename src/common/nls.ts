@@ -17,6 +17,11 @@ export const defaultLocale = 'en';
 /** main -> renderer(preload) 로케일 전달용 인자. webPreferences.additionalArguments 로 넘긴다. */
 export const localeArgPrefix = '--crossterm-locale=';
 
+/**
+ * Note. 언어를 추가하면 package.json 의 build.{mac,win,linux}.electronLanguages 와
+ *       build.mac.extendInfo.CFBundleLocalizations 에도 추가해야 한다. (nls.test.ts 에서 검사)
+ *       mac 은 lproj 이름(en, ko, zh_CN), win/linux 는 Chromium pak 이름(en-US, ko, zh-CN)을 쓴다.
+ */
 const bundles: { [locale: string]: Record<string, string> } = {
   ko,
 };

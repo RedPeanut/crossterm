@@ -151,6 +151,17 @@
           "x64"
         ]
       },
+      "electronLanguages": [
+        "en",
+        "ko"
+      ],
+      "extendInfo": {
+        "CFBundleDevelopmentRegion": "en",
+        "CFBundleLocalizations": [
+          "en",
+          "ko"
+        ]
+      },
       "type": "distribution",
       "hardenedRuntime": true,
       "entitlements": "assets/entitlements.mac.plist",
@@ -174,13 +185,21 @@
     "win": {
       "target": [
         "nsis"
+      ],
+      "electronLanguages": [
+        "en-US",
+        "ko"
       ]
     },
     "linux": {
       "target": [
         "AppImage"
       ],
-      "category": "Development"
+      "category": "Development",
+      "electronLanguages": [
+        "en-US",
+        "ko"
+      ]
     },
     "directories": {
       "app": "release/app",

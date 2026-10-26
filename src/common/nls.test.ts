@@ -1,4 +1,4 @@
-import { resolveLocale, setLocale, getLocale, localize } from './nls';
+import { resolveLocale, setLocale, getLocale, localize, supportedLocales, defaultLocale } from './nls';
 
 describe('nls', () => {
   afterEach(() => setLocale('en'));
@@ -77,5 +77,22 @@ describe('ko.json', () => {
       .filter(([key, [message]]) => key in ko && placeholders(ko[key]).join() !== placeholders(message).join())
       .map(([key]) => key);
     expect(mismatched).toEqual([]);
+  });
+});
+
+describe('package.json electronLanguages', () => {
+  const build = require('../../package.json').build;
+  const others = supportedLocales.filter(l => l !== defaultLocale);
+
+  test('mac: lproj 와 CFBundleLocalizations 가 지원 로케일과 같다', () => {
+    expect([...build.mac.electronLanguages].sort()).toEqual([...supportedLocales].sort());
+    expect([...build.mac.extendInfo.CFBundleLocalizations].sort()).toEqual([...supportedLocales].sort());
+  });
+
+  test('win/linux: en-US.pak 을 남기고 지원 로케일 pak 을 포함한다', () => {
+    // Chromium 은 en-US.pak 을 fallback 으로 쓰므로 지워지면 안 된다
+    for (const platform of ['win', 'linux']) {
+      expect([...build[platform].electronLanguages].sort()).toEqual(['en-US', ...others].sort());
+    }
   });
 });

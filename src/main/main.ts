@@ -44,7 +44,7 @@ import { DialogServiceChannel } from './ipc/DialogServiceChannel';
 import { ExportServiceChannel } from './ipc/ExportServiceChannel';
 import { ImportServiceChannel } from './ipc/ImportServiceChannel';
 import { getLocale, localeArgPrefix, localize, setLocale } from '../common/nls';
-import { configureLocaleSwitch, resolveAppLocale } from './locale';
+import { configureLocaleSwitch, resolveAppLocale, syncAppleLanguages } from './locale';
 
 class AppUpdater {
   constructor() {
@@ -423,6 +423,7 @@ class MainWindow extends Disposable {
         this.browserWindow.webContents.send('configuration changed', change);
       }
       if (change.affectsConfiguration('locale')) {
+        syncAppleLanguages();
         this.promptRestartForLocale();
       }
     }));
