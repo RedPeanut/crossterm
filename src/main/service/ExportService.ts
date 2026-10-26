@@ -1,3 +1,4 @@
+import { localize } from '../../common/nls';
 import path from 'path';
 import { FileService } from '../../common/service/FileService';
 import { EnvironmentService } from '../../common/service/EnvironmentService';
@@ -46,10 +47,10 @@ export class ExportService {
   async exportTo(filePath: string): Promise<string[]> {
     const log: string[] = [];
 
-    log.push('Exporting sessions...');
+    log.push(localize('export.exportingSessions', 'Exporting sessions...'));
     const sessions = await this.readSessions(this.appService.getSessionsDir(), log);
 
-    log.push('', 'Exporting settings...');
+    log.push('', localize('export.exportingSettings', 'Exporting settings...'));
     const settings = await this.readSettings(log);
 
     // log.push('', 'Exporting app state...');
@@ -66,7 +67,7 @@ export class ExportService {
     };
     await this.fileService.writeFileAtomic(filePath, JSON.stringify(data, null, 2) + '\n');
 
-    log.push('', `Saved to ${filePath}`);
+    log.push('', localize('export.savedTo', 'Saved to {0}', filePath));
     return log;
   }
 
@@ -89,7 +90,7 @@ export class ExportService {
           sessions.push({ name: item.name, type: 'session', data: JSON.parse(text) });
         } catch {
           sessions.push({ name: item.name, type: 'session', raw: text });
-          log.push('  warning: invalid JSON, exported as raw text');
+          log.push(localize('export.invalidJson', '  warning: invalid JSON, exported as raw text'));
         }
       }
       // 심볼릭 링크 등은 건너뛴다
@@ -103,7 +104,7 @@ export class ExportService {
   private async readSettings(log: string[]): Promise<unknown> {
     const settingsPath = path.join(this.environmentService.userDataPath, 'settings.json');
     if (!(await this.fileService.exists(settingsPath))) {
-      log.push('  (no settings.json)');
+      log.push(localize('export.noSettings', '  (no settings.json)'));
       return null;
     }
 
@@ -112,7 +113,7 @@ export class ExportService {
     try {
       return JSON.parse(text);
     } catch {
-      log.push('  warning: invalid JSON, exported as raw text');
+      log.push(localize('export.invalidJson', '  warning: invalid JSON, exported as raw text'));
       return text;
     }
   }

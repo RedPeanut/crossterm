@@ -1,3 +1,4 @@
+import { localize } from "../../common/nls";
 import { ListItemElem } from "../../common/Types";
 import { Pane, PaneOptions } from "../Pane";
 import { getService, sidebarPartServiceId } from "../Service";
@@ -13,17 +14,17 @@ interface DetailRow {
 
 /** 상세 표에 보여줄 항목. 선택이 없으면 값은 모두 비운다. */
 const DETAIL_ROWS: DetailRow[] = [
-  { label: '이름', value: (item) => item.title || item.name || '' },
+  { label: localize('detail.name', 'Name'), value: (item) => item.title || item.name || '' },
   {
-    label: '종류',
-    value: (item) => item.type === 'remote' ? '원격' :
-      item.type === 'local' ? '로컬' :
-      item.type === 'folder' ? '폴더' : ''
+    label: localize('detail.type', 'Type'),
+    value: (item) => item.type === 'remote' ? localize('detail.remote', 'Remote') :
+      item.type === 'local' ? localize('detail.local', 'Local') :
+      item.type === 'folder' ? localize('detail.folder', 'Folder') : ''
   },
-  { label: '호스트', value: (item) => item.url?.host || '' },
-  { label: '사용자이름', value: (item) => item.url?.username || '' },
-  { label: '포트', value: (item) => item.url?.port ? String(item.url.port) : '' },
-  { label: '설명', value: (item) => item.description || '' },
+  { label: localize('detail.host', 'Host'), value: (item) => item.url?.host || '' },
+  { label: localize('detail.username', 'Username'), value: (item) => item.url?.username || '' },
+  { label: localize('detail.port', 'Port'), value: (item) => item.url?.port ? String(item.url.port) : '' },
+  { label: localize('detail.description', 'Description'), value: (item) => item.description || '' },
 ];
 
 export class DetailPane extends Pane {
@@ -59,7 +60,7 @@ export class DetailPane extends Pane {
     }));
     this.header.appendChild(arrow);
     const title = $('h3.title');
-    title.innerHTML = 'DETAIL';
+    title.textContent = localize('detail.title', 'DETAIL');
     this.header.appendChild(title);
   }
 

@@ -1,3 +1,4 @@
+import { localize } from "../../common/nls";
 import { ListItemElem } from "../../common/Types";
 import { Disposable } from "../../common/base/lifecycle";
 import { Popup, PopupOptions } from "../Popup";
@@ -78,10 +79,10 @@ export class PropertiesPopup extends Popup {
     let title;
 
     if (this.mode === Mode.MULTI)
-      title = `다중 세션 등록정보 (${this.options.items.length})`;
+      title = localize('properties.multiTitle', 'Properties of Multiple Sessions ({0})', this.options.items.length);
     else
-      title = this.options.items[0].title + ' 등록정보';
-    this.title.innerHTML = title;
+      title = localize('properties.title', '{0} Properties', this.options.items[0].title);
+    this.title.textContent = title;
   }
 
   override renderContentArea(): void {
@@ -92,7 +93,7 @@ export class PropertiesPopup extends Popup {
     // const body = $('.body');
     const categories = $('.categories');
     const label = $('label');
-    label.textContent = '범주';
+    label.textContent = localize('properties.category', 'Category');
     categories.appendChild(label);
 
     const tree = this.tree = $('.tree');
@@ -106,11 +107,11 @@ export class PropertiesPopup extends Popup {
 
     const buttons = $('.buttons');
 
-    const okBtn: HTMLButtonElement = this.okBtn = $('button.primary'); okBtn.innerHTML = 'Ok';
+    const okBtn: HTMLButtonElement = this.okBtn = $('button.primary'); okBtn.textContent = localize('common.ok', 'OK');
     // okBtn.addEventListener('click', (e: Event) => {});
     this._register(_addEventListener(okBtn, 'click', (e: MouseEvent) => this.ok()));
 
-    const cancelBtn: HTMLButtonElement = this.cancelBtn = $('button'); cancelBtn.innerHTML = 'Cancel';
+    const cancelBtn: HTMLButtonElement = this.cancelBtn = $('button'); cancelBtn.textContent = localize('common.cancel', 'Cancel');
     // cancelBtn.addEventListener('click', (e: Event) => {});
     this._register(_addEventListener(cancelBtn, 'click', (e: MouseEvent) => this.close()));
 
@@ -171,25 +172,25 @@ export class PropertiesPopup extends Popup {
   renderTree() {
     const tree: Node[] = [
       {
-        label: '연결',
+        label: localize('properties.connection', 'Connection'),
         children: [
           {
-            label: '사용자 인증',
+            label: localize('properties.userAuth', 'User Authentication'),
             render: (container, data) => {
               const desc = append(container, $('.desc'));
-              append(desc, $('p')).textContent = '인증 방법과 기타 관련 매개 변수들을 선택하십시오.';
-              append(desc, $('p')).textContent = '이 섹션은 로그인 할 때 시간을 절약하기 위해 사용할 수 있습니다. 그러나 보안을 중요시하는 경우 이 섹션을 비워 두는 것이 좋습니다.';
+              append(desc, $('p')).textContent = localize('properties.userAuthDesc1', 'Select the authentication method and other related parameters.');
+              append(desc, $('p')).textContent = localize('properties.userAuthDesc2', 'This section can be used to save time when logging in. However, if security is a concern, it is recommended to leave this section blank.');
 
               let row, label, input;
 
               row = append(container, $('.row'));
-              label = append(row, $<HTMLLabelElement>('label')); label.textContent = '사용자 이름';
+              label = append(row, $<HTMLLabelElement>('label')); label.textContent = localize('properties.username', 'Username');
               input = append(row, $<HTMLInputElement>('input'));
               input.type = 'text';
               this.bindField(fields.username, label, input);
 
               row = append(container, $('.row'));
-              label = append(row, $<HTMLLabelElement>('label')); label.textContent = '암호';
+              label = append(row, $<HTMLLabelElement>('label')); label.textContent = localize('properties.password', 'Password');
               input = append(row, $<HTMLInputElement>('input'))
               input.type = 'password';
               this.bindField(fields.password, label, input);
@@ -200,19 +201,19 @@ export class PropertiesPopup extends Popup {
           let row, label, input, select, option;
 
           row = append(container, $('.row'));
-          label = append(row, $<HTMLLabelElement>('label')); label.textContent = '이름';
+          label = append(row, $<HTMLLabelElement>('label')); label.textContent = localize('properties.name', 'Name');
           input = append(row, $<HTMLInputElement>('input'));
           input.type = 'text';
           if (this.mode === Mode.MULTI) {
             // 다중 선택 시 이름은 일괄 변경하지 않는다
-            input.value = '다중 세션 등록 정보';
+            input.value = localize('properties.multiName', 'Multiple Session Properties');
             input.disabled = true;
           } else {
             this.bindField(fields.title, label, input);
           }
 
           row = append(container, $('.row'));
-          label = append(row, $<HTMLLabelElement>('label')); label.textContent = '프로토콜';
+          label = append(row, $<HTMLLabelElement>('label')); label.textContent = localize('properties.protocol', 'Protocol');
           select = append(row, $<HTMLSelectElement>('select'))
 
           option = append(select, $<HTMLOptionElement>('option'));
@@ -231,14 +232,14 @@ export class PropertiesPopup extends Popup {
           protocolSelect.disabled = lockProtocol;
 
           row = append(container, $('.row'));
-          label = append(row, $<HTMLLabelElement>('label')); label.textContent = '호스트';
+          label = append(row, $<HTMLLabelElement>('label')); label.textContent = localize('properties.host', 'Host');
           input = append(row, $<HTMLInputElement>('input'))
           input.type = 'text';
           this.bindField(fields.host, label, input);
           const hostInput = input;
 
           row = append(container, $('.row'));
-          label = append(row, $<HTMLLabelElement>('label')); label.textContent = '포트 번호';
+          label = append(row, $<HTMLLabelElement>('label')); label.textContent = localize('properties.port', 'Port Number');
           input = append(row, $<HTMLInputElement>('input'));
           // '###' 표시를 위해 number 대신 text + 숫자 필터 사용
           input.type = 'text';

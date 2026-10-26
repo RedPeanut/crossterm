@@ -1,3 +1,4 @@
+import { localize } from "../../common/nls";
 import { MappedSashEvent, SplitView, SplitViewItem, SplitViewItemSizeType, SplitViewItemView, VerticalViewItem } from "../component/SplitView";
 import { Layout } from "../Layout";
 import { ActivitybarPart, ActivitybarPartService } from "../part/ActivitybarPart";
@@ -215,7 +216,7 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
   inflate(): void {
     const items = [
       {
-        title: 'Bookmarks',
+        title: localize('bodyLayout.bookmarks', 'Bookmarks'),
         id: 'activitybar-item.bookmark',
         paneView: new BookmarkPaneView(),
         codicon: 'bookmark',

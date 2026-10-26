@@ -1,3 +1,4 @@
+import { localize } from '../../common/nls';
 import { STATUSBAR_HEIGHT } from '../layout/MainLayout';
 import { Part, PartOptions } from '../Part';
 import { Service, setService, statusbarPartServiceId } from '../Service';
@@ -68,8 +69,8 @@ export class StatusbarPart extends Part implements StatusbarPartService {
    */
   updateTerminalStatus(status: TerminalStatus | undefined): void {
     if (!this.size_ || !this.position_) return;
-    this.size_.textContent = status ? `Sz: ${status.cols}x${status.rows}` : '';
-    this.position_.textContent = status ? `Pos: ${status.col},${status.row}` : '';
+    this.size_.textContent = status ? localize('statusbar.size', 'Sz: {0}x{1}', status.cols, status.rows) : '';
+    this.position_.textContent = status ? localize('statusbar.position', 'Pos: {0},{1}', status.col, status.row) : '';
   }
 
 }

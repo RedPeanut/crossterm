@@ -1,3 +1,4 @@
+import { localize } from "../../common/nls";
 import { Popup, PopupOptions } from "../Popup";
 import { $, append, _addEventListener } from "../util/dom";
 
@@ -27,9 +28,9 @@ enum Page { SOURCE, ITEMS, RESULT }
 enum State { IDLE, LOADING, CONFIRMING, RUNNING, DONE }
 
 const existOptions: { value: ImportExistOption, label: string }[] = [
-  { value: 'overwrite', label: 'Overwrite' }, // '덮어쓰기'
-  { value: 'ignore', label: 'Ignore' },       // '무시'
-  { value: 'rename', label: 'Rename' },       // '이름 바꾸기'
+  { value: 'overwrite', label: localize('import.overwrite', 'Overwrite') },
+  { value: 'ignore', label: localize('import.ignore', 'Ignore') },
+  { value: 'rename', label: localize('import.rename', 'Rename') },
 ];
 
 /**
@@ -71,7 +72,7 @@ export class ImportPopup extends Popup {
 
   override renderTitleArea(): void {
     super.renderTitleArea();
-    this.title.innerHTML = 'Import'; // '가져오기'
+    this.title.textContent = localize('import.title', 'Import');
   }
 
   override renderContentArea(): void {
@@ -83,10 +84,10 @@ export class ImportPopup extends Popup {
     this.renderResultPage(contentArea);
 
     const footer = append(this.popup, $('.footer'));
-    const prevBtn = this.prevBtn = append(footer, $<HTMLButtonElement>('button')); prevBtn.textContent = '< Back';
-    const nextBtn = this.nextBtn = append(footer, $<HTMLButtonElement>('button.primary')); nextBtn.textContent = 'Next >';
-    const finishBtn = this.finishBtn = append(footer, $<HTMLButtonElement>('button')); finishBtn.textContent = 'Finish';
-    const cancelBtn = this.cancelBtn = append(footer, $<HTMLButtonElement>('button')); cancelBtn.textContent = 'Cancel';
+    const prevBtn = this.prevBtn = append(footer, $<HTMLButtonElement>('button')); prevBtn.textContent = localize('wizard.back', '< Back');
+    const nextBtn = this.nextBtn = append(footer, $<HTMLButtonElement>('button.primary')); nextBtn.textContent = localize('wizard.next', 'Next >');
+    const finishBtn = this.finishBtn = append(footer, $<HTMLButtonElement>('button')); finishBtn.textContent = localize('wizard.finish', 'Finish');
+    const cancelBtn = this.cancelBtn = append(footer, $<HTMLButtonElement>('button')); cancelBtn.textContent = localize('common.cancel', 'Cancel');
 
     this._register(_addEventListener(prevBtn, 'click', () => this.prev()));
     this._register(_addEventListener(nextBtn, 'click', () => this.next()));
@@ -99,7 +100,7 @@ export class ImportPopup extends Popup {
   renderSourcePage(container: HTMLElement): void {
     const page = this.sourcePage = append(container, $('.page.source'));
 
-    const label = append(page, $<HTMLLabelElement>('label')); label.textContent = 'Source file:'; // '원본 위치:'
+    const label = append(page, $<HTMLLabelElement>('label')); label.textContent = localize('import.sourceFile', 'Source file:');
     const row = append(page, $('.row'));
 
     const input = this.fileInput = append(row, $<HTMLInputElement>('input'));
@@ -110,7 +111,7 @@ export class ImportPopup extends Popup {
     this._register(_addEventListener(browseBtn, 'click', () => this.browse()));
 
     const fieldset = append(page, $<HTMLFieldSetElement>('fieldset'));
-    append(fieldset, $('legend')).textContent = 'If the file exists'; // '파일이 존재하는 경우'
+    append(fieldset, $('legend')).textContent = localize('import.ifExists', 'If the file exists');
     for (const { value, label } of existOptions) {
       const radioLabel = append(fieldset, $<HTMLLabelElement>('label'));
       const radio = append(radioLabel, $<HTMLInputElement>('input'));
@@ -127,21 +128,21 @@ export class ImportPopup extends Popup {
     const page = this.itemsPage = append(container, $('.page.items-page'));
 
     const pathRow = append(page, $('.row'));
-    append(pathRow, $<HTMLLabelElement>('label')).textContent = 'Source:'; // '원본 경로:'
+    append(pathRow, $<HTMLLabelElement>('label')).textContent = localize('import.source', 'Source:');
     this.sourcePathLabel = append(pathRow, $('span.source-path'));
 
     const table = append(append(page, $('.items')), $<HTMLTableElement>('table'));
     const headRow = append(append(table, $('thead')), $('tr'));
-    append(headRow, $('th')).textContent = 'Source';  // '원본'
-    append(headRow, $('th')).textContent = 'Type';    // '종류'
-    append(headRow, $('th.count')).textContent = 'Count'; // '개수'
+    append(headRow, $('th')).textContent = localize('import.columnSource', 'Source');
+    append(headRow, $('th')).textContent = localize('import.columnType', 'Type');
+    append(headRow, $('th.count')).textContent = localize('import.columnCount', 'Count');
     this.itemsBody = append(table, $('tbody'));
   }
 
   renderResultPage(container: HTMLElement): void {
     const page = this.resultPage = append(container, $('.page.result'));
 
-    const label = append(page, $<HTMLLabelElement>('label')); label.textContent = 'Result:'; // '결과:'
+    const label = append(page, $<HTMLLabelElement>('label')); label.textContent = localize('wizard.result', 'Result:');
     this.logArea = append(page, $('.log'));
   }
 
@@ -152,7 +153,7 @@ export class ImportPopup extends Popup {
     if (this.items.length === 0) {
       const td = append(append(this.itemsBody, $('tr')), $<HTMLTableCellElement>('td'));
       td.colSpan = 3;
-      td.textContent = 'Nothing to import'; // '가져올 항목이 없습니다'
+      td.textContent = localize('import.nothing', 'Nothing to import');
     }
 
     for (const item of this.items) {
@@ -204,7 +205,7 @@ export class ImportPopup extends Popup {
 
   async browse(): Promise<void> {
     const { canceled, filePaths } = await window.ipc.invoke('dialog show opendialog', {
-      title: 'Import',
+      title: localize('import.title', 'Import'),
       defaultPath: this.fileInput.value.trim() || undefined,
       properties: ['openFile'],
       filters: [{ name: 'JSON', extensions: ['json'] }],
@@ -239,8 +240,8 @@ export class ImportPopup extends Popup {
       } catch (err) {
         await window.ipc.invoke('dialog show messagebox', {
           type: 'error',
-          title: 'Import',
-          message: `Cannot read ${filePath}`,
+          title: localize('import.title', 'Import'),
+          message: localize('import.cannotRead', 'Cannot read {0}', filePath),
           detail: err instanceof Error ? err.message : String(err),
         });
         return;
@@ -263,11 +264,10 @@ export class ImportPopup extends Popup {
     this.updateButtons();
     const { response } = await window.ipc.invoke('dialog show messagebox', {
       type: 'question',
-      title: 'Import',
-      // '내보내기한 컴퓨터와 동일 컴퓨터가 아니면 세션 암호를 사용할 수 없습니다. 가져오기를 계속하시겠습니까?'
-      message: 'Session passwords cannot be used unless this is the same computer the data was exported from.',
-      detail: 'Do you want to continue importing?',
-      buttons: ['Yes', 'No'],
+      title: localize('import.title', 'Import'),
+      message: localize('import.passwordWarning', 'Session passwords cannot be used unless this is the same computer the data was exported from.'),
+      detail: localize('import.continue', 'Do you want to continue importing?'),
+      buttons: [localize('common.yes', 'Yes'), localize('common.no', 'No')],
       defaultId: 0,
       cancelId: 1,
     });
@@ -289,7 +289,7 @@ export class ImportPopup extends Popup {
       await this.options.onImport(filePath, itemIds, this.existOption, line => this.log(line));
     } catch (err) {
       this.log('');
-      this.log(`Error: ${err instanceof Error ? err.message : String(err)}`);
+      this.log(localize('wizard.error', 'Error: {0}', err instanceof Error ? err.message : String(err)));
     }
     this.log('');
     this.log('=== END ===');

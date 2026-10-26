@@ -1,3 +1,4 @@
+import { localize } from "../../../common/nls";
 import { $, _addEventListener } from "../../util/dom";
 import { ConnStatus, TerminalItem } from "../../../common/Types";
 import { v4 as uuidv4 } from 'uuid';
@@ -252,7 +253,9 @@ export class Term extends Disposable {
 
     const on: boolean = broadcastInputService.has(this.uid);
     this.broadcastInputIcon.classList.toggle('on', on);
-    this.broadcastInputIcon.title = on ? 'Broadcast input: on (click to remove)' : 'Broadcast input: off (click to add)';
+    this.broadcastInputIcon.title = on
+      ? localize('term.broadcastInputOn', 'Broadcast input: on (click to remove)')
+      : localize('term.broadcastInputOff', 'Broadcast input: off (click to add)');
   }
 
   fit() {

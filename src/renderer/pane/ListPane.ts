@@ -1,3 +1,4 @@
+import { localize } from "../../common/nls";
 import { renderer } from "..";
 import { TerminalItem, ListItemElem } from "../../common/Types";
 import { wrapper } from "../globals";
@@ -45,26 +46,26 @@ export class ListPane extends Pane {
     this.header.appendChild(arrow);
 
     const title = $('h3.title');
-    title.innerHTML = 'LIST';
+    title.textContent = localize('listPane.title', 'LIST');
     this.header.appendChild(title);
 
     const div = $('div.actions');
     const ul = $('ul');
     const items = [
       {
-        title: 'New Session...', icon: 'new-file',
+        title: localize('listPane.newSession', 'New Session...'), icon: 'new-file',
         click: () => {
           this.list.addNode('session');
         }
       },
       {
-        title: 'New Folder...', icon: 'new-folder',
+        title: localize('list.newFolder', 'New Folder...'), icon: 'new-folder',
         click: () => {
           this.list.addNode('folder');
         }
       },
       {
-        title: 'Collapse Folders in Sessions', icon: 'collapse-all',
+        title: localize('listPane.collapseFolders', 'Collapse Folders in Sessions'), icon: 'collapse-all',
         click: async () => {
           this.list.collapseAll();
           // const configurationService = getService(configurationServiceId) as ConfigurationService;

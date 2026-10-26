@@ -1,3 +1,4 @@
+import { localize } from '../common/nls';
 import {
   BrowserWindow,
   Menu,
@@ -61,23 +62,23 @@ export class Menubar {
       label: 'crossterm',
       submenu: [
         {
-          label: 'About crossterm',
+          label: localize('menubar.about', 'About {0}', 'crossterm'),
         },
         { type: 'separator' },
         {
-          label: 'Preferences...',
+          label: localize('menubar.preferences', 'Preferences...'),
           accelerator: null, // keyBinding[appPreferencesMenuId][keyBindingIdx], // 'Command+,',
           click: null, // mainWindow.preferenceClickHandler.bind(mainWindow),
           submenu: [
             {
-              label: 'Settings',
+              label: localize('menubar.settings', 'Settings'),
               accelerator: keyBinding[appSettingsMenuId][keyBindingIdx],
               click: (item, focusedWindow) => {}
             },
             {
               id: appShortcutsMenuId,
               appCommandId: appShortcutsCmdId,
-              label: `Keyboard Shortcuts ${process.platform === 'darwin' ? '[⌘K ⌘S]' : 'Ctrl+K Ctrl+S'}`,
+              label: localize('menubar.keyboardShortcuts', 'Keyboard Shortcuts {0}', process.platform === 'darwin' ? '[⌘K ⌘S]' : 'Ctrl+K Ctrl+S'),
               accelerator: keyBinding[appShortcutsMenuId][keyBindingIdx],
               click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', appShortcutsCmdId),
             },
@@ -85,13 +86,13 @@ export class Menubar {
         },
         { type: 'separator' },
         {
-          label: 'Hide crossterm',
+          label: localize('menubar.hide', 'Hide {0}', 'crossterm'),
           accelerator: 'Command+H',
           // selector: 'hide:',
           role: 'hide'
         },
         {
-          label: 'Hide Others',
+          label: localize('menubar.hideOthers', 'Hide Others'),
           accelerator: 'Command+Shift+H',
           // selector: 'hideOtherApplications:',
           role: 'hideOthers'
@@ -102,7 +103,7 @@ export class Menubar {
         }, */
         { type: 'separator' },
         {
-          label: 'Quit',
+          label: localize('menubar.quit', 'Quit'),
           accelerator: 'Command+Q',
           role: 'quit',
           /* click: () => {
@@ -125,13 +126,13 @@ export class Menubar {
       }, */
       {
         id: fileReconnMenuId,
-        label: 'Reconnect', // '다시 연결',
+        label: localize('menubar.reconnect', 'Reconnect'),
         accelerator: keyBinding[fileReconnMenuId][keyBindingIdx],
         click: null
       },
       {
         id: fileReconnAllMenuId,
-        label: 'Reconnect All', // '모두 다시 연결',
+        label: localize('menubar.reconnectAll', 'Reconnect All'),
         accelerator: null, // keyBinding[fileReconnAllMenuId][keyBindingIdx],
         click: null
       },
@@ -139,14 +140,14 @@ export class Menubar {
       {
         id: fileImportMenuId,
         appCommandId: fileImportCmdId,
-        label: 'Import', // '가져오기',
+        label: localize('menubar.import', 'Import'),
         accelerator: null, // keyBinding[fileImportMenuId][keyBindingIdx],
         click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', fileImportCmdId),
       },
       {
         id: fileExportMenuId,
         appCommandId: fileExportCmdId,
-        label: 'Export', // '내보내기',
+        label: localize('menubar.export', 'Export'),
         accelerator: null, // keyBinding[fileExportMenuId][keyBindingIdx],
         click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', fileExportCmdId),
       },
@@ -156,21 +157,21 @@ export class Menubar {
       fileSubmenu.push({ type: 'separator' });
       fileSubmenu.push({
         id: filePreferencesMenuId,
-        label: 'Preferences...',
+        label: localize('menubar.preferences', 'Preferences...'),
         accelerator: keyBinding[filePreferencesMenuId][keyBindingIdx],
         click: null, // mainWindow.preferenceClickHandler.bind(mainWindow),
       });
     }
 
     options.push({
-      label: '&File',
+      label: localize('menubar.file', '&File'),
       submenu: fileSubmenu,
     });
   }
 
   addEditMenu(options: MenuItemConstructorOptions[]) {
     options.push({
-      label: '&Edit',
+      label: localize('menubar.edit', '&Edit'),
       submenu: [
         // { id: editUndoMenuId, label: 'Undo', accelerator: keyBinding[editUndoMenuId][keyBindingIdx], role: 'undo' },
         // { id: editRedoMenuId, label: 'Redo', accelerator: keyBinding[editRedoMenuId][keyBindingIdx], role: 'redo' },
@@ -180,13 +181,13 @@ export class Menubar {
           // Note. role: 'copy'는 DOM 선택 영역만 복사한다. xterm의 선택은 DOM selection이 아니라
           //       직접 그린 것이므로 네이티브 role로는 복사되지 않는다. renderer 커맨드로 넘긴다.
           id: editCopyMenuId,
-          label: 'Copy', accelerator: keyBinding[editCopyMenuId][keyBindingIdx],
+          label: localize('menubar.copy', 'Copy'), accelerator: keyBinding[editCopyMenuId][keyBindingIdx],
           // role: 'copy',
           click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editCopyCmdId),
         },
         {
           id: editPasteMenuId,
-          label: 'Paste', accelerator: keyBinding[editPasteMenuId][keyBindingIdx],
+          label: localize('menubar.paste', 'Paste'), accelerator: keyBinding[editPasteMenuId][keyBindingIdx],
           // role: 'paste',
           click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', editPasteCmdId),
         },
@@ -197,36 +198,36 @@ export class Menubar {
 
   addViewMenu(options: MenuItemConstructorOptions[]) {
     options.push({
-      label: '&View',
+      label: localize('menubar.view', '&View'),
       submenu: [],
     });
   }
 
   addTabMenu(options: MenuItemConstructorOptions[]) {
     options.push({
-      label: 'Ta&b',
+      label: localize('menubar.tab', 'Ta&b'),
       submenu: [
         {
           id: tabAlignMenuId,
-          label: 'Align',
+          label: localize('menubar.align', 'Align'),
           accelerator: null, // keyBinding[tabAlignMenuId][keyBindingIdx],
           // click: () => {},
           submenu: [
             {
               id: tabAlignVerticalMenuId,
-              label: 'Vertical',
+              label: localize('menubar.vertical', 'Vertical'),
               accelerator: null, // keyBinding[tabAlignVerticalMenuId][keyBindingIdx],
               click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabAlignVerticalCmdId),
             },
             {
               id: tabAlignHorizontalMenuId,
-              label: 'Horizontal',
+              label: localize('menubar.horizontal', 'Horizontal'),
               accelerator: null, // keyBinding[tabAlignHorizontalMenuId][keyBindingIdx],
               click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabAlignHorizontalCmdId),
             },
             {
               id: tabAlignTilesMenuId,
-              label: 'Tiles',
+              label: localize('menubar.tiles', 'Tiles'),
               accelerator: null, // keyBinding[tabAlignTilesMenuId][keyBindingIdx],
               click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabAlignTilesCmdId),
             },
@@ -235,20 +236,20 @@ export class Menubar {
         { type: 'separator' },
         {
           id: tabCloseOthersMenuId,
-          label: 'Close Others',
+          label: localize('menubar.closeOthers', 'Close Others'),
           accelerator: null, // keyBinding[tabCloseOthersMenuId][keyBindingIdx],
           // click: () => {},
         },
         {
           id: tabCloseAllMenuId,
-          label: 'Close All',
+          label: localize('menubar.closeAll', 'Close All'),
           accelerator: null, // keyBinding[tabCloseAllMenuId][keyBindingIdx],
           // click: () => {},
         },
         { type: 'separator' },
         {
           id: tabToggleBroadcastInputMenuId,
-          label: 'Toggle Broadcast Input',
+          label: localize('menubar.toggleBroadcastInput', 'Toggle Broadcast Input'),
           accelerator: keyBinding[tabToggleBroadcastInputMenuId][keyBindingIdx],
           click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', tabToggleBroadcastInputCmdId),
         },
@@ -258,14 +259,14 @@ export class Menubar {
 
   addWindowMenu(options: MenuItemConstructorOptions[]) {
     options.push({
-      label: 'Window',
+      label: localize('menubar.window', 'Window'),
       submenu: [],
     });
   }
 
   addHelpMenu(options: MenuItemConstructorOptions[]) {
     options.push({
-      label: '&Help',
+      label: localize('menubar.help', '&Help'),
       submenu: [],
     });
   }

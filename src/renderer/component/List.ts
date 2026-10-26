@@ -1,3 +1,4 @@
+import { localize } from "../../common/nls";
 import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
 import { Children, DirentExt, ListItemElem, ContextMenuItem, TerminalItem,
@@ -396,12 +397,12 @@ export class List extends Disposable {
 
       const items: ContextMenuItem[] = [
         {
-          label: 'New File...',
+          label: localize('list.newFile', 'New File...'),
           accelerator: '',
           click: () => this.addNode('session')
         },
         {
-          label: 'New Folder...',
+          label: localize('list.newFolder', 'New Folder...'),
           accelerator: '',
           click: () => this.addNode('folder')
         }
@@ -412,7 +413,7 @@ export class List extends Disposable {
         items.push(
           { type: 'separator' },
           {
-            label: 'Paste',
+            label: localize('list.paste', 'Paste'),
             accelerator: acceleratorOf(listPasteCmdId),
             click: () => this.paste(renderer.sessionsDir)
           }
@@ -524,7 +525,7 @@ export class List extends Disposable {
           const renamed = joinPath(item.path, newName);
           // 대소문자만 바뀐 경우는 같은 파일이므로 존재 검사에서 뺀다
           if (newName.toLowerCase() !== item.name.toLowerCase() && await fileService.exists(renamed))
-            throw new Error(`'${newName}' already exists`);
+            throw new Error(localize('list.alreadyExists', '\'{0}\' already exists', newName));
           await fileService.move(target, renamed);
           target = renamed;
         }
@@ -617,13 +618,13 @@ export class List extends Disposable {
     if (nodes.length === 0) return;
 
     const message = nodes.length === 1
-      ? `Are you sure you want to delete '${nodes[0].data.name}'?`
-      : `Are you sure you want to delete the following ${nodes.length} files/directories?`;
+      ? localize('list.confirmDelete', 'Are you sure you want to delete \'{0}\'?', nodes[0].data.name)
+      : localize('list.confirmDeleteMultiple', 'Are you sure you want to delete the following {0} files/directories?', nodes.length);
     const { response } = await window.ipc.invoke('dialog show messagebox', {
       type: 'warning',
       message,
-      detail: nodes.length === 1 ? 'You can restore from the Trash.' : nodes.map(v => v.data.name).join('\n'),
-      buttons: ['Move to Trash', 'Cancel'],
+      detail: nodes.length === 1 ? localize('list.restoreFromTrash', 'You can restore from the Trash.') : nodes.map(v => v.data.name).join('\n'),
+      buttons: [localize('list.moveToTrash', 'Move to Trash'), localize('common.cancel', 'Cancel')],
       defaultId: 0,
       cancelId: 1
     });
@@ -939,7 +940,7 @@ export class List extends Disposable {
 
         try {
           // writeFileAtomic 은 기존 파일을 덮어쓰므로 목록에 안 보이는 파일(.DS_Store 등)까지 한 번 더 확인한다
-          if (await fileService.exists(target)) throw new Error(`'${name}' already exists`);
+          if (await fileService.exists(target)) throw new Error(localize('list.alreadyExists', '\'{0}\' already exists', name));
 
           if (type == 'folder')
             await fileService.createFolder(target);
@@ -1004,14 +1005,14 @@ function validateFileName(name: string, siblingNames: string[]): InputMessage | 
   // Name not provided
   if (!name || name.length === 0 || /^\s+$/.test(name)) {
     return {
-      content: 'Name must be provided.', // emptyNameError
+      content: localize('list.emptyName', 'Name must be provided.'),
       severity: Severity.Error
     };
   }
 
   if (/[\\/]/.test(name)) {
     return {
-      content: `A file or folder name cannot contain '/' or '\\'.`,
+      content: localize('list.invalidChar', 'A file or folder name cannot contain \'/\' or \'\\\'.'),
       severity: Severity.Error
     };
   }
@@ -1020,7 +1021,7 @@ function validateFileName(name: string, siblingNames: string[]): InputMessage | 
   // (macOS/Windows 는 대소문자를 구분하지 않으므로 대소문자 무시하고 비교)
   if (siblingNames.some(v => v.toLowerCase() === name.toLowerCase())) {
     return {
-      content: `${name} already exists at this location. Please choose a different name.`, // nameExistsError
+      content: localize('list.nameExists', '{0} already exists at this location. Please choose a different name.', name),
       severity: Severity.Error
     };
   }
@@ -1029,7 +1030,7 @@ function validateFileName(name: string, siblingNames: string[]): InputMessage | 
   // if (names.some(name => /^\s|\s$/.test(name))) {
   if (/^\s|\s$/.test(name)) {
     return {
-      content: `Leading or trailing whitespace detected in name.`, // nameWhitespaceWarning
+      content: localize('list.nameWhitespace', 'Leading or trailing whitespace detected in name.'),
       severity: Severity.Warning
     };
   }
@@ -1335,12 +1336,12 @@ export class Node extends Disposable implements Children<Node> {
       if (isDirectory) {
         groups.push([
           {
-            label: 'New File...',
+            label: localize('list.newFile', 'New File...'),
             accelerator: '',
             click: () => list.addNode('session')
           },
           {
-            label: 'New Folder...',
+            label: localize('list.newFolder', 'New Folder...'),
             accelerator: '',
             click: () => list.addNode('folder')
           }
@@ -1352,12 +1353,12 @@ export class Node extends Disposable implements Children<Node> {
 
       clipboardGroup.push(
         {
-          label: 'Cut',
+          label: localize('list.cut', 'Cut'),
           accelerator: acceleratorOf(listCutCmdId),
           click: () => list.cutSelected()
         },
         {
-          label: 'Copy',
+          label: localize('list.copy', 'Copy'),
           accelerator: acceleratorOf(listCopyCmdId),
           click: () => list.copySelected()
         }
@@ -1365,7 +1366,7 @@ export class Node extends Disposable implements Children<Node> {
 
       if (list.clipboard?.paths.length > 0 && isDirectory) {
         clipboardGroup.push({
-          label: 'Paste',
+          label: localize('list.paste', 'Paste'),
           accelerator: acceleratorOf(listPasteCmdId),
           click: () => list.paste(list.getPasteDir(this))
         });
@@ -1376,12 +1377,12 @@ export class Node extends Disposable implements Children<Node> {
       const editGroup: ContextMenuItem[] = [];
 
       editGroup.push({
-        label: 'Rename',
+        label: localize('list.rename', 'Rename'),
         accelerator: 'F2',
         click: () => this.rename()
       });
       editGroup.push({
-        label: 'Delete',
+        label: localize('list.delete', 'Delete'),
         accelerator: acceleratorOf(listDeleteCmdId),
         click: () => list.deleteSelected()
       });
@@ -1390,7 +1391,7 @@ export class Node extends Disposable implements Children<Node> {
 
       groups.push([
         {
-          label: 'Properties',
+          label: localize('list.properties', 'Properties'),
           accelerator: 'P',
           click: () => {
 

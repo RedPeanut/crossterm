@@ -1,3 +1,4 @@
+import { localize } from '../../common/nls';
 import fs from 'fs';
 import path from 'path';
 import { FileService } from '../../common/service/FileService';
@@ -37,8 +38,8 @@ export class ImportService {
     const data = await this.read(filePath);
 
     const items: ImportItem[] = [
-      { id: 'sessions', name: 'Sessions', type: 'Session files', count: countSessions(data.sessions) },
-      { id: 'settings', name: 'Settings', type: 'User settings (settings.json)', count: data.settings == null ? 0 : 1 },
+      { id: 'sessions', name: localize('import.item.sessions', 'Sessions'), type: localize('import.item.sessionFiles', 'Session files'), count: countSessions(data.sessions) },
+      { id: 'settings', name: localize('import.item.settings', 'Settings'), type: localize('import.item.userSettings', 'User settings (settings.json)'), count: data.settings == null ? 0 : 1 },
     ];
     return items.filter(item => item.count > 0);
   }
@@ -72,10 +73,10 @@ export class ImportService {
     try {
       data = JSON.parse(text);
     } catch {
-      throw new Error('Not a crossterm export file (invalid JSON)');
+      throw new Error(localize('import.invalidJson', 'Not a crossterm export file (invalid JSON)'));
     }
-    if (!data || data.format !== EXPORT_FORMAT) throw new Error('Not a crossterm export file');
-    if (data.version > EXPORT_VERSION) throw new Error(`Unsupported export version ${data.version} (this app supports up to ${EXPORT_VERSION})`);
+    if (!data || data.format !== EXPORT_FORMAT) throw new Error(localize('import.invalidFormat', 'Not a crossterm export file'));
+    if (data.version > EXPORT_VERSION) throw new Error(localize('import.unsupportedVersion', 'Unsupported export version {0} (this app supports up to {1})', data.version, EXPORT_VERSION));
 
     if (!Array.isArray(data.sessions)) data.sessions = [];
     validateSessions(data.sessions);
@@ -91,17 +92,17 @@ export class ImportService {
         let folder = target;
         const stat = await fs.promises.lstat(target).catch(() => null);
         if (stat && !stat.isDirectory()) {
-          log.push(`Copying ${target}`);
+          log.push(localize('import.copying', 'Copying {0}', target));
           if (onExist === 'ignore') {
-            log.push('Duplicated. Ignored by user option');
+            log.push(localize('import.duplicatedIgnored', 'Duplicated. Ignored by user option'));
             continue;
           }
           if (onExist === 'overwrite') {
             await this.fileService.del(target);
-            log.push(`Duplicated. Overwrite to ${node.name}`);
+            log.push(localize('import.duplicatedOverwritten', 'Duplicated. Overwrite to {0}', node.name));
           } else {
             folder = await uniquePath(target);
-            log.push(`Duplicated. Renamed to ${path.basename(folder)}`);
+            log.push(localize('import.duplicatedRenamed', 'Duplicated. Renamed to {0}', path.basename(folder)));
           }
         }
         await fs.promises.mkdir(folder, { recursive: true });
@@ -115,22 +116,22 @@ export class ImportService {
 
   /** @returns 실제로 쓴 경로. 무시했으면 null */
   private async writeFile(target: string, content: string, onExist: ImportExistOption, log: string[]): Promise<string | null> {
-    log.push(`Copying ${target}`);
+    log.push(localize('import.copying', 'Copying {0}', target));
 
     const stat = await fs.promises.lstat(target).catch(() => null);
     let written = target;
     if (stat) {
       if (onExist === 'ignore') {
-        log.push('Duplicated. Ignored by user option');
+        log.push(localize('import.duplicatedIgnored', 'Duplicated. Ignored by user option'));
         return null;
       }
       if (onExist === 'overwrite') {
         // 같은 이름의 폴더는 덮어쓸 수 없으므로 지우고 쓴다
         if (stat.isDirectory()) await this.fileService.del(target);
-        log.push(`Duplicated. Overwrite to ${path.basename(target)}`);
+        log.push(localize('import.duplicatedOverwritten', 'Duplicated. Overwrite to {0}', path.basename(target)));
       } else {
         written = await uniquePath(target);
-        log.push(`Duplicated. Renamed to ${path.basename(written)}`);
+        log.push(localize('import.duplicatedRenamed', 'Duplicated. Renamed to {0}', path.basename(written)));
       }
     }
 

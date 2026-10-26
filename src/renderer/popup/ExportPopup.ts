@@ -1,3 +1,4 @@
+import { localize } from "../../common/nls";
 import { Popup, PopupOptions } from "../Popup";
 import { $, append, _addEventListener } from "../util/dom";
 
@@ -48,7 +49,7 @@ export class ExportPopup extends Popup {
 
   override renderTitleArea(): void {
     super.renderTitleArea();
-    this.title.innerHTML = 'Export'; // '내보내기'
+    this.title.textContent = localize('export.title', 'Export');
   }
 
   override renderContentArea(): void {
@@ -59,10 +60,10 @@ export class ExportPopup extends Popup {
     this.renderResultPage(contentArea);
 
     const footer = append(this.popup, $('.footer'));
-    const prevBtn = this.prevBtn = append(footer, $<HTMLButtonElement>('button')); prevBtn.textContent = '< Back';
-    const nextBtn = this.nextBtn = append(footer, $<HTMLButtonElement>('button.primary')); nextBtn.textContent = 'Next >';
-    const finishBtn = this.finishBtn = append(footer, $<HTMLButtonElement>('button')); finishBtn.textContent = 'Finish';
-    const cancelBtn = this.cancelBtn = append(footer, $<HTMLButtonElement>('button')); cancelBtn.textContent = 'Cancel';
+    const prevBtn = this.prevBtn = append(footer, $<HTMLButtonElement>('button')); prevBtn.textContent = localize('wizard.back', '< Back');
+    const nextBtn = this.nextBtn = append(footer, $<HTMLButtonElement>('button.primary')); nextBtn.textContent = localize('wizard.next', 'Next >');
+    const finishBtn = this.finishBtn = append(footer, $<HTMLButtonElement>('button')); finishBtn.textContent = localize('wizard.finish', 'Finish');
+    const cancelBtn = this.cancelBtn = append(footer, $<HTMLButtonElement>('button')); cancelBtn.textContent = localize('common.cancel', 'Cancel');
 
     this._register(_addEventListener(prevBtn, 'click', () => this.showPage(Page.TARGET)));
     this._register(_addEventListener(nextBtn, 'click', () => this.next()));
@@ -75,7 +76,7 @@ export class ExportPopup extends Popup {
   renderTargetPage(container: HTMLElement): void {
     const page = this.targetPage = append(container, $('.page.target'));
 
-    const label = append(page, $<HTMLLabelElement>('label')); label.textContent = 'Target file:'; // '대상 파일:'
+    const label = append(page, $<HTMLLabelElement>('label')); label.textContent = localize('export.targetFile', 'Target file:');
     const row = append(page, $('.row'));
 
     const input = this.fileInput = append(row, $<HTMLInputElement>('input'));
@@ -90,7 +91,7 @@ export class ExportPopup extends Popup {
   renderResultPage(container: HTMLElement): void {
     const page = this.resultPage = append(container, $('.page.result'));
 
-    const label = append(page, $<HTMLLabelElement>('label')); label.textContent = 'Result:'; // '결과:'
+    const label = append(page, $<HTMLLabelElement>('label')); label.textContent = localize('wizard.result', 'Result:');
     this.logArea = append(page, $('.log'));
   }
 
@@ -115,7 +116,7 @@ export class ExportPopup extends Popup {
 
   async browse(): Promise<void> {
     const { canceled, filePath } = await window.ipc.invoke('dialog show savedialog', {
-      title: 'Export',
+      title: localize('export.title', 'Export'),
       defaultPath: this.fileInput.value.trim() || defaultFileName(),
       filters: [{ name: 'JSON', extensions: ['json'] }],
     });
@@ -138,7 +139,7 @@ export class ExportPopup extends Popup {
       await this.options.onExport(filePath, line => this.log(line));
     } catch (err) {
       this.log('');
-      this.log(`Error: ${err instanceof Error ? err.message : String(err)}`);
+      this.log(localize('wizard.error', 'Error: {0}', err instanceof Error ? err.message : String(err)));
     }
     this.log('');
     this.log('=== END ===');
