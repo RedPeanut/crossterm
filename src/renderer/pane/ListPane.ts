@@ -134,7 +134,7 @@ export class ListPane extends Pane {
         bodyLayoutService.layout(0, 0);
 
         const sessionPartService: SessionPartService = getService(sessionPartServiceId);
-        sessionPartService.getServices();
+        // sessionPartService.getServices();
         sessionPartService.createTerminal();
       }, // onDblClick
       (items: ListItemElem[]) => {

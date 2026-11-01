@@ -12,7 +12,7 @@ export class Tab extends Disposable {
   statusDot: HTMLElement;
 
   item: TerminalItem;
-  sessionPartService: SessionPartService;
+  // sessionPartService: SessionPartService;
 
   constructor(parent: HTMLElement, item: TerminalItem) {
     super();
@@ -22,14 +22,14 @@ export class Tab extends Disposable {
   }
 
   onMouseDown(e: any) {
-    this.sessionPartService.setActiveTerminal(this.item);
+    (getService(sessionPartServiceId) as SessionPartService).setActiveTerminal(this.item);
   }
 
   onDragStart(e: any): void {
     console.log('onDragStart event is called...');
     // console.log('e =', e);
     e.dataTransfer.setData('text', this.item.uid);
-    this.sessionPartService.makeOverlayVisible(true);
+    (getService(sessionPartServiceId) as SessionPartService).makeOverlayVisible(true);
   }
 
   onDragEnter(e: any): void {}
@@ -37,7 +37,7 @@ export class Tab extends Disposable {
 
   onDragEnd(e: any): void {
     console.log('onDragEnd event is called...');
-    this.sessionPartService.makeOverlayVisible(false);
+    (getService(sessionPartServiceId) as SessionPartService).makeOverlayVisible(false);
   }
 
   onDragOver(e: any): void {}
@@ -115,7 +115,7 @@ export class Tab extends Disposable {
 
   getServices(): void {
     // console.log('getServices() is called ...');
-    this.sessionPartService = getService(sessionPartServiceId);
+    // this.sessionPartService = getService(sessionPartServiceId);
   }
 
 }

@@ -27,8 +27,8 @@ export class DropOverlay extends Disposable {
   throttle_doPositionOverlay: DebouncedFunc<(...args: any[]) => any>;
   splitDirection: GroupDirection | undefined;
 
-  sessionPartService: SessionPartService;
-  bodyLayoutService: BodyLayoutService;
+  // sessionPartService: SessionPartService;
+  // bodyLayoutService: BodyLayoutService;
 
   constructor(parent: HTMLElement, group: Group, target: DropTarget) {
     super();
@@ -262,13 +262,14 @@ export class DropOverlay extends Disposable {
       this.cleanSingleSplitItemOnce(wrapper.tree);
     // console.log('wrapper.tree =', wrapper.tree);
 
-    this.bodyLayoutService.recreate();
-    this.bodyLayoutService.layout(0, 0); // not use param
+    const bodyLayoutService = getService(bodyLayoutServiceId)
+    bodyLayoutService.recreate();
+    bodyLayoutService.layout(0, 0); // not use param
 
-    // const sessionPartService = getService(sessionPartServiceId)
+    const sessionPartService = getService(sessionPartServiceId)
     // sessionPartService.getServices(); // reconnect service
     // sessionPartService.fit(); // fit again
-    requestAnimationFrame(() => requestAnimationFrame(() => this.sessionPartService.fit()));
+    requestAnimationFrame(() => requestAnimationFrame(() => sessionPartService.fit()));
   }
 
   cleanSingleSplitItemOnce(curr: SplitItem): void {
@@ -309,7 +310,7 @@ export class DropOverlay extends Disposable {
   }
 
   getServices(): void {
-    this.sessionPartService = getService(sessionPartServiceId);
-    this.bodyLayoutService = getService(bodyLayoutServiceId);
+    // this.sessionPartService = getService(sessionPartServiceId);
+    // this.bodyLayoutService = getService(bodyLayoutServiceId);
   }
 }
