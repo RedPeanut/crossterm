@@ -1,10 +1,11 @@
 import { localize } from '../../../common/nls';
-import { $ } from '../../util/dom';
+import { $, _addEventListener } from '../../util/dom';
 import { ConnStatus, TerminalItem } from '../../../common/Types';
 import { SessionPartService } from '../SessionPart';
 import { getService, sessionPartServiceId } from '../../Service';
+import { Disposable } from '../../../common/base/lifecycle';
 
-export class Tab {
+export class Tab extends Disposable {
 
   parent: HTMLElement;
   element: HTMLElement;
@@ -14,6 +15,7 @@ export class Tab {
   sessionPartService: SessionPartService;
 
   constructor(parent: HTMLElement, item: TerminalItem) {
+    super();
     this.parent = parent;
     this.item = item;
     // this.sessionPartService = getService(sessionPartServiceId);
@@ -60,13 +62,24 @@ export class Tab {
     if (item.active) el.classList.add('active');
 
     el.draggable = true;
-    el.onmousedown = this.onMouseDown.bind(this);
-    el.ondragstart = this.onDragStart.bind(this);
-    el.ondragenter = this.onDragEnter.bind(this);
-    el.ondragleave = this.onDragLeave.bind(this);
-    el.ondragend = this.onDragEnd.bind(this);
-    el.ondragover = this.onDragOver.bind(this);
-    el.ondrop = this.onDrop.bind(this);
+    // el.onmousedown = this.onMouseDown.bind(this);
+    // el.ondragstart = this.onDragStart.bind(this);
+    // el.ondragenter = this.onDragEnter.bind(this);
+    // el.ondragleave = this.onDragLeave.bind(this);
+    // el.ondragend = this.onDragEnd.bind(this);
+    // el.ondragover = this.onDragOver.bind(this);
+    // el.ondrop = this.onDrop.bind(this);
+
+    // this._register(_addEventListener(el, 'mousedown', this.onMouseDown)); // x
+    // this._register(_addEventListener(el, 'mousedown', this.onMouseDown.bind(this))); // ?
+    // this._register(_addEventListener(el, 'mousedown', () => this.onMouseDown)); // ?
+    this._register(_addEventListener(el, 'mousedown', (e) => this.onMouseDown(e))); // o
+    this._register(_addEventListener(el, 'dragstart', (e) => this.onDragStart(e)));
+    this._register(_addEventListener(el, 'dragenter', (e) => this.onDragEnter(e)));
+    this._register(_addEventListener(el, 'dragleave', (e) => this.onDragLeave(e)));
+    this._register(_addEventListener(el, 'dragend', (e) => this.onDragEnd(e)));
+    this._register(_addEventListener(el, 'dragover', (e) => this.onDragOver(e)));
+    this._register(_addEventListener(el, 'drop', (e) => this.onDrop(e)));
 
     const tabBorderTopContainer = $('.tab-border-top-container');
     el.appendChild(tabBorderTopContainer);

@@ -1,5 +1,5 @@
 import { TerminalItem } from "../../../common/Types";
-import { $ } from "../../util/dom";
+import { $, _addEventListener } from "../../util/dom";
 import _, { DebouncedFunc } from 'lodash';
 import { DropTarget } from "./DropTarget";
 import { bodyLayoutServiceId, getService, sessionPartServiceId } from "../../Service";
@@ -8,6 +8,7 @@ import { SessionPartService } from "../SessionPart";
 import { wrapper } from "../../globals";
 import { findActiveItem, findItemById, findSplitItemByGroup } from "../../utils";
 import { Group, isSplitItem, Mode, SplitItem } from "../../Types";
+import { Disposable } from '../../../common/base/lifecycle';
 
 export const enum GroupDirection {
   UP, DOWN, LEFT, RIGHT
@@ -15,7 +16,7 @@ export const enum GroupDirection {
 
 export interface DropOverlayOptions {}
 
-export class DropOverlay {
+export class DropOverlay extends Disposable {
 
   parent: HTMLElement;
   element: HTMLElement;
@@ -30,6 +31,7 @@ export class DropOverlay {
   bodyLayoutService: BodyLayoutService;
 
   constructor(parent: HTMLElement, group: Group, target: DropTarget) {
+    super();
     this.parent = parent;
     this.group = group;
     this.target = target;
@@ -289,12 +291,20 @@ export class DropOverlay {
 
   create(): HTMLElement {
     const el = this.element = $('.drop-overlay');
-    el.ondragstart = this.onDragStart.bind(this);
-    el.ondragenter = this.onDragEnter.bind(this);
-    el.ondragleave = this.onDragLeave.bind(this);
-    el.ondragend = this.onDragEnd.bind(this);
-    el.ondragover = this.onDragOver.bind(this);
-    el.ondrop = this.onDrop.bind(this);
+    // el.ondragstart = this.onDragStart.bind(this);
+    // el.ondragenter = this.onDragEnter.bind(this);
+    // el.ondragleave = this.onDragLeave.bind(this);
+    // el.ondragend = this.onDragEnd.bind(this);
+    // el.ondragover = this.onDragOver.bind(this);
+    // el.ondrop = this.onDrop.bind(this);
+
+    this._register(_addEventListener(el, 'dragstart', (e) => this.onDragStart(e)));
+    this._register(_addEventListener(el, 'dragenter', (e) => this.onDragEnter(e)));
+    this._register(_addEventListener(el, 'dragleave', (e) => this.onDragLeave(e)));
+    this._register(_addEventListener(el, 'dragend', (e) => this.onDragEnd(e)));
+    this._register(_addEventListener(el, 'dragover', (e) => this.onDragOver(e)));
+    this._register(_addEventListener(el, 'drop', (e) => this.onDrop(e)));
+
     return el;
   }
 

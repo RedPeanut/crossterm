@@ -4,8 +4,9 @@ import { DropOverlay } from "../overlay/DropOverlay";
 import { DropTarget } from "../overlay/DropTarget";
 import { Term } from "./Term";
 import { Group } from "../../Types";
+import { Disposable } from '../../../common/base/lifecycle';
 
-export class Terms {
+export class Terms extends Disposable {
   parent: HTMLElement;
   element: HTMLElement;
   group: Group;
@@ -15,6 +16,7 @@ export class Terms {
   dropOverlay: DropOverlay;
 
   constructor(parent: HTMLElement, group: Group) {
+    super();
     this.parent = parent;
     this.group = group;
   }

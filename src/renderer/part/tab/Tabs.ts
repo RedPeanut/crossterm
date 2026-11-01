@@ -2,13 +2,15 @@ import { $ } from "../../util/dom";
 import { TerminalItem } from "../../../common/Types";
 import { Tab } from "./Tab";
 import { Group } from "../../Types";
+import { Disposable } from '../../../common/base/lifecycle';
 
-export class Tabs {
+export class Tabs extends Disposable {
   parent: HTMLElement;
   group: Group;
   tabs: Tab[];
 
   constructor(parent: HTMLElement, group: Group) {
+    super();
     this.parent = parent;
     this.group = group;
   }
