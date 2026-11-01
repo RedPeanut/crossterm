@@ -660,13 +660,13 @@ body { height: 100%; }
 
 
 /* Tabs */
-.tabs {}
-
-.tabs .tablist {
+.tabs {
   display: flex;
   height: 35px;
   overflow: hidden;
 }
+
+/* .tabs .tablist {} */
 
 .tabs .tab {
   flex: 1;
