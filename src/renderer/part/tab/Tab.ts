@@ -100,7 +100,7 @@ export class Tab extends Disposable {
     }
 
     const label = $('.label');
-    label.innerText = '탭입니다';
+    label.textContent = this.item.title; // '탭입니다';
     el.appendChild(label);
 
     /* const tabActionsContainer = $('.tab-actions');

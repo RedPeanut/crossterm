@@ -109,6 +109,7 @@ export class ListPane extends Pane {
           // type: item?.type,
           // size: { row: 24, col: 80 },
           type: item.type,
+          title: item.title,
           // size: item.size,
           url: item.url,
           uid: uuidv4(), selected: true, active: true,
