@@ -51,7 +51,7 @@ export class Tab extends Disposable {
   updateStatus(status: ConnStatus): void {
     if (!this.statusDot) return;
     this.statusDot.className = `tab-status-dot status-${status}`;
-    this.statusDot.title = connStatusLabel(status);
+    this.statusDot.title = this.connStatusLabel(status);
   }
 
   create(): HTMLElement {
@@ -88,7 +88,7 @@ export class Tab extends Disposable {
     if (item.type === 'remote') {
       const dot = this.statusDot = $('span.tab-status-dot');
       dot.className = `tab-status-dot status-${item.connStatus ?? 'connecting'}`;
-      dot.title = connStatusLabel(item.connStatus ?? 'connecting');
+      dot.title = this.connStatusLabel(item.connStatus ?? 'connecting');
       el.appendChild(dot);
 
       // // register status callback on the item
@@ -118,15 +118,15 @@ export class Tab extends Disposable {
     // this.sessionPartService = getService(sessionPartServiceId);
   }
 
-}
-
-/** 상태 점(status dot) 툴팁에 보여줄 문구 */
-function connStatusLabel(status: ConnStatus): string {
-  switch (status) {
-    case 'connecting': return localize('tab.status.connecting', 'Connecting');
-    case 'connected': return localize('tab.status.connected', 'Connected');
-    case 'error': return localize('tab.status.error', 'Error');
-    case 'closed': return localize('tab.status.closed', 'Closed');
-    default: return status;
+  /** 상태 점(status dot) 툴팁에 보여줄 문구 */
+  connStatusLabel(status: ConnStatus): string {
+    switch (status) {
+      case 'connecting': return localize('tab.status.connecting', 'Connecting');
+      case 'connected': return localize('tab.status.connected', 'Connected');
+      case 'error': return localize('tab.status.error', 'Error');
+      case 'closed': return localize('tab.status.closed', 'Closed');
+      default: return status;
+    }
   }
 }
+
