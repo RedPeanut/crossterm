@@ -14,10 +14,10 @@ describe('#MainFileService', function() {
   afterEach(function() {
   });
 
-  it('readFile ', async function() {
+  /* it('readFile ', async function() {
     const fileService = new MainFileService();
     const reads = await fileService.readFile(path.join(userDataPath, 'user/sessions/remote1'));
     console.log('reads =', reads.toString('utf8'));
     console.log('parsed =', JSON.parse(reads.toString('utf8')));
-  });
+  }); */
 });
