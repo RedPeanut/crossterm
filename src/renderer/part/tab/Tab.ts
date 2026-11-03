@@ -2,8 +2,12 @@ import { localize } from '../../../common/nls';
 import { $, _addEventListener } from '../../util/dom';
 import { ConnStatus, TerminalItem } from '../../../common/Types';
 import { SessionPartService } from '../SessionPart';
-import { getService, sessionPartServiceId } from '../../Service';
+import { bodyLayoutServiceId, getService, sessionPartServiceId } from '../../Service';
 import { Disposable } from '../../../common/base/lifecycle';
+import { BodyLayoutService } from '../../layout/BodyLayout';
+import { wrapper } from '../../globals';
+import { cleanSingleSplitItemOnce, collectVisibleItems, findItemById } from '../../utils';
+import { isSplitItem, SplitItem } from '../../Types';
 
 export class Tab extends Disposable {
 
@@ -43,9 +47,65 @@ export class Tab extends Disposable {
   onDragOver(e: any): void {}
   onDrop(e: any): void {}
 
+  /**
+   * 탭(터미널)을 닫는다.
+   * 트리에서 항목을 빼고, 빠진 자리의 selected/active를 이웃에게 넘긴 뒤 SessionPart를 다시 만든다.
+   */
   onClick_closeBtn(e: any): void {
     e.stopPropagation();
-    console.log('closeBtn is clicked...');
+
+    const item = this.item;
+    const find_curr = findItemById(wrapper.tree, 0, [], item.uid);
+    if (!find_curr) return;
+
+    const { index, pos, group, splitItem } = find_curr;
+
+    // 터미널 정리: main의 pty/ssh 종료 + renderer 쪽 xterm/리스너 해제
+    // (Term.uid는 item.uid와 별개이며, main은 Term.uid로 터미널을 관리한다)
+    const term = item.term;
+    if (term) {
+      window.ipc.send('terminal close', { uid: term.uid });
+      term.destroy();
+      term.element.remove();
+      item.term = undefined;
+    }
+
+    // find this in wrapper n remove
+    let next: TerminalItem | undefined;
+    if (group.length > 1) {
+      group.splice(pos, 1);
+      // 같은 그룹에 남은 탭이 있으면 오른쪽(없으면 왼쪽) 탭이 이어받는다.
+      next = group[Math.min(pos, group.length - 1)];
+      if (item.selected) next.selected = true;
+    } else {
+      splitItem.list.splice(index[index.length - 1], 1);
+    }
+
+    if (wrapper.tree.list.length === 1) {
+      if (isSplitItem(wrapper.tree.list[0]))
+        wrapper.tree = wrapper.tree.list[0] as SplitItem;
+    } else
+      cleanSingleSplitItemOnce(wrapper.tree);
+
+    // 닫은 탭이 active였다면 새 active를 정한다. 그룹째 사라졌으면 화면에 보이는 첫 터미널로 넘긴다.
+    if (item.active) {
+      if (!next) next = collectVisibleItems(wrapper.tree)[0];
+      if (next) {
+        next.selected = true;
+        next.active = true;
+      }
+    } else
+      next = undefined;
+
+    // n body layout recreate ~
+    const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
+    const sessionPartService: SessionPartService = getService(sessionPartServiceId);
+    bodyLayoutService.recreate();
+    bodyLayoutService.layout(0, 0); // not use param
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      sessionPartService.fit();
+      next?.term?.updateStatusbar();
+    }));
   }
 
   updateStatus(status: ConnStatus): void {
