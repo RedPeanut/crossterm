@@ -615,6 +615,9 @@ body { height: 100%; }
 
 .sidebar .list .node .list-item .title {
   /* cursor: default; */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .sidebar .list .node .list-item span {
@@ -663,13 +666,14 @@ body { height: 100%; }
 .tabs {
   display: flex;
   height: 35px;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* .tabs .tablist {} */
 
 .tabs .tab {
-  flex: 1;
+  flex: 1 1 0%;
+  min-width: 0;
   border-right: 1px solid var(--ct-tab-border);
   background-color: var(--ct-tab-inactiveBackground);
   /* width: 120px; */
@@ -722,7 +726,12 @@ body { height: 100%; }
   background-color: var(--ct-toolbar-hoverBackground);
 } */
 
-.tabs .tab .label { flex: 1; }
+.tabs .tab .label {
+  flex: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
 .tabs .tab .tab-border-top-container {
   background-color: var(--ct-tab-activeBorderTop);
