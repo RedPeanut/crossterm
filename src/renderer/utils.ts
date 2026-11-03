@@ -91,7 +91,11 @@ export function findSplitItemByGroup(curr: SplitItem, depth: number, index: numb
   return undefined;
 }
 
-/* export function cleanSingleSplitItemOnce(curr: SplitItem): void {
+/**
+ * 원소가 하나뿐인 SplitItem을 그 원소로 대체해 한 단계 평탄화한다.
+ * 드롭이나 탭 닫기로 트리에서 항목이 빠진 뒤 정리용으로 쓴다.
+ */
+export function cleanSingleSplitItemOnce(curr: SplitItem): void {
   if (curr.list && curr.list.length > 0) {
     for (let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
@@ -107,7 +111,7 @@ export function findSplitItemByGroup(curr: SplitItem, depth: number, index: numb
       }
     }
   }
-} */
+}
 
 export function flatten<T extends Children<T>>(list: T[]): T[] {
   let new_list: T[] = [];
