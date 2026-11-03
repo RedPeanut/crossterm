@@ -84,6 +84,10 @@ export class Tab extends Disposable {
     const tabBorderTopContainer = $('.tab-border-top-container');
     el.appendChild(tabBorderTopContainer);
 
+    const typeIcon = $(`a.codicon.codicon-${this.item.type === 'local' ? 'terminal' : 'globe'}`);
+    this._register(_addEventListener(typeIcon, 'click', (e) => this.onClick_closeBtn(e)));
+    el.appendChild(typeIcon);
+
     // status dot (remote only)
     if (item.type === 'remote') {
       const dot = this.statusDot = $('span.tab-status-dot');

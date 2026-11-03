@@ -678,12 +678,16 @@ body { height: 100%; }
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding-left: 10px;
+  padding-left: 2px;
 }
 
 .tabs .tab.selected, .tabs .tab:hover {
   background-color: var(--ct-tab-activeBackground);
 }
+
+.tabs .tab:hover a.codicon::before { content: '\ea76'; }
+.tabs .tab a.codicon { padding: 2px; }
+.tabs .tab a.codicon:hover { background-color: var(--ct-toolbar-hoverBackground); border-radius: 5px; }
 
 /* .tabs .tab .tab-actions { display: none; }
 .tabs .tab.selected .tab-actions, .tabs .tab:hover .tab-actions { display: block; }
