@@ -685,7 +685,7 @@ body { height: 100%; }
   background-color: var(--ct-tab-activeBackground);
 }
 
-.tabs .tab .tab-actions { display: none; }
+/* .tabs .tab .tab-actions { display: none; }
 .tabs .tab.selected .tab-actions, .tabs .tab:hover .tab-actions { display: block; }
 
 .tabs .tab .tab-actions {
@@ -711,13 +711,12 @@ body { height: 100%; }
 }
 
 .tabs .tab .tab-actions a.codicon:hover {
-  /* outline: 1px dashed null; */
   outline-offset: -1px;
 }
 
 .tabs .tab .tab-actions a.codicon:hover {
   background-color: var(--ct-toolbar-hoverBackground);
-}
+} */
 
 .tabs .tab .label { flex: 1; }
 

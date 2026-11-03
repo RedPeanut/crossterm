@@ -99,13 +99,13 @@ export class Tab extends Disposable {
     label.innerText = '탭입니다';
     el.appendChild(label);
 
-    const tabActionsContainer = $('.tab-actions');
+    /* const tabActionsContainer = $('.tab-actions');
     const actionsContainer = $('.actions-container');
     const closeBtn = $('a.codicon.codicon-close');
     closeBtn.onclick = this.onClick_closeBtn.bind(this);
     actionsContainer.appendChild(closeBtn);
     tabActionsContainer.appendChild(actionsContainer);
-    el.appendChild(tabActionsContainer);
+    el.appendChild(tabActionsContainer); */
 
     const tabBorderBottomContainer = $('.tab-border-bottom-container');
     el.appendChild(tabBorderBottomContainer);
