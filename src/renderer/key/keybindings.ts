@@ -9,11 +9,12 @@ import { KeybindingWeight, keybindingsRegistry } from './KeybindingsRegistry';
 import { getService, mainLayoutServiceId, broadcastInputServiceId, bodyLayoutServiceId, sessionPartServiceId } from '../Service';
 import { MainLayoutService } from '../layout/MainLayout';
 // import { keybindingsRegistry } from '../globals';
-import { getFocusedTerm } from '../part/term/Term';
+// import { getFocusedTerm } from '../part/term/Term';
+import { Term } from '../part/term/Term';
 import { getFocusedList, refreshAllLists } from '../component/List';
 import { BroadcastInputService } from '../service/BroadcastInputService';
 import { Group, SplitItem } from '../Types';
-import { wrapper } from '../globals';
+import { terminals, wrapper } from '../globals';
 import { collectAllItems, getTileRows } from '../utils';
 import { BodyLayoutService } from '../layout/BodyLayout';
 import { SessionPartService } from '../part/SessionPart';
@@ -183,6 +184,15 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
   primary: 'mod+v',
   handler: () => paste(),
 });
+
+/**
+ * 지금 포커스를 갖고 있는 터미널. 없으면 undefined.
+ * document.activeElement에서 가장 가까운 `.term`을 찾아 uid로 역조회한다.
+ */
+function getFocusedTerm(): Term | undefined {
+  const el = (document.activeElement as HTMLElement | null)?.closest('.term') as HTMLElement | null;
+  return el ? terminals[el.id] : undefined;
+}
 
 function copy(): void {
   const text = getFocusedTerm()?.xterm?.getSelection() || getDomSelection();

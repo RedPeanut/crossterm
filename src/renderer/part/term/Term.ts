@@ -21,15 +21,6 @@ import { Disposable } from '../../../common/base/lifecycle';
 import { BroadcastInputService } from '../../service/BroadcastInputService';
 import { getTerminalTheme, onDidChangeTheme } from './terminalTheme';
 
-/**
- * 지금 포커스를 갖고 있는 터미널. 없으면 undefined.
- * document.activeElement에서 가장 가까운 `.term`을 찾아 uid로 역조회한다.
- */
-export function getFocusedTerm(): Term | undefined {
-  const el = (document.activeElement as HTMLElement | null)?.closest('.term') as HTMLElement | null;
-  return el ? terminals[el.id] : undefined;
-}
-
 export class Term extends Disposable {
   parent: HTMLElement;
   item: RenderTerminalItem;
