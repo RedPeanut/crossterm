@@ -1,11 +1,14 @@
 import EventEmitter from 'events';
-import { TerminalOptions } from '../Types';
+// import { TerminalOptions } from '../Types';
+import { CommonTerminalItem } from '../../common/Types';
 
-export default abstract class TerminalBase extends EventEmitter {
+export type TerminalBaseOptions = CommonTerminalItem;
 
-  options: TerminalOptions;
+export abstract class TerminalBase extends EventEmitter {
 
-  constructor(options: TerminalOptions) {
+  options: CommonTerminalItem;
+
+  constructor(options: CommonTerminalItem) {
     super();
     this.options = options;
   }

@@ -1,22 +1,21 @@
 import os from 'os';
 import { IPty, spawn } from 'node-pty';
-// import TerminalBase from './TerminalBase';
-// import { TerminalOptions } from 'main/Types';
 import { EventEmitter } from 'events';
 import DataBatcher from './DataBatcher';
-import { CommonTerminalItem } from '../../common/Types';
-import TerminalBase from './TerminalBase';
+import { TerminalBase, TerminalBaseOptions } from './TerminalBase';
 // import DataBatcher from 'main/terminal/DataBatcher'; // why not
 
-export default class TerminalLocal extends TerminalBase {
+interface TerminalLocalOptions extends TerminalBaseOptions {}
+
+export class TerminalLocal extends TerminalBase {
 
   pty: IPty | null = null;
   batcher: DataBatcher | null = null;
   shell: string | undefined;
   initTimestamp: number = new Date().getTime();
-  options: CommonTerminalItem;
+  // options: TerminalLocalOptions;
 
-  constructor(options: CommonTerminalItem) {
+  constructor(options: TerminalLocalOptions) {
     super(options);
     // this.options = options;
   }
