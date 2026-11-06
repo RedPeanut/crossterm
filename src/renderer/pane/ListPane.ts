@@ -1,6 +1,7 @@
 import { localize } from "../../common/nls";
 import { renderer } from "..";
-import { TerminalItem, ListItemElem } from "../../common/Types";
+import { ListItemElem } from "../../common/Types";
+import { RenderTerminalItem } from "../Types";
 import { wrapper } from "../globals";
 import { List } from "../component/List";
 import { BodyLayoutService } from "../layout/BodyLayout";
@@ -105,14 +106,14 @@ export class ListPane extends Pane {
         // const list = renderer.list;
         const item: ListItemElem | undefined = utils.flatten(renderer.sessions).find((item) => item.id === id);
 
-        const new_one: TerminalItem = {
-          // type: item?.type,
-          // size: { row: 24, col: 80 },
-          type: item.type,
+        const new_one: RenderTerminalItem = {
           title: item.title,
-          // size: item.size,
+          selected: true,
+          active: true,
+
+          type: item.type,
           url: item.url,
-          uid: uuidv4(), selected: true, active: true,
+          uid: uuidv4(),
         };
 
         // find active item position first
