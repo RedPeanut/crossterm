@@ -14,7 +14,7 @@ import { result } from 'lodash';
 
 export interface SessionPartService extends Service {
   createTerminal(): void;
-  getServices(): void;
+  // getServices(): void;
   makeOverlayVisible(b: boolean): void;
   controlStyle({depth, index, pos}, {selected, active}): void;
   setActiveTerminal(item: RenderTerminalItem): void;
@@ -135,7 +135,7 @@ export class SessionPart extends Part implements SessionPartService {
     }
   }
 
-  getServices_r(v: OrientationView): void {
+  /* getServices_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
     for (let i = 0; i < viewItems.length; i++) {
       if (viewItems[i].view instanceof GroupView) {
@@ -161,7 +161,7 @@ export class SessionPart extends Part implements SessionPartService {
         this.getServices_r(this.resultView as OrientationView);
       }
     }
-  }
+  } */
 
   makeOverlayVisible_r(v: OrientationView, b: boolean): void {
     const viewItems = v.splitView.viewItems;
