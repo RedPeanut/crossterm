@@ -346,8 +346,8 @@ export class MainLayout extends Layout implements MainLayoutService {
       _handleResize(event);
     }));
 
-    // create terminal after layout n ipc install
-    (getService(sessionPartServiceId) as SessionPartService).createTerminal();
+    // // create terminal after layout n ipc install
+    // (getService(sessionPartServiceId) as SessionPartService).createTerminal();
   }
 
   toggleSidebar(): void {
