@@ -1,5 +1,6 @@
 import { $ } from "../../util/dom";
-import { TerminalItem } from "../../../common/Types";
+// import { RenderTerminalItem } from "../../../common/Types";
+import { RenderTerminalItem } from "../../Types";
 import { DropOverlay } from "../overlay/DropOverlay";
 import { DropTarget } from "../overlay/DropTarget";
 import { Term } from "./Term";
@@ -32,7 +33,7 @@ export class Terms extends Disposable {
     }); */
 
     for (let i = 0; i < this.group.length; i++) {
-      let item: TerminalItem = this.group[i];
+      let item: RenderTerminalItem = this.group[i];
       if (item.term) {
         const term: Term = item.term;
         if (item.selected) term.element.classList.add('selected');

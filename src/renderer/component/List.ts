@@ -1,7 +1,7 @@
 import { localize } from "../../common/nls";
 import { KeyboardInputEvent } from "electron";
 import { renderer } from "..";
-import { Children, DirentExt, ListItemElem, ContextMenuItem, TerminalItem,
+import { Children, DirentExt, ListItemElem, ContextMenuItem,
   listCutCmdId, listCopyCmdId, listPasteCmdId, listDeleteCmdId } from "../../common/Types";
 // import { wrapper } from "../globals";
 import { IDisposable, Disposable, DisposableStore } from "../../common/base/lifecycle";

@@ -1,6 +1,7 @@
 import { localize } from '../../../common/nls';
 import { $, _addEventListener } from '../../util/dom';
-import { ConnStatus, TerminalItem } from '../../../common/Types';
+// import { ConnStatus, RenderTerminalItem } from '../../../common/Types';
+import { ConnStatus, RenderTerminalItem } from '../../Types';
 import { SessionPartService } from '../SessionPart';
 import { bodyLayoutServiceId, getService, sessionPartServiceId } from '../../Service';
 import { Disposable } from '../../../common/base/lifecycle';
@@ -15,10 +16,10 @@ export class Tab extends Disposable {
   element: HTMLElement;
   statusDot: HTMLElement;
 
-  item: TerminalItem;
+  item: RenderTerminalItem;
   // sessionPartService: SessionPartService;
 
-  constructor(parent: HTMLElement, item: TerminalItem) {
+  constructor(parent: HTMLElement, item: RenderTerminalItem) {
     super();
     this.parent = parent;
     this.item = item;
@@ -71,7 +72,7 @@ export class Tab extends Disposable {
     }
 
     // find this in wrapper n remove
-    let next: TerminalItem | undefined;
+    let next: RenderTerminalItem | undefined;
     if (group.length > 1) {
       group.splice(pos, 1);
       // 같은 그룹에 남은 탭이 있으면 오른쪽(없으면 왼쪽) 탭이 이어받는다.

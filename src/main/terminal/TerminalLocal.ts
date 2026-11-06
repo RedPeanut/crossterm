@@ -4,7 +4,7 @@ import { IPty, spawn } from 'node-pty';
 // import { TerminalOptions } from 'main/Types';
 import { EventEmitter } from 'events';
 import DataBatcher from './DataBatcher';
-import { TerminalItem } from '../../common/Types';
+import { CommonTerminalItem } from '../../common/Types';
 import TerminalBase from './TerminalBase';
 // import DataBatcher from 'main/terminal/DataBatcher'; // why not
 
@@ -14,9 +14,9 @@ export default class TerminalLocal extends TerminalBase {
   batcher: DataBatcher | null = null;
   shell: string | undefined;
   initTimestamp: number = new Date().getTime();
-  options: TerminalItem;
+  options: CommonTerminalItem;
 
-  constructor(options: TerminalItem) {
+  constructor(options: CommonTerminalItem) {
     super(options);
     // this.options = options;
   }

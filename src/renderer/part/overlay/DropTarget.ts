@@ -1,4 +1,4 @@
-import { TerminalItem } from "../../../common/Types";
+// import { RenderTerminalItem } from "../../../common/Types";
 import { Group } from "../../Types";
 import { $ } from "../../util/dom";
 import { Disposable } from '../../../common/base/lifecycle';

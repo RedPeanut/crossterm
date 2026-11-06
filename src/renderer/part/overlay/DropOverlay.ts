@@ -1,4 +1,4 @@
-import { TerminalItem } from "../../../common/Types";
+// import { RenderTerminalItem } from "../../../common/Types";
 import { $, _addEventListener } from "../../util/dom";
 import _, { DebouncedFunc } from 'lodash';
 import { DropTarget } from "./DropTarget";

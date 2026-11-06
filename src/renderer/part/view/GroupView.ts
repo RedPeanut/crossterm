@@ -1,4 +1,4 @@
-import { TerminalItem } from "../../../common/Types";
+// import { RenderTerminalItem } from "../../../common/Types";
 import { $ } from "../../util/dom";
 import { MappedSashEvent, SplitViewItemSizeType, SplitViewItemView } from "../../component/SplitView";
 import { Tabs } from "../tab/Tabs";

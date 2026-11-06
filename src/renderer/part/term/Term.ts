@@ -1,6 +1,7 @@
 import { localize } from '../../../common/nls';
 import { $, _addEventListener } from '../../util/dom';
-import { ConnStatus, TerminalItem } from '../../../common/Types';
+// import { ConnStatus, RenderTerminalItem } from '../../../common/Types';
+import { ConnStatus, RenderTerminalItem } from '../../Types';
 import { v4 as uuidv4 } from 'uuid';
 import 'xterm/css/xterm.css';
 import { Terminal as xterm } from 'xterm'
@@ -31,7 +32,7 @@ export function getFocusedTerm(): Term | undefined {
 
 export class Term extends Disposable {
   parent: HTMLElement;
-  item: TerminalItem;
+  item: RenderTerminalItem;
   element: HTMLElement;
 
   uid: string;
@@ -55,7 +56,7 @@ export class Term extends Disposable {
   resizeOverlay: TermResizeOverlay | null = null;
   broadcastInputIcon: HTMLElement;
 
-  constructor(parent: HTMLElement, item: TerminalItem) {
+  constructor(parent: HTMLElement, item: RenderTerminalItem) {
     super();
     this.parent = parent;
     this.item = item;

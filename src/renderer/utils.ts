@@ -1,8 +1,8 @@
-import { Children, ListItemElem, TerminalItem } from "../common/Types";
-import { Group, isSplitItem, SplitItem } from "./Types";
+import { Children, ListItemElem } from "../common/Types";
+import { Group, isSplitItem, SplitItem, RenderTerminalItem } from "./Types";
 
 export function findActiveItem(curr: SplitItem, depth: number, index: number[])
-: { depth: number, index: number[], pos: number, item: TerminalItem, group: Group, splitItem: SplitItem } | undefined {
+: { depth: number, index: number[], pos: number, item: RenderTerminalItem, group: Group, splitItem: SplitItem } | undefined {
   if (curr.list && curr.list.length > 0) {
     for (let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
@@ -25,7 +25,7 @@ export function findActiveItem(curr: SplitItem, depth: number, index: number[])
 }
 
 export function findItemById(curr: SplitItem, depth: number, index: number[], id: string)
-: { depth: number, index: number[], pos: number, item: TerminalItem, group: Group, splitItem: SplitItem } | undefined {
+: { depth: number, index: number[], pos: number, item: RenderTerminalItem, group: Group, splitItem: SplitItem } | undefined {
   if (curr.list && curr.list.length > 0) {
     for (let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
@@ -54,8 +54,8 @@ export function findItemById(curr: SplitItem, depth: number, index: number[], id
  * 방송 대상 스냅샷을 만들 때 쓴다. 스냅샷 이후로는 아무도 이 함수를 다시 부르지 않으므로,
  * 나중에 생긴 터미널이 방송 집합에 저절로 끼어들 경로가 없다.
  */
-export function collectVisibleItems(curr: SplitItem): TerminalItem[] {
-  const result: TerminalItem[] = [];
+export function collectVisibleItems(curr: SplitItem): RenderTerminalItem[] {
+  const result: RenderTerminalItem[] = [];
 
   const walk = (node: SplitItem): void => {
     if (!node.list || node.list.length === 0) return;
@@ -174,8 +174,8 @@ export function collectExpandedPaths(items: ListItemElem[]): string[] {
  *
  * 탭 정렬(Align)처럼 트리를 통째로 다시 짤 때 쓴다.
  */
-export function collectAllItems(curr: SplitItem): TerminalItem[] {
-  const result: TerminalItem[] = [];
+export function collectAllItems(curr: SplitItem): RenderTerminalItem[] {
+  const result: RenderTerminalItem[] = [];
 
   const walk = (node: SplitItem): void => {
     if (!node.list || node.list.length === 0) return;

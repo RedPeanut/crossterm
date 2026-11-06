@@ -1,5 +1,5 @@
 import { $ } from "../../util/dom";
-import { TerminalItem } from "../../../common/Types";
+// import { RenderTerminalItem } from "../../../common/Types";
 import { Tab } from "./Tab";
 import { Group } from "../../Types";
 import { Disposable } from '../../../common/base/lifecycle';

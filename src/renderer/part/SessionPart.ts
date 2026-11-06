@@ -6,7 +6,8 @@ import { Part, PartOptions } from '../Part';
 import { GroupView } from './view/GroupView';
 import { OrientationView } from './view/OrientationView';
 import { Service, sessionPartServiceId, setService } from '../Service';
-import { TerminalItem } from '../../common/Types';
+// import { RenderTerminalItem } from '../../common/Types';
+import { RenderTerminalItem } from '../Types';
 import { wrapper } from '../globals';
 import { findActiveItem, findItemById } from '../utils';
 import { result } from 'lodash';
@@ -16,7 +17,7 @@ export interface SessionPartService extends Service {
   getServices(): void;
   makeOverlayVisible(b: boolean): void;
   controlStyle({depth, index, pos}, {selected, active}): void;
-  setActiveTerminal(item: TerminalItem): void;
+  setActiveTerminal(item: RenderTerminalItem): void;
   fit(): void;
 }
 
@@ -306,7 +307,7 @@ export class SessionPart extends Part implements SessionPartService {
    * 이전 활성 터미널의 active를 내리고, 같은 그룹이면 selected까지 넘겨받는다.
    * 탭 클릭과 터미널 영역 클릭이 모두 이 경로를 탄다.
    */
-  setActiveTerminal(item: TerminalItem): void {
+  setActiveTerminal(item: RenderTerminalItem): void {
     if (item.active) return;
 
     const find_active = findActiveItem(wrapper.tree, 0, []);

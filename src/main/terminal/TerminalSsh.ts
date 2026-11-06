@@ -1,18 +1,18 @@
 import { Client, ClientChannel, ClientErrorExtensions, NegotiatedAlgorithms } from 'ssh2';
 import { EventEmitter } from 'events';
-import { TerminalItem } from '../../common/Types';
+import { CommonTerminalItem } from '../../common/Types';
 import DataBatcher from './DataBatcher';
 import TerminalBase from './TerminalBase';
 // import { TerminalOptions } from 'main/Types';
 
 export default class TerminalSsh extends TerminalBase {
 
-  options: TerminalItem;
+  options: CommonTerminalItem;
   batcher: DataBatcher | null = null;
   conn?: Client;
   stream?: ClientChannel;
 
-  constructor(options: TerminalItem) {
+  constructor(options: CommonTerminalItem) {
     super(options);
     // this.options = options;
     // this.start(options);

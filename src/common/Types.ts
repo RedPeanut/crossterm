@@ -1,29 +1,10 @@
-import { Term } from "../renderer/part/term/Term";
-
-export type ConnStatus = 'connecting' | 'connected' | 'error' | 'closed';
-
-export interface TerminalItem {
+export interface CommonTerminalItem {
   uid: string,
-
-  // in render
-  selected?: boolean; // default: false
-  active?: boolean; // default: false
-
-  //
-  term?: Term;
-  connStatus?: ConnStatus;
-  onConnStatusChange?: (status: ConnStatus) => void;
 
   // in main
   // properties that are describe to terminal
   // text, position, etc ...
   type?: string; // 'folder' | 'local' | 'remote'
-  title: string;
-
-  /* size?: {
-    row: number;
-    col: number;
-  } */
 
   url?: {
     host: string;

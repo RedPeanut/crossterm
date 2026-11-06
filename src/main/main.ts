@@ -16,7 +16,7 @@ import log from 'electron-log';
 import * as utils from './utils';
 import { SerializableContextMenuItem, SerializableMenuItem } from '../common/Types';
 import { Menubar } from './Menubar';
-import { TerminalItem } from '../common/Types';
+import { CommonTerminalItem } from '../common/Types';
 import TerminalLocal from './terminal/TerminalLocal';
 import TerminalSsh from './terminal/TerminalSsh';
 import TerminalBase from './terminal/TerminalBase';
@@ -145,7 +145,7 @@ class MainWindow extends Disposable {
 
     ipcMain.on('terminal new', (event, args: any[]) => {
       console.log('[main.ts/new] args =', args);
-      const arg: TerminalItem = args[0] as TerminalItem;
+      const arg: CommonTerminalItem = args[0] as CommonTerminalItem;
       const { uid, type } = arg;
 
       let terminal: TerminalBase;
