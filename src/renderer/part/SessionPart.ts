@@ -114,8 +114,8 @@ export class SessionPart extends Part implements SessionPartService {
     for (let i = 0; i < viewItems.length; i++) {
       if (viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        for (let j = 0; j < v.terms.terms.length; j++)
-          v.terms.terms[j].createTerminal();
+        for (let j = 0; j < v.contents.terms.length; j++)
+          v.contents.terms[j].createTerminal();
       } else if (viewItems[i].view instanceof OrientationView) {
         // recurrence
         this.createTerminal_r(viewItems[i].view as OrientationView);
@@ -127,8 +127,8 @@ export class SessionPart extends Part implements SessionPartService {
     if (this.resultView) {
       if (this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        for (let i = 0; i < v.terms.terms.length; i++)
-          v.terms.terms[i].createTerminal();
+        for (let i = 0; i < v.contents.terms.length; i++)
+          v.contents.terms[i].createTerminal();
       } else if (this.resultView instanceof OrientationView) {
         this.createTerminal_r(this.resultView as OrientationView);
       }
@@ -168,7 +168,7 @@ export class SessionPart extends Part implements SessionPartService {
     for (let i = 0; i < viewItems.length; i++) {
       if (viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        v.terms.wrapper.style.display = b ? 'block' : 'none';
+        v.contents.wrapper.style.display = b ? 'block' : 'none';
       } else if (viewItems[i].view instanceof OrientationView) {
         this.makeOverlayVisible_r(viewItems[i].view as OrientationView, b);
       }
@@ -179,7 +179,7 @@ export class SessionPart extends Part implements SessionPartService {
     if (this.resultView) {
       if (this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        v.terms.wrapper.style.display = b ? 'block' : 'none';
+        v.contents.wrapper.style.display = b ? 'block' : 'none';
       } else if (this.resultView instanceof OrientationView) {
         this.makeOverlayVisible_r(this.resultView as OrientationView, b);
       }
@@ -200,21 +200,21 @@ export class SessionPart extends Part implements SessionPartService {
         if (selected) {
           for (let i = 0; i < v.tabs.tabs.length; i++) {
             v.tabs.tabs[i].element.classList.remove('selected');
-            v.terms.terms[i].element.classList.remove('selected');
+            v.contents.terms[i].element.classList.remove('selected');
           }
           v.tabs.tabs[pos].element.classList.add('selected');
-          v.terms.terms[pos].element.classList.add('selected');
+          v.contents.terms[pos].element.classList.add('selected');
         } else {
           v.tabs.tabs[pos].element.classList.remove('selected');
-          v.terms.terms[pos].element.classList.remove('selected');
+          v.contents.terms[pos].element.classList.remove('selected');
         }
 
         if (active) {
           v.tabs.tabs[pos].element.classList.add('active');
-          v.terms.terms[pos].element.classList.add('active');
+          v.contents.terms[pos].element.classList.add('active');
         } else {
           v.tabs.tabs[pos].element.classList.remove('active');
-          v.terms.terms[pos].element.classList.remove('active');
+          v.contents.terms[pos].element.classList.remove('active');
         }
       } else if (viewItems[index[curr]].view instanceof OrientationView) {
         // not enter here
@@ -246,21 +246,21 @@ export class SessionPart extends Part implements SessionPartService {
           if (selected) {
             for (let i = 0; i < v.tabs.tabs.length; i++) {
               v.tabs.tabs[i].element.classList.remove('selected');
-              v.terms.terms[i].element.classList.remove('selected');
+              v.contents.terms[i].element.classList.remove('selected');
             }
             v.tabs.tabs[pos].element.classList.add('selected');
-            v.terms.terms[pos].element.classList.add('selected');
+            v.contents.terms[pos].element.classList.add('selected');
           } else {
             v.tabs.tabs[pos].element.classList.remove('selected');
-            v.terms.terms[pos].element.classList.remove('selected');
+            v.contents.terms[pos].element.classList.remove('selected');
           }
 
           if (active) {
             v.tabs.tabs[pos].element.classList.add('active');
-            v.terms.terms[pos].element.classList.add('active');
+            v.contents.terms[pos].element.classList.add('active');
           } else {
             v.tabs.tabs[pos].element.classList.remove('active');
-            v.terms.terms[pos].element.classList.remove('active');
+            v.contents.terms[pos].element.classList.remove('active');
           }
         } else if (this.resultView instanceof OrientationView) {
           const orientationView: OrientationView = this.resultView as OrientationView;
@@ -269,21 +269,21 @@ export class SessionPart extends Part implements SessionPartService {
           if (selected) {
             for (let i = 0; i < v.tabs.tabs.length; i++) {
               v.tabs.tabs[i].element.classList.remove('selected');
-              v.terms.terms[i].element.classList.remove('selected');
+              v.contents.terms[i].element.classList.remove('selected');
             }
             v.tabs.tabs[pos].element.classList.add('selected');
-            v.terms.terms[pos].element.classList.add('selected');
+            v.contents.terms[pos].element.classList.add('selected');
           } else {
             v.tabs.tabs[pos].element.classList.remove('selected');
-            v.terms.terms[pos].element.classList.remove('selected');
+            v.contents.terms[pos].element.classList.remove('selected');
           }
 
           if (active) {
             v.tabs.tabs[pos].element.classList.add('active');
-            v.terms.terms[pos].element.classList.add('active');
+            v.contents.terms[pos].element.classList.add('active');
           } else {
             v.tabs.tabs[pos].element.classList.remove('active');
-            v.terms.terms[pos].element.classList.remove('active');
+            v.contents.terms[pos].element.classList.remove('active');
           }
         }
       } else {
@@ -340,7 +340,7 @@ export class SessionPart extends Part implements SessionPartService {
     for (let i = 0; i < viewItems.length; i++) {
       if (viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        v.terms.fit();
+        v.contents.fit();
       } else if (viewItems[i].view instanceof OrientationView) {
         this.fit_r(viewItems[i].view as OrientationView);
       }
@@ -351,7 +351,7 @@ export class SessionPart extends Part implements SessionPartService {
     if (this.resultView) {
       if (this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        v.terms.fit();
+        v.contents.fit();
       } else if (this.resultView instanceof OrientationView) {
         this.fit_r(this.resultView as OrientationView);
       }

@@ -15,11 +15,11 @@ import { StatusbarPartService } from '../StatusbarPart';
 import { SessionPartService } from '../SessionPart';
 import { ContextKey } from '../../key/ContextKey';
 import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from '../../key/contextKeys';
-import { TermResizeOverlay } from './TermResizeOverlay';
+import { TermResizeOverlay } from '../term/TermResizeOverlay';
 // import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from './TerminalContextKeys';
 import { Disposable } from '../../../common/base/lifecycle';
 import { BroadcastInputService } from '../../service/BroadcastInputService';
-import { getTerminalTheme, onDidChangeTheme } from './terminalTheme';
+import { getTerminalTheme, onDidChangeTheme } from '../term/terminalTheme';
 
 export class Term extends Disposable {
   parent: HTMLElement;

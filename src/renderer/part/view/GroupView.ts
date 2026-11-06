@@ -2,7 +2,7 @@
 import { $ } from "../../util/dom";
 import { MappedSashEvent, SplitViewItemSizeType, SplitViewItemView } from "../../component/SplitView";
 import { Tabs } from "../tab/Tabs";
-import { Terms } from "../term/Terms";
+import { Contents } from "../content/Contents";
 import { Group } from "../../Types";
 
 export interface GroupViewOptions {
@@ -44,7 +44,7 @@ export class GroupView implements SplitViewItemView {
    * sash 드래그와 윈도우 리사이즈 모두 이 경로를 타므로 여기서 터미널을 맞춘다.
    */
   layout(offset: number, size: number): void {
-    this.terms?.fit();
+    this.contents?.fit();
   }
   onDidChange(mappedEvent: MappedSashEvent): void {}
   snapped(visible: boolean): void {}
@@ -54,7 +54,7 @@ export class GroupView implements SplitViewItemView {
   style: {};
 
   tabs: Tabs;
-  terms: Terms;
+  contents: Contents;
 
   constructor(parent: HTMLElement, group: Group, options: GroupViewOptions) {
     this.parent = parent;
@@ -67,8 +67,8 @@ export class GroupView implements SplitViewItemView {
     // el.style = this.style;
     const tabs = this.tabs = new Tabs(el, this.group);
     el.appendChild(tabs.create());
-    const terms = this.terms = new Terms(el, this.group);
-    el.appendChild(terms.create());
+    const contents = this.contents = new Contents(el, this.group);
+    el.appendChild(contents.create());
     // this.container.appendChild(el);
     return el;
   }

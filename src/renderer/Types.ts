@@ -1,5 +1,5 @@
 import { CommonTerminalItem } from "../common/Types";
-import { Term } from "./part/term/Term";
+import { Term } from "./part/content/Term";
 
 export type ConnStatus = 'connecting' | 'connected' | 'error' | 'closed';
 

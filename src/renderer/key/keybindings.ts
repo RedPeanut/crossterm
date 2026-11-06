@@ -10,7 +10,7 @@ import { getService, mainLayoutServiceId, broadcastInputServiceId, bodyLayoutSer
 import { MainLayoutService } from '../layout/MainLayout';
 // import { keybindingsRegistry } from '../globals';
 // import { getFocusedTerm } from '../part/term/Term';
-import { Term } from '../part/term/Term';
+import { Term } from '../part/content/Term';
 import { getFocusedList, refreshAllLists } from '../component/List';
 import { BroadcastInputService } from '../service/BroadcastInputService';
 import { Group, SplitItem } from '../Types';

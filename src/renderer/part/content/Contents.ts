@@ -7,7 +7,7 @@ import { Term } from "./Term";
 import { Group } from "../../Types";
 import { Disposable } from '../../../common/base/lifecycle';
 
-export class Terms extends Disposable {
+export class Contents extends Disposable {
   parent: HTMLElement;
   element: HTMLElement;
   group: Group;
@@ -23,7 +23,7 @@ export class Terms extends Disposable {
   }
 
   create(): HTMLElement {
-    const el = this.element = $('.terms');
+    const el = this.element = $('.contents');
     this.terms = new Array<Term>(this.group.length);
 
     /* this.group.map((item, i) => {
