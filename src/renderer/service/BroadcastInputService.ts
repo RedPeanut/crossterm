@@ -47,7 +47,7 @@ export class BroadcastInputServiceImpl extends Disposable implements BroadcastIn
       this._targets.clear();
     } else {
       for (const item of collectVisibleItems(wrapper.tree)) {
-        if (item.term) this._targets.add(item.term.uid);
+        if (item.view) this._targets.add(item.view.uid);
       }
     }
     this._onDidChange.fire();

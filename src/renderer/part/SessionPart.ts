@@ -329,7 +329,7 @@ export class SessionPart extends Part implements SessionPartService {
       this.controlStyle({depth: find_curr.depth, index: find_curr.index, pos: find_curr.pos}, {selected: true, active: true});
 
       // 탭 전환만으로는 크기가 안 바뀔 수 있어 onResize가 안 나므로 직접 갱신한다.
-      item.term?.updateStatusbar();
+      item.view?.updateStatusbar();
     }
 
     requestAnimationFrame(() => requestAnimationFrame(() => this.fit()));

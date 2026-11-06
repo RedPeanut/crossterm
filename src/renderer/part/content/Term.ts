@@ -122,7 +122,7 @@ export class Term extends Disposable {
       uid: this.uid,
 
       // remove object when pass ipc
-      term: null,
+      view: null,
       connStatus: null,
       onConnStatusChange: null,
 

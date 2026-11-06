@@ -63,12 +63,12 @@ export class Tab extends Disposable {
 
     // 터미널 정리: main의 pty/ssh 종료 + renderer 쪽 xterm/리스너 해제
     // (Term.uid는 item.uid와 별개이며, main은 Term.uid로 터미널을 관리한다)
-    const term = item.term;
+    const term = item.view;
     if (term) {
       window.ipc.send('terminal close', { uid: term.uid });
       term.destroy();
       term.element.remove();
-      item.term = undefined;
+      item.view = undefined;
     }
 
     // find this in wrapper n remove
@@ -105,7 +105,7 @@ export class Tab extends Disposable {
     bodyLayoutService.layout(0, 0); // not use param
     requestAnimationFrame(() => requestAnimationFrame(() => {
       sessionPartService.fit();
-      next?.term?.updateStatusbar();
+      next?.view?.updateStatusbar();
     }));
   }
 

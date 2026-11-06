@@ -34,8 +34,8 @@ export class Contents extends Disposable {
 
     for (let i = 0; i < this.group.length; i++) {
       let item: RenderTerminalItem = this.group[i];
-      if (item.term) {
-        const term: Term = item.term;
+      if (item.view) {
+        const term: Term = item.view;
         if (item.selected) term.element.classList.add('selected');
         if (item.active) term.element.classList.add('active');
         el.appendChild(term.element);
@@ -44,7 +44,7 @@ export class Contents extends Disposable {
         const term = new Term(null, item);
         el.appendChild(term.create());
         this.terms[i] = term;
-        item.term = term;
+        item.view = term;
       }
     }
 
