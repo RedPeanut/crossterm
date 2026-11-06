@@ -6,9 +6,9 @@ export type TerminalBaseOptions = CommonTerminalItem;
 
 export abstract class TerminalBase extends EventEmitter {
 
-  options: CommonTerminalItem;
+  options: TerminalBaseOptions;
 
-  constructor(options: CommonTerminalItem) {
+  constructor(options: TerminalBaseOptions) {
     super();
     this.options = options;
   }
