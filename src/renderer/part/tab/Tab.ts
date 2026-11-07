@@ -73,7 +73,7 @@ export class Tab extends Disposable {
       const term = item.view as Term;
       if (term) {
         window.ipc.send('terminal close', { uid: term.uid });
-        term.destroy();
+        term.dispose();
         term.element.remove();
         item.view = undefined;
       }

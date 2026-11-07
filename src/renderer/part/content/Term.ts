@@ -270,7 +270,7 @@ export class Term extends Disposable implements TabContent {
     this.item.onConnStatusChange?.(status);
   }
 
-  destroy(): void {
+  override dispose(): void {
     // if (this.offConnected) this.offConnected(); // window.ipc.off('terminal connected', this.onConnected);
     // if (this.offError) this.offError(); // window.ipc.off('terminal error', this.onError);
     // if (this.offClosed) this.offClosed(); // window.ipc.off('terminal closed', this.onClosed);

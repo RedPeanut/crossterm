@@ -19,7 +19,5 @@ export class Shortcuts extends Disposable implements TabContent {
     return el;
   }
 
-  fit(): void {
-    throw new Error("Method not implemented.");
-  }
+  fit(): void {}
 }
