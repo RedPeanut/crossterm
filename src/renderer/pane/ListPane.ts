@@ -107,6 +107,7 @@ export class ListPane extends Pane {
         const item: ListItemElem | undefined = utils.flatten(renderer.sessions).find((item) => item.id === id);
 
         const new_one: RenderTerminalItem = {
+          kind: 'terminal',
           title: item.title,
           selected: true,
           active: true,
@@ -140,7 +141,7 @@ export class ListPane extends Pane {
 
         const sessionPartService: SessionPartService = getService(sessionPartServiceId);
         // sessionPartService.getServices();
-        sessionPartService.createTerminal();
+        sessionPartService.createContent();
       }, // onDblClick
       (items: ListItemElem[]) => {
         this.onSelectionChange?.(items.length === 1 ? items[0] : undefined);

@@ -1,7 +1,7 @@
 import { localize } from '../../../common/nls';
 import { $, _addEventListener } from '../../util/dom';
 // import { ConnStatus, RenderTerminalItem } from '../../../common/Types';
-import { ConnStatus, RenderTerminalItem } from '../../Types';
+import { ConnStatus, RenderTerminalItem, TabItem } from '../../Types';
 import { SessionPartService } from '../SessionPart';
 import { bodyLayoutServiceId, getService, sessionPartServiceId } from '../../Service';
 import { Disposable } from '../../../common/base/lifecycle';
@@ -9,6 +9,7 @@ import { BodyLayoutService } from '../../layout/BodyLayout';
 import { wrapper } from '../../globals';
 import { cleanSingleSplitItemOnce, collectVisibleItems, findItemById } from '../../utils';
 import { isSplitItem, SplitItem } from '../../Types';
+import { Term } from '../content/Term';
 
 export class Tab extends Disposable {
 
@@ -16,10 +17,11 @@ export class Tab extends Disposable {
   element: HTMLElement;
   statusDot: HTMLElement;
 
-  item: RenderTerminalItem;
+  // item: RenderTerminalItem;
+  item: TabItem;
   // sessionPartService: SessionPartService;
 
-  constructor(parent: HTMLElement, item: RenderTerminalItem) {
+  constructor(parent: HTMLElement, item: TabItem) {
     super();
     this.parent = parent;
     this.item = item;
@@ -27,13 +29,16 @@ export class Tab extends Disposable {
   }
 
   onMouseDown(e: any) {
-    (getService(sessionPartServiceId) as SessionPartService).setActiveTerminal(this.item);
+    (getService(sessionPartServiceId) as SessionPartService).setActiveTab(this.item);
   }
 
   onDragStart(e: any): void {
     console.log('onDragStart event is called...');
     // console.log('e =', e);
-    e.dataTransfer.setData('text', this.item.uid);
+    let text = `kind=${this.item.kind}`;
+    if (this.item.kind === 'terminal')
+      text += `&uid=${this.item.uid}`;
+    e.dataTransfer.setData('text', text);
     (getService(sessionPartServiceId) as SessionPartService).makeOverlayVisible(true);
   }
 
@@ -56,6 +61,7 @@ export class Tab extends Disposable {
     e.stopPropagation();
 
     const item = this.item;
+
     const find_curr = findItemById(wrapper.tree, 0, [], item.uid);
     if (!find_curr) return;
 
@@ -63,16 +69,18 @@ export class Tab extends Disposable {
 
     // 터미널 정리: main의 pty/ssh 종료 + renderer 쪽 xterm/리스너 해제
     // (Term.uid는 item.uid와 별개이며, main은 Term.uid로 터미널을 관리한다)
-    const term = item.view;
-    if (term) {
-      window.ipc.send('terminal close', { uid: term.uid });
-      term.destroy();
-      term.element.remove();
-      item.view = undefined;
+    if (item.kind === 'terminal') {
+      const term = item.view as Term;
+      if (term) {
+        window.ipc.send('terminal close', { uid: term.uid });
+        term.destroy();
+        term.element.remove();
+        item.view = undefined;
+      }
     }
 
     // find this in wrapper n remove
-    let next: RenderTerminalItem | undefined;
+    let next: TabItem | undefined;
     if (group.length > 1) {
       group.splice(pos, 1);
       // 같은 그룹에 남은 탭이 있으면 오른쪽(없으면 왼쪽) 탭이 이어받는다.
@@ -98,14 +106,19 @@ export class Tab extends Disposable {
     } else
       next = undefined;
 
-    // n body layout recreate ~
+    // body layout recreate
     const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
     const sessionPartService: SessionPartService = getService(sessionPartServiceId);
     bodyLayoutService.recreate();
     bodyLayoutService.layout(0, 0); // not use param
     requestAnimationFrame(() => requestAnimationFrame(() => {
       sessionPartService.fit();
-      next?.view?.updateStatusbar();
+
+      // next?.view?.updateStatusbar();
+      if (next) {
+        if (next.kind === 'terminal')
+          next.view.updateStatusbar();
+      }
     }));
   }
 
@@ -116,11 +129,11 @@ export class Tab extends Disposable {
   }
 
   create(): HTMLElement {
-    const item = this.item;
+    // const item = this.item;
 
     const el = this.element = $('.tab');
-    if (item.selected) el.classList.add('selected');
-    if (item.active) el.classList.add('active');
+    if (this.item.selected) el.classList.add('selected');
+    if (this.item.active) el.classList.add('active');
 
     el.draggable = true;
     // el.onmousedown = this.onMouseDown.bind(this);
@@ -145,23 +158,40 @@ export class Tab extends Disposable {
     const tabBorderTopContainer = $('.tab-border-top-container');
     el.appendChild(tabBorderTopContainer);
 
-    const typeIcon = $(`a.codicon.codicon-${this.item.type === 'local' ? 'terminal' : 'globe'}`);
+    let typeIcon: HTMLElement;
+    if (this.item.kind === 'settings') {
+      typeIcon = $(`a.codicon.codicon-gear`);
+    } else if (this.item.kind === 'shortcuts') {
+      typeIcon = $(`a.codicon.codicon-keyboard`); // record-keys
+    } else { // if (this.item.kind === 'terminal') {
+      typeIcon = $(`a.codicon.codicon-${this.item.type === 'local' ? 'terminal' : 'globe'}`);
+    }
     this._register(_addEventListener(typeIcon, 'click', (e) => this.onClick_closeBtn(e)));
     el.appendChild(typeIcon);
 
-    // status dot (remote only)
-    if (item.type === 'remote') {
-      const dot = this.statusDot = $('span.tab-status-dot');
-      dot.className = `tab-status-dot status-${item.connStatus ?? 'connecting'}`;
-      dot.title = this.connStatusLabel(item.connStatus ?? 'connecting');
-      el.appendChild(dot);
+    if (this.item.kind === 'terminal') {
+      // status dot (remote only)
+      if (this.item.type === 'remote') {
+        const dot = this.statusDot = $('span.tab-status-dot');
+        dot.className = `tab-status-dot status-${this.item.connStatus ?? 'connecting'}`;
+        dot.title = this.connStatusLabel(this.item.connStatus ?? 'connecting');
+        el.appendChild(dot);
 
-      // // register status callback on the item
-      item.onConnStatusChange = (status) => this.updateStatus(status);
+        // // register status callback on the item
+        this.item.onConnStatusChange = (status) => this.updateStatus(status);
+      }
     }
 
     const label = $('.label');
-    label.textContent = this.item.title; // '탭입니다';
+    let title: string;
+    if (this.item.kind === 'settings') {
+      title = `Settings`;
+    } else if (this.item.kind === 'shortcuts') {
+      title = `Keyboard Shortcuts`;
+    } else { // if (this.item.kind === 'terminal') {
+      title = this.item.title; // '탭입니다';
+    }
+    label.textContent = title;
     el.appendChild(label);
 
     /* const tabActionsContainer = $('.tab-actions');

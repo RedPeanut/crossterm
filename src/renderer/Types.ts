@@ -1,5 +1,5 @@
-import { Settings } from "electron";
 import { CommonTerminalItem } from "../common/Types";
+import { Settings } from "./part/content/Settings";
 import { Shortcuts } from "./part/content/Shortcuts";
 import { Term } from "./part/content/Term";
 
@@ -17,7 +17,7 @@ export interface RenderTerminalItem extends CommonTerminalItem {
 }
 
 export type Mode = 'horizontal' | 'vertical';
-export type Group = RenderTerminalItem[];
+// export type Group = RenderTerminalItem[];
 
 export interface SplitItem {
   // id: string;
@@ -26,6 +26,7 @@ export interface SplitItem {
 }
 
 export interface SettingsItem {
+  uid: 'settings';
   // kind: string = 'settings'; // An interface property cannot have an initializer. ts(1246)
   kind: 'settings';
   selected?: boolean;
@@ -34,6 +35,7 @@ export interface SettingsItem {
 }
 
 export interface ShortcutsItem {
+  uid: 'shortcuts';
   kind: 'shortcuts';
   selected?: boolean;
   active?: boolean;
@@ -41,7 +43,7 @@ export interface ShortcutsItem {
 }
 
 export type TabItem = RenderTerminalItem | SettingsItem | ShortcutsItem;
-// export type Group = TabItem[];
+export type Group = TabItem[];
 
 /*
 (Render|Common|Main)TerminalItem

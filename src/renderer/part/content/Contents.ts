@@ -1,6 +1,7 @@
 import { $ } from "../../util/dom";
 // import { RenderTerminalItem } from "../../../common/Types";
-import { RenderTerminalItem } from "../../Types";
+import { RenderTerminalItem, TabItem } from "../../Types";
+import { TabContent } from "./Types";
 import { DropOverlay } from "../overlay/DropOverlay";
 import { DropTarget } from "../overlay/DropTarget";
 import { Term } from "./Term";
@@ -11,7 +12,7 @@ export class Contents extends Disposable {
   parent: HTMLElement;
   element: HTMLElement;
   group: Group;
-  terms: Term[];
+  tabContents: TabContent[];
   wrapper: HTMLElement;
   dropTarget: DropTarget;
   dropOverlay: DropOverlay;
@@ -24,7 +25,7 @@ export class Contents extends Disposable {
 
   create(): HTMLElement {
     const el = this.element = $('.contents');
-    this.terms = new Array<Term>(this.group.length);
+    this.tabContents = new Array<Term>(this.group.length);
 
     /* this.group.map((item, i) => {
       const term = new Term(null, item);
@@ -33,18 +34,25 @@ export class Contents extends Disposable {
     }); */
 
     for (let i = 0; i < this.group.length; i++) {
-      let item: RenderTerminalItem = this.group[i];
+      let item: TabItem = this.group[i];
+
       if (item.view) {
-        const term: Term = item.view;
-        if (item.selected) term.element.classList.add('selected');
-        if (item.active) term.element.classList.add('active');
-        el.appendChild(term.element);
-        this.terms[i] = term;
+        const tabContent: TabContent = item.view;
+        if (item.selected) tabContent.element.classList.add('selected');
+        if (item.active) tabContent.element.classList.add('active');
+        el.appendChild(tabContent.element);
+        this.tabContents[i] = tabContent;
       } else {
-        const term = new Term(null, item);
-        el.appendChild(term.create());
-        this.terms[i] = term;
-        item.view = term;
+        if (item.kind === 'settings') {
+
+        } else if (item.kind === 'shortcuts') {
+
+        } else if (item.kind === 'terminal') {
+          const term = new Term(null, item);
+          el.appendChild(term.create());
+          this.tabContents[i] = term;
+          item.view = term;
+        }
       }
     }
 
@@ -61,8 +69,8 @@ export class Contents extends Disposable {
 
   /** 보이는 터미널들을 컨테이너 크기에 맞춘다. 숨겨진 터미널은 Term.fit()에서 걸러진다. */
   fit(): void {
-    for (const term of this.terms) {
-      term.fit();
+    for (const content of this.tabContents) {
+      content.fit();
     }
   }
 }

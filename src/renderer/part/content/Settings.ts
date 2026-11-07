@@ -1,13 +1,16 @@
 import { $ } from "../../util/dom";
+import { TabContent } from "./Types";
+import { Disposable } from '../../../common/base/lifecycle';
 
 export interface SettingsOptions {}
 
-export class Settings {
+export class Settings extends Disposable implements TabContent {
 
   parent: HTMLElement;
   element: HTMLElement;
 
   constructor(parent: HTMLElement) {
+    super();
     this.parent = parent;
   }
 
@@ -16,4 +19,7 @@ export class Settings {
     return el;
   }
 
+  fit(): void {
+    throw new Error("Method not implemented.");
+  }
 }

@@ -1,5 +1,5 @@
 import { Orientation } from '../component/Sash';
-import { Group, isSplitItem, SplitItem } from '../Types';
+import { Group, isSplitItem, SplitItem, TabItem } from '../Types';
 import { $, getClientArea } from '../util/dom';
 import { SplitView, SplitViewItem, SplitViewItemView, MappedSashEvent } from '../component/SplitView';
 import { Part, PartOptions } from '../Part';
@@ -11,13 +11,14 @@ import { RenderTerminalItem } from '../Types';
 import { wrapper } from '../globals';
 import { findActiveItem, findItemById } from '../utils';
 import { result } from 'lodash';
+import { Term } from './content/Term';
 
 export interface SessionPartService extends Service {
-  createTerminal(): void;
+  createContent(): void;
   // getServices(): void;
   makeOverlayVisible(b: boolean): void;
   controlStyle({depth, index, pos}, {selected, active}): void;
-  setActiveTerminal(item: RenderTerminalItem): void;
+  setActiveTab(item: TabItem): void;
   fit(): void;
 }
 
@@ -109,28 +110,44 @@ export class SessionPart extends Part implements SessionPartService {
     // return container; // super.createContentArea();
   }
 
-  createTerminal_r(v: OrientationView): void {
+  createContent_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
     for (let i = 0; i < viewItems.length; i++) {
       if (viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        for (let j = 0; j < v.contents.terms.length; j++)
-          v.contents.terms[j].createTerminal();
+        for (let j = 0; j < v.contents.group.length; j++) {
+          const tabItem: TabItem = v.contents.group[j];
+          if (tabItem.kind === 'settings') {
+
+          } else if (tabItem.kind === 'shortcuts') {
+
+          } else if (tabItem.kind === 'terminal') {
+            (v.contents.tabContents[j] as Term).createTerminal();
+          }
+        }
       } else if (viewItems[i].view instanceof OrientationView) {
         // recurrence
-        this.createTerminal_r(viewItems[i].view as OrientationView);
+        this.createContent_r(viewItems[i].view as OrientationView);
       }
     }
   }
 
-  createTerminal(): void {
+  createContent(): void {
     if (this.resultView) {
       if (this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        for (let i = 0; i < v.contents.terms.length; i++)
-          v.contents.terms[i].createTerminal();
+        for (let i = 0; i < v.contents.group.length; i++) {
+          const tabItem: TabItem = v.contents.group[i];
+          if (tabItem.kind === 'settings') {
+
+          } else if (tabItem.kind === 'shortcuts') {
+
+          } else if (tabItem.kind === 'terminal') {
+            (v.contents.tabContents[i] as Term).createTerminal();
+          }
+        }
       } else if (this.resultView instanceof OrientationView) {
-        this.createTerminal_r(this.resultView as OrientationView);
+        this.createContent_r(this.resultView as OrientationView);
       }
     }
   }
@@ -200,21 +217,21 @@ export class SessionPart extends Part implements SessionPartService {
         if (selected) {
           for (let i = 0; i < v.tabs.tabs.length; i++) {
             v.tabs.tabs[i].element.classList.remove('selected');
-            v.contents.terms[i].element.classList.remove('selected');
+            v.contents.tabContents[i].element.classList.remove('selected');
           }
           v.tabs.tabs[pos].element.classList.add('selected');
-          v.contents.terms[pos].element.classList.add('selected');
+          v.contents.tabContents[pos].element.classList.add('selected');
         } else {
           v.tabs.tabs[pos].element.classList.remove('selected');
-          v.contents.terms[pos].element.classList.remove('selected');
+          v.contents.tabContents[pos].element.classList.remove('selected');
         }
 
         if (active) {
           v.tabs.tabs[pos].element.classList.add('active');
-          v.contents.terms[pos].element.classList.add('active');
+          v.contents.tabContents[pos].element.classList.add('active');
         } else {
           v.tabs.tabs[pos].element.classList.remove('active');
-          v.contents.terms[pos].element.classList.remove('active');
+          v.contents.tabContents[pos].element.classList.remove('active');
         }
       } else if (viewItems[index[curr]].view instanceof OrientationView) {
         // not enter here
@@ -246,21 +263,21 @@ export class SessionPart extends Part implements SessionPartService {
           if (selected) {
             for (let i = 0; i < v.tabs.tabs.length; i++) {
               v.tabs.tabs[i].element.classList.remove('selected');
-              v.contents.terms[i].element.classList.remove('selected');
+              v.contents.tabContents[i].element.classList.remove('selected');
             }
             v.tabs.tabs[pos].element.classList.add('selected');
-            v.contents.terms[pos].element.classList.add('selected');
+            v.contents.tabContents[pos].element.classList.add('selected');
           } else {
             v.tabs.tabs[pos].element.classList.remove('selected');
-            v.contents.terms[pos].element.classList.remove('selected');
+            v.contents.tabContents[pos].element.classList.remove('selected');
           }
 
           if (active) {
             v.tabs.tabs[pos].element.classList.add('active');
-            v.contents.terms[pos].element.classList.add('active');
+            v.contents.tabContents[pos].element.classList.add('active');
           } else {
             v.tabs.tabs[pos].element.classList.remove('active');
-            v.contents.terms[pos].element.classList.remove('active');
+            v.contents.tabContents[pos].element.classList.remove('active');
           }
         } else if (this.resultView instanceof OrientationView) {
           const orientationView: OrientationView = this.resultView as OrientationView;
@@ -269,21 +286,21 @@ export class SessionPart extends Part implements SessionPartService {
           if (selected) {
             for (let i = 0; i < v.tabs.tabs.length; i++) {
               v.tabs.tabs[i].element.classList.remove('selected');
-              v.contents.terms[i].element.classList.remove('selected');
+              v.contents.tabContents[i].element.classList.remove('selected');
             }
             v.tabs.tabs[pos].element.classList.add('selected');
-            v.contents.terms[pos].element.classList.add('selected');
+            v.contents.tabContents[pos].element.classList.add('selected');
           } else {
             v.tabs.tabs[pos].element.classList.remove('selected');
-            v.contents.terms[pos].element.classList.remove('selected');
+            v.contents.tabContents[pos].element.classList.remove('selected');
           }
 
           if (active) {
             v.tabs.tabs[pos].element.classList.add('active');
-            v.contents.terms[pos].element.classList.add('active');
+            v.contents.tabContents[pos].element.classList.add('active');
           } else {
             v.tabs.tabs[pos].element.classList.remove('active');
-            v.contents.terms[pos].element.classList.remove('active');
+            v.contents.tabContents[pos].element.classList.remove('active');
           }
         }
       } else {
@@ -303,11 +320,11 @@ export class SessionPart extends Part implements SessionPartService {
   }
 
   /**
-   * 주어진 터미널을 활성 터미널로 만든다.
-   * 이전 활성 터미널의 active를 내리고, 같은 그룹이면 selected까지 넘겨받는다.
-   * 탭 클릭과 터미널 영역 클릭이 모두 이 경로를 탄다.
+   * 주어진 아이템을 활성 아이템으로 만든다.
+   * 이전 활성 아이템의 active를 내리고, 같은 그룹이면 selected까지 넘겨받는다.
+   * 탭 클릭과 아이템 영역 클릭이 모두 이 경로를 탄다.
    */
-  setActiveTerminal(item: RenderTerminalItem): void {
+  setActiveTab(item: TabItem): void {
     if (item.active) return;
 
     const find_active = findActiveItem(wrapper.tree, 0, []);
@@ -315,8 +332,16 @@ export class SessionPart extends Part implements SessionPartService {
 
     const { depth, index, pos, item: activeItem, group } = find_active;
 
-    // 같은 그룹이면 selected도 새 터미널로 넘어간다 (그룹 내 표시 대상이 하나이므로)
-    const same_group = group.some(groupItem => groupItem.uid === item.uid);
+    // 같은 그룹이면 selected도 새 아이템으로 넘어간다 (그룹 내 표시 대상이 하나이므로)
+    const same_group = group.some(e => {
+      if (e.kind === item.kind) {
+        if (e.kind === 'terminal' && item.kind === 'terminal')
+          return e.uid === item.uid;
+        else
+          return true;
+      }
+      return false;
+    });
 
     if (same_group) activeItem.selected = false;
     activeItem.active = false;
@@ -329,7 +354,8 @@ export class SessionPart extends Part implements SessionPartService {
       this.controlStyle({depth: find_curr.depth, index: find_curr.index, pos: find_curr.pos}, {selected: true, active: true});
 
       // 탭 전환만으로는 크기가 안 바뀔 수 있어 onResize가 안 나므로 직접 갱신한다.
-      item.view?.updateStatusbar();
+      if (item.kind === 'terminal' && item.view)
+        item.view.updateStatusbar();
     }
 
     requestAnimationFrame(() => requestAnimationFrame(() => this.fit()));

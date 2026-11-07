@@ -1,8 +1,8 @@
 import { Children, ListItemElem } from "../common/Types";
-import { Group, isSplitItem, SplitItem, RenderTerminalItem } from "./Types";
+import { Group, isSplitItem, SplitItem, RenderTerminalItem, TabItem } from "./Types";
 
 export function findActiveItem(curr: SplitItem, depth: number, index: number[])
-: { depth: number, index: number[], pos: number, item: RenderTerminalItem, group: Group, splitItem: SplitItem } | undefined {
+: { depth: number, index: number[], pos: number, item: TabItem, group: Group, splitItem: SplitItem } | undefined {
   if (curr.list && curr.list.length > 0) {
     for (let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
@@ -25,7 +25,7 @@ export function findActiveItem(curr: SplitItem, depth: number, index: number[])
 }
 
 export function findItemById(curr: SplitItem, depth: number, index: number[], id: string)
-: { depth: number, index: number[], pos: number, item: RenderTerminalItem, group: Group, splitItem: SplitItem } | undefined {
+: { depth: number, index: number[], pos: number, item: TabItem, group: Group, splitItem: SplitItem } | undefined {
   if (curr.list && curr.list.length > 0) {
     for (let i = 0; i < curr.list.length; i++) {
       let item = curr.list[i];
@@ -64,7 +64,7 @@ export function collectVisibleItems(curr: SplitItem): RenderTerminalItem[] {
         walk(entry as SplitItem);
       } else {
         const selected = (entry as Group).find((item) => item.selected);
-        if (selected) result.push(selected);
+        if (selected && selected.kind === 'terminal') result.push(selected);
       }
     }
   };
@@ -170,12 +170,12 @@ export function collectExpandedPaths(items: ListItemElem[]): string[] {
 }
 
 /**
- * 트리에 있는 모든 터미널. collectVisibleItems와 달리 탭 뒤에 숨은 것까지 트리 순서대로 모은다.
+ * 트리에 있는 모든 아이템. collectVisibleItems와 달리 탭 뒤에 숨은 것까지 트리 순서대로 모은다.
  *
  * 탭 정렬(Align)처럼 트리를 통째로 다시 짤 때 쓴다.
  */
-export function collectAllItems(curr: SplitItem): RenderTerminalItem[] {
-  const result: RenderTerminalItem[] = [];
+export function collectAllItems(curr: SplitItem): Group {
+  const result: Group = [];
 
   const walk = (node: SplitItem): void => {
     if (!node.list || node.list.length === 0) return;
