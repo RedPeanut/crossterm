@@ -141,7 +141,7 @@ export class ListPane extends Pane {
 
         const sessionPartService: SessionPartService = getService(sessionPartServiceId);
         // sessionPartService.getServices();
-        sessionPartService.createContent();
+        sessionPartService.createTerminal();
       }, // onDblClick
       (items: ListItemElem[]) => {
         this.onSelectionChange?.(items.length === 1 ? items[0] : undefined);

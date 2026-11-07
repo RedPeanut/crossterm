@@ -68,6 +68,7 @@ export interface PopupOptions {
 // app
 export const appPreferencesMenuId = 'app.preferences';
 export const appSettingsMenuId = 'app.settings';
+export const appSettingsCmdId = 'app.settings.cmd';
 export const appShortcutsMenuId = 'app.shortcuts';
 export const appShortcutsCmdId = 'app.shortcuts.cmd';
 export const appQuitMenuId = 'app.quit';

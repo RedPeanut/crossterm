@@ -7,6 +7,8 @@ import { DropTarget } from "../overlay/DropTarget";
 import { Term } from "./Term";
 import { Group } from "../../Types";
 import { Disposable } from '../../../common/base/lifecycle';
+import { Settings } from "./Settings";
+import { Shortcuts } from "./Shortcuts";
 
 export class Contents extends Disposable {
   parent: HTMLElement;
@@ -44,9 +46,15 @@ export class Contents extends Disposable {
         this.tabContents[i] = tabContent;
       } else {
         if (item.kind === 'settings') {
-
+          const settings = new Settings(null);
+          el.appendChild(settings.create());
+          this.tabContents[i] = settings;
+          item.view = settings;
         } else if (item.kind === 'shortcuts') {
-
+          const shortcuts = new Shortcuts(null);
+          el.appendChild(shortcuts.create());
+          this.tabContents[i] = shortcuts;
+          item.view = shortcuts;
         } else if (item.kind === 'terminal') {
           const term = new Term(null, item);
           el.appendChild(term.create());

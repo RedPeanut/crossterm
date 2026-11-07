@@ -67,17 +67,16 @@ export class Tab extends Disposable {
 
     const { index, pos, group, splitItem } = find_curr;
 
+    const view = item.view;
+
     // 터미널 정리: main의 pty/ssh 종료 + renderer 쪽 xterm/리스너 해제
     // (Term.uid는 item.uid와 별개이며, main은 Term.uid로 터미널을 관리한다)
     if (item.kind === 'terminal') {
-      const term = item.view as Term;
-      if (term) {
-        window.ipc.send('terminal close', { uid: term.uid });
-        term.dispose();
-        term.element.remove();
-        item.view = undefined;
-      }
+      window.ipc.send('terminal close', { uid: (view as Term).uid });
     }
+    view.dispose();
+    view.element.remove();
+    item.view = undefined;
 
     // find this in wrapper n remove
     let next: TabItem | undefined;
@@ -117,7 +116,7 @@ export class Tab extends Disposable {
       // next?.view?.updateStatusbar();
       if (next) {
         if (next.kind === 'terminal')
-          next.view.updateStatusbar();
+          next.view?.updateStatusbar();
       }
     }));
   }
@@ -185,9 +184,9 @@ export class Tab extends Disposable {
     const label = $('.label');
     let title: string;
     if (this.item.kind === 'settings') {
-      title = `Settings`;
+      title = localize('tab.title.settings', 'Settings');
     } else if (this.item.kind === 'shortcuts') {
-      title = `Keyboard Shortcuts`;
+      title = localize('tab.title.shortcuts', 'Keyboard Shortcuts');
     } else { // if (this.item.kind === 'terminal') {
       title = this.item.title; // '탭입니다';
     }

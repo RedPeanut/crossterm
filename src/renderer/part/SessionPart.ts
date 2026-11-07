@@ -14,7 +14,7 @@ import { result } from 'lodash';
 import { Term } from './content/Term';
 
 export interface SessionPartService extends Service {
-  createContent(): void;
+  createTerminal(): void;
   // getServices(): void;
   makeOverlayVisible(b: boolean): void;
   controlStyle({depth, index, pos}, {selected, active}): void;
@@ -110,7 +110,7 @@ export class SessionPart extends Part implements SessionPartService {
     // return container; // super.createContentArea();
   }
 
-  createContent_r(v: OrientationView): void {
+  createTerminal_r(v: OrientationView): void {
     const viewItems = v.splitView.viewItems;
     for (let i = 0; i < viewItems.length; i++) {
       if (viewItems[i].view instanceof GroupView) {
@@ -127,12 +127,12 @@ export class SessionPart extends Part implements SessionPartService {
         }
       } else if (viewItems[i].view instanceof OrientationView) {
         // recurrence
-        this.createContent_r(viewItems[i].view as OrientationView);
+        this.createTerminal_r(viewItems[i].view as OrientationView);
       }
     }
   }
 
-  createContent(): void {
+  createTerminal(): void {
     if (this.resultView) {
       if (this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
@@ -147,7 +147,7 @@ export class SessionPart extends Part implements SessionPartService {
           }
         }
       } else if (this.resultView instanceof OrientationView) {
-        this.createContent_r(this.resultView as OrientationView);
+        this.createTerminal_r(this.resultView as OrientationView);
       }
     }
   }
