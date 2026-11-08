@@ -27,7 +27,7 @@ export class Contents extends Disposable {
 
   create(): HTMLElement {
     const el = this.element = $('.contents');
-    this.tabContents = new Array<Term>(this.group.length);
+    this.tabContents = new Array<TabContent>(this.group.length);
 
     /* this.group.map((item, i) => {
       const term = new Term(null, item);
