@@ -81,7 +81,7 @@ export class Term extends Disposable implements TabContent {
       // 터미널 영역을 클릭(또는 포커스)해도 탭이 활성화되도록 한다.
       // SessionPart는 레이아웃 recreate 때 다시 만들어지므로 매번 조회한다.
       const sessionPartService: SessionPartService = getService(sessionPartServiceId);
-      sessionPartService?.setActiveTab(this.item);
+      sessionPartService.setActiveTab(this.item);
     }));
     this._register(_addEventListener(el, 'focusout', (e: FocusEvent) => {
       const next = e.relatedTarget as Node | null;

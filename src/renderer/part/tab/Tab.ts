@@ -35,10 +35,7 @@ export class Tab extends Disposable {
   onDragStart(e: any): void {
     console.log('onDragStart event is called...');
     // console.log('e =', e);
-    let text = `kind=${this.item.kind}`;
-    if (this.item.kind === 'terminal')
-      text += `&uid=${this.item.uid}`;
-    e.dataTransfer.setData('text', text);
+    e.dataTransfer.setData('text', this.item.uid);
     (getService(sessionPartServiceId) as SessionPartService).makeOverlayVisible(true);
   }
 

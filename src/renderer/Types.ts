@@ -45,16 +45,6 @@ export interface ShortcutsItem {
 export type TabItem = RenderTerminalItem | SettingsItem | ShortcutsItem;
 export type Group = TabItem[];
 
-/*
-(Render|Common|Main)TerminalItem
-SettingsItem
-ShortcutsItem
-
--- 체크할부분
-BodyLayout.recreate: create dom
-SessionPart.createTerminal: create main terminal process
-*/
-
 export function isSplitItem(o: any) {
   return 'mode' in o && 'list' in o && o.list.length > 0;
 }
