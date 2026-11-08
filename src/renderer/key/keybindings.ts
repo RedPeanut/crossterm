@@ -16,7 +16,7 @@ import { getFocusedList, refreshAllLists } from '../component/List';
 import { BroadcastInputService } from '../service/BroadcastInputService';
 import { Group, SplitItem } from '../Types';
 import { terminals, wrapper } from '../globals';
-import { collectAllItems, getTileRows } from '../utils';
+import { collectAllItems } from '../utils';
 import { BodyLayoutService } from '../layout/BodyLayout';
 import { SessionPartService } from '../part/SessionPart';
 
@@ -46,6 +46,36 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
   weight: KeybindingWeight.Core,
   handler: () => alignTabs(buildTiles),
 });
+
+/**
+ * Tiles 정렬의 행별 터미널 개수. (ex. 7 -> [3, 4])
+ *
+ * 행 수 r은 열 수 ceil(n/r) 대비 비율이 와이드(1.5)에 가장 가까운 값으로 고르고, 동률이면 행이 적은 쪽을 택한다.
+ * 나누어 떨어지지 않으면 남는 칸은 아래쪽 행부터 하나씩 더 받는다. (ex. 3 -> [1, 2], 5 -> [2, 3])
+ *
+ * Note. getGridDimensions는 7을 3x3(마지막 행 1개)으로 잡으므로 이 용도에는 맞지 않는다.
+ */
+function getTileRows(n: number): number[] {
+  if (n <= 0) return [];
+
+  let bestRows = 1;
+  let minDiff = Infinity;
+  for (let r = 1; r <= n; r++) {
+    const c = Math.ceil(n / r);
+    const diff = Math.abs(c / r - 1.5);
+    // if (diff < minDiff) {
+    if (diff < minDiff
+      || (diff === minDiff && n % r === 0 && n % bestRows !== 0)
+    ) {
+      minDiff = diff;
+      bestRows = r;
+    }
+  }
+
+  const base = Math.floor(n / bestRows);
+  const extra = n % bestRows;
+  return Array.from({ length: bestRows }, (_, i) => base + (i >= bestRows - extra ? 1 : 0));
+}
 
 /**
  * ex. 3 -> { mode: 'vertical', list: [ [a], { mode: 'horizontal', list: [[b], [c]] } ] }
