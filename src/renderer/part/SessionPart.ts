@@ -115,14 +115,11 @@ export class SessionPart extends Part implements SessionPartService {
     for (let i = 0; i < viewItems.length; i++) {
       if (viewItems[i].view instanceof GroupView) {
         const v: GroupView = viewItems[i].view as GroupView;
-        for (let j = 0; j < v.contents.group.length; j++) {
-          const tabItem: TabItem = v.contents.group[j];
-          if (tabItem.kind === 'settings') {
-
-          } else if (tabItem.kind === 'shortcuts') {
-
-          } else if (tabItem.kind === 'terminal') {
-            (v.contents.tabContents[j] as Term).createTerminal();
+        for (let j = 0; j < v.group.length; j++) {
+          const tabItem: TabItem = v.group[j];
+          if (tabItem.kind === 'terminal') {
+            // (v.contents.tabContents[j] as Term).createTerminal();
+            tabItem.view.createTerminal();
           }
         }
       } else if (viewItems[i].view instanceof OrientationView) {
@@ -136,14 +133,11 @@ export class SessionPart extends Part implements SessionPartService {
     if (this.resultView) {
       if (this.resultView instanceof GroupView) {
         const v: GroupView = this.resultView as GroupView;
-        for (let i = 0; i < v.contents.group.length; i++) {
-          const tabItem: TabItem = v.contents.group[i];
-          if (tabItem.kind === 'settings') {
-
-          } else if (tabItem.kind === 'shortcuts') {
-
-          } else if (tabItem.kind === 'terminal') {
-            (v.contents.tabContents[i] as Term).createTerminal();
+        for (let i = 0; i < v.group.length; i++) {
+          const tabItem: TabItem = v.group[i];
+          if (tabItem.kind === 'terminal') {
+            // (v.contents.tabContents[i] as Term).createTerminal();
+            tabItem.view.createTerminal();
           }
         }
       } else if (this.resultView instanceof OrientationView) {
