@@ -16,7 +16,7 @@ import {
   tabCloseAllMenuId, tabCloseOthersMenuId,
   tabToggleBroadcastInputMenuId,*/
   // command id
-  appShortcutsCmdId,
+  appSettingsCmdId, appShortcutsCmdId,
   /*editCopyCmdId, editPasteCmdId,
   tabAlignVerticalCmdId, tabAlignHorizontalCmdId, tabAlignTilesCmdId,
   tabToggleBroadcastInputCmdId*/
@@ -128,7 +128,7 @@ export class Menubar {
             {
               label: localize('menubar.settings', 'Settings'),
               accelerator: keyBinding[appSettingsMenuId][keyBindingIdx],
-              click: (item, focusedWindow) => {}
+              click: (item, focusedWindow) => focusedWindow?.webContents.send('execute command', appSettingsCmdId),
             },
             {
               id: appShortcutsMenuId,

@@ -156,7 +156,7 @@ export class Tab extends Disposable {
 
     let typeIcon: HTMLElement;
     if (this.item.kind === 'settings') {
-      typeIcon = $(`a.codicon.codicon-gear`);
+      typeIcon = $(`a.codicon.codicon-settings`);
     } else if (this.item.kind === 'shortcuts') {
       typeIcon = $(`a.codicon.codicon-keyboard`); // record-keys
     } else { // if (this.item.kind === 'terminal') {

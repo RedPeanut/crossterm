@@ -3,14 +3,17 @@ import { MappedSashEvent, SplitView, SplitViewItem, SplitViewItemSizeType, Split
 import { Layout } from '../Layout';
 import { ActivitybarPart, ActivitybarPartService } from '../part/ActivitybarPart';
 import { SidebarPart, SidebarPartService } from '../part/SidebarPart';
-import { SessionPart } from '../part/SessionPart';
+import { SessionPart, SessionPartService } from '../part/SessionPart';
 import { Orientation } from '../component/Sash';
 import { Parts, MainLayoutService, MainLayout } from './MainLayout';
 import { getClientArea } from '../util/dom';
-import { activitybarPartServiceId, bodyLayoutServiceId, getService, mainLayoutServiceId, Service, setService, sidebarPartServiceId } from '../Service';
+import { activitybarPartServiceId, bodyLayoutServiceId, getService, mainLayoutServiceId, Service, sessionPartServiceId, setService, sidebarPartServiceId } from '../Service';
 import { ActivitybarItem } from '../part/item/ActivitybarItem';
 import { BookmarkPaneView } from '../paneView/BookmarkPaneView';
 import { SamplePaneView } from '../paneView/SamplePaneView';
+import { TabItem } from '../Types';
+import { wrapper } from '../globals';
+import { findItemById, findActiveItem } from '../utils';
 
 export interface BodyLayoutOptions {}
 
@@ -19,6 +22,7 @@ export interface BodyLayoutService extends Service {
   inflate(): void;
   recreate(): void;
   layout(offset: number, size: number): void;
+  openItem(item: TabItem): void;
 }
 
 export class BodyLayout extends Layout implements BodyLayoutService, SplitViewItemView {
@@ -327,4 +331,43 @@ export class BodyLayout extends Layout implements BodyLayoutService, SplitViewIt
     this.sidebarPartService = getService(sidebarPartServiceId);
   } */
 
+  openItem(item: TabItem): void {
+
+    if (['settings', 'shortcuts'].includes(item.kind)) {
+      // if exists then focus n return
+      const find = findItemById(wrapper.tree, 0, [], item.kind);
+      if (find) {
+        const { index, pos, group, splitItem, item: findItem } = find;
+        const sessionPartService: SessionPartService = getService(sessionPartServiceId);
+        sessionPartService.setActiveTab(findItem);
+        return;
+      }
+    }
+
+    // find active item position first
+    const find_active = findActiveItem(wrapper.tree, 0, []);
+    // console.log('find_active =', find_active);
+
+    if (find_active) {
+      const { depth, index, pos, item: activeItem, group: activeGroup, splitItem } = find_active;
+
+      // turn off active item
+      activeItem.selected = false;
+      activeItem.active = false;
+
+      // attach backward
+      activeGroup.push(item);
+    } else {
+      wrapper.tree.list = [ [item] ];
+    }
+
+    const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
+    bodyLayoutService.recreate();
+    bodyLayoutService.layout(0, 0);
+
+    if (item.kind === 'terminal') {
+      const sessionPartService: SessionPartService = getService(sessionPartServiceId);
+      sessionPartService.createTerminal();
+    }
+  }
 }

@@ -14,7 +14,7 @@ import { MainLayoutService } from '../layout/MainLayout';
 import { Term } from '../part/content/Term';
 import { getFocusedList, refreshAllLists } from '../component/List';
 import { BroadcastInputService } from '../service/BroadcastInputService';
-import { Group, SplitItem } from '../Types';
+import { Group, SettingsItem, ShortcutsItem, SplitItem } from '../Types';
 import { terminals, wrapper } from '../globals';
 import { collectAllItems } from '../utils';
 import { BodyLayoutService } from '../layout/BodyLayout';
@@ -147,19 +147,33 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
   id: appSettingsCmdId,
   weight: KeybindingWeight.Core,
   primary: 'mod+,',
-  // TODO
   handler: () => {
-    (getService(mainLayoutServiceId) as MainLayoutService).showDialog();
+    const new_one: SettingsItem = {
+      uid: 'settings',
+      kind: 'settings',
+      selected: true,
+      active: true,
+    };
+
+    const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
+    bodyLayoutService.openItem(new_one);
   },
 });
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: appShortcutsCmdId,
   weight: KeybindingWeight.Core,
-  primary: 'mod+k mod+s', // mac: ⌘K ⌘S / win, linux: Ctrl+K Ctrl+S
-  // TODO: 단축키 편집 화면이 생기면 그걸 열도록 교체
+  primary: 'mod+k mod+s',
   handler: () => {
-    (getService(mainLayoutServiceId) as MainLayoutService).showDialog();
+    const new_one: ShortcutsItem = {
+      uid: 'shortcuts',
+      kind: 'shortcuts',
+      selected: true,
+      active: true,
+    };
+
+    const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
+    bodyLayoutService.openItem(new_one);
   },
 });
 

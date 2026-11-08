@@ -117,31 +117,8 @@ export class ListPane extends Pane {
           uid: uuidv4(),
         };
 
-        // find active item position first
-        const find_active = findActiveItem(wrapper.tree, 0, []);
-        // console.log('find_active =', find_active);
-
-        // let new_tree;
-        if (find_active) {
-          const { depth, index, pos, item: activeItem, group: activeGroup, splitItem } = find_active;
-
-          // turn off active item
-          activeItem.selected = false;
-          activeItem.active = false;
-
-          // attach backward
-          activeGroup.push(new_one);
-        } else {
-          wrapper.tree.list = [ [new_one] ];
-        }
-
         const bodyLayoutService: BodyLayoutService = getService(bodyLayoutServiceId);
-        bodyLayoutService.recreate();
-        bodyLayoutService.layout(0, 0);
-
-        const sessionPartService: SessionPartService = getService(sessionPartServiceId);
-        // sessionPartService.getServices();
-        sessionPartService.createTerminal();
+        bodyLayoutService.openItem(new_one);
       }, // onDblClick
       (items: ListItemElem[]) => {
         this.onSelectionChange?.(items.length === 1 ? items[0] : undefined);
