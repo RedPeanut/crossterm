@@ -1,8 +1,9 @@
 import assert from 'assert';
 // import fs from 'fs';
-import { getTileRows } from './utils';
+// import { getTileRows } from './utils';
+import { getTileRows } from './keybindings';
 
-describe('#utils', function() {
+describe('#keybindings', function() {
 
   it('getTileRows', function() {
     assert.deepStrictEqual(getTileRows(1), [1]);

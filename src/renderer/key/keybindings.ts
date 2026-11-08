@@ -55,7 +55,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
  *
  * Note. getGridDimensions는 7을 3x3(마지막 행 1개)으로 잡으므로 이 용도에는 맞지 않는다.
  */
-function getTileRows(n: number): number[] {
+export function getTileRows(n: number): number[] {
   if (n <= 0) return [];
 
   let bestRows = 1;
