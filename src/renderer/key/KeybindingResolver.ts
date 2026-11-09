@@ -1,4 +1,4 @@
-import { Context, ContextKeyExpr } from './ContextKey';
+import { Context, IContextKeyExpr } from './ContextKey';
 import { ResolvedKeybindingItem } from './KeybindingsRegistry';
 
 /**
@@ -121,7 +121,7 @@ export class KeybindingResolver {
     return this._findCommand(context, items) ?? items[items.length - 1];
   }
 
-  public static contextMatchesRules(context: Context, rules: ContextKeyExpr | undefined): boolean {
+  public static contextMatchesRules(context: Context, rules: IContextKeyExpr | undefined): boolean {
     return rules ? rules.evaluate(context) : true;
   }
 }

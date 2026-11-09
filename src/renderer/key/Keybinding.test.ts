@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { ContextKeyExpr } from './ContextKey';
+import { IContextKeyExpr, NSContextKeyExpr } from './ContextKey';
 import { ContextKeyService } from '../service/ContextKeyService';
 import { parseKeybinding } from './Keybinding';
 import { KeybindingResolver, ResultKind } from './KeybindingResolver';
@@ -15,7 +15,7 @@ describe('#Keybinding', function () {
 
   it('resolves single chord, honours when clause', function () {
     const resolver = resolverOf([
-      { id: 'pane.close', weight: KeybindingWeight.Core, primary: 'ctrl+w', when: ContextKeyExpr.has('paneFocused') },
+      { id: 'pane.close', weight: KeybindingWeight.Core, primary: 'ctrl+w', when: NSContextKeyExpr.has('paneFocused') },
     ]);
     const contextKeyService = new ContextKeyService();
     const paneFocused = contextKeyService.createKey<boolean>('paneFocused', false);

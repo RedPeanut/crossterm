@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { ContextKeyExpr, Context, ContextKeyValue, ContextKeyExpr } from './ContextKey';
+import { IContextKeyExpr, Context, ContextKeyValue, NSContextKeyExpr } from './ContextKey';
 
 
 describe('#ContextKey', function () {
@@ -35,7 +35,7 @@ describe('#ContextKey', function () {
     //   }
     // }));
 
-    const expr: ContextKeyExpr = ContextKeyExpr.deserialize('!paneFocused && listFocused || editorFocused')!;
+    const expr: IContextKeyExpr = NSContextKeyExpr.deserialize('!paneFocused && listFocused || editorFocused')!;
 
     console.log('expr =', expr);
 

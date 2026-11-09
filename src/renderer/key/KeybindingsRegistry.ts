@@ -2,7 +2,7 @@ import { isLinux, isMacintosh, isWindows } from '../../common/base/platform';
 // import { commandsRegistry } from '../globals';
 import { CommandHandler, commandsRegistry } from './CommandsRegistry';
 // import { CommandHandler } from './CommandService';
-import { ContextKeyExpr, ContextKeyExpr } from './ContextKey';
+import { IContextKeyExpr, NSContextKeyExpr } from './ContextKey';
 import { parseKeybinding } from './Keybinding';
 
 /**
@@ -28,7 +28,7 @@ export interface KeybindingRule {
   readonly mac?: string | null;
   readonly win?: string | null;
   readonly linux?: string | null;
-  readonly when?: ContextKeyExpr | string;
+  readonly when?: IContextKeyExpr | string;
   readonly args?: unknown;
 }
 
@@ -37,7 +37,7 @@ export interface ResolvedKeybindingItem {
   readonly chords: readonly string[];
   readonly command: string;
   readonly commandArgs: unknown;
-  readonly when: ContextKeyExpr | undefined;
+  readonly when: IContextKeyExpr | undefined;
   readonly weight: number;
   readonly order: number;
   readonly isDefault: boolean;
@@ -107,7 +107,7 @@ function toResolvedItem(rule: KeybindingRule, rawKeybinding: string, isDefault: 
     chords,
     command: rule.id,
     commandArgs: rule.args,
-    when: typeof rule.when === 'string' ? ContextKeyExpr.deserialize(rule.when) : rule.when,
+    when: typeof rule.when === 'string' ? NSContextKeyExpr.deserialize(rule.when) : rule.when,
     weight: rule.weight,
     order,
     isDefault,
