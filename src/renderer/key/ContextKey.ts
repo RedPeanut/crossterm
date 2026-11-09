@@ -183,50 +183,54 @@ export namespace NSContextKeyExpr {
       ))
     );
   }
-}
 
-function deserializeOne(serialized: string): IContextKeyExpr | undefined {
-  if (serialized.length === 0) {
-    return undefined;
-  }
-  if (serialized === 'true') { return NSContextKeyExpr.isTrue(); }
-  if (serialized === 'false') { return NSContextKeyExpr.isFalse(); }
+  // below is internal fn
 
-  let match = /^([^!=~]+)(!=|==|=~)(.*)$/.exec(serialized);
-  if (match) {
-    const key = match[1].trim();
-    const op = match[2];
-    const rawValue = match[3].trim();
-    if (op === '=~') {
-      return NSContextKeyExpr.regex(key, parseRegex(rawValue));
+  function deserializeOne(serialized: string): IContextKeyExpr | undefined {
+    if (serialized.length === 0) {
+      return undefined;
     }
-    const value = parseValue(rawValue);
-    return op === '==' ? NSContextKeyExpr.equals(key, value) : NSContextKeyExpr.notEquals(key, value);
+    if (serialized === 'true') { return isTrue(); }
+    if (serialized === 'false') { return isFalse(); }
+
+    let match = /^([^!=~]+)(!=|==|=~)(.*)$/.exec(serialized);
+    if (match) {
+      const key = match[1].trim();
+      const op = match[2];
+      const rawValue = match[3].trim();
+      if (op === '=~') {
+        return regex(key, parseRegex(rawValue));
+      }
+      const value = parseValue(rawValue);
+      return op === '==' ? equals(key, value) : notEquals(key, value);
+    }
+
+    match = /^\!\s*([^\s]+)$/.exec(serialized);
+    if (match) {
+      return not(match[1].trim());
+    }
+
+    return has(serialized);
   }
 
-  match = /^\!\s*([^\s]+)$/.exec(serialized);
-  if (match) {
-    return NSContextKeyExpr.not(match[1].trim());
+  function parseValue(serialized: string): ContextKeyValue {
+    if (serialized === 'true') { return true; }
+    if (serialized === 'false') { return false; }
+    const quoted = /^'([^']*)'$/.exec(serialized);
+    if (quoted) { return quoted[1]; }
+    return serialized;
   }
 
-  return NSContextKeyExpr.has(serialized);
-}
-
-function parseValue(serialized: string): unknown {
-  if (serialized === 'true') { return true; }
-  if (serialized === 'false') { return false; }
-  const quoted = /^'([^']*)'$/.exec(serialized);
-  if (quoted) { return quoted[1]; }
-  return serialized;
-}
-
-function parseRegex(serialized: string): RegExp | null {
-  if (serialized[0] !== '/') { return null; }
-  const end = serialized.lastIndexOf('/');
-  if (end <= 0) { return null; }
-  try {
-    return new RegExp(serialized.slice(1, end), serialized.slice(end + 1));
-  } catch {
-    return null;
+  function parseRegex(serialized: string): RegExp | null {
+    if (serialized[0] !== '/') { return null; }
+    const end = serialized.lastIndexOf('/');
+    if (end <= 0) { return null; }
+    try {
+      return new RegExp(serialized.slice(1, end), serialized.slice(end + 1));
+    } catch {
+      return null;
+    }
   }
+
 }
+
