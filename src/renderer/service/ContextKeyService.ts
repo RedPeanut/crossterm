@@ -1,6 +1,6 @@
 import { Emitter, Event } from '../../common/base/event';
 import { Disposable, IDisposable } from '../../common/base/lifecycle';
-import { Context, ContextKey, ContextKeyExpression, ContextKeyValue } from '../key/ContextKey';
+import { Context, ContextKey, ContextKeyExpr, ContextKeyValue } from '../key/ContextKey';
 
 /**
  * VSCode의 `vs/platform/contextkey/browser/contextKeyService.ts`를 최소 형태로 옮긴 것.
@@ -163,6 +163,7 @@ export class ContextKeyService extends Disposable {
    * 위로 올라가며 가장 가까운 Context를 찾는다. 못 찾으면 이 서비스의 Context.
    */
   getContext(target?: ContextKeyServiceTarget | null): Context {
+    // let node = target == null ? null : target;
     let node = target ?? null;
     while (node) {
       const rawId = node.getAttribute(KEYBINDING_CONTEXT_ATTR);
@@ -177,7 +178,7 @@ export class ContextKeyService extends Disposable {
     return this._registry.contexts.get(this._contextId)!;
   }
 
-  contextMatchesRules(rules: ContextKeyExpression | undefined, target?: ContextKeyServiceTarget | null): boolean {
+  contextMatchesRules(rules: ContextKeyExpr | undefined, target?: ContextKeyServiceTarget | null): boolean {
     return rules ? rules.evaluate(this.getContext(target)) : true;
   }
 

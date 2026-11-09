@@ -21,7 +21,15 @@ export type ContextKeyValue =
 
 /** 식(expression)을 평가할 때 값을 조회하는 대상. */
 export interface Context {
-  getValue<T extends ContextKeyValue = ContextKeyValue>(key: string): T | undefined;
+  /**
+   * 형태: 함수명<T extends 제약 = 기본값>(인자): 결과타입;
+   *
+   * TypeScript 추론 순서
+   * 1. 기본값이 있으면 기본값
+   * 2. 없으면 제약(extends)의 타입
+   * 3. 그것도 없으면 unknown
+   */
+  getValue<T extends ContextKeyValue/*  = ContextKeyValue */>(key: string): T | undefined;
 }
 
 /** 컴포넌트가 자기 상태를 context에 밀어넣을 때 쓰는 핸들. */
@@ -43,7 +51,7 @@ export const enum ContextKeyExprType {
   Or = 8,
 }
 
-export interface ContextKeyExpression {
+export interface ContextKeyExpr {
   readonly type: ContextKeyExprType;
   evaluate(context: Context): boolean;
   serialize(): string;
@@ -51,7 +59,7 @@ export interface ContextKeyExpression {
   keys(): string[];
 }
 
-class TrueExpr implements ContextKeyExpression {
+class TrueExpr implements ContextKeyExpr {
   static readonly INSTANCE = new TrueExpr();
   readonly type = ContextKeyExprType.True;
   evaluate(): boolean { return true; }
@@ -59,7 +67,7 @@ class TrueExpr implements ContextKeyExpression {
   keys(): string[] { return []; }
 }
 
-class FalseExpr implements ContextKeyExpression {
+class FalseExpr implements ContextKeyExpr {
   static readonly INSTANCE = new FalseExpr();
   readonly type = ContextKeyExprType.False;
   evaluate(): boolean { return false; }
@@ -68,7 +76,7 @@ class FalseExpr implements ContextKeyExpression {
 }
 
 /** `myKey` — truthy 여부만 본다. */
-class DefinedExpr implements ContextKeyExpression {
+class DefinedExpr implements ContextKeyExpr {
   readonly type = ContextKeyExprType.Defined;
   constructor(readonly key: string) { }
   evaluate(context: Context): boolean { return !!context.getValue(this.key); }
@@ -77,7 +85,7 @@ class DefinedExpr implements ContextKeyExpression {
 }
 
 /** `!myKey` */
-class NotExpr implements ContextKeyExpression {
+class NotExpr implements ContextKeyExpr {
   readonly type = ContextKeyExprType.Not;
   constructor(readonly key: string) { }
   evaluate(context: Context): boolean { return !context.getValue(this.key); }
@@ -86,7 +94,7 @@ class NotExpr implements ContextKeyExpression {
 }
 
 /** `myKey == 'value'` — VSCode와 동일하게 문자열로 정규화 후 비교한다. */
-class EqualsExpr implements ContextKeyExpression {
+class EqualsExpr implements ContextKeyExpr {
   readonly type = ContextKeyExprType.Equals;
   constructor(readonly key: string, readonly value: unknown) { }
   evaluate(context: Context): boolean {
@@ -98,7 +106,7 @@ class EqualsExpr implements ContextKeyExpression {
 }
 
 /** `myKey != 'value'` */
-class NotEqualsExpr implements ContextKeyExpression {
+class NotEqualsExpr implements ContextKeyExpr {
   readonly type = ContextKeyExprType.NotEquals;
   constructor(readonly key: string, readonly value: unknown) { }
   evaluate(context: Context): boolean {
@@ -109,7 +117,7 @@ class NotEqualsExpr implements ContextKeyExpression {
 }
 
 /** `myKey =~ /pattern/i` */
-class RegexExpr implements ContextKeyExpression {
+class RegexExpr implements ContextKeyExpr {
   readonly type = ContextKeyExprType.Regex;
   constructor(readonly key: string, readonly regexp: RegExp | null) { }
   evaluate(context: Context): boolean {
@@ -120,17 +128,17 @@ class RegexExpr implements ContextKeyExpression {
   keys(): string[] { return [this.key]; }
 }
 
-class AndExpr implements ContextKeyExpression {
+class AndExpr implements ContextKeyExpr {
   readonly type = ContextKeyExprType.And;
-  constructor(readonly expr: ContextKeyExpression[]) { }
+  constructor(readonly expr: ContextKeyExpr[]) { }
   evaluate(context: Context): boolean { return this.expr.every(e => e.evaluate(context)); }
   serialize(): string { return this.expr.map(e => e.serialize()).join(' && '); }
   keys(): string[] { return this.expr.flatMap(e => e.keys()); }
 }
 
-class OrExpr implements ContextKeyExpression {
+class OrExpr implements ContextKeyExpr {
   readonly type = ContextKeyExprType.Or;
-  constructor(readonly expr: ContextKeyExpression[]) { }
+  constructor(readonly expr: ContextKeyExpr[]) { }
   evaluate(context: Context): boolean { return this.expr.some(e => e.evaluate(context)); }
   serialize(): string { return this.expr.map(e => e.serialize()).join(' || '); }
   keys(): string[] { return this.expr.flatMap(e => e.keys()); }
@@ -138,21 +146,21 @@ class OrExpr implements ContextKeyExpression {
 
 /** `when` 절을 코드로 조립할 때 쓰는 팩토리. */
 export namespace ContextKeyExpr {
-  export function isTrue(): ContextKeyExpression { return TrueExpr.INSTANCE; }
-  export function isFalse(): ContextKeyExpression { return FalseExpr.INSTANCE; }
-  export function has(key: string): ContextKeyExpression { return new DefinedExpr(key); }
-  export function not(key: string): ContextKeyExpression { return new NotExpr(key); }
-  export function equals(key: string, value: unknown): ContextKeyExpression { return new EqualsExpr(key, value); }
-  export function notEquals(key: string, value: unknown): ContextKeyExpression { return new NotEqualsExpr(key, value); }
-  export function regex(key: string, pattern: RegExp | null): ContextKeyExpression { return new RegexExpr(key, pattern); }
+  export function isTrue(): ContextKeyExpr { return TrueExpr.INSTANCE; }
+  export function isFalse(): ContextKeyExpr { return FalseExpr.INSTANCE; }
+  export function has(key: string): ContextKeyExpr { return new DefinedExpr(key); }
+  export function not(key: string): ContextKeyExpr { return new NotExpr(key); }
+  export function equals(key: string, value: unknown): ContextKeyExpr { return new EqualsExpr(key, value); }
+  export function notEquals(key: string, value: unknown): ContextKeyExpr { return new NotEqualsExpr(key, value); }
+  export function regex(key: string, pattern: RegExp | null): ContextKeyExpr { return new RegexExpr(key, pattern); }
 
-  export function and(...expr: Array<ContextKeyExpression | undefined | null>): ContextKeyExpression | undefined {
-    const items = expr.filter((e): e is ContextKeyExpression => !!e);
+  export function and(...expr: Array<ContextKeyExpr | undefined | null>): ContextKeyExpr | undefined {
+    const items = expr.filter((e): e is ContextKeyExpr => !!e);
     return items.length === 0 ? undefined : (items.length === 1 ? items[0] : new AndExpr(items));
   }
 
-  export function or(...expr: Array<ContextKeyExpression | undefined | null>): ContextKeyExpression | undefined {
-    const items = expr.filter((e): e is ContextKeyExpression => !!e);
+  export function or(...expr: Array<ContextKeyExpr | undefined | null>): ContextKeyExpr | undefined {
+    const items = expr.filter((e): e is ContextKeyExpr => !!e);
     return items.length === 0 ? undefined : (items.length === 1 ? items[0] : new OrExpr(items));
   }
 
@@ -163,17 +171,21 @@ export namespace ContextKeyExpr {
    * 우선순위는 항상 `&&` > `||`로 고정된다. 이걸로 부족해지면 그때
    * VSCode의 scanner.ts 스타일 파서로 교체하면 된다.
    */
-  export function deserialize(serialized: string | null | undefined): ContextKeyExpression | undefined {
+  export function deserialize(serialized: string | null | undefined): ContextKeyExpr | undefined {
     if (!serialized) {
       return undefined;
     }
-    return or(...serialized.split('||').map(part =>
-      and(...part.split('&&').map(term => deserializeOne(term.trim())))
-    ));
+    return or(...serialized.split('||').map(
+      part => and(
+        ...part.split('&&').map(
+          term => deserializeOne(term.trim())
+        )
+      ))
+    );
   }
 }
 
-function deserializeOne(serialized: string): ContextKeyExpression | undefined {
+function deserializeOne(serialized: string): ContextKeyExpr | undefined {
   if (serialized.length === 0) {
     return undefined;
   }

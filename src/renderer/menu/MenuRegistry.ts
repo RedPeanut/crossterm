@@ -2,7 +2,7 @@ import { Emitter, Event } from '../../common/base/event';
 import { IDisposable } from '../../common/base/lifecycle';
 import { SerializableMenuItem } from '../../common/Types';
 import { commandsRegistry } from '../key/CommandsRegistry';
-import { Context, ContextKeyExpr, ContextKeyExpression } from '../key/ContextKey';
+import { Context, ContextKeyExpr, ContextKeyExpr } from '../key/ContextKey';
 
 /**
  * VSCode의 `vs/platform/actions/common/actions.ts`(MenuId, MenuRegistry)를 최소 형태로 옮긴 것.
@@ -36,9 +36,9 @@ export interface MenuCommand {
   readonly id: string;
   readonly title: string;
   /** 거짓이면 메뉴에 보이되 비활성화(disabled). */
-  readonly precondition?: ContextKeyExpression | string;
+  readonly precondition?: ContextKeyExpr | string;
   /** 지정하면 체크박스 항목이 되고, 참일 때 체크 표시된다. */
-  readonly toggled?: ContextKeyExpression | string;
+  readonly toggled?: ContextKeyExpr | string;
 }
 
 interface MenuEntryBase {
@@ -50,7 +50,7 @@ interface MenuEntryBase {
   /** group 안에서의 순서. 작을수록 위. */
   readonly order?: number;
   /** 거짓이면 메뉴에서 아예 숨긴다. (비활성화는 precondition) */
-  readonly when?: ContextKeyExpression | string;
+  readonly when?: ContextKeyExpr | string;
 }
 
 export interface MenuItem extends MenuEntryBase {
@@ -186,7 +186,7 @@ function resolveEntry(entry: MenuEntry, context: Context, lookupAccelerator?: Ac
   };
 }
 
-function evaluate(expr: ContextKeyExpression | string | undefined, context: Context, defaultValue: boolean): boolean {
+function evaluate(expr: ContextKeyExpr | string | undefined, context: Context, defaultValue: boolean): boolean {
   const resolved = typeof expr === 'string' ? ContextKeyExpr.deserialize(expr) : expr;
   return resolved ? resolved.evaluate(context) : defaultValue;
 }

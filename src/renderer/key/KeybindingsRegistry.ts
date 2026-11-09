@@ -2,7 +2,7 @@ import { isLinux, isMacintosh, isWindows } from '../../common/base/platform';
 // import { commandsRegistry } from '../globals';
 import { CommandHandler, commandsRegistry } from './CommandsRegistry';
 // import { CommandHandler } from './CommandService';
-import { ContextKeyExpr, ContextKeyExpression } from './ContextKey';
+import { ContextKeyExpr, ContextKeyExpr } from './ContextKey';
 import { parseKeybinding } from './Keybinding';
 
 /**
@@ -28,7 +28,7 @@ export interface KeybindingRule {
   readonly mac?: string | null;
   readonly win?: string | null;
   readonly linux?: string | null;
-  readonly when?: ContextKeyExpression | string;
+  readonly when?: ContextKeyExpr | string;
   readonly args?: unknown;
 }
 
@@ -37,7 +37,7 @@ export interface ResolvedKeybindingItem {
   readonly chords: readonly string[];
   readonly command: string;
   readonly commandArgs: unknown;
-  readonly when: ContextKeyExpression | undefined;
+  readonly when: ContextKeyExpr | undefined;
   readonly weight: number;
   readonly order: number;
   readonly isDefault: boolean;

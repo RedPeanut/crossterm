@@ -23,6 +23,7 @@ describe('#Keybinding', function () {
     assert.deepStrictEqual(
       [
         resolver.resolve(contextKeyService.getContext(), [], 'ctrl+w').kind,
+        // (a,b) 쉼표 연산자: a를 먼저 실행하고 b의 결과를 값으로 돌려줌
         (paneFocused.set(true), resolver.resolve(contextKeyService.getContext(), [], 'ctrl+w')),
       ],
       [

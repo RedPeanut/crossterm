@@ -1,4 +1,4 @@
-import { Context, ContextKeyExpression } from './ContextKey';
+import { Context, ContextKeyExpr } from './ContextKey';
 import { ResolvedKeybindingItem } from './KeybindingsRegistry';
 
 /**
@@ -100,7 +100,7 @@ export class KeybindingResolver {
 
   private _findCommand(context: Context, matches: readonly ResolvedKeybindingItem[]): ResolvedKeybindingItem | undefined {
     for (let i = matches.length - 1; i >= 0; i--) {
-      if (contextMatchesRules(context, matches[i].when)) {
+      if (KeybindingResolver.contextMatchesRules(context, matches[i].when)) {
         return matches[i];
       }
     }
@@ -120,8 +120,9 @@ export class KeybindingResolver {
     }
     return this._findCommand(context, items) ?? items[items.length - 1];
   }
+
+  public static contextMatchesRules(context: Context, rules: ContextKeyExpr | undefined): boolean {
+    return rules ? rules.evaluate(context) : true;
+  }
 }
 
-function contextMatchesRules(context: Context, rules: ContextKeyExpression | undefined): boolean {
-  return rules ? rules.evaluate(context) : true;
-}
