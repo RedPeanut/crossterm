@@ -1,7 +1,7 @@
 import assert from 'assert';
 // import fs from 'fs';
 // import { getTileRows } from './utils';
-import { getTileRows } from './keybindings';
+import { getTileRows } from '../utils';
 
 describe('#keybindings', function() {
 
