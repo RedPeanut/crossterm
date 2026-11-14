@@ -2,7 +2,7 @@ import path from 'path';
 import { Queue } from '../../common/base/async';
 import { Emitter, Event } from '../../common/base/event';
 import { Disposable } from '../../common/base/lifecycle';
-import { ConfigurationService, ConfigurationChangeEvent } from '../../common/service/ConfigurationService';
+import { ConfigurationService, ConfigurationChangeEvent, createChangeEvent } from '../../common/service/ConfigurationService';
 import { EnvironmentService } from '../../common/service/EnvironmentService';
 import { FileService } from '../../common/service/FileService';
 
@@ -117,20 +117,6 @@ export class MainConfigurationService extends Disposable implements Configuratio
 }
 
 // --- 순수 헬퍼 함수 ----------------------------------------------------------
-
-function createChangeEvent(affectedKeys: Set<string>): ConfigurationChangeEvent {
-  return {
-    affectedKeys,
-    affectsConfiguration: (section: string) => {
-      for (const key of affectedKeys) {
-        if (key === section || key.startsWith(section + '.') || section.startsWith(key + '.')) {
-          return true;
-        }
-      }
-      return false;
-    },
-  };
-}
 
 /** `a.b.c` 경로로 중첩된 값을 읽는다. */
 function getPath(obj: Record<string, unknown>, path: string): unknown {

@@ -1,6 +1,6 @@
 import { Disposable } from "../../common/base/lifecycle";
 import { Emitter, Event } from "../../common/base/event";
-import { ConfigurationChangeEvent, ConfigurationService } from "../../common/service/ConfigurationService";
+import { ConfigurationChangeEvent, ConfigurationService, createChangeEvent, SerializedConfigurationChange } from "../../common/service/ConfigurationService";
 
 export class RenderConfigurationService extends Disposable implements ConfigurationService {
 
@@ -9,8 +9,8 @@ export class RenderConfigurationService extends Disposable implements Configurat
 
   constructor() {
     super();
-    this._register(window.ipc.on('configuration changed', (_event: unknown, change: ConfigurationChangeEvent) => {
-      this._onDidChangeConfiguration.fire(change);
+    this._register(window.ipc.on('configuration changed', (_event: unknown, change: SerializedConfigurationChange) => {
+      this._onDidChangeConfiguration.fire(createChangeEvent(change.affectedKeys));
     }));
   }
 
@@ -35,4 +35,7 @@ export class RenderConfigurationService extends Disposable implements Configurat
     return await window.ipc.invoke('configuration keys');
   }
 
+  async reload(): Promise<void> {
+    // throw new Error("Method not implemented.");
+  }
 }

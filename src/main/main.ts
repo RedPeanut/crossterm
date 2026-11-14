@@ -26,6 +26,7 @@ import { MainFileService } from './service/MainFileService';
 import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId, environmentServiceId, getService, dialogServiceId } from './Service';
 import { MainStorageService } from './service/MainStorageService';
 import { MainConfigurationService } from './service/MainConfigurationService';
+import { ConfigurationService, ConfigurationChangeEvent, serializeChangeEvent } from '../common/service/ConfigurationService';
 import { AppService } from './service/AppService';
 import { FileService } from '../common/service/FileService';
 import { MainEnvironmentService } from './service/MainEnvironmentService';
@@ -44,6 +45,7 @@ import { ExportServiceChannel } from './ipc/ExportServiceChannel';
 import { ImportServiceChannel } from './ipc/ImportServiceChannel';
 import { getLocale, localeArgPrefix, localize, setLocale } from '../common/nls';
 import { configureLocaleSwitch, resolveAppLocale, syncAppleLanguages } from './locale';
+import { EnvironmentService } from '../common/service/EnvironmentService';
 
 class AppUpdater {
   constructor() {
@@ -412,14 +414,15 @@ class MainWindow extends Disposable {
     }
 
     // set services
-    const environmentService = setService(environmentServiceId, new MainEnvironmentService());
-    const fileService = setService(fileServiceId, new MainFileService());
+    const environmentService: EnvironmentService = setService(environmentServiceId, new MainEnvironmentService());
+    const fileService: FileService = setService(fileServiceId, new MainFileService());
 
-    const storageService = setService(storageServiceId, new MainStorageService(environmentService, fileService));
-    const configurationService = setService(configurationServiceId, new MainConfigurationService(environmentService, fileService));
-    this._register(configurationService.onDidChangeConfiguration(change => {
+    const storageService: StorageService = setService(storageServiceId, new MainStorageService(environmentService, fileService));
+    const configurationService: ConfigurationService = setService(configurationServiceId, new MainConfigurationService(environmentService, fileService));
+    this._register(configurationService.onDidChangeConfiguration((change: ConfigurationChangeEvent) => {
       if (this.browserWindow) {
-        this.browserWindow.webContents.send('configuration changed', change);
+        // 이벤트 객체에는 함수가 있어 IPC로 복제할 수 없으므로 키 목록만 보낸다.
+        this.browserWindow.webContents.send('configuration changed', serializeChangeEvent(change));
       }
       if (change.affectsConfiguration('locale')) {
         syncAppleLanguages();
