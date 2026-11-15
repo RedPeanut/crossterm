@@ -2,6 +2,8 @@ import path from 'path';
 import { Queue } from '../../common/base/async';
 import { Emitter, Event } from '../../common/base/event';
 import { Disposable } from '../../common/base/lifecycle';
+import { setPath } from '../../common/base/objects';
+import { configurationRegistry } from '../../common/ConfigurationRegistry';
 import { ConfigurationService, ConfigurationChangeEvent, createChangeEvent } from '../../common/service/ConfigurationService';
 import { EnvironmentService } from '../../common/service/EnvironmentService';
 import { FileService } from '../../common/service/FileService';
@@ -27,10 +29,8 @@ export class MainConfigurationService extends Disposable implements Configuratio
   constructor(
     private readonly environmentService: EnvironmentService,
     private readonly fileService: FileService,
-    /** 코드에 정의된 기본값 (VSCode의 DefaultConfiguration 역할) */
-    private readonly defaults: Record<string, unknown> = {
-      locale: 'en'
-    },
+    /** 코드에 정의된 기본값 (VSCode의 DefaultConfiguration 역할). 테스트에서 바꿔 넣을 수 있게 인자로 둔다. */
+    private readonly defaults: Record<string, unknown> = configurationRegistry.getDefaultConfiguration(),
   ) {
     super();
     this.settingsPath = path.join(this.environmentService.userDataPath, 'settings.json');
@@ -126,20 +126,6 @@ function getPath(obj: Record<string, unknown>, path: string): unknown {
     }
     return undefined;
   }, obj);
-}
-
-/** `a.b.c` 경로에 값을 쓴다. 중간 객체는 없으면 생성한다. */
-function setPath(obj: Record<string, unknown>, path: string, value: unknown): void {
-  const segments = path.split('.');
-  const last = segments.pop()!;
-  let cursor = obj;
-  for (const segment of segments) {
-    if (!cursor[segment] || typeof cursor[segment] !== 'object') {
-      cursor[segment] = {};
-    }
-    cursor = cursor[segment] as Record<string, unknown>;
-  }
-  cursor[last] = value;
 }
 
 /** `a.b.c` 경로의 값을 삭제한다. */

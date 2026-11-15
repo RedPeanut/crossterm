@@ -123,5 +123,20 @@
   "export.exportingSettings": "설정 내보내는 중...",
   "export.savedTo": "{0}에 저장했습니다.",
   "export.invalidJson": "  경고: 잘못된 JSON이라 원본 텍스트로 내보냈습니다.",
-  "export.noSettings": "  (settings.json 없음)"
+  "export.noSettings": "  (settings.json 없음)",
+  "settings.category.general": "일반",
+  "settings.locale.auto": "운영 체제 언어 사용",
+  "settings.locale.title": "표시 언어",
+  "settings.locale.description": "앱의 표시 언어입니다. 적용하려면 다시 시작해야 합니다.",
+  "settings.category.appearance": "모양",
+  "settings.colorTheme.dark": "어둡게",
+  "settings.colorTheme.light": "밝게",
+  "settings.colorTheme.system": "운영 체제 설정 따름",
+  "settings.colorTheme.title": "색 테마",
+  "settings.colorTheme.description": "앱과 터미널의 색 테마입니다.",
+  "settings.category.terminal": "터미널",
+  "settings.terminal.fontFamily.title": "글꼴",
+  "settings.terminal.fontFamily.description": "터미널 글꼴입니다. CSS font-family 형식으로 입력합니다. 비워 두면 기본 글꼴을 사용합니다.",
+  "settings.terminal.fontSize.title": "글꼴 크기",
+  "settings.terminal.fontSize.description": "터미널 글꼴 크기(픽셀)입니다."
 }
