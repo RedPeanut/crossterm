@@ -2,7 +2,7 @@ import path from 'path';
 import { Queue } from '../../common/base/async';
 import { Emitter, Event } from '../../common/base/event';
 import { Disposable } from '../../common/base/lifecycle';
-import { setPath } from '../../common/base/objects';
+import { getPath, setPath } from '../../common/base/objects';
 import { configurationRegistry } from '../../common/ConfigurationRegistry';
 import { ConfigurationService, ConfigurationChangeEvent, createChangeEvent } from '../../common/service/ConfigurationService';
 import { EnvironmentService } from '../../common/service/EnvironmentService';
@@ -117,16 +117,6 @@ export class MainConfigurationService extends Disposable implements Configuratio
 }
 
 // --- 순수 헬퍼 함수 ----------------------------------------------------------
-
-/** `a.b.c` 경로로 중첩된 값을 읽는다. */
-function getPath(obj: Record<string, unknown>, path: string): unknown {
-  return path.split('.').reduce<unknown>((acc, segment) => {
-    if (acc && typeof acc === 'object') {
-      return (acc as Record<string, unknown>)[segment];
-    }
-    return undefined;
-  }, obj);
-}
 
 /** `a.b.c` 경로의 값을 삭제한다. */
 function deletePath(obj: Record<string, unknown>, path: string): void {

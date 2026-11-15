@@ -811,6 +811,117 @@ body { height: 100%; }
   position: absolute;
   width: 100%;
   height: 100%;
+  display: none;
+  flex-direction: column;
+  color: var(--ct-foreground);
+  background-color: var(--ct-background);
+  font-size: 13px;
+}
+.contents .settings.selected { display: flex; }
+
+.settings .header {
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--ct-border);
+}
+
+.settings input,
+.settings select {
+  height: 26px;
+  padding: 0 6px;
+  background-color: var(--ct-input-background);
+  color: var(--ct-input-foreground);
+  border: 1px solid var(--ct-input-border);
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+}
+.settings input { user-select: text; }
+.settings input:focus,
+.settings select:focus { border-color: var(--ct-focusBorder); }
+.settings input.invalid { border-color: var(--ct-inputValidation-errorBorder); }
+
+.settings .search {
+  width: 100%;
+  max-width: 640px;
+  box-sizing: border-box;
+}
+
+.settings .body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.settings .toc {
+  width: 160px;
+  flex-shrink: 0;
+  padding: 8px 0;
+  overflow-y: auto;
+}
+
+.settings .toc-item {
+  padding: 4px 24px;
+  cursor: pointer;
+  color: var(--ct-descriptionForeground);
+}
+.settings .toc-item:hover { background-color: var(--ct-list-hoverBackground); }
+.settings .toc-item.selected { color: var(--ct-foreground); font-weight: 600; }
+
+.settings .list {
+  flex: 1;
+  padding: 0 24px 24px 12px;
+  overflow-y: auto;
+}
+
+.settings .group-title {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 16px 0 8px;
+}
+
+.settings .row {
+  position: relative;
+  max-width: 640px;
+  padding: 10px 12px;
+  border-left: 2px solid transparent;
+}
+.settings .row:hover { background-color: var(--ct-list-hoverBackground); }
+/* 기본값과 다른 항목 */
+.settings .row.modified { border-left-color: var(--ct-focusBorder); }
+
+.settings .row-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.settings .row-reset {
+  visibility: hidden;
+  padding: 2px;
+  border: none;
+  border-radius: 3px;
+  background: none;
+  color: var(--ct-icon-foreground);
+  cursor: pointer;
+}
+.settings .row-reset:hover { background-color: var(--ct-toolbar-hoverBackground); }
+.settings .row.modified .row-reset { visibility: visible; }
+
+.settings .row-description {
+  margin: 4px 0 8px;
+  color: var(--ct-descriptionForeground);
+}
+
+.settings input.control[type="text"],
+.settings input.control[type="number"] { width: 100%; max-width: 320px; box-sizing: border-box; }
+.settings select.control { min-width: 200px; }
+.settings input.control[type="checkbox"] { height: auto; }
+
+.settings .empty {
+  padding: 24px 0;
+  color: var(--ct-descriptionForeground);
 }
 
 .contents .shortcuts {

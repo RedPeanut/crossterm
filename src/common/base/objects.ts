@@ -25,3 +25,13 @@ export function setPath(obj: Record<string, unknown>, path: string, value: unkno
 	}
 	cursor[last] = value;
 }
+
+/** `a.b.c` 경로로 중첩된 값을 읽는다. */
+export function getPath(obj: Record<string, unknown>, path: string): unknown {
+	return path.split('.').reduce<unknown>((acc, segment) => {
+		if (acc && typeof acc === 'object') {
+			return (acc as Record<string, unknown>)[segment];
+		}
+		return undefined;
+	}, obj);
+}

@@ -46,7 +46,7 @@ export class Contents extends Disposable {
         this.tabContents[i] = tabContent;
       } else {
         if (item.kind === 'settings') {
-          const settings = new Settings(null);
+          const settings = new Settings(null, item);
           el.appendChild(settings.create());
           this.tabContents[i] = settings;
           item.view = settings;
