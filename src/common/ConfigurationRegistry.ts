@@ -115,21 +115,6 @@ configurationRegistry.registerConfiguration({
       title: () => localize('settings.colorTheme.title', 'Color Theme'),
       description: () => localize('settings.colorTheme.description', 'The color theme of the app and terminals.'),
     },
-  },
-});
-
-configurationRegistry.registerConfiguration({
-  id: 'terminal',
-  title: () => localize('settings.category.terminal', 'Terminal'),
-  order: 3,
-  properties: {
-    'terminal.fontFamily': {
-      type: 'string',
-      // 빈 문자열이면 xterm 기본 글꼴을 쓴다.
-      default: '',
-      title: () => localize('settings.terminal.fontFamily.title', 'Font Family'),
-      description: () => localize('settings.terminal.fontFamily.description', 'The font family of the terminal, in CSS font-family format. Leave empty to use the default.'),
-    },
     'terminal.fontSize': {
       type: 'number',
       default: 13,
