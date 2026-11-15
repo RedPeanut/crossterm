@@ -23,6 +23,7 @@ import './key/keybindings';
 import './menu/menus';
 import { ConfigurationService } from '../common/service/ConfigurationService';
 import { RenderConfigurationService } from './service/RenderConfigurationService';
+import { IDisposable } from '../common/base/lifecycle';
 
 declare global {
   interface Window {
@@ -61,6 +62,7 @@ export class Renderer {
   sessionsDir: string;
   layoutState: LayoutStateType;
   treeViewState: TreeViewStateType;
+  themeChangeListener: IDisposable;
 
   constructor() {}
 
@@ -74,6 +76,8 @@ export class Renderer {
     // init main services in here
     const storageService = setService(storageServiceId, new RenderStorageService()) as StorageService;
     const configurationService = setService(configurationServiceId, new RenderConfigurationService()) as ConfigurationService;
+    // 레이아웃을 그리기 전에 테마를 적용해 다른 테마가 잠깐 보이는 것을 줄인다. (앱이 끝날 때까지 구독 유지)
+    this.themeChangeListener = await this.initTheme(configurationService);
     // console.log(await storageService.get<string>('layoutState'));
 
     this.window.isMaximized = await window.ipc.invoke('window get', 'function', 'isMaximized');
@@ -87,6 +91,24 @@ export class Renderer {
     this.sessionsDir = await window.ipc.invoke('get sessions dir');
     this.layoutState = JSON.parse(await storageService.get<string>('layoutState'));
     this.treeViewState = JSON.parse(await storageService.get<string>('treeViewState'));
+  }
+
+  static THEME_KEY = 'workbench.colorTheme';
+
+  /** 알 수 없는 값(예: 예전 버전에서 저장한 값)은 기본 테마(dark)로 취급한다. */
+  applyTheme(theme: string | undefined): void {
+    document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+  }
+
+  /** 현재 설정값을 적용(`<html data-theme>` 에 반영)하고, 이후 설정이 바뀌면 다시 적용한다. 반환값을 dispose 하면 구독을 끊는다. */
+  async initTheme(configurationService: ConfigurationService): Promise<IDisposable> {
+    const apply = async () => this.applyTheme(await configurationService.getValue<string>(Renderer.THEME_KEY));
+    await apply();
+    return configurationService.onDidChangeConfiguration(e => {
+      if (e.affectsConfiguration(Renderer.THEME_KEY)) {
+        void apply();
+      }
+    });
   }
 }
 
