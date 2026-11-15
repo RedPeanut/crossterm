@@ -14,6 +14,8 @@ describe('#MainFileService', function() {
   afterEach(function() {
   });
 
+  it('dummy ', function() {});
+
   /* it('readFile ', async function() {
     const fileService = new MainFileService();
     const reads = await fileService.readFile(path.join(userDataPath, 'user/sessions/remote1'));
