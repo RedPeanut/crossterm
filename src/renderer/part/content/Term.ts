@@ -11,7 +11,7 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 import { terminals } from '../../globals';
 // import { ContextKey } from '../../../common/key/ContextKey';
 import { ContextKeyService } from '../../service/ContextKeyService';
-import { broadcastInputServiceId, contextKeyServiceId, getService, sessionPartServiceId, statusbarPartServiceId } from '../../Service';
+import { broadcastInputServiceId, configurationServiceId, contextKeyServiceId, getService, sessionPartServiceId, statusbarPartServiceId } from '../../Service';
 import { StatusbarPartService } from '../StatusbarPart';
 import { SessionPartService } from '../SessionPart';
 import { ContextKey } from '../../key/ContextKey';
@@ -21,6 +21,7 @@ import { TermResizeOverlay } from '../term/TermResizeOverlay';
 import { Disposable } from '../../../common/base/lifecycle';
 import { BroadcastInputService } from '../../service/BroadcastInputService';
 import { getTerminalTheme, onDidChangeTheme } from '../term/terminalTheme';
+import { ConfigurationService } from '../../../common/service/ConfigurationService';
 
 export class Term extends Disposable implements TabContent {
   parent: HTMLElement;
@@ -47,6 +48,9 @@ export class Term extends Disposable implements TabContent {
 
   resizeOverlay: TermResizeOverlay | null = null;
   broadcastInputIcon: HTMLElement;
+
+  /** 비동기 작업(설정 읽기)이 끝났을 때 이미 닫힌 터미널인지 확인하는 용도 */
+  disposed: boolean = false;
 
   constructor(parent: HTMLElement, item: RenderTerminalItem) {
     super();
@@ -137,7 +141,6 @@ export class Term extends Disposable implements TabContent {
     this.statusbarPartService = getService(statusbarPartServiceId);
 
     const _xterm = new xterm({
-      fontSize: 13,
       theme: getTerminalTheme(),
     });
     // Load WebLinksAddon on terminal, this is all that's needed to get web links
@@ -160,6 +163,14 @@ export class Term extends Disposable implements TabContent {
 
     this.xterm = this._register(_xterm);
     this._register(onDidChangeTheme(() => { _xterm.options.theme = getTerminalTheme(); }));
+    // 글꼴 설정은 비동기로 읽으므로 생성 직후 한 번 적용하고, 설정이 바뀌면 다시 적용한다.
+    const configurationService: ConfigurationService = getService(configurationServiceId);
+    void this.applyFontOptions(configurationService);
+    this._register(configurationService.onDidChangeConfiguration(e => {
+      if (e.affectsConfiguration('terminal.fontSize')) {
+        void this.applyFontOptions(configurationService);
+      }
+    }));
     if (this.item.type === 'remote')
       this.xterm.write(`Connecting to ${this.item.url.host}:${this.item.url.port}...\r\n`);
 
@@ -254,6 +265,20 @@ export class Term extends Disposable implements TabContent {
       : localize('term.broadcastInputOff', 'Broadcast input: off (click to add)');
   }
 
+  /** `terminal.fontSize` 설정을 xterm 에 반영하고 크기를 다시 맞춘다. */
+  async applyFontOptions(configurationService: ConfigurationService): Promise<void> {
+    const [fontSize] = await Promise.all([
+      configurationService.getValue<number>('terminal.fontSize'),
+    ]);
+
+    if (this.disposed || !this.xterm)
+      return;
+
+    this.xterm.options.fontSize = fontSize;
+    // 글꼴이 바뀌면 셀 크기가 달라지므로 행/열 수를 다시 계산한다. (숨겨진 터미널은 fit()에서 걸러진다)
+    this.fit();
+  }
+
   fit() {
     if (!this.xterm || !this.element.isConnected || this.element.offsetParent === null)
       return;
@@ -280,6 +305,7 @@ export class Term extends Disposable implements TabContent {
     // this.resizeOverlay?.dispose();
     // this.scopedContextKeyService.dispose();
     delete terminals[this.uid];
+    this.disposed = true;
     super.dispose();
   }
 }
