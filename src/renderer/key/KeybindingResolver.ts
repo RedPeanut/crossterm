@@ -36,9 +36,12 @@ export class KeybindingResolver {
   /** 첫 chord -> 후보 목록. 우선순위가 낮은 것부터 담긴다(뒤에서부터 탐색). */
   private readonly _map = new Map<string, ResolvedKeybindingItem[]>();
   private readonly _lookupMap = new Map<string, ResolvedKeybindingItem[]>();
+  /** 제거 룰까지 반영한 최종 키바인딩. 우선순위가 낮은 것부터. */
+  private readonly _keybindings: readonly ResolvedKeybindingItem[];
 
   constructor(defaultKeybindings: readonly ResolvedKeybindingItem[], overrides: readonly ResolvedKeybindingItem[] = []) {
-    for (const item of KeybindingResolver._handleRemovals([...defaultKeybindings, ...overrides])) {
+    this._keybindings = KeybindingResolver._handleRemovals([...defaultKeybindings, ...overrides]);
+    for (const item of this._keybindings) {
       if (item.chords.length === 0) {
         continue;
       }
@@ -151,6 +154,11 @@ export class KeybindingResolver {
       }
     }
     return undefined;
+  }
+
+  /** 제거 룰까지 반영한 최종 키바인딩 전체. 우선순위가 낮은 것부터. (단축키 편집창 목록용) */
+  getKeybindings(): readonly ResolvedKeybindingItem[] {
+    return this._keybindings;
   }
 
   /** 커맨드 id로 걸린 키바인딩을 찾는다(메뉴/툴팁에 단축키를 표시할 때 사용). */
