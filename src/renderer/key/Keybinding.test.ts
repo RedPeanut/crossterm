@@ -3,7 +3,7 @@ import { IContextKeyExpr, NSContextKeyExpr } from './ContextKey';
 import { ContextKeyService } from '../service/ContextKeyService';
 import { parseKeybinding } from './Keybinding';
 import { KeybindingResolver, ResultKind } from './KeybindingResolver';
-import { KeybindingWeight, toUserKeybindingItems } from './KeybindingsRegistry';
+import { KeybindingWeight, fromUserKeybindingEntries, toUserKeybindingItems } from './KeybindingsRegistry';
 import { commandsRegistry } from './CommandsRegistry';
 // import { commandsRegistry } from '../globals';
 
@@ -66,18 +66,15 @@ describe('#Keybinding', function () {
       { id: 'c.cmd', weight: KeybindingWeight.Core, primary: 'ctrl+c', secondary: ['ctrl+k ctrl+c'] },
       { id: 'e.cmd', weight: KeybindingWeight.Core, primary: 'ctrl+e', when: 'paneFocused' },
     ]).map(item => ({ ...item, isDefault: true }));
-    const [removeAllOfC] = toUserKeybindingItems([{ id: '-c.cmd', weight: 0, primary: 'ctrl+c' }]).map(item => ({ ...item, chords: [] }));
-    const overrides = [
-      ...toUserKeybindingItems([
-        { id: '-a.cmd', weight: 0, primary: 'ctrl+a' }, // 키가 같은 것만 -> ctrl+shift+a 는 남는다
-        { id: 'a.cmd', weight: 0, primary: 'ctrl+alt+a' },
-        { id: '-b.cmd', weight: 0, primary: 'ctrl+b', when: 'listFocus' }, // when 이 달라 지우지 않는다
-        { id: 'd.cmd', weight: 0, primary: 'ctrl+d' },
-        { id: '-d.cmd', weight: 0, primary: 'ctrl+d' }, // 사용자 키바인딩은 지우지 않는다
-        { id: '-e.cmd', weight: 0, primary: 'ctrl+e' }, // when 이 없으면 when 과 상관없이 지운다
-      ]),
-      removeAllOfC, // 키가 없으면 그 커맨드의 기본 키바인딩 모두
-    ];
+    const overrides = fromUserKeybindingEntries([
+      { key: 'ctrl+a', command: '-a.cmd' }, // 키가 같은 것만 -> ctrl+shift+a 는 남는다
+      { key: 'ctrl+alt+a', command: 'a.cmd' },
+      { key: 'ctrl+b', command: '-b.cmd', when: 'listFocus' }, // when 이 달라 지우지 않는다
+      { key: 'ctrl+d', command: 'd.cmd' },
+      { key: 'ctrl+d', command: '-d.cmd' }, // 사용자 키바인딩은 지우지 않는다
+      { key: 'ctrl+e', command: '-e.cmd' }, // when 이 없으면 when 과 상관없이 지운다
+      { command: '-c.cmd' }, // 키가 없으면 그 커맨드의 기본 키바인딩 모두
+    ]);
     const resolver = new KeybindingResolver(defaults, overrides);
     const keybindingsOf = (command: string) => resolver.lookupKeybindings(command).map(item => item.chords.join(' '));
 
@@ -92,6 +89,29 @@ describe('#Keybinding', function () {
         '-a.cmd': [],
       }
     );
+  });
+
+  it('converts keybindings.json entries to user keybinding items', function () {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => { });
+    try {
+      const items = fromUserKeybindingEntries([
+        { key: 'ctrl+k ctrl+s', command: 'a.cmd', when: 'paneFocused', args: { x: 1 } },
+        { key: 'hyper+a', command: 'b.cmd' }, // 알 수 없는 수식 키라 파싱 실패 -> 건너뜀
+        { command: '-c.cmd', when: 'listFocus' },
+        { command: 'd.cmd' }, // 키 없는 일반 항목 -> 건너뜀
+      ]);
+
+      assert.deepStrictEqual(
+        items.map(({ chords, command, commandArgs, when, weight, order, isDefault }) =>
+          ({ chords, command, commandArgs, when: when?.serialize(), weight, order, isDefault })),
+        [
+          { chords: ['ctrl+k', 'ctrl+s'], command: 'a.cmd', commandArgs: { x: 1 }, when: 'paneFocused', weight: KeybindingWeight.UserSetting, order: 1, isDefault: false },
+          { chords: [], command: '-c.cmd', commandArgs: undefined, when: 'listFocus', weight: KeybindingWeight.UserSetting, order: 3, isDefault: false },
+        ]
+      );
+    } finally {
+      warn.mockRestore();
+    }
   });
 
   it('scoped context only applies below its DOM node', function () {

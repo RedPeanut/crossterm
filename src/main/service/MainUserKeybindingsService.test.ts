@@ -66,6 +66,10 @@ describe('#MainUserKeybindingsService', function() {
         { key: 'mod+c' },
         { key: 'mod+d', command: 'd', when: 1 },
         'mod+e',
+        { command: '-f' }, // 키 없는 제거 룰은 허용
+        { key: '  ', command: '-g' }, // 빈 키는 생략한 것으로 정리
+        { command: 'h' }, // 키 없는 일반 항목은 버린다
+        { command: '-' },
       ]));
       const invalidEntries = await service.getKeybindings();
 
@@ -74,7 +78,7 @@ describe('#MainUserKeybindingsService', function() {
 
       assert.deepStrictEqual({ broken, invalidEntries, notArray }, {
         broken: [],
-        invalidEntries: [{ key: 'mod+a', command: 'a' }],
+        invalidEntries: [{ key: 'mod+a', command: 'a' }, { command: '-f' }, { command: '-g' }],
         notArray: [],
       });
     } finally {

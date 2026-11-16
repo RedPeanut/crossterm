@@ -4,7 +4,8 @@ import { CommandService } from './CommandService';
 import { ContextKeyService, ContextKeyServiceTarget } from './ContextKeyService';
 import { Chord, toElectronAccelerator } from '../key/Keybinding';
 import { KeybindingResolver, ResultKind } from '../key/KeybindingResolver';
-import { KeybindingRule, ResolvedKeybindingItem, keybindingsRegistry, toUserKeybindingItems } from '../key/KeybindingsRegistry';
+import { ResolvedKeybindingItem, fromUserKeybindingEntries, keybindingsRegistry } from '../key/KeybindingsRegistry';
+import { UserKeybindingEntry } from '../../common/service/UserKeybindingsService';
 // import { keybindingsRegistry } from '../globals';
 
 /**
@@ -60,9 +61,9 @@ export class KeybindingService extends Disposable {
     return { dispose: () => target.removeEventListener('keydown', listener, true) };
   }
 
-  /** 사용자 설정 키바인딩 교체. 기본 바인딩보다 우선한다. */
-  setUserKeybindings(rules: KeybindingRule[]): void {
-    this._userKeybindings = toUserKeybindingItems(rules);
+  /** 사용자 키바인딩(keybindings.json 내용) 교체. 기본 바인딩보다 우선하며, `-command` 제거 룰도 여기서 받는다. */
+  setUserKeybindings(entries: readonly UserKeybindingEntry[]): void {
+    this._userKeybindings = fromUserKeybindingEntries(entries);
     this._resolver = undefined;
   }
 

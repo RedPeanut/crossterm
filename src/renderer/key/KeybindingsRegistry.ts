@@ -4,6 +4,7 @@ import { CommandHandler, commandsRegistry } from './CommandsRegistry';
 // import { CommandHandler } from './CommandService';
 import { IContextKeyExpr, NSContextKeyExpr } from './ContextKey';
 import { parseKeybinding } from './Keybinding';
+import { UserKeybindingEntry } from '../../common/service/UserKeybindingsService';
 
 /**
  * VSCode의 `vs/platform/keybinding/common/keybindingsRegistry.ts`를 최소 형태로 옮긴 것.
@@ -40,6 +41,7 @@ export interface ResolvedKeybindingItem {
   readonly command: string;
   readonly commandArgs: unknown;
   readonly when: IContextKeyExpr | undefined;
+
   readonly weight: number;
   readonly order: number;
   readonly isDefault: boolean;
@@ -74,7 +76,42 @@ class KeybindingsRegistryImpl {
 
 export const keybindingsRegistry = new KeybindingsRegistryImpl();
 
-/** 사용자 설정(keybindings.json 등)에서 읽은 룰을 resolver 입력으로 변환한다. */
+/**
+ * keybindings.json 항목을 resolver 입력으로 변환한다. 순서는 파일 순서를 따른다(뒤에 있을수록 우선).
+ *
+ *  - 키를 파싱할 수 없는 항목은 경고를 남기고 건너뛴다.
+ *  - 키 없는 제거 룰(`{ command: '-x' }`)은 chords 가 빈 항목이 된다. resolver 가 이를 "x 의 기본 키바인딩 모두 제거"로 처리한다.
+ */
+export function fromUserKeybindingEntries(entries: readonly UserKeybindingEntry[]): ResolvedKeybindingItem[] {
+  const items: ResolvedKeybindingItem[] = [];
+  let order = 0;
+  for (const entry of entries) {
+    const rule: KeybindingRule = { id: entry.command, weight: KeybindingWeight.UserSetting, when: entry.when, args: entry.args };
+    if (entry.key?.trim()) {
+      const item = toResolvedItem(rule, entry.key, /* isDefault */ false, ++order);
+      if (item) {
+        items.push(item);
+      }
+    } else if (entry.command.startsWith('-')) {
+      items.push({
+        chords: [],
+        command: entry.command,
+        commandArgs: entry.args,
+        when: NSContextKeyExpr.deserialize(entry.when),
+        weight: KeybindingWeight.UserSetting,
+        order: ++order,
+        isDefault: false,
+        label: '',
+      });
+    }
+  }
+  return items;
+}
+
+/**
+ * `KeybindingRule` 형태의 룰을 사용자 키바인딩(isDefault=false)으로 변환한다.
+ * 테스트에서 레지스트리를 거치지 않고 resolver 입력을 만들 때 쓴다. 실제 keybindings.json 은 `fromUserKeybindingEntries`.
+ */
 export function toUserKeybindingItems(rules: KeybindingRule[]): ResolvedKeybindingItem[] {
   const items: ResolvedKeybindingItem[] = [];
   let order = 0;
