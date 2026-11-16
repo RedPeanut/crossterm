@@ -6,6 +6,7 @@ export const configurationServiceId = 'configurationService';
 export const appServiceId = 'appService';
 export const environmentServiceId = 'environmentService';
 export const dialogServiceId = 'dialogService';
+export const userKeybindingsServiceId = 'userKeybindingsService';
 export const blarBlarServiceId = 'blarBlarService';
 
 type ServiceId =
@@ -15,6 +16,7 @@ type ServiceId =
   | typeof appServiceId
   | typeof environmentServiceId
   | typeof dialogServiceId
+  | typeof userKeybindingsServiceId
   | typeof blarBlarServiceId
 ;
 

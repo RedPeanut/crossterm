@@ -14,7 +14,7 @@ import { ElectronHandler } from '../main/preload';
 import { ConfigsInitialValueType } from '../common/configs';
 // import { ListItemElem } from './component/List';
 import { RenderStorageService } from './service/RenderStorageService';
-import { configurationServiceId, setService, storageServiceId } from './Service';
+import { configurationServiceId, setService, storageServiceId, userKeybindingsServiceId } from './Service';
 import { ListItemElem } from '../common/Types';
 import { LayoutStateType, StorageService, TreeViewStateType } from '../common/service/StorageService';
 
@@ -23,7 +23,9 @@ import './key/keybindings';
 import './menu/menus';
 import { ConfigurationService } from '../common/service/ConfigurationService';
 import { RenderConfigurationService } from './service/RenderConfigurationService';
+import { RenderUserKeybindingsService } from './service/RenderUserKeybindingsService';
 import { IDisposable } from '../common/base/lifecycle';
+import { UserKeybindingsService } from '../common/service/UserKeybindingsService';
 
 declare global {
   interface Window {
@@ -76,6 +78,7 @@ export class Renderer {
     // init main services in here
     const storageService = setService(storageServiceId, new RenderStorageService()) as StorageService;
     const configurationService = setService(configurationServiceId, new RenderConfigurationService()) as ConfigurationService;
+    const userKeybindingService = setService(userKeybindingsServiceId, new RenderUserKeybindingsService()) as UserKeybindingsService;
     // 레이아웃을 그리기 전에 테마를 적용해 다른 테마가 잠깐 보이는 것을 줄인다. (앱이 끝날 때까지 구독 유지)
     this.themeChangeListener = await this.initTheme(configurationService);
     // console.log(await storageService.get<string>('layoutState'));

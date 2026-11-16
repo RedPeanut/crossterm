@@ -23,7 +23,7 @@ import { TerminalBase, TerminalBaseOptions } from './terminal/TerminalBase';
 import default_configs, { ConfigsType } from '../common/configs';
 import { clamp } from '../common/util/numbers';
 import { MainFileService } from './service/MainFileService';
-import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId, environmentServiceId, getService, dialogServiceId } from './Service';
+import { fileServiceId, setService, storageServiceId, configurationServiceId, appServiceId, environmentServiceId, getService, dialogServiceId, userKeybindingsServiceId } from './Service';
 import { MainStorageService } from './service/MainStorageService';
 import { MainConfigurationService } from './service/MainConfigurationService';
 import { ConfigurationService, ConfigurationChangeEvent, serializeChangeEvent } from '../common/service/ConfigurationService';
@@ -36,6 +36,9 @@ import { FileServiceChannel } from './ipc/FileServiceChannel';
 import { StorageServiceChannel } from './ipc/StorageServiceChannel';
 import { DisposableStore, Disposable } from '../common/base/lifecycle';
 import { ConfigurationServiceChannel } from './ipc/ConfigurationServiceChannel';
+import { MainUserKeybindingsService } from './service/MainUserKeybindingsService';
+import { UserKeybindingsServiceChannel } from './ipc/UserKeybindingsServiceChannel';
+import { UserKeybindingsService } from '../common/service/UserKeybindingsService';
 import { StorageService } from '../common/service/StorageService';
 import { MainDialogService } from './service/MainDialogService';
 import { ExportService } from './service/ExportService';
@@ -429,6 +432,10 @@ class MainWindow extends Disposable {
         this.promptRestartForLocale();
       }
     }));
+    const userKeybindingsService: UserKeybindingsService = setService(userKeybindingsServiceId, new MainUserKeybindingsService(environmentService, fileService));
+    this._register(userKeybindingsService.onDidChange(() => {
+      this.browserWindow?.webContents.send('keybindings changed');
+    }));
     const appService = setService(appServiceId, new AppService(environmentService, fileService));
     const dialogService = setService(dialogServiceId, new MainDialogService());
     const exportService = new ExportService(environmentService, fileService, storageService, appService, app.getVersion());
@@ -439,6 +446,7 @@ class MainWindow extends Disposable {
       new FileServiceChannel(fileService),
       new StorageServiceChannel(storageService),
       new ConfigurationServiceChannel(configurationService),
+      new UserKeybindingsServiceChannel(userKeybindingsService),
       new AppServiceChannel(appService),
       new DialogServiceChannel(dialogService),
       new ExportServiceChannel(exportService),

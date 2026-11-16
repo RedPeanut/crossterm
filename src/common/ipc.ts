@@ -28,6 +28,10 @@ export type MainEvents =
   | 'configuration update value'
   | 'configuration keys'
 
+  // keybindings (keybindings.json)
+  | 'keybindings get'
+  | 'keybindings set'
+
   // storage (sqlite)
   | 'storage getall'
   | 'storage set'
@@ -86,6 +90,9 @@ export type RenderEvents =
 
   // configuration
   | 'configuration changed'
+
+  // keybindings
+  | 'keybindings changed'
 
   // command (네이티브 메뉴 클릭 -> renderer의 커맨드 실행)
   | 'execute command'
