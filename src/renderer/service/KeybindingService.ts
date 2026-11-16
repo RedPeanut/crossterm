@@ -1,6 +1,7 @@
 import { Emitter, Event } from '../../common/base/event';
 import { Disposable, IDisposable } from '../../common/base/lifecycle';
 import { CommandService } from './CommandService';
+import { commandsRegistry } from '../key/CommandsRegistry';
 import { ContextKeyService, ContextKeyServiceTarget } from './ContextKeyService';
 import { Chord, toElectronAccelerator } from '../key/Keybinding';
 import { KeybindingResolver, ResultKind } from '../key/KeybindingResolver';
@@ -31,6 +32,14 @@ export interface ChordModeEvent {
   readonly label: string | undefined;
 }
 
+/** 단축키 편집창의 한 줄. 키바인딩이 없는 커맨드도 `keybinding: undefined`로 한 줄을 차지한다. */
+export interface KeybindingListItem {
+  readonly command: string;
+  /** 표시 이름. 제목이 없으면 커맨드 id. */
+  readonly title: string;
+  readonly keybinding: ResolvedKeybindingItem | undefined;
+}
+
 export class KeybindingService extends Disposable {
   private _resolver: KeybindingResolver | undefined;
   private _userKeybindings: ResolvedKeybindingItem[] = [];
@@ -41,6 +50,13 @@ export class KeybindingService extends Disposable {
   private readonly _onDidChangeChordMode = this._register(new Emitter<ChordModeEvent>());
   /** 상태바에 "(⌘K) 를 눌렀습니다..." 같은 표시를 하고 싶을 때 구독한다. */
   readonly onDidChangeChordMode: Event<ChordModeEvent> = this._onDidChangeChordMode.event;
+
+  private readonly _onDidUpdateKeybindings = this._register(new Emitter<void>());
+  /** 사용자 키바인딩이 바뀌면 발생한다. 메뉴바 단축키 표시, 단축키 편집창이 다시 그릴 때 구독한다. */
+  readonly onDidUpdateKeybindings: Event<void> = this._onDidUpdateKeybindings.event;
+
+  /** 0보다 크면 키 입력을 커맨드로 보내지 않는다. (suspendDispatch) */
+  private _suspendCount = 0;
 
   constructor(
     private readonly _contextKeyService: ContextKeyService,
@@ -65,6 +81,52 @@ export class KeybindingService extends Disposable {
   setUserKeybindings(entries: readonly UserKeybindingEntry[]): void {
     this._userKeybindings = fromUserKeybindingEntries(entries);
     this._resolver = undefined;
+    this._onDidUpdateKeybindings.fire();
+  }
+
+  /**
+   * 반환한 disposable 을 dispose 할 때까지 키 입력을 커맨드로 보내지 않는다.
+   * 단축키 편집창이 키를 녹화하는 동안 `mod+c` 같은 키가 커맨드로 실행되지 않고 입력창까지 가도록 할 때 쓴다.
+   * 여러 곳에서 동시에 걸 수 있고, 모두 풀려야 다시 동작한다.
+   */
+  suspendDispatch(): IDisposable {
+    this._suspendCount++;
+    this._leaveChordMode();
+    let disposed = false;
+    return {
+      dispose: () => {
+        if (!disposed) {
+          disposed = true;
+          this._suspendCount--;
+        }
+      },
+    };
+  }
+
+  /**
+   * 단축키 편집창 목록. 제거 룰까지 반영한 최종 키바인딩 한 개당 한 줄이고,
+   * 등록됐지만 키바인딩이 없는 커맨드도 한 줄씩 들어간다. 정렬은 하지 않는다(커맨드 등록 순서).
+   */
+  getKeybindingListItems(): KeybindingListItem[] {
+    const byCommand = new Map<string, ResolvedKeybindingItem[]>();
+    for (const keybinding of this.resolver.getKeybindings()) {
+      byCommand.set(keybinding.command, [...(byCommand.get(keybinding.command) ?? []), keybinding]);
+    }
+    // 등록된 커맨드 먼저, 그다음 keybindings.json 에만 있는 커맨드(오타 등)
+    const commands = new Set([...commandsRegistry.getCommands().keys(), ...byCommand.keys()]);
+
+    const items: KeybindingListItem[] = [];
+    for (const command of commands) {
+      const title = commandsRegistry.getCommandTitle(command);
+      const keybindings = byCommand.get(command) ?? [];
+      if (keybindings.length === 0) {
+        items.push({ command, title, keybinding: undefined });
+      }
+      for (const keybinding of keybindings) {
+        items.push({ command, title, keybinding });
+      }
+    }
+    return items;
   }
 
   get inChordMode(): boolean {
@@ -73,6 +135,9 @@ export class KeybindingService extends Disposable {
 
   /** @returns preventDefault 해야 하는지 */
   dispatchEvent(e: KeyboardEvent): boolean {
+    if (this._suspendCount > 0) {
+      return false;
+    }
     const chord = Chord.fromKeyboardEvent(e);
     const keypress = chord?.toDispatchString();
     if (!chord || !keypress) {

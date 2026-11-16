@@ -9,6 +9,7 @@ import { KeybindingService } from './KeybindingService';
 import { KeybindingWeight, keybindingsRegistry } from '../key/KeybindingsRegistry';
 import { terminalFocusedContextKeyName, terminalHasSelectionContextKeyName } from '../key/contextKeys';
 import { CommandService } from './CommandService';
+import { commandsRegistry } from '../key/CommandsRegistry';
 
 describe('#KeybindingService', function () {
 
@@ -50,7 +51,7 @@ describe('#KeybindingService', function () {
       return { ran: invoked.splice(0).length, consumed: e.defaultPrevented };
     };
 
-    return { scoped, textarea, press };
+    return { scoped, textarea, press, keybindingService };
   }
 
   it('terminalFocused로 터미널 안/밖 동작이 갈린다', async function () {
@@ -101,6 +102,65 @@ describe('#KeybindingService', function () {
     scoped.createKey<boolean>(terminalFocusedContextKeyName, true);
 
     assert.deepStrictEqual(await press(textarea, 'KeyV'), { ran: 1, consumed: true });
+  });
+
+  it('suspendDispatch 동안에는 키를 커맨드로 보내지 않는다 (단축키 녹화)', async function () {
+    const { press, keybindingService } = setup({ id: 'test.suspend', primary: 'mod+s' });
+
+    const first = keybindingService.suspendDispatch();
+    const second = keybindingService.suspendDispatch();
+    const whileSuspended = await press(document.body, 'KeyS');
+    first.dispose();
+    first.dispose(); // 두 번 dispose 해도 한 번으로 친다
+    const oneRemaining = await press(document.body, 'KeyS');
+    second.dispose();
+    const resumed = await press(document.body, 'KeyS');
+
+    assert.deepStrictEqual(
+      { whileSuspended, oneRemaining, resumed },
+      {
+        whileSuspended: { ran: 0, consumed: false },
+        oneRemaining: { ran: 0, consumed: false },
+        resumed: { ran: 1, consumed: true },
+      }
+    );
+  });
+
+  it('사용자 키바인딩을 반영한 편집창 목록을 만들고, 바뀌면 이벤트를 보낸다', function () {
+    keybindingsRegistry.registerCommandAndKeybindingRule({
+      id: 'test.list.a', weight: KeybindingWeight.Core, primary: 'ctrl+f1', title: () => 'List A', handler: () => { },
+    });
+    const noKey = commandsRegistry.registerCommand('test.list.noKey', () => { });
+    try {
+      const keybindingService = new KeybindingService(new ContextKeyService(), new CommandService());
+      let updateCount = 0;
+      keybindingService.onDidUpdateKeybindings(() => updateCount++);
+
+      keybindingService.setUserKeybindings([
+        { key: 'ctrl+f1', command: '-test.list.a' },
+        { key: 'ctrl+f2', command: 'test.list.a' },
+        { key: 'ctrl+f3', command: 'test.list.unknown' }, // 등록되지 않은 커맨드
+      ]);
+
+      assert.deepStrictEqual(
+        {
+          items: keybindingService.getKeybindingListItems()
+            .filter(item => item.command.startsWith('test.list.'))
+            .map(({ command, title, keybinding }) => ({ command, title, chords: keybinding?.chords, isDefault: keybinding?.isDefault })),
+          updateCount,
+        },
+        {
+          items: [
+            { command: 'test.list.a', title: 'List A', chords: ['ctrl+f2'], isDefault: false },
+            { command: 'test.list.noKey', title: 'test.list.noKey', chords: undefined, isDefault: undefined },
+            { command: 'test.list.unknown', title: 'test.list.unknown', chords: ['ctrl+f3'], isDefault: false },
+          ],
+          updateCount: 1,
+        }
+      );
+    } finally {
+      noKey.dispose();
+    }
   });
 
 });
