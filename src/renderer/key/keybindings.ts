@@ -7,6 +7,7 @@ import {
   tabToggleBroadcastInputCmdId,
 } from '../../common/Types';
 import { KeybindingWeight, keybindingsRegistry } from './KeybindingsRegistry';
+import { localize } from '../../common/nls';
 import { getService, mainLayoutServiceId, broadcastInputServiceId, bodyLayoutServiceId, sessionPartServiceId } from '../Service';
 import { MainLayoutService } from '../layout/MainLayout';
 // import { keybindingsRegistry } from '../globals';
@@ -31,18 +32,21 @@ import { SessionPartService } from '../part/SessionPart';
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: tabAlignVerticalCmdId,
+  title: () => localize('command.tabAlignVertical', 'Align Tabs Vertically'),
   weight: KeybindingWeight.Core,
   handler: () => alignTabs((groups) => ({ mode: 'vertical', list: groups })),
 });
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: tabAlignHorizontalCmdId,
+  title: () => localize('command.tabAlignHorizontal', 'Align Tabs Horizontally'),
   weight: KeybindingWeight.Core,
   handler: () => alignTabs((groups) => ({ mode: 'horizontal', list: groups })),
 });
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: tabAlignTilesCmdId,
+  title: () => localize('command.tabAlignTiles', 'Align Tabs as Tiles'),
   weight: KeybindingWeight.Core,
   handler: () => alignTabs(buildTiles),
 });
@@ -97,6 +101,7 @@ function alignTabs(build: (groups: Group[]) => SplitItem): void {
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: tabToggleBroadcastInputCmdId,
+  title: () => localize('menubar.toggleBroadcastInput', 'Toggle Broadcast Input'),
   weight: KeybindingWeight.Core,
   primary: 'mod+alt+i',
   handler: () => {
@@ -115,6 +120,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: appSettingsCmdId,
+  title: () => localize('menubar.settings', 'Settings'),
   weight: KeybindingWeight.Core,
   primary: 'mod+,',
   handler: () => {
@@ -132,6 +138,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: appShortcutsCmdId,
+  title: () => localize('command.keyboardShortcuts', 'Keyboard Shortcuts'),
   weight: KeybindingWeight.Core,
   primary: 'mod+k mod+s',
   handler: () => {
@@ -153,6 +160,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: fileImportCmdId,
+  title: () => localize('menubar.import', 'Import'),
   weight: KeybindingWeight.Core,
   handler: () => {
     (getService(mainLayoutServiceId) as MainLayoutService).showPopup('import', {
@@ -173,6 +181,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: fileExportCmdId,
+  title: () => localize('menubar.export', 'Export'),
   weight: KeybindingWeight.Core,
   handler: () => {
     (getService(mainLayoutServiceId) as MainLayoutService).showPopup('export', {
@@ -195,6 +204,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: editCopyCmdId,
+  title: () => localize('menubar.copy', 'Copy'),
   weight: KeybindingWeight.Core,
   primary: 'mod+c',
   // 터미널 밖이거나, 터미널 안이어도 선택 영역이 있을 때만 이 키를 가져간다.
@@ -205,6 +215,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: editPasteCmdId,
+  title: () => localize('menubar.paste', 'Paste'),
   weight: KeybindingWeight.Core,
   primary: 'mod+v',
   handler: () => paste(),
@@ -261,6 +272,7 @@ async function paste(): Promise<void> {
  */
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: listCutCmdId,
+  title: () => localize('command.listCut', 'Cut List Items'),
   weight: KeybindingWeight.Contrib,
   primary: 'mod+x',
   when: 'listFocus',
@@ -269,6 +281,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: listCopyCmdId,
+  title: () => localize('command.listCopy', 'Copy List Items'),
   weight: KeybindingWeight.Contrib,
   primary: 'mod+c',
   when: 'listFocus',
@@ -277,6 +290,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: listPasteCmdId,
+  title: () => localize('command.listPaste', 'Paste into List'),
   weight: KeybindingWeight.Contrib,
   primary: 'mod+v',
   when: 'listFocus',
@@ -285,6 +299,7 @@ keybindingsRegistry.registerCommandAndKeybindingRule({
 
 keybindingsRegistry.registerCommandAndKeybindingRule({
   id: listDeleteCmdId,
+  title: () => localize('command.listDelete', 'Delete List Items'),
   weight: KeybindingWeight.Contrib,
   primary: 'delete',
   mac: 'mod+backspace',

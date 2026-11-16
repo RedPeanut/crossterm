@@ -30,6 +30,8 @@ export interface KeybindingRule {
   readonly linux?: string | null;
   readonly when?: IContextKeyExpr | string;
   readonly args?: unknown;
+  /** 커맨드 표시 이름. `registerCommandAndKeybindingRule`에서만 쓰인다. (Command.title 참고) */
+  readonly title?: () => string;
 }
 
 /** resolver가 다루는 최종 형태. chords는 dispatch 문자열 배열. */
@@ -60,7 +62,7 @@ class KeybindingsRegistryImpl {
 
   /** 커맨드 등록 + 키바인딩 등록을 한 번에. contrib 파일에서 가장 많이 쓰는 형태. */
   registerCommandAndKeybindingRule(rule: KeybindingRule & { handler: CommandHandler }): void {
-    commandsRegistry.registerCommand(rule.id, rule.handler);
+    commandsRegistry.registerCommand(rule.id, rule.handler, rule.title);
     this.registerKeybindingRule(rule);
   }
 

@@ -137,5 +137,13 @@
   "settings.terminal.fontSize.description": "터미널 글꼴 크기(픽셀)입니다.",
   "settings.search.placeholder": "설정 검색",
   "settings.search.noResults": "설정을 찾을 수 없습니다.",
-  "settings.resetToDefault": "기본값으로 재설정"
+  "settings.resetToDefault": "기본값으로 재설정",
+  "command.tabAlignVertical": "탭 세로 정렬",
+  "command.tabAlignHorizontal": "탭 가로 정렬",
+  "command.tabAlignTiles": "탭 바둑판식 정렬",
+  "command.keyboardShortcuts": "키보드 단축키",
+  "command.listCut": "목록 항목 잘라내기",
+  "command.listCopy": "목록 항목 복사",
+  "command.listPaste": "목록에 붙여넣기",
+  "command.listDelete": "목록 항목 삭제"
 }
