@@ -12,7 +12,7 @@ import { SplitView, SplitViewItem } from '../component/SplitView';
 import { _addEventListener, getClientArea, position, size } from '../util/dom';
 import { Orientation } from '../component/Sash';
 import { bodyLayoutServiceId, getService, Service, sessionPartServiceId, setService, mainLayoutServiceId, menubarServiceId, activitybarPartServiceId, storageServiceId, contextViewServiceId,
-  contextKeyServiceId, commandServiceId, keybindingServiceId, broadcastInputServiceId } from '../Service';
+  contextKeyServiceId, commandServiceId, keybindingServiceId, broadcastInputServiceId, userKeybindingsServiceId } from '../Service';
 import { SessionPartService } from '../part/SessionPart';
 import { terminals } from '../globals';
 import { MenubarService } from '../part/Menubar';
@@ -32,6 +32,7 @@ import { ContextKeyService } from '../service/ContextKeyService';
 import { CommandService } from '../service/CommandService';
 import { BroadcastInputServiceImpl } from '../service/BroadcastInputService';
 import { KeybindingService } from '../service/KeybindingService';
+import { UserKeybindingEntry, UserKeybindingsService } from '../../common/service/UserKeybindingsService';
 
 export const TITLEBAR_HEIGHT = 34;
 export const ACTIVITYBAR_WIDTH = 39;
@@ -77,7 +78,10 @@ export class MainLayout extends Layout implements MainLayoutService {
     setService(mainLayoutServiceId, this);
   }
 
-  create(): void {
+  /**
+   * @param userKeybindings keybindings.json 내용. 메뉴바가 처음 그려질 때부터 사용자 단축키가 보이도록 미리 읽어 넘긴다.
+   */
+  create(userKeybindings: readonly UserKeybindingEntry[] = []): void {
     // console.log('render() is called ..');
 
     // init render services in here
@@ -86,6 +90,12 @@ export class MainLayout extends Layout implements MainLayoutService {
     const commandService = this.commandService = setService(commandServiceId, new CommandService()) as CommandService;
     const keybindingService = setService(keybindingServiceId, new KeybindingService(contextKeyService, commandService)) as KeybindingService;
     keybindingService.attach(window);
+    keybindingService.setUserKeybindings(userKeybindings);
+    // 단축키 편집창에서 저장하면 main 이 'keybindings changed' 를 보내고, 여기서 다시 읽어 적용한다.
+    const userKeybindingsService: UserKeybindingsService = getService(userKeybindingsServiceId);
+    this._register(userKeybindingsService.onDidChange(async () => {
+      keybindingService.setUserKeybindings(await this.loadUserKeybindings());
+    }));
 
     const broadcastInputService = setService(broadcastInputServiceId, new BroadcastInputServiceImpl());
 
@@ -309,6 +319,16 @@ export class MainLayout extends Layout implements MainLayoutService {
     this.parent.appendChild(this.container);
   } */
 
+  /** 읽기에 실패해도 앱은 기본 단축키로 계속 동작해야 하므로 빈 배열로 대신한다. */
+  private async loadUserKeybindings(): Promise<UserKeybindingEntry[]> {
+    try {
+      return await (getService(userKeybindingsServiceId) as UserKeybindingsService).getKeybindings();
+    } catch (err) {
+      console.error('[keybindings] cannot load user keybindings', err);
+      return [];
+    }
+  }
+
   async startup(): Promise<void> {
     // this.createParts();
     // await this.createLayout();
@@ -316,7 +336,8 @@ export class MainLayout extends Layout implements MainLayoutService {
     // this.layout();
     // this.installIpc();
 
-    this.create();
+    this.create(await this.loadUserKeybindings());
+
     // this.getServices();
     (getService(bodyLayoutServiceId) as BodyLayoutService).inflate();
     this.layout();
