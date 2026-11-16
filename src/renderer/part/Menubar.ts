@@ -86,6 +86,8 @@ export class Menubar extends Disposable implements MenubarService {
 
     this._register(menuRegistry.onDidChangeMenu(() => this.scheduleUpdate()));
     this._register(this.contextKeyService.onDidChangeContext(() => this.scheduleUpdate()));
+    // 단축키가 바뀌면 메뉴 항목 옆 단축키 표시(UI 메뉴바, 네이티브 메뉴 accelerator)를 다시 계산한다.
+    this._register(this.keybindingService.onDidUpdateKeybindings(() => this.scheduleUpdate()));
   }
 
   layout(dimension: Dimension): void {
