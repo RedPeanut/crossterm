@@ -1,4 +1,4 @@
-import { Context, IContextKeyExpr } from './ContextKey';
+import { Context, ContextKeyExprType, IContextKeyExpr } from './ContextKey';
 import { ResolvedKeybindingItem } from './KeybindingsRegistry';
 
 /**
@@ -11,8 +11,8 @@ import { ResolvedKeybindingItem } from './KeybindingsRegistry';
  * 중 하나로 판정한다.
  *
  * 원본과 비교해 의도적으로 뺀 것:
- *  - `-commandId` 형태의 기본 바인딩 제거(handleRemovals)
  *  - when 절 함의 판정(implies)을 이용한 lookupMap 정리
+ *  - 제거 룰의 when 비교는 원본의 상수 치환 비교(expressionsAreEqualWithConstantSubstitution) 대신 직렬화 문자열 비교
  */
 
 export const enum ResultKind {
@@ -38,7 +38,7 @@ export class KeybindingResolver {
   private readonly _lookupMap = new Map<string, ResolvedKeybindingItem[]>();
 
   constructor(defaultKeybindings: readonly ResolvedKeybindingItem[], overrides: readonly ResolvedKeybindingItem[] = []) {
-    for (const item of [...defaultKeybindings, ...overrides]) {
+    for (const item of KeybindingResolver._handleRemovals([...defaultKeybindings, ...overrides])) {
       if (item.chords.length === 0) {
         continue;
       }
@@ -96,6 +96,52 @@ export class KeybindingResolver {
     }
 
     return { kind: ResultKind.KbFound, commandId: found.command, commandArgs: found.commandArgs };
+  }
+
+  /**
+   * `-commandId` 제거 룰을 처리한다. (VSCode의 `KeybindingResolver.handleRemovals`)
+   *
+   * 제거 룰은 **기본** 키바인딩만 지우고, 제거 룰 자신은 결과에 남지 않는다.
+   * 사용자 키바인딩은 지우지 않는다. 사용자 것은 keybindings.json 에서 직접 빼면 되기 때문이다.
+   */
+  private static _handleRemovals(items: readonly ResolvedKeybindingItem[]): ResolvedKeybindingItem[] {
+    const removals = new Map<string, ResolvedKeybindingItem[]>();
+    for (const item of items) {
+      if (item.command.startsWith('-')) {
+        const command = item.command.substring(1);
+        removals.set(command, [...(removals.get(command) ?? []), item]);
+      }
+    }
+    if (removals.size === 0) {
+      return [...items];
+    }
+    return items.filter(item => {
+      if (item.command.startsWith('-')) {
+        return false;
+      }
+      if (!item.isDefault) {
+        return true;
+      }
+      return !removals.get(item.command)?.some(removal => KeybindingResolver._isTargetedForRemoval(item, removal));
+    });
+  }
+
+  /**
+   * - removal 에 chords 가 있으면 chord 시퀀스가 똑같은 것만, 비어 있으면 키와 상관없이 지운다.
+   * - removal 에 when 이 있으면 when 이 같은 것만, 없거나 `true`면 when 과 상관없이 지운다.
+   */
+  private static _isTargetedForRemoval(item: ResolvedKeybindingItem, removal: ResolvedKeybindingItem): boolean {
+    if (removal.chords.length > 0) {
+      if (item.chords.length !== removal.chords.length || item.chords.some((chord, i) => chord !== removal.chords[i])) {
+        return false;
+      }
+    }
+    if (removal.when && removal.when.type !== ContextKeyExprType.True) {
+      if (!item.when || item.when.serialize() !== removal.when.serialize()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private _findCommand(context: Context, matches: readonly ResolvedKeybindingItem[]): ResolvedKeybindingItem | undefined {

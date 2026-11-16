@@ -59,6 +59,41 @@ describe('#Keybinding', function () {
     assert.deepStrictEqual(result, { kind: ResultKind.KbFound, commandId: 'second', commandArgs: undefined });
   });
 
+  it("'-command' removal rule removes matching default keybindings only", function () {
+    const defaults = toUserKeybindingItems([
+      { id: 'a.cmd', weight: KeybindingWeight.Core, primary: 'ctrl+a', secondary: ['ctrl+shift+a'] },
+      { id: 'b.cmd', weight: KeybindingWeight.Core, primary: 'ctrl+b', when: 'paneFocused' },
+      { id: 'c.cmd', weight: KeybindingWeight.Core, primary: 'ctrl+c', secondary: ['ctrl+k ctrl+c'] },
+      { id: 'e.cmd', weight: KeybindingWeight.Core, primary: 'ctrl+e', when: 'paneFocused' },
+    ]).map(item => ({ ...item, isDefault: true }));
+    const [removeAllOfC] = toUserKeybindingItems([{ id: '-c.cmd', weight: 0, primary: 'ctrl+c' }]).map(item => ({ ...item, chords: [] }));
+    const overrides = [
+      ...toUserKeybindingItems([
+        { id: '-a.cmd', weight: 0, primary: 'ctrl+a' }, // 키가 같은 것만 -> ctrl+shift+a 는 남는다
+        { id: 'a.cmd', weight: 0, primary: 'ctrl+alt+a' },
+        { id: '-b.cmd', weight: 0, primary: 'ctrl+b', when: 'listFocus' }, // when 이 달라 지우지 않는다
+        { id: 'd.cmd', weight: 0, primary: 'ctrl+d' },
+        { id: '-d.cmd', weight: 0, primary: 'ctrl+d' }, // 사용자 키바인딩은 지우지 않는다
+        { id: '-e.cmd', weight: 0, primary: 'ctrl+e' }, // when 이 없으면 when 과 상관없이 지운다
+      ]),
+      removeAllOfC, // 키가 없으면 그 커맨드의 기본 키바인딩 모두
+    ];
+    const resolver = new KeybindingResolver(defaults, overrides);
+    const keybindingsOf = (command: string) => resolver.lookupKeybindings(command).map(item => item.chords.join(' '));
+
+    assert.deepStrictEqual(
+      Object.fromEntries(['a.cmd', 'b.cmd', 'c.cmd', 'd.cmd', 'e.cmd', '-a.cmd'].map(command => [command, keybindingsOf(command)])),
+      {
+        'a.cmd': ['ctrl+shift+a', 'ctrl+alt+a'],
+        'b.cmd': ['ctrl+b'],
+        'c.cmd': [],
+        'd.cmd': ['ctrl+d'],
+        'e.cmd': [],
+        '-a.cmd': [],
+      }
+    );
+  });
+
   it('scoped context only applies below its DOM node', function () {
     const root = new ContextKeyService();
     root.createKey('paneFocused', false);
